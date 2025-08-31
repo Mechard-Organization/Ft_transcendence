@@ -4,19 +4,25 @@
 
 ---
 
-<p align="center">
-  <span style="display:inline-block; text-align:center; margin:0 28px;">
-    <img src="/.img/jealefev_round.png" width="150"><br/>
-    <b>Jeanne</b><br/>
-    <sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
-    <img src="/.img/abutet_round.png" width="150"><br/>
-    <b>Lylou</b><br/>
-    <sub>Gameplay & Réseau temps réel<br/>(Moteur Pong, WebSockets, Matchmaking, IA)</sub>
-    <img src="/.img/mechard_round.png" width="150"><br/>
-    <b>Mechard</b><br/>
-    <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
-  </span>
-</p>
+<table align="center" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center" style="border:none; padding:0 30px;">
+      <img src=".img/jealefev_round.png" width="150"/><br/>
+      <b>Jeanne</b><br/>
+      <sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
+    </td>
+    <td align="center" style="border:none; padding:0 30px;">
+      <img src=".img/abutet_round.png" width="150"/><br/>
+      <b>Lylou</b><br/>
+      <sub>Gameplay & Réseau temps réel<br/>(Moteur Pong, WebSockets, Matchmaking, IA)</sub>
+    </td>
+    <td align="center" style="border:none; padding:0 30px;">
+      <img src=".img/mechard_round.png" width="150"/><br/>
+      <b>Mechard</b><br/>
+      <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
