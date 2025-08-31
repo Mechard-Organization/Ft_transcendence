@@ -7,11 +7,10 @@
 <table align="center">
   <tr>
     <td align="center">
-      <img src="./.img/mechard_round.png" width="150"/><br/>
-      <b>Mechard</b><br/>
-      <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
+      <img src="./.img/jealefev_round.png" width="150"/><br/>
+      <b>Jeanne</b><br/>
+      <sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
     </td>
-    <td width="60"></td>
     <td align="center">
       <img src="./.img/abutet_round.png" width="150"/><br/>
       <b>Lylou</b><br/>
@@ -19,10 +18,11 @@
     </td>
     <td width="60"></td>
     <td align="center">
-      <img src="./.img/jealefev_round.png" width="150"/><br/>
-      <b>Jeanne</b><br/>
-      <sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
+      <img src="./.img/mechard_round.png" width="150"/><br/>
+      <b>Mechard</b><br/>
+      <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
     </td>
+    <td width="60"></td>
   </tr>
 </table>
 
