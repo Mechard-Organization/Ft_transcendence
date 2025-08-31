@@ -1,5 +1,5 @@
 <p align="center">
-	🏓 ft_transcendence
+  <img src=".img/ft_transcendence_title_banner.png" width="900" alt="Équipe ft_transcendence">
 </p>
 
 ---
