@@ -23,8 +23,6 @@
   </tr>
 </table>
 
-*(Remplace les images par vos photos de profil GitHub ou perso)*
-
 ---
 
 ## 📂 Structure du projet
