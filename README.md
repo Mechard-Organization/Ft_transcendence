@@ -4,11 +4,24 @@
 
 ---
 
-<p align="center">
-  <img src="https://cdn.intra.42.fr/users/960e2b9c6fdb6714ba8764c0feef883a/mechard.jpg" alt="Profil 1" width="150" height="150" style="border-radius:50%;"/>
-  <img src="https://cdn.intra.42.fr/users/e154ae70f8786ce5b399d750f8d15d96/abutet.jpg" alt="Profil 2" width="150" height="150" style="border-radius:50%;"/>
-  <img src="https://cdn.intra.42.fr/users/26cc88c3c51d4da040f152f76d7889f7/jealefev.jpg" alt="Profil 3" width="150" height="150" style="border-radius:50%;"/>
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://cdn.intra.42.fr/users/960e2b9c6fdb6714ba8764c0feef883a/mechard.jpg" width="150"/><br/>
+      <sub><b>Mechard</b></sub>
+    </td>
+    <td width="50"></td>
+    <td align="center">
+      <img src="https://cdn.intra.42.fr/users/e154ae70f8786ce5b399d750f8d15d96/abutet.jpg" width="150"/><br/>
+      <sub><b>Lylou</b></sub>
+    </td>
+    <td width="50"></td>
+    <td align="center">
+      <img src="https://cdn.intra.42.fr/users/26cc88c3c51d4da040f152f76d7889f7/jealefev.jpg" width="150"/><br/>
+      <sub><b>Jeanne</b></sub>
+    </td>
+  </tr>
+</table>
 
 *(Remplace les images par vos photos de profil GitHub ou perso)*
 
