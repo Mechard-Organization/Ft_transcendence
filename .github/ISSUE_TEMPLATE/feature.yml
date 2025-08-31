@@ -1,0 +1,12 @@
+name: Feature
+description: Nouvelle fonctionnalité
+labels: ["priority:high"]
+body:
+  - type: textarea
+    id: need
+    attributes: { label: Besoin, description: Pourquoi, résultat attendu }
+    validations: { required: true }
+  - type: textarea
+    id: acceptance
+    attributes: { label: DoD, description: Critères de validation }
+    validations: { required: true }

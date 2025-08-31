@@ -1,0 +1,14 @@
+name: Bug
+description: Rapport de bug
+labels: ["area:testing"]
+body:
+  - type: textarea
+    id: steps
+    attributes: { label: Reproduction, description: Étapes précises }
+    validations: { required: true }
+  - type: input
+    id: expected
+    attributes: { label: Attendu }
+  - type: input
+    id: got
+    attributes: { label: Obtenu }
