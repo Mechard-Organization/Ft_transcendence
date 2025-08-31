@@ -4,27 +4,24 @@
 
 ---
 
-<table align="center" border="0" cellspacing="0" cellpadding="0"
-  <tr>
-    <td align="center" style="border:none;">
-      <img src="./.img/jealefev_round.png" width="150"/><br/>
-      <b>Jeanne</b><br/>
-      <sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
+<p align="center">
+	<div style="display:inline-block; text-align:center; margin: 0 25px;">
+    	<img src="./.img/jealefev_round.png" width="150"/><br/>
+    	<b>Jeanne</b><br/>
+    	<sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
+	</div>
+	<div style="display:inline-block; text-align:center; margin: 0 25px;">
+    	<img src="./.img/abutet_round.png" width="150"/><br/>
+    	<b>Lylou</b><br/>
+    	<sub>Gameplay & Réseau temps réel<br/>(Moteur Pong, WebSockets, Matchmaking, IA)</sub>
     </td>
-    <td align="center" style="border:none;">
-      <img src="./.img/abutet_round.png" width="150"/><br/>
-      <b>Lylou</b><br/>
-      <sub>Gameplay & Réseau temps réel<br/>(Moteur Pong, WebSockets, Matchmaking, IA)</sub>
-    </td>
-    <td width="60"></td>
-    <td align="center" style="border:none;">
-      <img src="./.img/mechard_round.png" width="150"/><br/>
-      <b>Mechard</b><br/>
-      <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
-    </td>
-    <td width="60"></td>
-  </tr>
-</table>
+    </div>
+  	<div style="display:inline-block; text-align:center; margin: 0 25px;">
+    	<img src="./.img/mechard_round.png" width="150"/><br/>
+    	<b>Mechard</b><br/>
+    	<sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
+    </div>
+</p>
 
 ---
 
