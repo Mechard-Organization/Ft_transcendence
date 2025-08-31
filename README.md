@@ -1,4 +1,6 @@
-# 🏓 ft_transcendence
+<p align="center">
+	# 🏓 ft_transcendence
+</p>
 
 ---
 
