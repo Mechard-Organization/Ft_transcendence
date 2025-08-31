@@ -1,5 +1,5 @@
 <p align="center">
-	# 🏓 ft_transcendence
+	🏓 ft_transcendence
 </p>
 
 ---
@@ -7,7 +7,7 @@
 <p align="center">
 <table>
   <tr>
-    <td align="center" valign="top">
+    <td align="center" valign="top" border_color="red">
       <img src=".img/jealefev_round.png" width="150"><br/>
       <b>Jeanne</b><br/>
       <sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
