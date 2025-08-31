@@ -1,0 +1,13 @@
+{
+  "name": "game",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@fastify/websocket": "^10.0.1",
+    "fastify": "^4.28.1"
+  }
+}
