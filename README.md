@@ -7,17 +7,17 @@
 <table align="center">
   <tr>
     <td align="center">
-      <img src="https://cdn.intra.42.fr/users/960e2b9c6fdb6714ba8764c0feef883a/mechard.jpg" width="150"/><br/>
+      <img src="./.img/jealefev_round.png" width="150"/><br/>
       <sub><b>Mechard</b></sub>
     </td>
     <td width="50"></td>
     <td align="center">
-      <img src="https://cdn.intra.42.fr/users/e154ae70f8786ce5b399d750f8d15d96/abutet.jpg" width="150"/><br/>
+      <img src="./.img/mechard_round.png" width="150"/><br/>
       <sub><b>Lylou</b></sub>
     </td>
     <td width="50"></td>
     <td align="center">
-      <img src="https://cdn.intra.42.fr/users/26cc88c3c51d4da040f152f76d7889f7/jealefev.jpg" width="150"/><br/>
+      <img src="./.img/abutet_round.pngg" width="150"/><br/>
       <sub><b>Jeanne</b></sub>
     </td>
   </tr>
