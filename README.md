@@ -17,7 +17,7 @@
     </td>
     <td width="50"></td>
     <td align="center">
-      <img src="./.img/abutet_round.pngg" width="150"/><br/>
+      <img src="./.img/abutet_round.png" width="150"/><br/>
       <sub><b>Jeanne</b></sub>
     </td>
   </tr>
