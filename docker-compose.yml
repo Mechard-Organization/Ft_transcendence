@@ -13,12 +13,10 @@ services:
       - "${EDGE_HTTP_PORT}:80"
       - "${EDGE_HTTPS_PORT}:443"
     volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro   # <— NOUVEAU
       - ./docker/certs:/etc/nginx/certs:ro
-    # optionnel: pour inspecter les logs d'accès
-    # - ./docker/nginx/logs:/var/log/nginx
     restart: unless-stopped
-
+    
   api-gateway:
     build:
       context: ./services/api-gateway
