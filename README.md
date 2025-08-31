@@ -5,30 +5,9 @@
 ---
 
 <p align="center">
-
-  <a href="#">
-    <img src="assets/avatars/jealefev_round.png" width="130" alt="Jeanne"><br/>
-    <b>Jeanne</b><br/>
-    <sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
-  </a>
-
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-  <a href="#">
-    <img src="assets/avatars/abutet_round.png" width="130" alt="Lylou"><br/>
-    <b>Lylou</b><br/>
-    <sub>Gameplay & Réseau temps réel<br/>(Moteur Pong, WebSockets, Matchmaking, IA)</sub>
-  </a>
-
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-  <a href="#">
-    <img src="assets/avatars/mechard_round.png" width="130" alt="Mechard"><br/>
-    <b>Mechard</b><br/>
-    <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
-  </a>
-
+  <img src=".img/ft_transcendence_avatars_banner.png" width="900" alt="Équipe ft_transcendence">
 </p>
+
 
 ---
 
