@@ -4,25 +4,25 @@
 
 ---
 
-<table align="center" border="0" cellspacing="0" cellpadding="0">
+<table align="center" border="0" cellspacing="0" cellpadding="0"
   <tr>
     <td align="center" style="border:none;">
-      <img src="assets/avatars/jealefev_round.png" width="150"/><br/>
+      <img src="./.img/jealefev_round.png" width="150"/><br/>
       <b>Jeanne</b><br/>
       <sub>Frontend & UX<br/>(SPA TypeScript + Tailwind, intégration chat, profils, tournois)</sub>
     </td>
-    <td width="60"></td>
     <td align="center" style="border:none;">
-      <img src="assets/avatars/abutet_round.png" width="150"/><br/>
+      <img src="./.img/abutet_round.png" width="150"/><br/>
       <b>Lylou</b><br/>
       <sub>Gameplay & Réseau temps réel<br/>(Moteur Pong, WebSockets, Matchmaking, IA)</sub>
     </td>
     <td width="60"></td>
     <td align="center" style="border:none;">
-      <img src="assets/avatars/mechard_round.png" width="150"/><br/>
+      <img src="./.img/mechard_round.png" width="150"/><br/>
       <b>Mechard</b><br/>
       <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
     </td>
+    <td width="60"></td>
   </tr>
 </table>
 
