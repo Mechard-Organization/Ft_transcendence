@@ -14,7 +14,7 @@
 ## 📂 Structure du projet
 
 <p align="center">
-  <img src=".img/tree.png" width="900" alt="Équipe ft_transcendence">
+  <img src=".img/tree.png" width="450" alt="Équipe ft_transcendence">
 </p>
 
 
