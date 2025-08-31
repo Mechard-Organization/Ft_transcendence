@@ -1,5 +1,5 @@
 <p align="center">
-	🏓 ft_transcendence
+	## 🏓 ft_transcendence
 </p>
 
 ---
@@ -13,7 +13,7 @@
 
 ## 📂 Structure du projet
 
-<p align="center">
+<p>
   <img src=".img/tree.png" width="200" alt="Équipe ft_transcendence">
 </p>
 
