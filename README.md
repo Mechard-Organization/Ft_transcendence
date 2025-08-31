@@ -13,23 +13,9 @@
 
 ## 📂 Structure du projet
 
-.
-├── Makefile
-├── README.md
-├── docker
-│ ├── grafana
-│ ├── nginx
-│ └── prometheus
-├── docker-compose.yml
-├── packages
-├── services
-│ ├── api-gateway
-│ ├── assets
-│ ├── auth
-│ ├── chat
-│ ├── game
-│ └── matchmaking
-└── webapp
+<p align="center">
+  <img src=".img/tree.png" width="900" alt="Équipe ft_transcendence">
+</p>
 
 
 ---
