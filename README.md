@@ -13,11 +13,6 @@
 
 ## 📂 Structure du projet
 
-<p>
-  <img src=".img/tree.png" width="250" alt="Équipe ft_transcendence">
-</p>
-
-
 ---
 
 ## 📝 Résumé du projet
