@@ -3,9 +3,9 @@
 ---
 
 <p align="center">
-  <img src="/home/mechard/Documents/42_Paris/42_Paris_2023/Cursus_2023/Projects/In_progress/ft_transcendence/.img/mechard_round.png" alt="Profil 1" width="150" height="150" style="border-radius:50%;"/>
-  <img src="/home/mechard/Documents/42_Paris/42_Paris_2023/Cursus_2023/Projects/In_progress/ft_transcendence/.img/abutet_round.png" alt="Profil 2" width="150" height="150" style="border-radius:50%;"/>
-  <img src="/home/mechard/Documents/42_Paris/42_Paris_2023/Cursus_2023/Projects/In_progress/ft_transcendence/.img/jealefev_round.png" alt="Profil 3" width="150" height="150" style="border-radius:50%;"/>
+  <img src=".img/mechard_round.png" alt="Profil 1" width="150" height="150" style="border-radius:50%;"/>
+  <img src=".img/abutet_round.png" alt="Profil 2" width="150" height="150" style="border-radius:50%;"/>
+  <img src=".img/jealefev_round.png" alt="Profil 3" width="150" height="150" style="border-radius:50%;"/>
 </p>
 
 ---
