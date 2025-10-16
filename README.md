@@ -5,17 +5,17 @@
 <table align="center">
   <tr>
     <td align="center">
-      <img src=".img/abutet_round.png" width="150"/><br/>
+      <img src=".img/abutet_round.png" width="150" style="border-radius: 50%; margin: 0 15px;"/><br/>
       <sub><b>Mechard</b></sub>
     </td>
     <td width="50"></td>
     <td align="center">
-      <img src=".img/jealefev_round.png" width="150"/><br/>
+      <img src=".img/jealefev_round.png" width="150" style="border-radius: 50%; margin: 0 15px;"/><br/>
       <sub><b>Lylou</b></sub>
     </td>
     <td width="50"></td>
     <td align="center">
-      <img src=".img/mechard_round.png" width="150"/><br/>
+      <img src=".img/mechard_round.png" width="150" style="border-radius: 50%; margin: 0 15px;"/><br/>
       <sub><b>Jeanne</b></sub>
     </td>
   </tr>
