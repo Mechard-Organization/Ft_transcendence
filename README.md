@@ -7,7 +7,6 @@
     <td align="center">
       <img src=".img/mechard_round.png" width="150"/><br/>
       <b>Mechard</b><br/>
-      <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
     </td>
     <td width="60"></td>
     <td align="center">
