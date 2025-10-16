@@ -2,11 +2,24 @@
 
 ---
 
-<p align="center">
-  <img src=".img/mechard_round.png" alt="Profil 1" width="150" height="150" style="border-radius:50%;"/>
-  <img src=".img/abutet_round.png" alt="Profil 2" width="150" height="150" style="border-radius:50%;"/>
-  <img src=".img/jealefev_round.png" alt="Profil 3" width="150" height="150" style="border-radius:50%;"/>
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src=".img/abutet_round.png" width="150"/><br/>
+      <sub><b>Mechard</b></sub>
+    </td>
+    <td width="50"></td>
+    <td align="center">
+      <img src=".img/jealefev_round.png" width="150"/><br/>
+      <sub><b>Lylou</b></sub>
+    </td>
+    <td width="50"></td>
+    <td align="center">
+      <img src=".img/mechard_round.png" width="150"/><br/>
+      <sub><b>Jeanne</b></sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
