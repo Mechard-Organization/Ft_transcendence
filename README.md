@@ -5,18 +5,19 @@
 <table align="center">
   <tr>
     <td align="center">
-      <img src=".img/abutet_round.png" width="150" style="border-radius: 50%; margin: 0 15px;"/><br/>
-      <sub><b>Mechard</b></sub>
+      <img src=".img/mechard_round.png" width="150"/><br/>
+      <b>Mechard</b><br/>
+      <sub>Backend, Sécurité & DevOps<br/>(Fastify, Auth, JWT+2FA, OAuth2, Docker, Microservices)</sub>
     </td>
-    <td width="50"></td>
+    <td width="60"></td>
     <td align="center">
-      <img src=".img/jealefev_round.png" width="150" style="border-radius: 50%; margin: 0 15px;"/><br/>
-      <sub><b>Lylou</b></sub>
+      <img src=".img/abutet_round.png" width="150"/><br/>
+      <b>Abutet</b><br/>
     </td>
-    <td width="50"></td>
+    <td width="60"></td>
     <td align="center">
-      <img src=".img/mechard_round.png" width="150" style="border-radius: 50%; margin: 0 15px;"/><br/>
-      <sub><b>Jeanne</b></sub>
+      <img src=".img/jealefev_round.png" width="150"/><br/>
+      <b>Jealefev</b><br/>
     </td>
   </tr>
 </table>
