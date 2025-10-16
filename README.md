@@ -2,24 +2,9 @@
 
 ---
 
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src=".img/mechard_round.png" width="150"/><br/>
-      <b>Mechard</b><br/>
-    </td>
-    <td width="60"></td>
-    <td align="center">
-      <img src=".img/abutet_round.png" width="150"/><br/>
-      <b>Abutet</b><br/>
-    </td>
-    <td width="60"></td>
-    <td align="center">
-      <img src=".img/jealefev_round.png" width="150"/><br/>
-      <b>Jealefev</b><br/>
-    </td>
-  </tr>
-</table>
+<p align="center">
+<img src=".img/ft_transcendence_avatars_banner_42.png" width="900" alt="Équipe ft_transcendence">
+</p>
 
 ---
 
