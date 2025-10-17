@@ -57,7 +57,9 @@ make up
 
 <h2 align="center">📂 Structure du projet 📂</h2>
 
-<img src=".img/tree.png" width="900" alt="tree" align="center">
+<p align="center">
+<img src=".img/tree.png" width="900" alt="tree">
+</p>
 
 ---
 
