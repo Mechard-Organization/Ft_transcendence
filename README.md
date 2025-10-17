@@ -5,8 +5,8 @@
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
 
 <p align="center">
-<img src=".img/ft_transcendence_avatars_banner_42_n1.png" width="900" alt="Équipe ft_transcendence">
-<img src=".img/ft_transcendence_avatars_banner_42_n2.png" width="900" alt="Équipe ft_transcendence">
+<img src=".img/ft_transcendence_avatars_banner_42_n1.png" width="900" alt="Équipe n1 ft_transcendence">
+<img src=".img/ft_transcendence_avatars_banner_42_n2.png" width="900" alt="Équipe n2 ft_transcendence">
 </p>
 
 ---
@@ -56,5 +56,9 @@ make up
 ---
 
 <h2 align="center">📂 Structure du projet 📂</h2>
+
+<img src=".img/tree.png" width="900" alt="tree">
+
+---
 
 <p align="right">écrit par <i><b>mechard</b></i></p>
