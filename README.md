@@ -9,10 +9,6 @@
 
 ---
 
-## 📂 Structure du projet
-
----
-
 ## 📝 Résumé du projet
 
 **ft_transcendence** est le dernier projet du **tronc commun de l’école 42**.  
@@ -44,3 +40,8 @@ L’objectif est de démontrer notre capacité à :
 ### 🚀 Lancement
 ```bash
 make up
+---
+
+## 📂 Structure du projet
+
+---
