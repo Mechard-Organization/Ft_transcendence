@@ -57,4 +57,4 @@ make up
 
 <h2 align="center">📂 Project Structure 📂</h2>
 
-<p align="right"><i>Written by <b>mechard</b></i></p>
+<p align="right">written by <i><b>mechard</b></i></p>

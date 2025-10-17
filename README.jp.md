@@ -58,4 +58,4 @@ make up
 
 <h2 align="center">📂 プロジェクト構造 📂</h2>
 
-<p align="right"><i>作成者：<b>mechard</b></i></p>
+<p align="right">作成<i><b>mechard</b></i></p>
