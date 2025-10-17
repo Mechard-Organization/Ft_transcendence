@@ -4,7 +4,7 @@
 
 <p align="center">
 <img src=".img/ft_transcendence_avatars_banner_42_n1.png" width="900" alt="Équipe ft_transcendence">
-<img src=".img/ft_transcendence_avatars_banner_42_n1.png" width="900" alt="Équipe ft_transcendence">
+<img src=".img/ft_transcendence_avatars_banner_42_n2.png" width="900" alt="Équipe ft_transcendence">
 </p>
 
 ---
