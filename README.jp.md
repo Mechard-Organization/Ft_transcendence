@@ -62,4 +62,6 @@ make up
 <img src=".img/tree.png" width="900" alt="tree">
 </p>
 
+---
+
 <p align="right">作成<i><b>mechard</b></i></p>

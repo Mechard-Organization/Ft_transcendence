@@ -61,4 +61,6 @@ make up
 <img src=".img/tree.png" width="900" alt="tree">
 </p>
 
+---
+
 <p align="right">written by <i><b>mechard</b></i></p>
