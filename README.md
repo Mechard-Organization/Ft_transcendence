@@ -1,6 +1,8 @@
-# 🏓 ft_transcendence
+<h1 align="center">🏓 ft_transcendence 🏓</h1>
 
 ---
+
+<h1 align="center">🏓 le groupe 🏓</h1>
 
 <p align="center">
 <img src=".img/ft_transcendence_avatars_banner_42_n1.png" width="900" alt="Équipe ft_transcendence">
@@ -9,7 +11,7 @@
 
 ---
 
-## 📝 Résumé du projet
+<h1 align="center">👨‍💻 Résumé du projet 👨‍💻</h1>
 
 **ft_transcendence** est le dernier projet du **tronc commun de l’école 42**.  
 Il consiste à concevoir **un site web complet et sécurisé** permettant de jouer au jeu culte **Pong** dans un environnement moderne, extensible et collaboratif.
@@ -45,6 +47,6 @@ make up
 
 ---
 
-## 📂 Structure du projet
+<h1 align="center">📂 Structure du projet 📂</h1>
 
 ---
