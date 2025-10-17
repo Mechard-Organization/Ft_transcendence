@@ -59,7 +59,7 @@ make up
 <h2 align="center">📂 プロジェクト構造 📂</h2>
 
 <p align="center">
-<img src=".img/tree.png" width="900" alt="tree">
+<img src=".img/tree.png" width="250" alt="tree">
 </p>
 
 ---
