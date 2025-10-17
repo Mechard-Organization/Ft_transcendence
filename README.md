@@ -40,6 +40,9 @@ L’objectif est de démontrer notre capacité à :
 ### 🚀 Lancement
 ```bash
 make up
+
+```
+
 ---
 
 ## 📂 Structure du projet
