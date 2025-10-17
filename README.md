@@ -11,6 +11,13 @@
 
 ---
 
+<h2 align="center">💾 Version 💾</h2>
+<p align="center">
+  <a href="./README.en.md">🇬🇧 English</a> • 
+  <a href="./README.jp.md">🇯🇵 日本語</a>
+</p>
+
+---
 <h2 align="center">📝 Résumé du projet 📝</h2>
 
 **ft_transcendence** est le dernier projet du **tronc commun de l’école 42**.  

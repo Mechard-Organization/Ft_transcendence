@@ -1,0 +1,58 @@
+<h1 align="center">🏓 ft_transcendence 🏓</h1>
+
+---
+
+<h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
+
+<p align="center">
+<img src=".img/ft_transcendence_avatars_banner_42_n1.png" width="900" alt="Équipe ft_transcendence">
+<img src=".img/ft_transcendence_avatars_banner_42_n2.png" width="900" alt="Équipe ft_transcendence">
+</p>
+
+---
+
+<h2 align="center">💾 Version 💾</h2>
+<p align="center">
+  <a href="./README.en.md">🇫🇷 Français</a> • 
+  <a href="./README.jp.md">🇯🇵 日本語</a>
+</p>
+
+<h2 align="center">📝 Project Overview 📝</h2>
+
+**ft_transcendence** is the final project of the **42 school’s core curriculum**.  
+It consists of designing a **complete and secure web application** that allows users to play the legendary **Pong** game in a modern, scalable, and collaborative environment.
+
+The goal is to demonstrate our ability to:  
+- Master **new technologies** (TypeScript, Node.js, Docker, WebSockets, etc.).  
+- Manage a **complex team project**, following a clear and modular organization.  
+- Deliver a **functional, secure, and maintainable website** that meets all project constraints.
+
+### 🎮 Main Features
+- **Real-time Pong game** (2 players — local or remote).  
+- **Tournament system** with matchmaking and alias management.  
+- **Live chat** (DMs, rooms, game invitations, blocklist).  
+- **User profiles** with statistics, match history, and avatars.  
+- Option to play against an **AI opponent** simulating a real player.  
+- **Enhanced security**: HTTPS, JWT + 2FA, OAuth2, password hashing, XSS/SQLi protection.  
+- **Microservices architecture**: each component (auth, chat, game, matchmaking) is independent and scalable.  
+- **Monitoring & observability** with Prometheus and Grafana.  
+- **Modern frontend**: Single Page Application (SPA) built with TypeScript + TailwindCSS.
+
+### ⚙️ Tech Stack
+- **Frontend**: TypeScript, TailwindCSS, SPA.  
+- **Backend**: Node.js (Fastify), SQLite, WebSockets.  
+- **Security**: HTTPS (Nginx reverse proxy), JWT, 2FA, OAuth2.  
+- **DevOps**: Docker, docker-compose, microservices, Prometheus/Grafana monitoring.  
+- **Gameplay**: Canvas/WebGL, real-time WS protocol, basic AI (limited vision).  
+
+### 🚀 Launch
+```bash
+make up
+
+```
+
+---
+
+<h2 align="center">📂 Project Structure 📂</h2>
+
+<p align="right"><i>Written by <b>mechard</b></i></p>
