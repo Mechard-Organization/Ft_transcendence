@@ -18,6 +18,7 @@
 </p>
 
 ---
+
 <h2 align="center">📝 Résumé du projet 📝</h2>
 
 **ft_transcendence** est le dernier projet du **tronc commun de l’école 42**.  

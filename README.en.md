@@ -13,9 +13,11 @@
 
 <h2 align="center">💾 Version 💾</h2>
 <p align="center">
-  <a href="./README.en.md">🇫🇷 Français</a> • 
   <a href="./README.jp.md">🇯🇵 日本語</a>
+  <a href="./README.en.md">🇫🇷 Français</a> • 
 </p>
+
+---
 
 <h2 align="center">📝 Project Overview 📝</h2>
 

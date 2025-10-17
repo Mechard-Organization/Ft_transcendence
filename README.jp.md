@@ -11,6 +11,14 @@
 
 ---
 
+<h2 align="center">💾 Version 💾</h2>
+<p align="center">
+  <a href="./README.en.md">🇬🇧 English</a> • 
+  <a href="./README.md">🇫🇷 Français</a>
+</p>
+
+---
+
 <h2 align="center">📝 プロジェクト概要 📝</h2>
 
 **ft_transcendence** は、**42スクールのコアカリキュラム（共通課程）最後のプロジェクト**です。  
