@@ -4,7 +4,20 @@
 
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
 
-<p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne"><img src=".img/ft_transcendence_avatars_banner_42_n1_left.png" width="300" alt="Jeanne" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou"><img src=".img/ft_transcendence_avatars_banner_42_n1_center.png" width="300" alt="Lylou" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime"><img src=".img/ft_transcendence_avatars_banner_42_n1_right.png" width="300" alt="Maxime" /></a></p>
+<p align="center">
+<svg width="900" height="301" viewBox="0 0 900 301" role="img" aria-label="Bannière équipe – zones cliquables">
+  <image href=".img/ft_transcendence_avatars_banner_42_n1.png" x="0" y="0" width="900" height="301" />
+  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne" aria-label="Jeanne">
+    <rect x="0" y="0" width="300" height="301" fill-opacity="0" />
+  </a>
+  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou" aria-label="Lylou">
+    <rect x="300" y="0" width="300" height="301" fill-opacity="0" />
+  </a>
+  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime" aria-label="Maxime">
+    <rect x="600" y="0" width="300" height="301" fill-opacity="0" />
+  </a>
+</svg>
+</p>
 
 
 
