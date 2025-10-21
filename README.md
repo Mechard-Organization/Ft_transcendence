@@ -5,18 +5,21 @@
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
 
 <p align="center">
-<svg width="900" height="301" viewBox="0 0 900 301" role="img" aria-label="Bannière équipe – zones cliquables">
-  <image href=".img/ft_transcendence_avatars_banner_42_n1.png" x="0" y="0" width="900" height="301" />
-  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne" aria-label="Jeanne">
-    <rect x="0" y="0" width="300" height="301" fill-opacity="0" />
+
+<!-- Colle tout le contenu du fichier SVG ici -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 301" width="100%" role="img" aria-label="ft_transcendence team banner">
+  <image x="0" y="0" width="1200" height="301" xlink:href="data:image/png;base64, ...TON_BASE64_ICI..."/>
+  <a xlink:href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne" aria-label="Jeanne">
+    <rect x="0" y="0" width="400" height="301" fill="white" opacity="0"/>
   </a>
-  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou" aria-label="Lylou">
-    <rect x="300" y="0" width="300" height="301" fill-opacity="0" />
+  <a xlink:href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou" aria-label="Lylou">
+    <rect x="400" y="0" width="400" height="301" fill="white" opacity="0"/>
   </a>
-  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime" aria-label="Maxime">
-    <rect x="600" y="0" width="300" height="301" fill-opacity="0" />
+  <a xlink:href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime" aria-label="Maxime">
+    <rect x="800" y="0" width="400" height="301" fill="white" opacity="0"/>
   </a>
 </svg>
+
 </p>
 
 
