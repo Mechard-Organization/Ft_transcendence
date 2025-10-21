@@ -1,14 +1,8 @@
-<h1 align="center">🏓 ft_transcendence 🏓</h1>
-
----
-
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
 
 <p align="center">
-
-<!-- Colle tout le contenu du fichier SVG ici -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1200 301" width="100%" role="img" aria-label="ft_transcendence team banner">
-  <image x="0" y="0" width="1200" height="301" xlink:href="data:image/png;base64, ...TON_BASE64_ICI..."/>
+  <image x="0" y="0" width="1200" height="301" xlink:href="data:image/png;base64,{{BASE64_IMAGE}}" />
   <a xlink:href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne" aria-label="Jeanne">
     <rect x="0" y="0" width="400" height="301" fill="white" opacity="0"/>
   </a>
@@ -19,11 +13,7 @@
     <rect x="800" y="0" width="400" height="301" fill="white" opacity="0"/>
   </a>
 </svg>
-
 </p>
-
-
-
 
 <p align="center">
   <img src=".img/ft_transcendence_avatars_banner_42_n2.png" width="900" alt="Équipe n2 ft_transcendence">
