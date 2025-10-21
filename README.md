@@ -4,15 +4,8 @@
 
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
 
-<p align="center">
-  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne">
-    <img src=".img/ft_transcendence_avatars_banner_42_n1_left.png" width="300" alt="Jeanne" />
-  </a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou">
-    <img src=".img/ft_transcendence_avatars_banner_42_n1_center.png" width="300" alt="Lylou" />
-  </a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime">
-    <img src=".img/ft_transcendence_avatars_banner_42_n1_right.png" width="300" alt="Maxime" />
-  </a>
-</p>
+<p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne"><img src=".img/ft_transcendence_avatars_banner_42_n1_left.png" width="300" alt="Jeanne" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou"><img src=".img/ft_transcendence_avatars_banner_42_n1_center.png" width="300" alt="Lylou" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime"><img src=".img/ft_transcendence_avatars_banner_42_n1_right.png" width="300" alt="Maxime" /></a></p>
+
 
 <p align="center">
   <img src=".img/ft_transcendence_avatars_banner_42_n2.png" width="900" alt="Équipe n2 ft_transcendence">
