@@ -1,6 +1,6 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
-<h2 align="center"> Commandes pour clone le dossier transcendence<\h2>
+<h2 align="center"> Commandes pour clone le dossier transcendence</h2>
 **⚠️  Uniquement pour le groupe de travail !**
 
 ```bash
