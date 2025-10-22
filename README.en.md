@@ -2,6 +2,17 @@
 
 ---
 
+<h2 align="center">Commands to clone the transcendence repository</h2>
+
+**⚠️ For the project team only!**
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
+
+```
+
+---
+
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
 
 <p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne"><img src=".img/ft_transcendence_avatars_banner_42_n1_left.png" width="33.333%" alt="Jeanne" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou"><img src=".img/ft_transcendence_avatars_banner_42_n1_center.png" width="33.333%" alt="Lylou" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime"><img src=".img/ft_transcendence_avatars_banner_42_n1_right.png" width="33.333%" alt="Maxime" /></a></p>
