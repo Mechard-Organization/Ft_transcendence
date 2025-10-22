@@ -1,5 +1,14 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
+<h2 align="center"> Commandes pour clone le dossier transcendence<\h2>
+**⚠️  Uniquement pour le groupe de travail !**
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
+
+```
+
+
 ---
 
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
