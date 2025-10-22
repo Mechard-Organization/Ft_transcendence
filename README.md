@@ -1,5 +1,7 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
+---
+
 <h2 align="center"> Commandes pour clone le dossier transcendence</h2>
 
 **⚠️  Uniquement pour le groupe de travail !**
@@ -9,10 +11,9 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 
 ```
 
-
 ---
 
-<h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
+<h2 align="center">👨‍💻 Le Groupe 👨‍💻</h2>
 
 <p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne"><img src=".img/ft_transcendence_avatars_banner_42_n1_left.png" width="33.333%" alt="Jeanne" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou"><img src=".img/ft_transcendence_avatars_banner_42_n1_center.png" width="33.333%" alt="Lylou" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime"><img src=".img/ft_transcendence_avatars_banner_42_n1_right.png" width="33.333%" alt="Maxime" /></a></p>
 
