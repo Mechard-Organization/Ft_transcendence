@@ -4,14 +4,15 @@
 
 <h2 align="center">Commands to clone the transcendence repository</h2>
 
-**⚠️ For the project team only!**
+<details><summary>👷‍♀️ For the project team only!</summary>
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
 
 ```
+</details>
 
-**⚠️ On your terminal ⚠️**
+<details><summary>🖵 On your terminal</summary>
 
 Before working on your branch :
 ```bash
@@ -22,6 +23,8 @@ After you have pushed to your branch :
 ```bash
 /bin/git switch main && /bin/git merge <Votre_branch> && /bin/git add . && /bin/git commit -m "$(date) - $(pwd) update" && /bin/git push && /bin/git switch <Votre_branch>
 ```
+</details>
+
 **⚠️ If there are conflicts, contact the person(s) concerned by the conflict before performing any operations ! ⚠️**
 
 ---

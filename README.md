@@ -4,7 +4,7 @@
 
 <h2 align="center">🖵 Commandes pour clone le dossier transcendence</h2>
 
-<details> <summary>👷‍♀️ Uniquement pour le groupe de travail !</summary>
+<details><summary>👷‍♀️ Uniquement pour le groupe de travail !</summary>
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
@@ -12,7 +12,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 ```
 </details>
 
-<details> <summary>🖵 Sur votre terminal</summary>
+<details><summary>🖵 Sur votre terminal</summary>
 
 Avant de travailler sur votre branche :
 ```bash

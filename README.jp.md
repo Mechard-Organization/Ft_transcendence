@@ -4,14 +4,15 @@
 
 <h2 align="center">ft_transcendence リポジトリをクローンするコマンド</h2>
 
-**⚠️ 作業チーム専用です！**
+<details><summary>👷‍♀️ 作業チーム専用です！</summary>
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
 
 ```
+</details>
 
-**⚠️ ターミナル上で ⚠️**
+<details><summary>🖵 ターミナル上で</summary>
 
 自分のブランチで作業を始める前に :
 ```bash
@@ -22,6 +23,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 ```bash
 /bin/git switch main && /bin/git merge <Votre_branch> && /bin/git add . && /bin/git commit -m "$(date) - $(pwd) update" && /bin/git push && /bin/git switch <Votre_branch>
 ```
+</details>
+
 **⚠️ コンフリクトが発生した場合は、操作を行う前に必ず関係するメンバーに連絡してください！ ⚠️**
 
 ---
