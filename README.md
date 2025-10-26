@@ -11,6 +11,19 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 
 ```
 
+**⚠️ Sur votre terminal ⚠️**
+
+Avant de travailler sur votre branche :
+```bash
+/bin/git switch main && /bin/git pull && /bin/git switch <Votre_branch> && /bin/git merge main && /bin/git push 
+```
+
+Aprés que vous ayez push sur votre branche :
+```bash
+/bin/git switch main && /bin/git merge <Votre_branch> && /bin/git add . && /bin/git commit -m "$(date) - $(pwd) update" && /bin/git push && /bin/git switch <Votre_branch>
+```
+**⚠️ Si il y a des conflits, contacter la/les personnes concernée.s par le conflit avant toutes opérations !⚠️**
+
 ---
 
 <h2 align="center">👨‍💻 Le Groupe 👨‍💻</h2>
