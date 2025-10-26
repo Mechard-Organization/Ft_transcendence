@@ -11,6 +11,19 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 
 ```
 
+**⚠️ ターミナル上で ⚠️**
+
+自分のブランチで作業を始める前に :
+```bash
+/bin/git switch main && /bin/git pull && /bin/git switch <Votre_branch> && /bin/git merge main && /bin/git push 
+```
+
+自分のブランチにプッシュした後に :
+```bash
+/bin/git switch main && /bin/git merge <Votre_branch> && /bin/git add . && /bin/git commit -m "$(date) - $(pwd) update" && /bin/git push && /bin/git switch <Votre_branch>
+```
+**⚠️ コンフリクトが発生した場合は、操作を行う前に必ず関係するメンバーに連絡してください！ ⚠️**
+
 ---
 
 <h2 align="center">👨‍💻 チーム 👨‍💻</h2>

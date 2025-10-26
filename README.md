@@ -22,7 +22,7 @@ Aprés que vous ayez push sur votre branche :
 ```bash
 /bin/git switch main && /bin/git merge <Votre_branch> && /bin/git add . && /bin/git commit -m "$(date) - $(pwd) update" && /bin/git push && /bin/git switch <Votre_branch>
 ```
-**⚠️ Si il y a des conflits, contacter la/les personnes concernée.s par le conflit avant toutes opérations !⚠️**
+**⚠️ Si il y a des conflits, contacter la/les personnes concernée.s par le conflit avant toutes opérations ! ⚠️**
 
 ---
 
