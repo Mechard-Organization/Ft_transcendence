@@ -12,12 +12,13 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 ```
 </details>
 
-**⚠️ Sur votre terminal ⚠️**
+<details> <summary>**⚠️ Sur votre terminal ⚠️**</summary>
 
 Avant de travailler sur votre branche :
 ```bash
 /bin/git switch main && /bin/git pull && /bin/git switch <Votre_branch> && /bin/git merge main && /bin/git push 
 ```
+</details>
 
 Aprés que vous ayez push sur votre branche :
 ```bash
