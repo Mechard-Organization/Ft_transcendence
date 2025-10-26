@@ -18,12 +18,14 @@ Avant de travailler sur votre branche :
 ```bash
 /bin/git switch main && /bin/git pull && /bin/git switch <Votre_branch> && /bin/git merge main && /bin/git push 
 ```
-</details>
 
 Aprés que vous ayez push sur votre branche :
 ```bash
 /bin/git switch main && /bin/git merge <Votre_branch> && /bin/git add . && /bin/git commit -m "$(date) - $(pwd) update" && /bin/git push && /bin/git switch <Votre_branch>
 ```
+
+</details>
+
 **⚠️ Si il y a des conflits, contacter la/les personnes concernée.s par le conflit avant toutes opérations ! ⚠️**
 
 ---
