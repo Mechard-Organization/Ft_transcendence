@@ -4,12 +4,13 @@
 
 <h2 align="center"> Commandes pour clone le dossier transcendence</h2>
 
-**⚠️  Uniquement pour le groupe de travail !**
+<details> <summary>**⚠️  Uniquement pour le groupe de travail !**</summary>
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
 
 ```
+</details>
 
 **⚠️ Sur votre terminal ⚠️**
 
