@@ -12,7 +12,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 ```
 </details>
 
-<details> <summary>🖵 Sur votre terminal 🖵</summary>
+<details> <summary>🖵 Sur votre terminal</summary>
 
 Avant de travailler sur votre branche :
 ```bash
