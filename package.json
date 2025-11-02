@@ -2,10 +2,14 @@
   "name": "transcendence",
   "version": "1.0.0",
   "scripts": {
+    "dev": "vite",
     "build": "tsc",
     "start": "node dest/app.js"
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "@babylonjs/core": "^8.33.1",
+    "@babylonjs/gui": "^8.33.1",
+    "vite": "^5.4.21"
   }
 }
