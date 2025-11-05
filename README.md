@@ -2,31 +2,14 @@
 
 ---
 
-<h2 align="center">🖵 Commandes pour clone le dossier transcendence</h2>
+<h2 align="center"> Commandes pour clone le dossier transcendence</h2>
 
-<details><summary>👷‍♀️ Uniquement pour le groupe de travail !</summary>
+**⚠️  Uniquement pour le groupe de travail !**
 
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
 
 ```
-</details>
-
-<details><summary>🖵 Sur votre terminal</summary>
-
-Avant de travailler sur votre branche :
-```bash
-/bin/git switch main && /bin/git pull && /bin/git switch <Votre_branch> && /bin/git merge main && /bin/git push 
-```
-
-Aprés que vous ayez push sur votre branche :
-```bash
-/bin/git switch main && /bin/git merge <Votre_branch> && /bin/git add . && /bin/git commit -m "$(date) - $(pwd) update" && /bin/git push && /bin/git switch <Votre_branch>
-```
-
-</details>
-
-**⚠️ Si il y a des conflits, contacter la/les personnes concernée.s par le conflit avant toutes opérations ! ⚠️**
 
 ---
 
@@ -34,7 +17,7 @@ Aprés que vous ayez push sur votre branche :
 
 <p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne"><img src=".img/ft_transcendence_avatars_banner_42_n1_left.png" width="33.333%" alt="Jeanne" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou"><img src=".img/ft_transcendence_avatars_banner_42_n1_center.png" width="33.333%" alt="Lylou" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime"><img src=".img/ft_transcendence_avatars_banner_42_n1_right.png" width="33.333%" alt="Maxime" /></a></p>
 
-<p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/mehdi"><img src=".img/ft_transcendence_avatars_banner_42_n2_left.png" width="50%" alt="medhi" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/abdul"><img src=".img/ft_transcendence_avatars_banner_42_n2_right.png" width="50%" alt="abdul" /></a></p>
+<p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/medhi"><img src=".img/ft_transcendence_avatars_banner_42_n2_left.png" width="50%" alt="medhi" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/abdul"><img src=".img/ft_transcendence_avatars_banner_42_n2_right.png" width="50%" alt="abdul" /></a></p>
 
 
 ---

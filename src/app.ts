@@ -6,11 +6,12 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/11/02 14:51:10 by ajamshid         ###   ########.fr       */
+/*   Updated: 2025/11/05 18:40:22 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import {gamePage, resetBabylonJs} from "./play";
+import {gamePage} from "./gameLogicAndMeshes";
+import {resetBabylonJs} from "./ButtonsAndUI";
 
 const app = document.getElementById("app");
 
