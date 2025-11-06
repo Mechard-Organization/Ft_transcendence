@@ -27,10 +27,6 @@ ARG="votre branche"; git switch main && git merge $ARG && git add . && git commi
 ```
 
 **⚠️ Si il y a des conflits, contacter la/les personnes concernée.s par le conflit avant toutes opérations ! ⚠️**
-
-</details>
-
-
 </details>
 
 </details>

@@ -9,23 +9,26 @@
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
 ```
-</details>
 
-<details><summary>🖵 ターミナル上で</summary>
+🖵 ターミナル上で
 
-自分のブランチで作業を始める前に :
+<details><summary>自分のブランチで作業を始める前に :</summary>
+
 ```bash
 ARG="自分のブランチ"; git switch main && git pull && git switch $ARG && git merge main && git push 
 ```
+</details>
 
-自分のブランチにプッシュした後に :
+<details><summary>自分のブランチにプッシュした後に :</summary>
 
 ```bash
 ARG="自分のブランチ"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
 ```
-</details>
 
 **⚠️ コンフリクトが発生した場合は、操作を行う前に必ず関係するメンバーに連絡してください！ ⚠️**
+</details>
+
+</details>
 
 ---
 

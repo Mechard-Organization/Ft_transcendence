@@ -12,23 +12,26 @@
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
 
 ```
-</details>
 
-<details><summary>🖵 On your terminal</summary>
+🖵 On your terminal
 
-Before working on your branch :
+<details><summary>Before working on your branch :</summary>
+
 ```bash
 ARG="your branch"; git switch main && git pull && git switch $ARG && git merge main && git push 
 ```
+</details>
 
-After you have pushed to your branch :
+<details><summary>After you have pushed to your branch :</summary>
+
 ```bash
 ARG="your branch"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
 ```
-</details>
 
 **⚠️ If there are conflicts, contact the person(s) concerned by the conflict before performing any operations ! ⚠️**
+</details>
 
+</details>
 ---
 
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
