@@ -23,9 +23,10 @@ Aprés que vous ayez push sur votre branche :
 ```bash
 ARG="votre branche"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
 ```
-</details>
 
 **⚠️ Si il y a des conflits, contacter la/les personnes concernée.s par le conflit avant toutes opérations ! ⚠️**
+
+</details>
 
 </details>
 
