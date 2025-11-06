@@ -10,7 +10,6 @@
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
 
 ```
-</details>
 
 <details><summary>🖵 Sur votre terminal</summary>
 
@@ -27,6 +26,8 @@ ARG="votre branche"; git switch main && git merge $ARG && git add . && git commi
 </details>
 
 **⚠️ Si il y a des conflits, contacter la/les personnes concernée.s par le conflit avant toutes opérations ! ⚠️**
+
+</details>
 
 ---
 
