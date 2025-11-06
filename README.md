@@ -14,6 +14,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 🖵 Sur votre terminal</summary>
 
 <details><summary>Avant de travailler sur votre branche :</summary>
+
 ```bash
 ARG="votre branche"; git switch main && git pull && git switch $ARG && git merge main && git push 
 ```
