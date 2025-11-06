@@ -4,8 +4,6 @@
 
 <h2 align="center">Commands to clone the transcendence repository</h2>
 
-**⚠️ For the project team only!**
-
 <details><summary>👷‍♀️ For the project team only!</summary>
 
 ```bash
