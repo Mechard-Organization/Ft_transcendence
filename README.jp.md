@@ -24,7 +24,6 @@ ARG="votre branche"; git switch main && git pull && git switch $ARG && git merge
 
 ```bash
 ARG="votre branche"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
-
 ```
 </details>
 
