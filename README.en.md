@@ -32,6 +32,7 @@ ARG="your branch"; git switch main && git merge $ARG && git add . && git commit 
 </details>
 
 </details>
+
 ---
 
 <h2 align="center">👨‍💻 le groupe 👨‍💻</h2>
