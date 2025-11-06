@@ -10,8 +10,8 @@
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
 
 ```
-
 </details>
+
 <details><summary>🖵 Sur votre terminal</summary>
 
 Avant de travailler sur votre branche :

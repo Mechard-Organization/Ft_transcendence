@@ -14,7 +14,6 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 ```
 </details>
 
-**⚠️ On your terminal ⚠️**
 <details><summary>🖵 On your terminal</summary>
 
 Before working on your branch :

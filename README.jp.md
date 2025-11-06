@@ -4,7 +4,6 @@
 
 <h2 align="center">ft_transcendence リポジトリをクローンするコマンド</h2>
 
-**⚠️ 作業チーム専用です！**
 <details><summary>👷‍♀️ 作業チーム専用です！</summary>
 
 ```bash
@@ -12,7 +11,6 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 ```
 </details>
 
-**⚠️ ターミナル上で ⚠️**
 <details><summary>🖵 ターミナル上で</summary>
 
 自分のブランチで作業を始める前に :
