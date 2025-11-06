@@ -20,14 +20,12 @@ status:
 	docker compose ps -a
 
 
-clean: down
-	docker compose rm -f
+clean:
+	docker compose down -v
 
-fclean: clean
-	docker compose down -v --remove-orphans
+prune:
+	docker system prune --all --force
 
-prune: fclean
-	docker system prune -af --volumes
 
 bash:
 	docker exec -it trancendence-web-1 bash
