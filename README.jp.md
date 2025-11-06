@@ -17,13 +17,13 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 
 自分のブランチで作業を始める前に :
 ```bash
-ARG="votre branche"; git switch main && git pull && git switch $ARG && git merge main && git push 
+ARG="自分のブランチ"; git switch main && git pull && git switch $ARG && git merge main && git push 
 ```
 
 自分のブランチにプッシュした後に :
 
 ```bash
-ARG="votre branche"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
+ARG="自分のブランチ"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
 ```
 </details>
 

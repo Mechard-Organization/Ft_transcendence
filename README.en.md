@@ -19,12 +19,12 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_t
 
 Before working on your branch :
 ```bash
-ARG="votre branche"; git switch main && git pull && git switch $ARG && git merge main && git push 
+ARG="your branch"; git switch main && git pull && git switch $ARG && git merge main && git push 
 ```
 
 After you have pushed to your branch :
 ```bash
-ARG="votre branche"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
+ARG="your branch"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
 ```
 </details>
 
