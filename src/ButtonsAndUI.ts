@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/11/05 19:08:45 by ajamshid         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:39:44 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ export let finalGoal: number = 1;
 
 let playername = ["player1", "player2"];
 export let pause = 0;
-export let playBtn = 0;
+// export let playBtn = 0;
 export let playerCount = 0;
 let mainUI: AdvancedDynamicTexture | null = null;
 let multiUI: AdvancedDynamicTexture | null = null;
@@ -54,10 +54,13 @@ export function resetBabylonJs() {
   player2 = player1 = disposableUI = counterUI = resumeUI = tournamentUI = multiUI = mainUI = null;
 }
 
-export function resetGame2() {
+export function resetGame2(type?: number) {
+  if (type === undefined) {
+    contestants = [];
+    contestantNumber = 0;
+  }
   pause = 0;
-  playBtn = 0;
-  contestants = [];
+  // playBtn = 0;
   playerCount = 0;
   playername[0] = "player1";
   playername[1] = "player2";
@@ -165,92 +168,129 @@ function createTournamentUI() {
   const tournamentPanel = new StackPanel();
   const aliasPanel = new StackPanel();
   const text = createTextBlock("Please add 4 to 8 player Aliases!");
-  tournamentPanel.width = "300px";
-  tournamentPanel.isVertical = true;
-  tournamentPanel.background = "black";
-  // tournamentPanel.padding = "50px";
-  tournamentPanel.height = "80%";
-  tournamentPanel.background = "rgba(13, 0, 48, 0.7)"
+  tournamentPanel.width = aliasPanel.width = "300px";
+  tournamentPanel.isVertical = aliasPanel.isVertical = true;
+  tournamentPanel.height = aliasPanel.height = "70%";
+  tournamentPanel.background = aliasPanel.background = "rgba(13, 0, 48, 0.7)"
   tournamentPanel.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT
-  // tournamentPanel.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
-  aliasPanel.width = "300px";
-  aliasPanel.isVertical = true;
-  aliasPanel.background = "black";
-  aliasPanel.background = "black";
-  // tournamentPanel.paddingRight = "90px";
-  aliasPanel.height = "80%";
-  aliasPanel.background = "rgba(13, 0, 48, 0.7)"
+  tournamentPanel.verticalAlignment = aliasPanel.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
   aliasPanel.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT
-  // tournamentPanel.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT
+
   tournamentUI.addControl(text);
   tournamentUI.addControl(tournamentPanel);
   tournamentUI.addControl(aliasPanel);
 
   const textInput = createTextInput();
   const mainMenuBtn = createMainMenuBtn();
+  const startTournamentBtn = createStartTournamentBtn();
   const addBtn = createAddBtn(textInput, aliasPanel);
 
   tournamentPanel.addControl(textInput);
   tournamentPanel.addControl(addBtn);
+  tournamentPanel.addControl(startTournamentBtn);
   tournamentPanel.addControl(mainMenuBtn);
 }
+function createStartTournamentBtn(): Button {
+  const startTournamentBtn = Button.CreateSimpleButton("startBtn", "Start Tournament");
+  buttonStyler(startTournamentBtn);
+  // startBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+  startTournamentBtn.onPointerUpObservable.add(() => {
+    mainUI.rootContainer.isVisible = false;
+    mainUI.isForeground = false;
+    multiUI.rootContainer.isVisible = false;
+    multiUI.isForeground = false;
+    resumeUI.rootContainer.isVisible = false;
+    resumeUI.isForeground = false;
+    createdisposableUI(0);
+    if (tournamentUI) {
+      tournamentUI.dispose();
+      tournamentUI = null;
+    }
+    // startBtn.metadata.panel.dispose();
+    // (resumetBtn.metadata.ui as AdvancedDynamicTexture).dispose();
+  });
+  return startTournamentBtn;
+}
+function createStartBtn(): Button {
+  const startBtn = Button.CreateSimpleButton("startBtn", "Start");
+  buttonStyler(startBtn);
+  startBtn.onPointerUpObservable.add(() => {
+    mainUI.rootContainer.isVisible = false;
+    mainUI.isForeground = false;
+    multiUI.rootContainer.isVisible = false;
+    multiUI.isForeground = false;
+    resumeUI.rootContainer.isVisible = false;
+    resumeUI.isForeground = false;
 
+    // resetGame(scene);
+    // playerCount = 2;
+    // playBtn = 1;
+    pause = 0;
+    // playername = [contestants[contestantNumber], contestants[contestantNumber + 1]];
+    drawText();
+
+    if (disposableUI) {
+      disposableUI.dispose();
+      disposableUI = null;
+    }
+  });
+  return startBtn;
+}
 export function createdisposableUI(type: number) {
-  let text: TextBlock;
+
+  let text: TextBlock | undefined;
   disposableUI = AdvancedDynamicTexture.CreateFullscreenUI("statsUI");
   disposableUI.background = "rgba(13, 0, 48, 0.5)";
   const statsPanel = new StackPanel();
   if (counter[0] == finalGoal) {
     text = createTextBlock(playername[0] + " Won the game!");
-    if (contestants.length >= 2)
+    if (contestants.length >= 2) {
       contestants.splice(contestantNumber + 1, 1);
+      contestantNumber++;
+    }
   }
   else if (counter[1] == finalGoal) {
     text = createTextBlock(playername[1] + " Won the game!");
-    if (contestants.length >= 2)
+    if (contestants.length >= 2) {
       contestants.splice(contestantNumber, 1);
+      contestantNumber++;
+    }
   }
   statsPanel.width = "300px";
   statsPanel.isVertical = true;
-  statsPanel.background = "black";
+  if (text)
+    disposableUI.addControl(text);
 
-  disposableUI.addControl(text);
-  disposableUI.addControl(statsPanel);
   if (contestantNumber > contestants.length - 1)
     contestantNumber = 0;
   if (contestantNumber < contestants.length - 1) {
+    resetGame(scene, 1);
+    pause = 1;
+    playerCount = 2;
     playername[0] = contestants[contestantNumber];
     playername[1] = contestants[contestantNumber + 1];
-
-    //here i should create a button to start the game between the two contastants
-    //i should have a button in tounament page called startTournament to come to this UI
-    //when start button is press in this UI the UI should be deleted
-    //this ui will be created again when someone has won
-
-    //       contestants = shuffle(contestants);
-
-    //       while(contestants.length != 1){
-    //         for(let i = 0; i < (contestants.length -1); i++){
-    //           clearCanvas();
-    //           app.appendChild(tournamentBtn);
-    //           app.appendChild(twoPlayerBtn);
-    //           app.appendChild(mainMenuBtn);
-    //           const p = document.createElement("p");
-    //           p.textContent = `${contestants[i]} VS ${contestants[i+1]}`;
-    //           app.appendChild(p);
-    //           await waitForStart();
-    //           const looser = await play(1, contestants[i], contestants[i+1]);
-    //           
-    //           await waitForContinue();
-    //         }
-    //       }
+    if (text == undefined) {
+      text = createTextBlock(`${contestants[contestantNumber]} VS ${contestants[contestantNumber + 1]}`);
+      disposableUI.addControl(text);
+    }
+    else {
+      const newText = createTextBlock(`${contestants[contestantNumber]} VS ${contestants[contestantNumber + 1]}`)
+      newText.top = "150px";
+      disposableUI.addControl(newText);
+    }
+    disposableUI.addControl(statsPanel);
+    const mainMenuBtn = createMainMenuBtn();
+    statsPanel.addControl(mainMenuBtn);
+    const startBtn = createStartBtn();
+    statsPanel.addControl(startBtn);
+    return;
   }
+  resetGame(scene);
+  disposableUI.addControl(statsPanel);
   const mainMenuBtn = createMainMenuBtn();
   statsPanel.addControl(mainMenuBtn);
-
-  pause = 1;
-  disposableUI.rootContainer.isVisible = true;
-  disposableUI.isForeground = true;
+  // const startBtn = createStartBtn();
+  // statsPanel.addControl(startBtn);
 }
 
 /*************************************************************************************/
@@ -359,7 +399,7 @@ function createSinglePlayerBtn(): Button {
     resetGame(scene);
     playername = ["Player", "Bot"];
     playerCount = 1;
-    playBtn = 1;
+    // playBtn = 1;
     drawText();
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
@@ -399,7 +439,7 @@ function createTwoPlayerBtn(): Button {
     multiUI.isForeground = false;
 
     playerCount = 2;
-    playBtn = 1;
+    // playBtn = 1;
     playername = ["Player1", "Player2"];
     drawText();
     // twoPlayerBtn.metadata.panel.dispose();
@@ -460,11 +500,12 @@ function createAddBtn(input: InputText, aliasPanel: StackPanel): Button {
   buttonStyler(addBtn);
   // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   addBtn.onPointerUpObservable.add(() => {
-    if (input.text === "")
+    if (input.text === "" || (contestants.indexOf(input.text) + 1))
       input.background = "red";
     else {
       const text = new TextBlock("text", input.text);
       text.height = "30px";
+      input.background = "rgba(81, 81, 138, 1)";
       text.fontFamily = "impact";
       text.color = "white";
       text.size = "20px";
@@ -472,6 +513,7 @@ function createAddBtn(input: InputText, aliasPanel: StackPanel): Button {
       text.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
       aliasPanel.addControl(text);
       contestants.push(input.text);
+      shuffle(contestants);
       input.text = "";
     }
     // addBtn.metadata.panel.dispose();
@@ -479,3 +521,4 @@ function createAddBtn(input: InputText, aliasPanel: StackPanel): Button {
   });
   return addBtn;
 }
+
