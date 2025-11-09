@@ -50,31 +50,8 @@ canvas.style.display = "block";
 canvas.style.margin = "0 auto";
 
 let Direction = 0;
-// class Direction {
-//   static pos = 0;
-//   static pos1 = 0;
-//   constructor() { }
-
-//   static setPos(newNum: number) {
-//     Direction.pos = newNum;
-//   }
-
-//   static getPos() {
-//     return Direction.pos;
-//   }
-//   static setPos1(newNum: number) {
-//     Direction.pos1 = newNum;
-//   }
-
-//   static getPos1() {
-//     return Direction.pos1;
-//   }
-// }
-
+//AI next position finder
 function AIDirection(ball: any) {
-
-  // dx: cosDeg(45) * (Math.random() > 0.5 ? 1 : -1)
-  // dz: sinDeg(45) * (Math.random() > 0.5 ? 1 : -1)
   let difference = 0;
   let x = ball.position.x + (balld.dx * balld.currentSpeed * 58);
   if (!(x < canvas.width / 2 -25 && x > -canvas.width / 2 + 25)) {
@@ -83,7 +60,6 @@ function AIDirection(ball: any) {
     else x = x + (canvas.width / 2 - 25);
     difference = Math.abs(x / (balld.dx * balld.currentSpeed));
   }
-  // console.log(difference);
   let i = ball.position.z + (balld.dz * balld.currentSpeed * (58 - difference))+ 40 * (Math.random() > 0.5 ? 1 : -1);;
   while ((-canvas.height / 2) > i || (canvas.height / 2) < i) {
     if ((-canvas.height / 2) > i)
@@ -102,7 +78,6 @@ function AIDirection(ball: any) {
 function movePaddles(scene: any) {
   const paddle1 = scene.getMeshByName("paddle1");
   const paddle2 = scene.getMeshByName("paddle2");
-  // console.log(Direction.getPos());
   if (playerCount > 0) {
     if (keys["w"] && paddle1.position.z > -canvas.height / 2 + 50) paddle1.position.z -= paddleSpeed;
     if (keys["s"] && paddle1.position.z < canvas.height / 2 - 50) paddle1.position.z += paddleSpeed;
@@ -141,7 +116,7 @@ function moveBall(scene: any): number {
   ball.refreshBoundingInfo();
 
   //top/bottom bounce
-  if (ball.position.z + balld.radius >= canvas.height / 2 || ball.position.z - balld.radius <= -canvas.height / 2) {
+  if ((ball.position.z + balld.radius >= canvas.height / 2 && balld.dz > 0) || (ball.position.z - balld.radius <= -canvas.height / 2 && balld.dz < 0)) {
     balld.dz *= -1;
     ball.refreshBoundingInfo();
   }
