@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gameLogicAndMeshes.ts                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
+/*   Updated: 2025/11/09 14:01:29 by ajamshid         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 import { Texture, Color4, ParticleSystem, KeyboardEventTypes, TrailMesh, Color3, FreeCamera, StandardMaterial, Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, MeshBuilder, Vector3 } from "@babylonjs/core";
 import { playerCount, finalGoal, drawText, createUI, pause, resetGame2, createdisposableUI } from "./ButtonsAndUI";
