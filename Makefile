@@ -23,7 +23,7 @@ status:
 clean:
 	docker compose down -v
 
-prune:
+prune: down
 	docker system prune --all --force
 
 
