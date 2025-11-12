@@ -17,6 +17,8 @@
 # --- Config projet ---
 PROJECT := ft_transcendence
 COMPOSE := docker compose -p $(PROJECT)
+IMAGES	:= docker images
+VOLUMES	:= docker volumes
 SYSTEM  := docker system
 
 # --- Helpers ---
@@ -35,7 +37,7 @@ RESET := \033[0m
 # Cible par défaut
 # =========================
 
-all: up
+all: build up
 
 # =========================
 # Aide
@@ -102,10 +104,10 @@ pull:
 	@$(COMPOSE) pull
 
 images:
-	@docker images | grep $(PROJECT) || true
+	@$(IMAGES) | grep $(PROJECT) || true
 
 volumes:
-	@docker volume ls | grep $(PROJECT) || true
+	@$(VOLUMES) ls | grep $(PROJECT) || true
 
 # =========================
 # Logs / PS / Status / Exec
