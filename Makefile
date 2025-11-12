@@ -37,7 +37,7 @@ RESET := \033[0m
 # Cible par défaut
 # =========================
 
-all: build up
+all: start
 
 # =========================
 # Aide
@@ -51,6 +51,7 @@ help:
 	@echo "  make up                 # démarre en détaché"
 	@echo "  make down               # stop + remove (garde volumes)"
 	@echo "  make stop [svc]         # stop (global ou service)"
+	@echo "  make start  		     # start (global ou service)"
 	@echo "  make restart            # redémarre tout"
 	@echo ""
 	@echo "$(YELLOW)Debug & état$(RESET)"
@@ -82,6 +83,8 @@ prepare:
 
 up: prepare
 	@$(COMPOSE) up -d
+
+start: build up
 
 down:
 	@$(COMPOSE) down $(if $(SERVICE),$(SERVICE),)
