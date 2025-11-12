@@ -13,6 +13,9 @@
 COMPOSE = docker compose -p ft_transcendence
 SYSTEM	= docker system -p ft_transcendence
 
+%:
+	@:
+
 all: up
 
 up:
@@ -20,23 +23,21 @@ up:
 	mkdir -p data/db
 	$(COMPOSE) up -d
 
-down:
-	$(COMPOSE) down
-
 logs:
 	$(COMPOSE) logs -f --tail=200
 
 ps:
-	echo $(n)
-	$(COMPOSE) ps
+	$(COMPOSE) ps $(filter-out $@,$(MAKECMDGOALS))
 
 stop:
-	$(COMPOSE) stop
+	$(COMPOSE) stop $(filter-out $@,$(MAKECMDGOALS))
 
-restart: down up
+
+down: stop
+	$(COMPOSE) down
 
 clean: down
-	$(COMPOSE) down
+	$(COMPOSE) down -v
 
 fclean : clean
 	rm -rf data/db
@@ -45,6 +46,8 @@ fclean : clean
 
 prune: down fclean
 	$(SYSTEM) prune -af --volumes
+
+restart: down up
 
 re: prune all
 
