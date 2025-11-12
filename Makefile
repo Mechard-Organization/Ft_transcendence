@@ -17,8 +17,8 @@
 # --- Config projet ---
 PROJECT := ft_transcendence
 COMPOSE := docker compose -p $(PROJECT)
-IMAGES	:= docker images
-VOLUMES	:= docker volume
+IMAGES  := docker images
+VOLUMES := docker volume
 SYSTEM  := docker system
 
 # --- Helpers ---
@@ -51,7 +51,8 @@ help:
 	@echo "  make up                 # démarre en détaché"
 	@echo "  make down               # stop + remove (garde volumes)"
 	@echo "  make stop [svc]         # stop (global ou service)"
-	@echo "  make start  		     # start (global ou service)"
+	@echo "  make start              # build + up (raccourci pratique)"
+	@echo "  make resume [svc]       # docker compose start (relance sans recréer)"
 	@echo "  make restart            # redémarre tout"
 	@echo ""
 	@echo "$(YELLOW)Debug & état$(RESET)"
@@ -63,8 +64,8 @@ help:
 	@echo "$(YELLOW)Build & images$(RESET)"
 	@echo "  make build [svc]        # build"
 	@echo "  make pull               # pull des images"
-	@echo "  make images             # liste images"
-	@echo "  make volumes            # liste volumes"
+	@echo "  make images             # liste images du projet"
+	@echo "  make volumes            # liste volumes du projet"
 	@echo ""
 	@echo "$(YELLOW)Nettoyage$(RESET)"
 	@echo "  make clean              # down -v (supprime volumes des services)"
@@ -89,6 +90,9 @@ start: build up
 down:
 	@$(COMPOSE) down
 
+resume:
+	@$(COMPOSE) start $(if $(SERVICE),$(SERVICE),)
+
 stop:
 	@$(COMPOSE) stop $(if $(SERVICE),$(SERVICE),)
 
@@ -107,10 +111,10 @@ pull:
 	@$(COMPOSE) pull
 
 images:
-	@$(IMAGES) | grep $(PROJECT) || true
+	@$(COMPOSE) images || $(IMAGES) | grep $(PROJECT) || true
 
 volumes:
-	@$(VOLUMES) ls | grep $(PROJECT) || true
+	@$(VOLUMES) ls --filter label=com.docker.compose.project=$(PROJECT) || true
 
 # =========================
 # Logs / PS / Status / Exec
@@ -151,4 +155,5 @@ prune: down fclean
 # =========================
 # Phony (sécurité)
 # =========================
-.PHONY: all help prepare up down stop restart re build pull images volumes logs ps status exec clean fclean prune
+
+.PHONY: all help prepare up down stop restart re build pull images volumes logs ps status exec clean fclean prune start resume
