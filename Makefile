@@ -34,10 +34,10 @@ stop:
 
 
 down: stop
-	$(COMPOSE) down
+	$(COMPOSE) down $(filter-out $@,$(MAKECMDGOALS))
 
 clean: down
-	$(COMPOSE) down -v
+	$(COMPOSE) down -v $(filter-out $@,$(MAKECMDGOALS))
 
 fclean : clean
 	rm -rf data/db
