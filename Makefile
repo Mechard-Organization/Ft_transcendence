@@ -18,7 +18,7 @@
 PROJECT := ft_transcendence
 COMPOSE := docker compose -p $(PROJECT)
 IMAGES	:= docker images
-VOLUMES	:= docker volumes
+VOLUMES	:= docker volume
 SYSTEM  := docker system
 
 # --- Helpers ---
@@ -87,7 +87,7 @@ up: prepare
 start: build up
 
 down:
-	@$(COMPOSE) down $(if $(SERVICE),$(SERVICE),)
+	@$(COMPOSE) down
 
 stop:
 	@$(COMPOSE) stop $(if $(SERVICE),$(SERVICE),)
@@ -137,7 +137,7 @@ endif
 # Nettoyage
 # =========================
 
-clean: down
+clean:
 	@$(COMPOSE) down -v
 
 fclean: clean
