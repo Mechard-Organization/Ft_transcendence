@@ -79,7 +79,7 @@ The goal is to demonstrate our ability to:
 
 ### 🚀 Launch
 ```bash
-make up
+make help
 
 ```
 

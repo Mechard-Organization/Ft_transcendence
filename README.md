@@ -80,7 +80,7 @@ L’objectif est de démontrer notre capacité à :
 
 ### 🚀 Lancement
 ```bash
-make up
+make help
 
 
 ```

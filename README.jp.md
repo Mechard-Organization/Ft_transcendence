@@ -79,7 +79,7 @@ ARG="自分のブランチ"; git switch main && git merge $ARG && git add . && g
 
 ### 🚀 起動方法
 ```bash
-make up
+make help
 
 ```
 
