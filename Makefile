@@ -10,33 +10,42 @@
 #                                                                              #
 # **************************************************************************** #
 
+COMPOSE = docker compose -p ft_transcendence
+SYSTEM	= docker system -p ft_transcendence
+
 all: up
 
 up:
-	docker compose up -d --build
+	mkdir -p data
+	mkdir -p data/db
+	$(COMPOSE) up -d
 
 down:
-	docker compose down
+	$(COMPOSE) down
+
+logs:
+	$(COMPOSE) logs -f --tail=200
+
+ps:
+	echo $(n)
+	$(COMPOSE) ps
 
 stop:
-	docker compose stop
+	$(COMPOSE) stop
 
 restart: down up
 
-re: clean all
-
-status:
-	docker compose ps -a
-
-clean:
-	docker compose down -v
+clean: down
+	$(COMPOSE) down
 
 fclean : clean
+	rm -rf data/db
+	rm -rf data
+	$(COMPOSE) rm -v
 
 prune: down fclean
-	docker system prune --all --force
+	$(SYSTEM) prune -af --volumes
 
-bash:
-	docker exec -it trancendence-web-1 bash
+re: prune all
 
 .PHONY: all prepare_directories build up down strop start restart re status remove clean prune bashmariadb bashnginx bashwordpress
