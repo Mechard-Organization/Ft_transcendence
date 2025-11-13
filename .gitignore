@@ -1,1 +1,6 @@
+# À ne pas push pour des questions de sécurité
+
 .env
+.script_merging
+
+# Autres
