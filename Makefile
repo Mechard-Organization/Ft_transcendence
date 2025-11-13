@@ -6,7 +6,7 @@
 #    By: abutet <abutet@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2025/11/12 13:14:32 by abutet           ###   ########.fr        #
+#    Updated: 2025/11/13 15:59:42 by abutet           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,8 +79,6 @@ help:
 # =========================
 
 prepare:
-	@mkdir -p /app/data
-	@mkdir -p /app/data/db
 
 up: prepare
 	@$(COMPOSE) up -d
@@ -145,8 +143,6 @@ clean:
 	@$(COMPOSE) down -v
 
 fclean: clean
-	@rm -rf /app/data/db
-	@rm -rf /app/data
 	@$(COMPOSE) rm -fsv || true
 
 prune: down fclean
