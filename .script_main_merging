@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+# Merge toutes les branches locales dans une branche cible (par défaut : main)
+# Usage :
+#   ./script_main_merging.sh          # merge tout dans main
+#   ./script_main_merging.sh develop  # merge tout dans develop
+
+set -u  # erreur si variable non définie
+
+TARGET_BRANCH="${1:-main}"
+
+echo "🔍 Target branch : ${TARGET_BRANCH}"
+echo ""
+
+# Vérifie qu'on est bien dans un repo git
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "❌ Ce répertoire n'est pas un dépôt Git."
+  exit 1
+fi
+
+# Vérifie qu'il n'y a pas de changements non commités
+if ! git diff-index --quiet HEAD --; then
+  echo "❌ Il y a des changements non commités."
+  echo "   Merci de commit ou stash avant de lancer le script."
+  exit 1
+fi
+
+echo "⬇️  Fetch des références distantes..."
+git fetch --all --prune
+echo ""
+
+echo "📦 Passage sur la branche cible : ${TARGET_BRANCH}"
+if ! git checkout "${TARGET_BRANCH}"; then
+  echo "❌ Impossible de se placer sur la branche ${TARGET_BRANCH}."
+  exit 1
+fi
+echo ""
+
+echo "📥 Mise à jour de ${TARGET_BRANCH} depuis le remote (si présent)..."
+if git rev-parse --verify "origin/${TARGET_BRANCH}" >/dev/null 2>&1; then
+  if ! git pull --ff-only origin "${TARGET_BRANCH}"; then
+    echo "⚠️  Pull --ff-only impossible. Vérifie l'état de ${TARGET_BRANCH}."
+    exit 1
+  fi
+else
+  # Aucun remote pour cette branche, on ne fait rien de plus
+  echo "ℹ️ Aucun remote 'origin/${TARGET_BRANCH}' trouvé, skip du pull."
+fi
+echo ""
+
+echo "🧾 Récupération de la liste des branches locales (hors ${TARGET_BRANCH})..."
+BRANCHES=$(git for-each-ref refs/heads --format='%(refname:short)' | grep -v "^${TARGET_BRANCH}$" || true)
+
+if [ -z "${BRANCHES}" ]; then
+  echo "ℹ️ Aucune autre branche locale à merger."
+  exit 0
+fi
+
+echo "🌿 Branches à merger dans ${TARGET_BRANCH} :"
+echo "${BRANCHES}"
+echo ""
+
+FAILED_BRANCHES=()
+
+for BR in ${BRANCHES}; do
+  echo "================================"
+  echo "🔁 Merge de la branche : ${BR}"
+  echo "================================"
+
+  if git merge --no-ff "${BR}" -m "Merge branch '${BR}' into ${TARGET_BRANCH}"; then
+    echo "✅ Merge de ${BR} réussi."
+  else
+    echo "⚠️ Conflits détectés lors du merge de ${BR}."
+    echo "   -> Annulation du merge et passage à la branche suivante."
+    git merge --abort || true
+    FAILED_BRANCHES+=("${BR}")
+  fi
+
+  echo ""
+done
+
+echo "📤 Push de ${TARGET_BRANCH} vers le dépôt distant (si 'origin' existe)..."
+if git remote get-url origin >/dev/null 2>&1; then
+  if git rev-parse --verify "origin/${TARGET_BRANCH}" >/dev/null 2>&1; then
+    git push origin "${TARGET_BRANCH}" || echo "⚠️ Le push vers origin/${TARGET_BRANCH} a échoué."
+  else
+    git push -u origin "${TARGET_BRANCH}" || echo "⚠️ Le push vers origin/${TARGET_BRANCH} a échoué."
+  fi
+else
+  echo "ℹ️ Aucun remote 'origin' configuré, skip du push."
+fi
+
+echo ""
+echo "📊 RÉCAPITULATIF"
+echo "----------------"
+
+if [ ${#FAILED_BRANCHES[@]} -eq 0 ]; then
+  echo "🎉 Tous les merges se sont bien passés."
+else
+  echo "⚠️ Les branches suivantes n'ont PAS été mergées à cause de conflits :"
+  for BR in "${FAILED_BRANCHES[@]}"; do
+    echo "   - ${BR}"
+  done
+  echo ""
+  echo "Tu peux les traiter manuellement, par exemple :"
+  echo "  git checkout ${TARGET_BRANCH}"
+  echo "  git merge <branche_en_conflit>"
+fi
+
+echo ""
+echo "✅ Script terminé."
