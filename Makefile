@@ -79,8 +79,8 @@ help:
 # =========================
 
 prepare:
-	@mkdir -p data
-	@mkdir -p data/db
+	@mkdir -p /app/data
+	@mkdir -p /app/data/db
 
 up: prepare
 	@$(COMPOSE) up -d
@@ -145,8 +145,8 @@ clean:
 	@$(COMPOSE) down -v
 
 fclean: clean
-	@rm -rf data/db
-	@rm -rf data
+	@rm -rf /app/data/db
+	@rm -rf /app/data
 	@$(COMPOSE) rm -fsv || true
 
 prune: down fclean
