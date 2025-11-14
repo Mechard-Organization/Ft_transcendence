@@ -3,12 +3,12 @@ FROM node:20
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY frontend/package*.json ./
 
 RUN npm install
 
-COPY tsconfig.json vite.config.js ./
-COPY src ./src
+COPY frontend/tsconfig.json frontend/vite.config.js ./
+COPY frontend/src ./src
 
 EXPOSE 3000
 

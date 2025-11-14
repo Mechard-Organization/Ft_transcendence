@@ -26,12 +26,20 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - ./frontend:/app
       - /app/node_modules
-      - ./src:/app/src
-      - ./data:/app/data
     env_file:
       - .env
     networks:
       - transcendence
 
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - transcendence
