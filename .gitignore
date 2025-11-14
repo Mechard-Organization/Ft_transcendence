@@ -3,6 +3,7 @@
 .env
 .script_merging
 .script_main_merging
+.vite
 
 # Autres
 
