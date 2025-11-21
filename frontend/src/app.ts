@@ -1,6 +1,7 @@
 import { gamePage } from "./gameLogicAndMeshes";
 import { resetBabylonJs } from "./ButtonsAndUI";
 import { messagesPage } from "./messagesPage";
+import { usersPage } from "./usersPage";
 
 const app = document.getElementById("app");
 
@@ -19,6 +20,8 @@ function showPage(page: string) {
     gamePage();
   } else if (page === "messages") {
     messagesPage();
+  } else if (page === "user") {
+    usersPage();
   } else {
     app.innerHTML = "<h1>Page not found</h1>";
   }
