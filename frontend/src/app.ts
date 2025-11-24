@@ -1,7 +1,10 @@
-import { gamePage } from "./gameLogicAndMeshes";
+import { gamePage } from "./Game/gamePage";
 import { resetBabylonJs } from "./ButtonsAndUI";
 import { messagesPage } from "./messagesPage";
-import { usersPage } from "./usersPage";
+import { homePage } from "./homePage";
+import { usersPage } from "./UserManagement/usersPage";
+import { loginPage } from "./UserManagement/loginPage";
+
 
 const app = document.getElementById("app");
 
@@ -13,15 +16,22 @@ function showPage(page: string) {
   app.innerHTML = "";
 
   if (page === "home") {
-    app.innerHTML = "<h1>Home</h1>";
+    window.location.hash = "#home";
+    homePage();
   } else if (page === "about") {
     app.innerHTML = "<h1>About</h1>";
   } else if (page === "game") {
+    window.location.hash = "#game";
     gamePage();
   } else if (page === "messages") {
+    window.location.hash = "#messages";
     messagesPage();
   } else if (page === "user") {
+    window.location.hash = "#user";
     usersPage();
+  } else if (page === "login") {
+    window.location.hash = "#login";
+    loginPage();
   } else {
     app.innerHTML = "<h1>Page not found</h1>";
   }

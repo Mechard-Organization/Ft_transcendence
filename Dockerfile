@@ -7,6 +7,8 @@ COPY frontend/package*.json ./
 
 RUN npm install
 
+RUN npm install validator zxcvbn
+
 COPY frontend/tsconfig.json frontend/vite.config.js ./
 COPY frontend/src ./src
 

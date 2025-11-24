@@ -2,7 +2,7 @@
 const Database = require("better-sqlite3");
 
 // --- INITIALISATION DE LA BASE ---
-const db = new Database("mydb.sqlite");
+const db = new Database("data/mydb.sqlite");
 
 // Création de la table si nécessaire
 // --- TABLE MESSAGES ---
@@ -17,8 +17,10 @@ db.prepare(`
 db.prepare(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    mail TEXT UNIQUE NOT NULL
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `).run();
 
@@ -42,13 +44,13 @@ export function addMessage(content: string) {
 
 // --- USERS FUNCTIONS ---
 
-export function createUser(username: string, password: string) {
+export function createUser(username: string, password: string, mail: string) {
   const stmt = db.prepare(`
-    INSERT INTO users (username, password)
-    VALUES (?, ?)
+    INSERT INTO users (username, password, mail)
+    VALUES (?, ?, ?)
   `);
 
-  const info = stmt.run(username, password);
+  const info = stmt.run(username, password, mail);
 
   return {
     id: info.lastInsertRowid,
@@ -58,7 +60,7 @@ export function createUser(username: string, password: string) {
 
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password
+    SELECT id, username, password, mail
     FROM users
     WHERE username = ?
   `);
@@ -66,10 +68,28 @@ export function getUserByUsername(username: string) {
   return stmt.get(username);
 }
 
+export function getUserByMail(mail: string) {
+  const stmt = db.prepare(`
+    SELECT id, username, password, mail
+    FROM users
+    WHERE mail = ?
+  `);
+
+  return stmt.get(mail);
+}
+
 export function getAllUsers() {
   const stmt = db.prepare(`
-    SELECT id, username FROM users ORDER BY id ASC
+    SELECT * FROM users ORDER BY id ASC
   `);
 
   return stmt.all();
 }
+
+export type User = {
+  id: number;
+  username: string;
+  password: string;
+  mail: string;
+  created_at: string;
+};

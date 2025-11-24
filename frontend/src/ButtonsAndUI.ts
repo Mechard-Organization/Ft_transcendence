@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ButtonsAndUI.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/11/07 16:39:44 by ajamshid         ###   ########.fr       */
+/*   Updated: 2025/11/24 14:19:24 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { AdvancedDynamicTexture, Button, InputText, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
-import { counter, resetGame, scene, nullifySceneEngine } from "./gameLogicAndMeshes";
+import { counter, resetGame, scene, nullifySceneEngine } from "./Game/gameLogicAndMeshes";
 // Create the canvas
 
 
