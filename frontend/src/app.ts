@@ -1,4 +1,4 @@
-import { gamePage } from "./gameLogicAndMeshes";
+import { gamePage } from "./Game/gamePage";
 import { resetBabylonJs } from "./ButtonsAndUI";
 import { messagesPage } from "./messagesPage";
 import { homePage } from "./homePage";

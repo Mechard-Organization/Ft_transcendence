@@ -6,13 +6,13 @@
 /*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/11/24 14:13:49 by mechard          ###   ########.fr       */
+/*   Updated: 2025/11/24 14:42:06 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 import { Texture, Color4, ParticleSystem, KeyboardEventTypes, TrailMesh, Color3, FreeCamera, StandardMaterial, Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, MeshBuilder, Vector3 } from "@babylonjs/core";
-import { playerCount, finalGoal, drawText, createUI, pause, resetGame2, createdisposableUI } from "./ButtonsAndUI";
+import { playerCount, finalGoal, drawText, createUI, pause, resetGame2, createdisposableUI } from "../ButtonsAndUI";
 
 const paddleWidth = 10, paddleHeight = 100, paddleSpeed = 6;
 const wallHeight = 20;
@@ -254,7 +254,7 @@ function createScene(engine: any) {
   return scene;
 };
 
-export function gamePage(): string {
+export function pong(): string {
   const app = document.getElementById("app")!;
   resetGame(null);
   function play() {

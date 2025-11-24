@@ -1,4 +1,5 @@
-import { gamePage } from "./gameLogicAndMeshes";
+import { gamePage } from "./Game/gamePage";
+import { resetBabylonJs } from "./ButtonsAndUI";
 
 // homePage.ts
 export function homePage() {
@@ -17,6 +18,7 @@ export function homePage() {
 
   playBtn.onclick = async () => {
 	window.location.hash = "#game";
+	resetBabylonJs();
 	gamePage();
   }
 }
