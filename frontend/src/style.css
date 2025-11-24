@@ -34,7 +34,7 @@ div.header {
 }
 div.header_links {
   margin: auto;
-  width: 50%;
+  width: auto;
   text-transform: capitalize;
 }
 

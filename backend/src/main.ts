@@ -52,11 +52,11 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
   if (req.url === "/api/users" && req.method === "POST") {
     try {
       const body = await getRequestBody(req);
-      const { username, password } = body;
+      const { username, password, mail } = body;
 
-      if (!username || !password) {
+      if (!username || !password || !mail) {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Missing username or password" }));
+        res.end(JSON.stringify({ error: "Missing username, password or mail" }));
         return;
       }
 
@@ -67,7 +67,14 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
         return;
       }
 
-      const user = db.createUser(username, password);
+      // Vérifier si le mail existe
+      if (db.getUserByMail(mail)) {
+        res.writeHead(409, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Mail already exists" }));
+        return;
+      }
+
+      const user = db.createUser(username, password, mail);
 
       res.writeHead(201, { "Content-Type": "application/json" });
       res.end(JSON.stringify(user));

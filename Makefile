@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: abutet <abutet@student.42.fr>              +#+  +:+       +#+         #
+#    By: mechard <mechard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2025/11/13 15:59:42 by abutet           ###   ########.fr        #
+#    Updated: 2025/11/24 12:31:14 by mechard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,6 +79,8 @@ help:
 # =========================
 
 prepare:
+	@mkdir -p backend/data
+	@chmod 777 backend/data
 
 up: prepare
 	@$(COMPOSE) up -d
@@ -143,6 +145,7 @@ clean:
 	@$(COMPOSE) down -v
 
 fclean: clean
+	@rm -rf backend/data
 	@$(COMPOSE) rm -fsv || true
 
 prune: down fclean
