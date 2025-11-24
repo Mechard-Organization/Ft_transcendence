@@ -42,7 +42,7 @@ export function loginPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // si tu utilises des cookies
+        credentials: "include",
         body: JSON.stringify({ username, password }),
       });
 

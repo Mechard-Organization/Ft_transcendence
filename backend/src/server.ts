@@ -1,4 +1,6 @@
 import { createServer, IncomingMessage, ServerResponse } from "http";
+import { loginRoutes } from "./User/login/login.route"
+import Fastify from "fastify";
 import * as db from "./Database/db";
 
 const port = 4000;
@@ -17,6 +19,25 @@ function getRequestBody(req: IncomingMessage): Promise<any> {
 
 // --- SERVEUR HTTP ---
 const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
+
+  // 
+  async function bootstrap() {
+  const fastify = Fastify({
+    logger: true,
+    });
+
+    // On peut préfixer toutes les routes d'auth
+    fastify.register(loginRoutes, { prefix: "/api/auth" });
+
+    try {
+      await fastify.listen({ port: 3000, host: "0.0.0.0" });
+      console.log("🚀 Backend started on http://localhost:3000");
+    } catch (err) {
+      fastify.log.error(err);
+      process.exit(1);
+    }
+  }
+  bootstrap();
 
   // POST /api/hello -> Ajouter un message
   if (req.url === "/api/hello" && req.method === "POST") {

@@ -17,9 +17,10 @@ db.prepare(`
 db.prepare(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT,
-    mail TEXT UNIQUE
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    mail TEXT UNIQUE NOT NULL
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `).run();
 
@@ -84,3 +85,11 @@ export function getAllUsers() {
 
   return stmt.all();
 }
+
+export type User = {
+  id: number;
+  username: string;
+  password: string;
+  mail: string;
+  created_at: string;
+};
