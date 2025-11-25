@@ -1,4 +1,5 @@
 import { createServer, IncomingMessage, ServerResponse } from "http";
+import { findUserByUsername, verifyPassword, generateAccessToken } from "./User/login/login.service";
 import { loginRoutes } from "./User/login/login.route"
 import Fastify from "fastify";
 import * as db from "./Database/db";
@@ -20,24 +21,62 @@ function getRequestBody(req: IncomingMessage): Promise<any> {
 // --- SERVEUR HTTP ---
 const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
 
-  // 
-  async function bootstrap() {
-  const fastify = Fastify({
-    logger: true,
-    });
+  //
+  // async function bootstrap() {
+  // const fastify = Fastify({
+  //   logger: true,
+  //   });
 
-    // On peut préfixer toutes les routes d'auth
-    fastify.register(loginRoutes, { prefix: "/api/auth" });
+  //   // On peut préfixer toutes les routes d'auth
+  //   fastify.register(loginRoutes, { prefix: "/api/auth" });
 
+  //   try {
+  //     await fastify.listen({ port: 3000, host: "0.0.0.0" });
+  //     console.log("🚀 Backend started on http://localhost:3000");
+  //   } catch (err) {
+  //     fastify.log.error(err);
+  //     process.exit(1);
+  //   }
+  // }
+  // bootstrap();
+
+  // POST /api/auth -> Ajouter un message
+  if (req.url === "/api/auth" && req.method === "POST") {
     try {
-      await fastify.listen({ port: 3000, host: "0.0.0.0" });
-      console.log("🚀 Backend started on http://localhost:3000");
+      const body = await getRequestBody(req);
+
+      const { username, password } = body;
+
+      if (!username || !password) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Username and password are required" }));
+      }
+
+      const user = findUserByUsername(username);
+      if (!user) {
+        res.writeHead(401, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid credentials" }));
+        return;
+      }
+
+      const passwordOk = await verifyPassword(password, user.password_hash);
+      if (!passwordOk) {
+        res.writeHead(401, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid credentials" }));
+        return;
+      }
+
+      const token = generateAccessToken(user);
+
+      // Pour l’instant on renvoie juste le token en JSON
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ access_token: token }));
+      return;
     } catch (err) {
-      fastify.log.error(err);
-      process.exit(1);
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Invalid JSON" }));
     }
   }
-  bootstrap();
 
   // POST /api/hello -> Ajouter un message
   if (req.url === "/api/hello" && req.method === "POST") {
