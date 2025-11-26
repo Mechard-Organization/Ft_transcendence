@@ -7,8 +7,8 @@ RUN npm install
 
 RUN npm install better-sqlite3
 
-RUN npm install fastify @fastify/jwt @fastify/cors bcrypt
-RUN npm install -D typescript ts-node @types/node @types/bcrypt
+RUN npm install bcrypt jsonwebtoken
+RUN npm install -D typescript ts-node @types/node @types/bcrypt @types/jsonwebtoken
 RUN npx tsc --init
 
 COPY . .

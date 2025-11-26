@@ -1,39 +1,72 @@
 import { gamePage } from "./Game/gamePage";
 import { resetBabylonJs } from "./ButtonsAndUI";
 import { messagesPage } from "./messagesPage";
-import { homePage } from "./homePage";
+import { homePage } from "./Home/homePage";
 import { usersPage } from "./UserManagement/usersPage";
 import { loginPage } from "./UserManagement/loginPage";
+import { profilPage } from "./UserManagement/profilPage"
+import { isAuthenticated } from "./UserManagement/authenticator";
 
-
-const app = document.getElementById("app");
+function buildHeader() {
+  const app = document.getElementById("app");
+  const auth = isAuthenticated();
+  if (!app) return null;
+  if (!auth) {
+    app.innerHTML = `
+    <body>
+    <div class="header">
+    <div class="header_links">
+    <a class="header_link" href="#home">Home</a>
+    <a class="header_link" href="#login">Login</a>
+    <a class="header_link" href="#messages">Messages</a>
+    <a class="header_link" href="#user">User</a>
+    <a class="header_link" href="#about">About</a>
+    </div>
+    </div>
+    </body>`;
+  } else {
+    app.innerHTML = `
+    <body>
+    <div class="header">
+    <div class="header_links">
+    <a class="header_link" href="#home">Home</a>
+    <a class="header_link" href="#messages">Messages</a>
+    <a class="header_link" href="#user">User</a>
+    <a class="header_link" href="#profil">Profil</a>
+    <a class="header_link" href="#about">About</a>
+    </div>
+    </div>
+    </body>`;
+  }
+  return app;
+}
 
 // main function that selects the page asked
 function showPage(page: string) {
-  const app = document.getElementById("app");
-  if (!app) return;
+  
+  const app = buildHeader();
+  if (!app)
+    return;
   resetBabylonJs();
-  app.innerHTML = "";
 
   if (page === "home") {
-    window.location.hash = "#home";
-    homePage();
+    homePage(app.innerHTML);
   } else if (page === "about") {
-    app.innerHTML = "<h1>About</h1>";
+    app.innerHTML += "<h1>About</h1>";
   } else if (page === "game") {
-    window.location.hash = "#game";
-    gamePage();
+    gamePage(app.innerHTML);
   } else if (page === "messages") {
-    window.location.hash = "#messages";
-    messagesPage();
+    messagesPage(app.innerHTML);
   } else if (page === "user") {
-    window.location.hash = "#user";
-    usersPage();
+    usersPage(app.innerHTML);
   } else if (page === "login") {
-    window.location.hash = "#login";
-    loginPage();
+    loginPage(app.innerHTML);
+  } else if (page === "profil") {
+    profilPage(app.innerHTML);
+  } else if (page === "profil") {
+    profilPage(app.innerHTML);
   } else {
-    app.innerHTML = "<h1>Page not found</h1>";
+    app.innerHTML += "<h1>Page not found</h1>";
   }
 }
 
