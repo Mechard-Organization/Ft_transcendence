@@ -1,10 +1,36 @@
 import { createServer, IncomingMessage, ServerResponse } from "http";
-import { findUserByUsername, verifyPassword, generateAccessToken } from "./User/login/login.service";
-import { loginRoutes } from "./User/login/login.route"
-import Fastify from "fastify";
+import bcrypt from "bcrypt";
+import { verifyPassword, generateAccessToken } from "./User/login/login.service";
+import { handleAuthMe } from "./User/auth";
 import * as db from "./Database/db";
 
 const port = 4000;
+
+export function parseCookies(cookieHeader?: string) {
+  const cookies: Record<string, string> = {};
+  if (!cookieHeader) return cookies;
+
+  const parts = cookieHeader.split(";");
+  for (const part of parts) {
+    const [key, ...rest] = part.trim().split("=");
+    if (!key) continue;
+    cookies[key] = decodeURIComponent(rest.join("="));
+  }
+  return cookies;
+}
+
+export function sendJson(
+  res: ServerResponse,
+  statusCode: number,
+  body: unknown
+) {
+  const json = JSON.stringify(body);
+  res.statusCode = statusCode;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Content-Length", Buffer.byteLength(json));
+  res.end(json);
+}
+
 
 // --- FONCTION POUR LIRE LE BODY JSON ---
 function getRequestBody(req: IncomingMessage): Promise<any> {
@@ -20,28 +46,12 @@ function getRequestBody(req: IncomingMessage): Promise<any> {
 
 // --- SERVEUR HTTP ---
 const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
-
-  //
-  // async function bootstrap() {
-  // const fastify = Fastify({
-  //   logger: true,
-  //   });
-
-  //   // On peut préfixer toutes les routes d'auth
-  //   fastify.register(loginRoutes, { prefix: "/api/auth" });
-
-  //   try {
-  //     await fastify.listen({ port: 3000, host: "0.0.0.0" });
-  //     console.log("🚀 Backend started on http://localhost:3000");
-  //   } catch (err) {
-  //     fastify.log.error(err);
-  //     process.exit(1);
-  //   }
-  // }
-  // bootstrap();
-
-  // POST /api/auth -> Ajouter un message
-  if (req.url === "/api/auth" && req.method === "POST") {
+  // Route /api/auth/me
+  if (req.url === "/api/auth/me") {
+    return handleAuthMe(req, res);
+  }
+  // POST /api/auth -> Application d'authentification
+  if (req.url === "/api/auth/login" && req.method === "POST") {
     try {
       const body = await getRequestBody(req);
 
@@ -52,7 +62,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
         res.end(JSON.stringify({ error: "Username and password are required" }));
       }
 
-      const user = findUserByUsername(username);
+      const user = db.getUserByUsername(username);
       if (!user) {
         res.writeHead(401, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Invalid credentials" }));
@@ -68,9 +78,20 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
 
       const token = generateAccessToken(user);
 
+      // 🔒 Cookie HttpOnly + Secure + SameSite=Strict
+      const cookie = [
+        `access_token=${token}`,
+        "HttpOnly",
+        "Secure",          // OK même si le back est en HTTP derrière Nginx
+        "SameSite=Strict", // ou Lax selon ton besoin
+        "Path=/",
+        `Max-Age=3600`,
+      ].join("; ");
+
       // Pour l’instant on renvoie juste le token en JSON
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ access_token: token }));
+      res.writeHead(200, {"Set-Cookie": cookie});
+      res.end(JSON.stringify({ ok: true }));
       return;
     } catch (err) {
       res.writeHead(400, { "Content-Type": "application/json" });
@@ -113,8 +134,9 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     try {
       const body = await getRequestBody(req);
       const { username, password, mail } = body;
+      const password_hash = await bcrypt.hash(password, 10);
 
-      if (!username || !password || !mail) {
+      if (!username || !password_hash || !mail) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Missing username, password or mail" }));
         return;
@@ -134,7 +156,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
         return;
       }
 
-      const user = db.createUser(username, password, mail);
+      const user = db.createUser(username, password_hash, mail);
 
       res.writeHead(201, { "Content-Type": "application/json" });
       res.end(JSON.stringify(user));

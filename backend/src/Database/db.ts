@@ -18,8 +18,8 @@ db.prepare(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    mail TEXT UNIQUE NOT NULL
+    password_hash TEXT NOT NULL,
+    mail TEXT UNIQUE NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `).run();
@@ -44,13 +44,13 @@ export function addMessage(content: string) {
 
 // --- USERS FUNCTIONS ---
 
-export function createUser(username: string, password: string, mail: string) {
+export function createUser(username: string, password_hash: string, mail: string) {
   const stmt = db.prepare(`
-    INSERT INTO users (username, password, mail)
+    INSERT INTO users (username, password_hash, mail)
     VALUES (?, ?, ?)
   `);
 
-  const info = stmt.run(username, password, mail);
+  const info = stmt.run(username, password_hash, mail);
 
   return {
     id: info.lastInsertRowid,
@@ -60,7 +60,7 @@ export function createUser(username: string, password: string, mail: string) {
 
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password, mail
+    SELECT id, username, password_hash, mail
     FROM users
     WHERE username = ?
   `);
@@ -70,7 +70,7 @@ export function getUserByUsername(username: string) {
 
 export function getUserByMail(mail: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password, mail
+    SELECT id, username, password_hash, mail
     FROM users
     WHERE mail = ?
   `);
@@ -89,7 +89,7 @@ export function getAllUsers() {
 export type User = {
   id: number;
   username: string;
-  password: string;
+  password_hash: string;
   mail: string;
   created_at: string;
 };

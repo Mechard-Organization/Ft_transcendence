@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   messages.ts                                        :+:      :+:    :+:   */
+/*   messagesPage.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/11/20 12:51:16 by abutet           ###   ########.fr       */
+/*   Updated: 2025/11/25 15:17:06 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // messagesPage.ts
-export function messagesPage() {
+export function messagesPage(header: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
-  app.innerHTML = `
+  app.innerHTML = header;
+  app.innerHTML += `
     <h1>Messages</h1>
     <div>
       <input type="text" id="newMessage" placeholder="Nouveau message" />

@@ -1,9 +1,10 @@
 // loginPage.ts
-export function loginPage() {
+export function loginPage(header: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
-  app.innerHTML = `
+  app.innerHTML = header;
+  app.innerHTML += `
     <h1>Login</h1>
 
     <div>
@@ -37,11 +38,9 @@ export function loginPage() {
 
     try {
       // ✅ 2. Appel au backend
-      const response = await fetch("https://localhost:8443/api/auth/login", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ username, password }),
       });
@@ -60,7 +59,7 @@ export function loginPage() {
       }
 
       // ✅ 4. Redirection vers la page de jeu ou home
-      window.location.hash = "#game";
+      window.location.hash = "#profil";
       // si tu as une fonction gamePage():
       // gamePage();
     } catch (err) {

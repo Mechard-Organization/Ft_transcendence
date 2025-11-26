@@ -46,11 +46,12 @@ export function validateEmail(email: string) {
 }
 
 // usersPage.ts
-export function usersPage() {
+export function usersPage(header: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
-  app.innerHTML = `
+  app.innerHTML = header;
+  app.innerHTML += `
     <h1>Users</h1>
 
     <div>
