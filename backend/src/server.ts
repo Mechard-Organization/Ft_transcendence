@@ -50,6 +50,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
   if (req.url === "/api/auth/me") {
     return handleAuthMe(req, res);
   }
+  
   // POST /api/auth -> Application d'authentification
   if (req.url === "/api/auth/login" && req.method === "POST") {
     try {
@@ -89,8 +90,9 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       ].join("; ");
 
       // Pour l’instant on renvoie juste le token en JSON
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.writeHead(200, {"Set-Cookie": cookie});
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Set-Cookie", cookie);
       res.end(JSON.stringify({ ok: true }));
       return;
     } catch (err) {

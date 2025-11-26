@@ -58,6 +58,16 @@ export function createUser(username: string, password_hash: string, mail: string
   };
 }
 
+export function getUserById(username: string) {
+  const stmt = db.prepare(`
+    SELECT id, username, password_hash, mail
+    FROM id
+    WHERE id = ?
+  `);
+
+  return stmt.get(username);
+}
+
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
     SELECT id, username, password_hash, mail

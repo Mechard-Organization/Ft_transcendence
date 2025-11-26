@@ -14,24 +14,26 @@ export function handleAuthMe(req: IncomingMessage, res: ServerResponse) {
 
   // 2) Récupérer le cookie
   const cookies = parseCookies(req.headers.cookie);
+  if (!cookies) {
+    return sendJson(res, 200, { id:0, ok: "No cookies" });
+  }
+  
   const token = cookies["access_token"];
-
   if (!token) {
-    return sendJson(res, 401, { error: "Not authenticated (no token)" });
+    return sendJson(res, 200, { ok: "Not authenticated (no token)" });
   }
 
   try {
     // 3) Vérifier le JWT
     const payload = jwt.verify(token, JWT_SECRET) as {
       sub: number | string;
-      username?: string;
+      id?: string;
       [key: string]: unknown;
     };
 
     // 4) Retourner les infos utiles de l’utilisateur
     return sendJson(res, 200, {
       id: payload.sub,
-      username: payload.username,
       // tu peux ajouter d’autres claims ici si tu les mets dans le token
     });
   } catch (err) {
