@@ -1,5 +1,5 @@
 // loginPage.ts
-export function loginPage(header: string) {
+export function loginPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
@@ -22,7 +22,8 @@ export function loginPage(header: string) {
       <p id="loginError" style="color:red;"></p>
     </form>
   `;
-
+  app.innerHTML += footer;
+  
   const usernameInput = document.getElementById("username") as HTMLInputElement | null;
   const passwordInput = document.getElementById("password") as HTMLInputElement | null;
   const errorEl = document.getElementById("loginError") as HTMLParagraphElement | null;

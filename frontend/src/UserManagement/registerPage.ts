@@ -45,8 +45,8 @@ export function validateEmail(email: string) {
   return { ok: true, reason: "Valid email" };
 }
 
-// usersPage.ts
-export function usersPage(header: string) {
+// registerPage.ts
+export function registerPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 

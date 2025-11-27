@@ -2,7 +2,7 @@ import { gamePage } from "../Game/gamePage";
 import { resetBabylonJs } from "../ButtonsAndUI";
 
 // homePage.ts
-export function homePage(header: string) {
+export function homePage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
@@ -15,7 +15,7 @@ export function homePage(header: string) {
 	</div>
 	</html>
   `;
-
+  app.innerHTML += footer;
   const playBtn = document.getElementById("game") as HTMLButtonElement;
 
   playBtn.onclick = async () => {

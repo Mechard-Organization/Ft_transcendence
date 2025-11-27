@@ -1,4 +1,4 @@
-export function profilPage(header: string) {
+export function profilPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
@@ -9,7 +9,8 @@ export function profilPage(header: string) {
       <button id="logout" class="btn-primary">Logout</button>
     </div>
   `;
-
+  app.innerHTML += footer;
+  
   const logoutBtn = document.getElementById("logout");
   if (!logoutBtn) return;
 
