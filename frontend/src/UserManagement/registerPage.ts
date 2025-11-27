@@ -54,50 +54,43 @@ export function usersPage(header: string) {
   app.innerHTML += `
     <h1 class="title">Créer un compte</h1>
 
-    <div class="form-container">
-      <div class="form-group">
-        <label for="username">Nom d'utilisateur</label>
-        <input type="text" id="username" placeholder="Nom d'utilisateur" />
-      </div>
-
-      <div class="form-group">
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" placeholder="Mot de passe" />
-      </div>
-
-      <div class="form-group">
-        <label for="mail">E-mail</label>
-        <input type="email" id="mail" placeholder="E-mail" />
-      </div>
-
-      <button id="createUser" class="btn-primary">S'enregistrer</button>
+  <div class="form-container">
+    <div class="form-group">
+      <label for="username">Nom d'utilisateur</label>
+      <input type="text" id="username" placeholder="Nom d'utilisateur" />
     </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" placeholder="Mot de passe" />
+    </div>
+
+    <div class="form-group">
+      <label for="mail">E-mail</label>
+      <input type="email" id="mail" placeholder="E-mail" />
+    </div>
+
+    <button id="createUser" class="btn-primary">S'enregistrer</button>
+  </div>
   `;
 
-  const usersList = document.getElementById("usersList") as HTMLUListElement;
   const usernameInput = document.getElementById("username") as HTMLInputElement;
   const passwordInput = document.getElementById("password") as HTMLInputElement;
   const mailInput = document.getElementById("mail") as HTMLInputElement;
   const createUserBtn = document.getElementById("createUser") as HTMLButtonElement;
 
-  // --- Fonction pour récupérer tous les utilisateurs ---
-  async function fetchUsers() {
-    try {
-      const res = await fetch("/api/users");
-      const data = await res.json();
-
-      usersList.innerHTML = "";
-
-      data.forEach((user: { id: number; username: string; mail: string}) => {
-        const li = document.createElement("li");
-        li.textContent = `#${user.id}: ${user.username}, ${user.mail}`;
-        usersList.appendChild(li);
-      });
-    } catch (err) {
-      console.error(err);
-      usersList.innerHTML = "<li>Erreur lors du chargement des utilisateurs</li>";
+  // 🔹 Ajout de la touche "Entrée" uniquement sur cette page
+  const handleEnter = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();           // évite toute action par défaut chelou
+      createUserBtn.click();        // déclenche exactement la même logique
     }
-  }
+  };
+
+  usernameInput.addEventListener("keydown", handleEnter);
+  passwordInput.addEventListener("keydown", handleEnter);
+  mailInput.addEventListener("keydown", handleEnter);
+  createUserBtn.addEventListener("keydown", handleEnter);
 
   // --- Créer un utilisateur ---
   createUserBtn.onclick = async () => {
@@ -120,6 +113,7 @@ export function usersPage(header: string) {
       return;
     }
 
+    console.log(null, 200, { user: username, password: password, mail: mail});
     try {
       const res = await fetch("/api/users", {
         method: "POST",
@@ -140,12 +134,10 @@ export function usersPage(header: string) {
       passwordInput.value = "";
       mailInput.value = "";
 
-      fetchUsers(); // Rafraîchir la liste
     } catch (err) {
       console.error(err);
     }
   };
 
-  // --- Chargement initial ---
-  fetchUsers();
+  // --- Chargement initial ---;
 }

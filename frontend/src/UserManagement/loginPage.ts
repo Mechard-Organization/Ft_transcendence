@@ -7,7 +7,7 @@ export function loginPage(header: string) {
   app.innerHTML += `
     <h1 class="title">Login</h1>
 
-    <div class="form-container">
+    <form id="loginForm" class="form-container">
       <div class="form-group">
         <label for="username">Nom d'utilisateur</label>
         <input type="text" id="username" placeholder="Nom d'utilisateur" />
@@ -18,19 +18,24 @@ export function loginPage(header: string) {
         <input type="password" id="password" placeholder="Mot de passe" />
       </div>
 
-      <button id="loginBtn" class="btn-secondary">Se connecter</button>
+      <button id="loginBtn" class="btn-secondary" type="submit">Se connecter</button>
       <p id="loginError" style="color:red;"></p>
-    </div>
+    </form>
   `;
 
   const usernameInput = document.getElementById("username") as HTMLInputElement | null;
   const passwordInput = document.getElementById("password") as HTMLInputElement | null;
-  const loginBtn = document.getElementById("loginBtn") as HTMLButtonElement | null;
   const errorEl = document.getElementById("loginError") as HTMLParagraphElement | null;
+  const form = document.getElementById("loginForm") as HTMLFormElement | null;
 
-  if (!usernameInput || !passwordInput || !loginBtn || !errorEl) return;
+  if (!usernameInput || !passwordInput || !errorEl || !form) {
+    console.error("LoginPage: élément manquant dans le DOM");
+    return;
+  }
 
-  loginBtn.onclick = async () => {
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+
     errorEl.textContent = "";
 
     const username = usernameInput.value.trim();
@@ -45,7 +50,7 @@ export function loginPage(header: string) {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // ⚠ nécessaire pour que le cookie HttpOnly soit accepté
+        credentials: "include",
         body: JSON.stringify({ username, password }),
       });
 
@@ -55,7 +60,7 @@ export function loginPage(header: string) {
         return;
       }
 
-      // Ici le cookie est déjà créé.
+      // Ici, le cookie HttpOnly est déjà posé côté navigateur
       window.location.hash = "#profil";
     } catch (err) {
       console.error(err);
