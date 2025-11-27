@@ -1,36 +1,11 @@
 import { createServer, IncomingMessage, ServerResponse } from "http";
-import bcrypt from "bcrypt";
 import { verifyPassword, generateAccessToken } from "./User/login/login.service";
 import { handleAuthMe } from "./User/auth";
+import { handleLogout } from "./User/logout/logout.service";
 import * as db from "./Database/db";
+import bcrypt from "bcrypt";
 
 const port = 4000;
-
-export function parseCookies(cookieHeader?: string) {
-  const cookies: Record<string, string> = {};
-  if (!cookieHeader) return cookies;
-
-  const parts = cookieHeader.split(";");
-  for (const part of parts) {
-    const [key, ...rest] = part.trim().split("=");
-    if (!key) continue;
-    cookies[key] = decodeURIComponent(rest.join("="));
-  }
-  return cookies;
-}
-
-export function sendJson(
-  res: ServerResponse,
-  statusCode: number,
-  body: unknown
-) {
-  const json = JSON.stringify(body);
-  res.statusCode = statusCode;
-  res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("Content-Length", Buffer.byteLength(json));
-  res.end(json);
-}
-
 
 // --- FONCTION POUR LIRE LE BODY JSON ---
 function getRequestBody(req: IncomingMessage): Promise<any> {
@@ -46,11 +21,21 @@ function getRequestBody(req: IncomingMessage): Promise<any> {
 
 // --- SERVEUR HTTP ---
 const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
+  const url = req.url || "/";
+  const method = req.method || "GET";
+
+  console.log(`${method} ${url}`);
+
+  // Route /api/auth/logout
+  if (req.url === "/api/auth/logout") {
+    return handleLogout(req, res);
+  }
+
   // Route /api/auth/me
   if (req.url === "/api/auth/me") {
     return handleAuthMe(req, res);
   }
-  
+
   // POST /api/auth -> Application d'authentification
   if (req.url === "/api/auth/login" && req.method === "POST") {
     try {

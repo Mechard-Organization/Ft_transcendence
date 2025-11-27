@@ -7,11 +7,12 @@ import { loginPage } from "./UserManagement/loginPage";
 import { profilPage } from "./UserManagement/profilPage"
 import { isAuthenticated } from "./UserManagement/authenticator";
 
-function buildHeader() {
+async function buildHeader() {
   const app = document.getElementById("app");
-  const auth = isAuthenticated();
   if (!app) return null;
-  if (!auth) {
+
+  const auth = await isAuthenticated();
+  if (!auth.authenticated) {
     app.innerHTML = `
     <body>
     <div class="header">
@@ -42,9 +43,9 @@ function buildHeader() {
 }
 
 // main function that selects the page asked
-function showPage(page: string) {
+async function showPage(page: string) {
   
-  const app = buildHeader();
+  const app = await buildHeader();
   if (!app)
     return;
   resetBabylonJs();

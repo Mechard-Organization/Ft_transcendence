@@ -1,43 +1,64 @@
 import { IncomingMessage, ServerResponse } from "http";
 import jwt from "jsonwebtoken";
-import { parseCookies, sendJson } from "../server";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
 
+export function parseCookies(cookieHeader?: string) {
+  const cookies: Record<string, string> = {};
+  if (!cookieHeader) return cookies;
+  
+  const parts = cookieHeader.split(";");
+  for (const part of parts) {
+    const [key, ...rest] = part.trim().split("=");
+    if (!key) continue;
+    cookies[key] = decodeURIComponent(rest.join("="));
+  }
+  return cookies;
+}
+
+function sendJson(res: ServerResponse, statusCode: number, body: unknown) {
+  const json = JSON.stringify(body);
+  res.statusCode = statusCode;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Content-Length", Buffer.byteLength(json));
+  res.end(json);
+}
+
 export function handleAuthMe(req: IncomingMessage, res: ServerResponse) {
-  // 1) On ne traite que GET /api/auth/me
   if (req.method !== "GET") {
     res.statusCode = 405;
     res.setHeader("Allow", "GET");
     return res.end();
   }
 
-  // 2) Récupérer le cookie
   const cookies = parseCookies(req.headers.cookie);
-  if (!cookies) {
-    return sendJson(res, 200, { id:0, ok: "No cookies" });
-  }
-  
   const token = cookies["access_token"];
+
+  // ✅ Cas 1 : aucun token → utilisateur NON connecté
   if (!token) {
-    return sendJson(res, 200, { ok: "Not authenticated (no token)" });
+    return sendJson(res, 200, {
+      authenticated: false,
+    });
   }
 
   try {
-    // 3) Vérifier le JWT
     const payload = jwt.verify(token, JWT_SECRET) as {
       sub: number | string;
       id?: string;
-      [key: string]: unknown;
     };
 
-    // 4) Retourner les infos utiles de l’utilisateur
+    // ✅ Cas 2 : token valide → utilisateur connecté
     return sendJson(res, 200, {
+      authenticated: true,
       id: payload.sub,
-      // tu peux ajouter d’autres claims ici si tu les mets dans le token
     });
   } catch (err) {
     console.error("JWT verify error:", err);
-    return sendJson(res, 401, { error: "Invalid or expired token" });
+
+    // ✅ Cas 3 : token invalide / expiré → NON connecté
+    return sendJson(res, 200, {
+      authenticated: false,
+      reason: "invalid_or_expired",
+    });
   }
 }
