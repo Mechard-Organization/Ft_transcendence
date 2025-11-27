@@ -1,6 +1,13 @@
 // logout.ts
 import { IncomingMessage, ServerResponse } from "http";
-import { sendJson } from "../httpUtils";
+
+function sendJson(res: ServerResponse, statusCode: number, body: unknown) {
+  const json = JSON.stringify(body);
+  res.statusCode = statusCode;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Content-Length", Buffer.byteLength(json));
+  res.end(json);
+}
 
 export function handleLogout(req: IncomingMessage, res: ServerResponse) {
   if (req.method !== "POST") {

@@ -25,12 +25,16 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
   const method = req.method || "GET";
 
   console.log(`${method} ${url}`);
-  
+
+  // Route /api/auth/logout
+  if (req.url === "/api/auth/logout") {
+    return handleLogout(req, res);
+  }
+
   // Route /api/auth/me
   if (req.url === "/api/auth/me") {
     return handleAuthMe(req, res);
   }
-  
 
   // POST /api/auth -> Application d'authentification
   if (req.url === "/api/auth/login" && req.method === "POST") {
