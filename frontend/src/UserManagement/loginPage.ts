@@ -5,14 +5,20 @@ export function loginPage(header: string) {
 
   app.innerHTML = header;
   app.innerHTML += `
-    <h1>Login</h1>
+    <h1 class="title">Login</h1>
 
-    <div>
-      <input type="text" id="username" placeholder="Nom d'utilisateur" />
-      <br/><br/>
-      <input type="password" id="password" placeholder="Mot de passe" />
-      <br/><br/>
-      <button id="loginBtn">Se connecter</button>
+    <div class="form-container">
+      <div class="form-group">
+        <label for="username">Nom d'utilisateur</label>
+        <input type="text" id="username" placeholder="Nom d'utilisateur" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" placeholder="Mot de passe" />
+      </div>
+
+      <button id="loginBtn" class="btn-secondary">Se connecter</button>
       <p id="loginError" style="color:red;"></p>
     </div>
   `;

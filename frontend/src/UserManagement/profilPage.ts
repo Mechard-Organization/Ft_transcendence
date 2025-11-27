@@ -5,7 +5,9 @@ export function profilPage(header: string) {
   app.innerHTML = header;
   app.innerHTML += `
     <h1>Profil</h1>
-    <button id="logout">Logout</button>
+    <div width=10>
+      <button id="logout" class="btn-primary">Logout</button>
+    </div>
   `;
 
   const logoutBtn = document.getElementById("logout");
