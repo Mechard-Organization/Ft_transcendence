@@ -52,17 +52,26 @@ export function usersPage(header: string) {
 
   app.innerHTML = header;
   app.innerHTML += `
-    <h1>Users</h1>
+    <h1 class="title">Créer un compte</h1>
 
-    <div>
-      <input type="text" id="username" placeholder="Nom d'utilisateur" />
-      <input type="password" id="password" placeholder="Mot de passe" />
-      <input type="mail" id="mail" placeholder="E-mail" />
-      <button id="createUser">Créer utilisateur</button>
+    <div class="form-container">
+      <div class="form-group">
+        <label for="username">Nom d'utilisateur</label>
+        <input type="text" id="username" placeholder="Nom d'utilisateur" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" placeholder="Mot de passe" />
+      </div>
+
+      <div class="form-group">
+        <label for="mail">E-mail</label>
+        <input type="email" id="mail" placeholder="E-mail" />
+      </div>
+
+      <button id="createUser" class="btn-primary">S'enregistrer</button>
     </div>
-
-    <h2>Liste des utilisateurs</h2>
-    <ul id="usersList"></ul>
   `;
 
   const usersList = document.getElementById("usersList") as HTMLUListElement;

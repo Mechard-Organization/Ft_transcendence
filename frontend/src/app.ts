@@ -2,7 +2,7 @@ import { gamePage } from "./Game/gamePage";
 import { resetBabylonJs } from "./ButtonsAndUI";
 import { messagesPage } from "./messagesPage";
 import { homePage } from "./Home/homePage";
-import { usersPage } from "./UserManagement/usersPage";
+import { usersPage } from "./UserManagement/registerPage";
 import { loginPage } from "./UserManagement/loginPage";
 import { profilPage } from "./UserManagement/profilPage"
 import { isAuthenticated } from "./UserManagement/authenticator";
@@ -19,6 +19,7 @@ async function buildHeader() {
     <div class="header_links">
     <a class="header_link" href="#home">Home</a>
     <a class="header_link" href="#login">Login</a>
+    <a class="header_link" href="#user">Register</a>
     <a class="header_link" href="#messages">Messages</a>
     <a class="header_link" href="#user">User</a>
     <a class="header_link" href="#about">About</a>
@@ -32,7 +33,6 @@ async function buildHeader() {
     <div class="header_links">
     <a class="header_link" href="#home">Home</a>
     <a class="header_link" href="#messages">Messages</a>
-    <a class="header_link" href="#user">User</a>
     <a class="header_link" href="#profil">Profil</a>
     <a class="header_link" href="#about">About</a>
     </div>
