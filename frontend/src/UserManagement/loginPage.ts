@@ -30,18 +30,16 @@ export function loginPage(header: string) {
     const username = usernameInput.value.trim();
     const password = passwordInput.value;
 
-    // ✅ 1. Validation de base
     if (!username || !password) {
       errorEl.textContent = "Nom d'utilisateur et mot de passe requis.";
       return;
     }
 
     try {
-      // ✅ 2. Appel au backend
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        credentials: "include", // ⚠ nécessaire pour que le cookie HttpOnly soit accepté
         body: JSON.stringify({ username, password }),
       });
 
@@ -51,17 +49,8 @@ export function loginPage(header: string) {
         return;
       }
 
-      const data = await response.json();
-
-      // ✅ 3. Stockage du token (si tu es en JWT côté front)
-      if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-      }
-
-      // ✅ 4. Redirection vers la page de jeu ou home
+      // Ici le cookie est déjà créé.
       window.location.hash = "#profil";
-      // si tu as une fonction gamePage():
-      // gamePage();
     } catch (err) {
       console.error(err);
       errorEl.textContent = "Erreur réseau, réessaie plus tard.";

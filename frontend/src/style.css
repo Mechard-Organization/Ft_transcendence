@@ -33,8 +33,10 @@ div.header {
 
 }
 div.header_links {
-  margin: auto;
-  width: auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  gap: 15px;
   text-transform: capitalize;
 }
 
@@ -42,7 +44,6 @@ a.header_link {
   text-decoration: none;
   text-shadow: 2px 2px #333;
   font-weight: bold;
-  margin: 50px;
   color: brown;
 }
 

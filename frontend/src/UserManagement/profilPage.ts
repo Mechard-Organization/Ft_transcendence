@@ -5,5 +5,30 @@ export function profilPage(header: string) {
   app.innerHTML = header;
   app.innerHTML += `
     <h1>Profil</h1>
+    <button id="logout">Logout</button>
   `;
-  }
+
+  const logoutBtn = document.getElementById("logout");
+  if (!logoutBtn) return;
+
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include"
+      });
+
+      if (!res.ok) {
+        console.error("Logout failed");
+        return;
+      }
+
+      // 👉 Tu veux vider la session côté SPA
+      window.location.hash = "#login";
+
+      // await buildHeader();
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  });
+}
