@@ -6,7 +6,7 @@ export function profilPage(header: string, footer: string) {
   app.innerHTML += `
     <h1>Profil</h1>
     <div width=10>
-      <button id="logout" class="btn-primary">Logout</button>
+      <button id="logout" class="btn-secondary">Logout</button>
     </div>
   `;
   app.innerHTML += footer;

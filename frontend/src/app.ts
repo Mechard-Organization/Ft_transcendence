@@ -24,8 +24,7 @@ async function buildHeader() {
     <a class="header_link" href="#about">About</a>
     </div>
     </div>
-    </body>
-    <div class="footer"><p class="footer_text">this is my footer</p></div>`;
+    </body>`;
   } else {
     app.innerHTML = `
     <body>
@@ -46,7 +45,11 @@ async function buildHeader() {
 async function showPage(page: string) {
   
   const footer = `
-  <div class="footer"><p class="footer_text">this is my footer</p></div>
+  <div class="footer">
+  <div class="footer_links">
+  <a class="footer_link" href="#about">About</a></div>
+  </div>
+  </div>
   `;
   const app = await buildHeader();
   if (!app)

@@ -11,7 +11,7 @@ export function homePage(header: string, footer: string) {
 	<h1>Home</h1>
 
 	<div>
-	  <button id="game">Play</button>
+	  <button id="game" class="btn-standard">Play</button>
 	</div>
 	</html>
   `;

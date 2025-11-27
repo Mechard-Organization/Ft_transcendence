@@ -18,7 +18,7 @@ export function loginPage(header: string, footer: string) {
         <input type="password" id="password" placeholder="Mot de passe" />
       </div>
 
-      <button id="loginBtn" class="btn-secondary" type="submit">Se connecter</button>
+      <button id="loginBtn" class="btn-primary" type="submit">Se connecter</button>
       <p id="loginError" style="color:red;"></p>
     </form>
   `;
@@ -29,10 +29,10 @@ export function loginPage(header: string, footer: string) {
   const errorEl = document.getElementById("loginError") as HTMLParagraphElement | null;
   const form = document.getElementById("loginForm") as HTMLFormElement | null;
 
-  if (!usernameInput || !passwordInput || !errorEl || !form) {
-    console.error("LoginPage: élément manquant dans le DOM");
-    return;
-  }
+  // if (!usernameInput || !passwordInput || !errorEl || !form) {
+  //   console.error("LoginPage: élément manquant dans le DOM");
+  //   return;
+  // }
 
   form.onsubmit = async (e) => {
     e.preventDefault();
