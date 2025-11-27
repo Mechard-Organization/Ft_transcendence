@@ -6,12 +6,12 @@
 /*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/11/25 15:17:06 by mechard          ###   ########.fr       */
+/*   Updated: 2025/11/27 14:49:19 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // messagesPage.ts
-export function messagesPage(header: string) {
+export function messagesPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
@@ -24,7 +24,8 @@ export function messagesPage(header: string) {
     </div>
     <ul id="messagesList"></ul>
   `;
-
+  app.innerHTML += footer;
+  
   const messagesList = document.getElementById("messagesList") as HTMLUListElement;
   const newMessageInput = document.getElementById("newMessage") as HTMLInputElement;
   const sendMessageButton = document.getElementById("sendMessage") as HTMLButtonElement;

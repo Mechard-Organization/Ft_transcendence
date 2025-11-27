@@ -6,7 +6,7 @@
 #    By: mechard <mechard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2025/11/24 12:31:14 by mechard          ###   ########.fr        #
+#    Updated: 2025/11/27 11:35:21 by mechard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -148,7 +148,10 @@ fclean: clean
 	@rm -rf backend/data
 	@$(COMPOSE) rm -fsv || true
 
-prune: down fclean
+prune: down clean
+	@$(SYSTEM) prune -af --volumes
+
+fprune: down fclean
 	@$(SYSTEM) prune -af --volumes
 
 # =========================

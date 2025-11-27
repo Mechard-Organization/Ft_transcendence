@@ -1,13 +1,16 @@
-export function profilPage(header: string) {
+export function profilPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
   app.innerHTML = header;
   app.innerHTML += `
     <h1>Profil</h1>
-    <button id="logout">Logout</button>
+    <div width=10>
+      <button id="logout" class="btn-secondary">Logout</button>
+    </div>
   `;
-
+  app.innerHTML += footer;
+  
   const logoutBtn = document.getElementById("logout");
   if (!logoutBtn) return;
 

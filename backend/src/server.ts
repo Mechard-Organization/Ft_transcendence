@@ -154,8 +154,10 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     return;
   }
 
-  if (req.url === "/api/users" && req.method === "GET") {
-  const users = db.getAllUsers();
+  if (req.url === "/api/getuser" && req.method === "POST") {
+  const body = await getRequestBody(req);
+  const { id } = body;
+  const users = db.getUserById(id);
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(users));
   return;
