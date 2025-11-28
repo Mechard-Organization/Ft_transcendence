@@ -1,9 +1,14 @@
+// Bibliothéque extérieure
 import { createServer, IncomingMessage, ServerResponse } from "http";
-import { verifyPassword, generateAccessToken } from "./User/login/login.service";
-import { handleAuthMe } from "./User/auth";
-import { handleLogout } from "./User/logout/logout.service";
-import * as db from "./Database/db";
+import { WebSocketServer } from "ws";
 import bcrypt from "bcrypt";
+
+// Bibliothéque intérieure
+import { register, httpRequestCounter, httpRequestDuration, httpErrorCounter } from "./metrics";
+import { verifyPassword, generateAccessToken } from "./User/login/login.service";
+import { handleLogout } from "./User/logout/logout.service";
+import { handleAuthMe } from "./User/auth";
+import * as db from "./Database/db";
 
 const port = 4000;
 
@@ -26,147 +31,215 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
 
   console.log(`${method} ${url}`);
 
-  // Route /api/auth/logout
-  if (req.url === "/api/auth/logout") {
-    return handleLogout(req, res);
-  }
+  try {
+    // Route /api/auth/logout
+    if (req.url === "/api/auth/logout") {
+      return handleLogout(req, res);
+    }
 
-  // Route /api/auth/me
-  if (req.url === "/api/auth/me") {
-    return handleAuthMe(req, res);
-  }
+    // Route /api/auth/me
+    if (req.url === "/api/auth/me" && req.method === "GET") {
+      return handleAuthMe(req, res);
+    }
 
-  // POST /api/auth -> Application d'authentification
-  if (req.url === "/api/auth/login" && req.method === "POST") {
-    try {
-      const body = await getRequestBody(req);
+    // POST /api/auth -> Application d'authentification
+    if (req.url === "/api/auth/login" && req.method === "POST") {
+      try {
+        const body = await getRequestBody(req);
 
-      const { username, password } = body;
+        const { username, password } = body;
 
-      if (!username || !password) {
+        if (!username || !password) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Username and password are required" }));
+        }
+
+        const user = db.getUserByUsername(username);
+        if (!user) {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid credentials" }));
+          return;
+        }
+
+        const passwordOk = await verifyPassword(password, user.password_hash);
+        if (!passwordOk) {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid credentials" }));
+          return;
+        }
+
+        const token = generateAccessToken(user);
+
+        // 🔒 Cookie HttpOnly + Secure + SameSite=Strict
+        const cookie = [
+          `access_token=${token}`,
+          "HttpOnly",
+          "Secure",          // OK même si le back est en HTTP derrière Nginx
+          "SameSite=Strict", // ou Lax selon ton besoin
+          "Path=/",
+          `Max-Age=3600`,
+        ].join("; ");
+
+        // Pour l’instant on renvoie juste le token en JSON
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.setHeader("Set-Cookie", cookie);
+        res.end(JSON.stringify({ ok: true }));
+        return;
+      } catch (err) {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Username and password are required" }));
+        res.end(JSON.stringify({ error: "Invalid JSON" }));
       }
+    }
 
-      const user = db.getUserByUsername(username);
-      if (!user) {
-        res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Invalid credentials" }));
-        return;
+    // POST /api/hello -> Ajouter un message
+    if (req.url === "/api/hello" && req.method === "POST") {
+      try {
+        const body = await getRequestBody(req);
+        const content = body.content;
+
+        if (!content || typeof content !== "string") {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid content" }));
+          return;
+        }
+
+        const saved = db.addMessage(content);
+
+        // 🔥 Broadcast WebSocket
+        wss.clients.forEach(client => {
+          if (client.readyState === 1) {
+            client.send(JSON.stringify({ type: "new_message", data: saved }));
+          }
+        });
+
+        res.writeHead(201, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(saved));
+      } catch (err) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid JSON" }));
       }
-
-      const passwordOk = await verifyPassword(password, user.password_hash);
-      if (!passwordOk) {
-        res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Invalid credentials" }));
-        return;
-      }
-
-      const token = generateAccessToken(user);
-
-      // 🔒 Cookie HttpOnly + Secure + SameSite=Strict
-      const cookie = [
-        `access_token=${token}`,
-        "HttpOnly",
-        "Secure",          // OK même si le back est en HTTP derrière Nginx
-        "SameSite=Strict", // ou Lax selon ton besoin
-        "Path=/",
-        `Max-Age=3600`,
-      ].join("; ");
-
-      // Pour l’instant on renvoie juste le token en JSON
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.setHeader("Set-Cookie", cookie);
-      res.end(JSON.stringify({ ok: true }));
       return;
-    } catch (err) {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Invalid JSON" }));
     }
-  }
 
-  // POST /api/hello -> Ajouter un message
-  if (req.url === "/api/hello" && req.method === "POST") {
-    try {
-      const body = await getRequestBody(req);
-      const content = body.content;
+    // GET /api/messages -> Liste tous les messages
+    if (req.url === "/api/messages" && req.method === "GET") {
+      const rows = db.getAllMessages();
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(rows));
+      return;
+    }
 
-      if (!content || typeof content !== "string") {
+    if (req.url === "/api/users" && req.method === "POST") {
+      try {
+        const body = await getRequestBody(req);
+        const { username, password, mail } = body;
+        const password_hash = await bcrypt.hash(password, 10);
+
+        if (!username || !password_hash || !mail) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Missing username, password or mail" }));
+          return;
+        }
+
+        // Vérifier si user existe
+        if (db.getUserByUsername(username)) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Username already exists" }));
+          return;
+        }
+
+        // Vérifier si le mail existe
+        if (db.getUserByMail(mail)) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Mail already exists" }));
+          return;
+        }
+
+        const user = db.createUser(username, password_hash, mail);
+
+        res.writeHead(201, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(user));
+      } catch {
         res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Invalid content" }));
-        return;
+        res.end(JSON.stringify({ error: "Invalid JSON" }));
       }
-
-      const saved = db.addMessage(content);
-
-      res.writeHead(201, { "Content-Type": "application/json" });
-      res.end(JSON.stringify(saved));
-    } catch (err) {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Invalid JSON" }));
+      return;
     }
-    return;
-  }
 
-  // GET /api/messages -> Liste tous les messages
-  if (req.url === "/api/messages" && req.method === "GET") {
-    const rows = db.getAllMessages();
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify(rows));
-    return;
-  }
+    if (req.url === "/api/users" && req.method === "GET") {
+      const users = db.getAllUsers();
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(users));
+      return;
+    }
 
-  if (req.url === "/api/users" && req.method === "POST") {
-    try {
+    if (req.url === "/api/getuser" && req.method === "POST") {
       const body = await getRequestBody(req);
-      const { username, password, mail } = body;
-      const password_hash = await bcrypt.hash(password, 10);
-
-      if (!username || !password_hash || !mail) {
-        res.writeHead(400, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Missing username, password or mail" }));
-        return;
-      }
-
-      // Vérifier si user existe
-      if (db.getUserByUsername(username)) {
-        res.writeHead(409, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Username already exists" }));
-        return;
-      }
-
-      // Vérifier si le mail existe
-      if (db.getUserByMail(mail)) {
-        res.writeHead(409, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Mail already exists" }));
-        return;
-      }
-
-      const user = db.createUser(username, password_hash, mail);
-
-      res.writeHead(201, { "Content-Type": "application/json" });
-      res.end(JSON.stringify(user));
-    } catch {
-      res.writeHead(400, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Invalid JSON" }));
+      const { id } = body;
+      const users = db.getUserById(id);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(users));
+      return;
     }
-    return;
+
+    // Route Prometheus /metrics
+    if (url === "/metrics") {
+      // Pas de compteur ici, pour éviter de compter les scrapes Prometheus
+      register.metrics()
+        .then((metrics) => {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", register.contentType);
+          res.end(metrics);
+        })
+        .catch((err) => {
+          console.error("Error generating metrics:", err);
+          res.statusCode = 500;
+          res.setHeader("Content-Type", "text/plain");
+          res.end("Error generating metrics");
+        });
+      return;
+    }
+
+    // ROUTE 404
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Not Found" }));
+  } catch (err) {
+    console.error("Unhandled error:", err);
+    httpErrorCounter.inc({ method, route: url.split("?")[0], type: "exception" });
+
+    res.statusCode = 500;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.end(JSON.stringify({ error: "Internal server error" }));
   }
 
-  if (req.url === "/api/getuser" && req.method === "POST") {
-  const body = await getRequestBody(req);
-  const { id } = body;
-  const users = db.getUserById(id);
-  res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(JSON.stringify(users));
-  return;
-}
-
-  // ROUTE 404
-  res.writeHead(404, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ error: "Not Found" }));
 });
+
+// --- SERVEUR WEBSOCKET ---
+const wss = new WebSocketServer({ server });
+
+// Quand un client se connecte
+wss.on("connection", ws => {
+  console.log("Client connecté en WebSocket");
+
+  ws.send(JSON.stringify({ type: "welcome", message: "Bienvenue en WebSocket !" }));
+
+  ws.on("message", msg => {
+    console.log("Message reçu :", msg.toString());
+
+    // Exemple : broadcast à tous les autres clients
+    wss.clients.forEach(client => {
+      if (client.readyState === 1) {
+        client.send(JSON.stringify({ type: "msg", payload: msg.toString() }));
+      }
+    });
+  });
+
+  ws.on("close", () => {
+    console.log("Client déconnecté");
+  });
+});
+
 
 // --- DÉMARRAGE ---
 server.listen(port, () => {

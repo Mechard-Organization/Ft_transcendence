@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   messagesPage.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/11/27 14:49:19 by mechard          ###   ########.fr       */
+/*   Updated: 2025/11/28 14:11:12 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// messagesPage.ts
+/// messagesPage.ts
 export function messagesPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
@@ -25,29 +25,57 @@ export function messagesPage(header: string, footer: string) {
     <ul id="messagesList"></ul>
   `;
   app.innerHTML += footer;
-  
+
   const messagesList = document.getElementById("messagesList") as HTMLUListElement;
   const newMessageInput = document.getElementById("newMessage") as HTMLInputElement;
   const sendMessageButton = document.getElementById("sendMessage") as HTMLButtonElement;
 
-  // Fonction pour récupérer tous les messages
+  // --- WEBSOCKET ---
+  const ws = new WebSocket("/ws/");
+
+  ws.onopen = () => {
+    console.log("WebSocket connecté !");
+  };
+
+  ws.onmessage = (event) => {
+    try {
+      const msg = JSON.parse(event.data);
+      console.log("WS reçu :", msg);
+
+      if (msg.type === "new_message") {
+        addMessageToList(msg.data);
+      }
+    } catch (e) {
+      console.error("Erreur WS:", e);
+    }
+  };
+
+  ws.onclose = () => {
+    console.log("WebSocket déconnecté");
+  };
+
+  // --- AJOUT D’UN MESSAGE DANS LA LISTE ---
+  function addMessageToList(msg: { id: number; content: string }) {
+    const li = document.createElement("li");
+    li.textContent = `#${msg.id}: ${msg.content}`;
+    messagesList.appendChild(li);
+  }
+
+  // --- RÉCUPÉRATION INITIALE DES MESSAGES ---
   async function fetchMessages() {
     try {
       const res = await fetch("/api/messages");
       const data = await res.json();
+
       messagesList.innerHTML = "";
-      data.forEach((msg: {id: number, content: string}) => {
-        const li = document.createElement("li");
-        li.textContent = `#${msg.id}: ${msg.content}`;
-        messagesList.appendChild(li);
-      });
+      data.forEach((msg: { id: number; content: string }) => addMessageToList(msg));
     } catch (err) {
       console.error(err);
       messagesList.innerHTML = "<li>Erreur lors du chargement des messages</li>";
     }
   }
 
-  // Envoyer un nouveau message
+  // --- ENVOI D’UN NOUVEAU MESSAGE VIA L’API ---
   sendMessageButton.onclick = async () => {
     const content = newMessageInput.value.trim();
     if (!content) return;
@@ -60,13 +88,15 @@ export function messagesPage(header: string, footer: string) {
       });
       const data = await res.json();
       console.log("Message envoyé :", data);
+
       newMessageInput.value = "";
-      fetchMessages(); // rafraîchir la liste
+      // ❌ plus besoin de fetchMessages() ici
+      // la mise à jour se fera automatiquement via WebSocket
     } catch (err) {
       console.error(err);
     }
   };
 
-  // Chargement initial des messages
+  // --- CHARGEMENT INITIALE ---
   fetchMessages();
 }
