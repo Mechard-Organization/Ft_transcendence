@@ -1,4 +1,5 @@
 import { createServer, IncomingMessage, ServerResponse } from "http";
+import { WebSocketServer } from "ws";
 import { verifyPassword, generateAccessToken } from "./User/login/login.service";
 import { handleAuthMe } from "./User/auth";
 import { handleLogout } from "./User/logout/logout.service";
@@ -32,7 +33,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
   }
 
   // Route /api/auth/me
-  if (req.url === "/api/auth/me") {
+  if (req.url === "/api/auth/me" && req.method === "GET") {
     return handleAuthMe(req, res);
   }
 
@@ -100,6 +101,13 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
 
       const saved = db.addMessage(content);
 
+      // 🔥 Broadcast WebSocket
+      wss.clients.forEach(client => {
+        if (client.readyState === 1) {
+          client.send(JSON.stringify({ type: "new_message", data: saved }));
+        }
+      });
+
       res.writeHead(201, { "Content-Type": "application/json" });
       res.end(JSON.stringify(saved));
     } catch (err) {
@@ -154,6 +162,12 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     return;
   }
 
+  if (req.url === "/api/users" && req.method === "GET") {
+    const users = db.getAllUsers();
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify(users));
+  }
+
   if (req.url === "/api/getuser" && req.method === "POST") {
   const body = await getRequestBody(req);
   const { id } = body;
@@ -167,6 +181,32 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
   res.writeHead(404, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ error: "Not Found" }));
 });
+
+// --- SERVEUR WEBSOCKET ---
+const wss = new WebSocketServer({ server });
+
+// Quand un client se connecte
+wss.on("connection", ws => {
+  console.log("Client connecté en WebSocket");
+
+  ws.send(JSON.stringify({ type: "welcome", message: "Bienvenue en WebSocket !" }));
+
+  ws.on("message", msg => {
+    console.log("Message reçu :", msg.toString());
+
+    // Exemple : broadcast à tous les autres clients
+    wss.clients.forEach(client => {
+      if (client.readyState === 1) {
+        client.send(JSON.stringify({ type: "msg", payload: msg.toString() }));
+      }
+    });
+  });
+
+  ws.on("close", () => {
+    console.log("Client déconnecté");
+  });
+});
+
 
 // --- DÉMARRAGE ---
 server.listen(port, () => {
