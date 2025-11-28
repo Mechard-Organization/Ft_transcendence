@@ -1,5 +1,10 @@
-export function profilPage(header: string, footer: string) {
+import { isAuthenticated } from "./authenticator";
+
+export async function profilPage(header: string, footer: string) {
   const app = document.getElementById("app");
+  const auth = await isAuthenticated();
+
+  console.log(null, 200, { id: auth.id });
   if (!app) return;
 
   app.innerHTML = header;
