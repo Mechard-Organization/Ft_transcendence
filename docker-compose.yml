@@ -17,7 +17,10 @@ services:
       - web
       - backend
     ports:
+      - "8080:80"
+      - "3000:80"
       - "8443:443"
+      - "4000:4000"
     networks:
       - transcendence
     volumes:
@@ -32,8 +35,6 @@ services:
   web:
     build: .
     container_name: web
-    ports:
-      - "3000:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -45,8 +46,6 @@ services:
     build:
       context: ./backend
     container_name: backend
-    ports:
-      - "4000:4000"
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -66,7 +65,7 @@ services:
       - transcendence
     restart: unless-stopped
 
-    
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
