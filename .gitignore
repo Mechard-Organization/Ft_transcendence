@@ -3,11 +3,10 @@
 .env
 .script_merging
 .script_main_merging
-.vite
+srcs/public/.vite
 
 # Database
 
-srcs/config/database/data/
 srcs/config/database/
 
 # Autres
