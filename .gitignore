@@ -7,8 +7,8 @@
 
 # Database
 
-./srcs/config/database/db.ts
-./srcs/config/database/data/mydb.sqlite
+db.ts
+mydb.sqlite
 ./srcs/config/database/data/
 ./srcs/config/database/
 
