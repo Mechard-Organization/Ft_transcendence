@@ -3,7 +3,7 @@
 .env
 .script_merging
 .script_main_merging
-./public/.vite
+.vite
 
 # Database
 
