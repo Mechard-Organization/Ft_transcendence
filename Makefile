@@ -6,7 +6,7 @@
 #    By: mechard <mechard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2025/12/04 14:15:05 by mechard          ###   ########.fr        #
+#    Updated: 2025/12/04 15:22:43 by mechard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -146,7 +146,7 @@ clean:
 	@$(COMPOSE) down -v
 
 fclean: clean
-	@rm -rf config/database/data
+	@rm -rf srcs/config/database/data
 	@$(COMPOSE) rm -fsv || true
 
 prune: down clean
