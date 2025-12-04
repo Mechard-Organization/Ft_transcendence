@@ -1,9 +1,12 @@
 # À ne pas push pour des questions de sécurité
 
 .env
-backend/Database/db.ts
 .script_merging
 .script_main_merging
 .vite
+
+# Database
+
+config/database/
 
 # Autres

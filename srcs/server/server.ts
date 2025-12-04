@@ -5,10 +5,10 @@ import bcrypt from "bcrypt";
 
 // Bibliothéque intérieure
 import { register, httpRequestCounter, httpRequestDuration, httpErrorCounter } from "./metrics";
-import { verifyPassword, generateAccessToken } from "./User/login/login.service";
-import { handleLogout } from "./User/logout/logout.service";
-import { handleAuthMe } from "./User/auth";
-import * as db from "./Database/db";
+import { verifyPassword, generateAccessToken } from "@services/login.service";
+import { handleLogout } from "@services/logout.service";
+import * as db from "@config/database/db";
+import { handleAuthMe } from "./auth";
 
 const port = 4000;
 

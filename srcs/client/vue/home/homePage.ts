@@ -1,5 +1,5 @@
-import { gamePage } from "../Game/gamePage";
-import { resetBabylonJs } from "../ButtonsAndUI";
+import { gamePage } from "../game/gamePage";
+import { resetBabylonJs } from "../ts/ButtonsAndUI";
 
 // homePage.ts
 export function homePage(header: string, footer: string) {

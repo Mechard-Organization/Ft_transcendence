@@ -1,5 +1,6 @@
 // backend/src/User/login/login.service.ts
-import { User } from "../../Database/db";
+import * as db from "@config/database/db";
+import type { User } from "@config/database/db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
