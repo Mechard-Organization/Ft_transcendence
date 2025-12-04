@@ -3,9 +3,9 @@
     "target": "ES6",
     "module": "commonjs",
     "outDir": "dest",
-    "rootDir": "frontend/src",
+    "rootDir": "public/client",
     "strict": true,
     "esModuleInterop": true
   },
-  "include": ["frontend/src/**/*"]
+  "include": ["public/client/**/*"]
 }

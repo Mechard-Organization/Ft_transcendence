@@ -8,7 +8,7 @@ export default defineConfig({
       "@babylonjs/gui/2D"
     ]
   },
-  root: "./src",
+  root: ".",
   build: {
     outDir: "./dist",
     emptyOutDir: true,

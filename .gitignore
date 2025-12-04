@@ -1,9 +1,15 @@
 # À ne pas push pour des questions de sécurité
 
 .env
-backend/Database/db.ts
 .script_merging
 .script_main_merging
 .vite
+
+# Database
+
+srcs/config/database/db.ts
+srcs/config/database/data/mydb.sqlite
+srcs/config/database/data/
+srcs/config/database/
 
 # Autres

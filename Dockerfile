@@ -3,14 +3,14 @@ FROM node:20
 
 WORKDIR /app
 
-COPY frontend/package*.json ./
+COPY ./srcs/public/package*.json ./
 
 RUN npm install
 
 RUN npm install validator zxcvbn
 
-COPY frontend/tsconfig.json frontend/vite.config.js ./
-COPY frontend/src ./src
+COPY ./srcs/public/tsconfig.json ./srcs/public/vite.config.js ./
+COPY ./srcs/config/ ./src
 
 EXPOSE 3000
 
