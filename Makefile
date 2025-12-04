@@ -6,7 +6,7 @@
 #    By: mechard <mechard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2025/12/04 15:22:43 by mechard          ###   ########.fr        #
+#    Updated: 2025/12/04 15:36:00 by mechard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -147,6 +147,12 @@ clean:
 
 fclean: clean
 	@rm -rf srcs/config/database/data
+	@rm -rf srcs/public/client
+	@rm -rf srcs/public/node_modules
+	@rm -rf srcs/public/server
+	@rm -rf srcs/server/config
+	@rm -rf srcs/server/node_modules
+	@rm -rf srcs/server/services
 	@$(COMPOSE) rm -fsv || true
 
 prune: down clean

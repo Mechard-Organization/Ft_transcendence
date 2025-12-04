@@ -7,6 +7,6 @@ srcs/public/.vite
 
 # Database
 
-srcs/config/database/
+srcs/config/database/data
 
 # Autres
