@@ -31,6 +31,44 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
 
   console.log(`${method} ${url}`);
 
+    const route = url.split("?")[0];
+
+  // --- Instrumentation Prometheus ---
+  if (route !== "/metrics") {
+    const baseLabels = { method, route };
+
+    // Timer d'Histogram (latence)
+    const endTimer = httpRequestDuration.startTimer({
+      ...baseLabels,
+      status: "pending",
+    });
+
+    res.on("finish", () => {
+      const status = String(res.statusCode);
+
+      // Compteur de requêtes avec status final
+      httpRequestCounter.inc({
+        ...baseLabels,
+        status,
+      });
+
+      // Fin du timer avec status final
+      endTimer({
+        ...baseLabels,
+        status,
+      });
+
+      // Compteur d'erreurs HTTP
+      if (res.statusCode >= 400) {
+        httpErrorCounter.inc({
+          method,
+          route,
+          type: status.startsWith("5") ? "5xx" : "4xx",
+        });
+      }
+    });
+  }
+
   try {
     // Route /api/auth/logout
     if (req.url === "/api/auth/logout") {
