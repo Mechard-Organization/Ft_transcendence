@@ -78,7 +78,7 @@ services:
     volumes:
       - ./srcs/config/monitoring/grafana/provisioning:/etc/grafana/provisioning
       - ./srcs/config/monitoring/grafana/dashboards:/var/lib/grafana/dashboards
-      - ./srcs/config/database/data:/var/lib/grafana/sqlite:ro
+      - ./srcs/config/database/data:/var/lib/grafana/sqlite
     networks:
       - transcendence
     restart: unless-stopped
