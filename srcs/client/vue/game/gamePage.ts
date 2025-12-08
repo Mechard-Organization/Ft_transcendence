@@ -1,4 +1,4 @@
-import { pong } from "./gameLogicAndMeshes";
+import { pong } from "./Meshes";
 
 export function gamePage(header: string, footer: string): void {
 
