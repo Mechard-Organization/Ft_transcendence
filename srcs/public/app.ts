@@ -1,11 +1,11 @@
-import { gamePage } from "../client/vue/game/gamePage";
-import { resetBabylonJs } from "../client/vue/ts/ButtonsAndUI";
-import { messagesPage } from "../client/vue/messages/messagesPage";
-import { homePage } from "../client/vue/home/homePage";
-import { registerPage } from "../client/vue/interface/registerPage";
-import { loginPage } from "../client/vue/interface/loginPage";
-import { profilPage } from "../client/vue/interface/profilPage"
-import { isAuthenticated } from "../client/vue/interface/authenticator";
+import { gamePage } from "./client/vue/game/gamePage";
+import { resetBabylonJs } from "./client/vue/ts/ButtonsAndUI";
+import { messagesPage } from "./client/vue/messages/messagesPage";
+import { homePage } from "./client/vue/home/homePage";
+import { registerPage } from "./client/vue/interface/registerPage";
+import { loginPage } from "./client/vue/interface/loginPage";
+import { profilPage } from "./client/vue/interface/profilPage"
+import { isAuthenticated } from "./client/vue/interface/authenticator";
 
 async function buildHeader() {
   const app = document.getElementById("app");

@@ -593,15 +593,12 @@
       "targets": [
         {
           "format": "table",
-          "queryText": "",
+          "queryText": "SELECT name AS table_name\nFROM sqlite_master\nWHERE type = 'table'\nORDER BY name;",
           "queryType": "table",
-          "rawQueryText": "SELECT CAST(strftime('%s', 'now', '-1 minute') as INTEGER) as time, 4 as value \nWHERE time >= $__from / 1000 and time < $__to / 1000",
-          "rawSql": "SELECT strftime('%s','now') AS time, name AS table_name, (SELECT COUNT(*) FROM sqlite_master WHERE type='table') AS table_count FROM sqlite_master WHERE type='table' LIMIT 10;",
+          "rawQueryText": "SELECT name AS table_name\nFROM sqlite_master\nWHERE type = 'table'\nORDER BY name;",
+          "rawSql": "SELECT name AS table_name\nFROM sqlite_master\nWHERE type = 'table'\nORDER BY name;",
           "refId": "A",
-          "timeColumns": [
-            "time",
-            "ts"
-          ]
+          "timeColumns": []
         }
       ],
       "title": "Tables DB (SQLite)",
@@ -656,10 +653,10 @@
       "targets": [
         {
           "format": "table",
-          "queryText": "",
+          "queryText": "SELECT\n  (SELECT COUNT(*) FROM users)    AS users_count,\n  (SELECT COUNT(*) FROM messages) AS messages_count;",
           "queryType": "table",
-          "rawQueryText": "SELECT CAST(strftime('%s', 'now', '-1 minute') as INTEGER) as time, 4 as value \nWHERE time >= $__from / 1000 and time < $__to / 1000",
-          "rawSql": "SELECT strftime('%s','now') AS time, name AS table_name, (SELECT COUNT(*) FROM sqlite_master WHERE type='table') AS table_count FROM sqlite_master WHERE type='table' LIMIT 10;",
+          "rawQueryText": "SELECT\n  (SELECT COUNT(*) FROM users)    AS users_count,\n  (SELECT COUNT(*) FROM messages) AS messages_count;",
+          "rawSql": "SELECT\n  (SELECT COUNT(*) FROM users)    AS users_count,\n  (SELECT COUNT(*) FROM messages) AS messages_count;",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -719,10 +716,10 @@
       "targets": [
         {
           "format": "table",
-          "queryText": "",
+          "queryText": "SELECT\n  id,\n  username,\n  mail\nFROM users\nORDER BY id DESC\nLIMIT 10;",
           "queryType": "table",
-          "rawQueryText": "SELECT CAST(strftime('%s', 'now', '-1 minute') as INTEGER) as time, 4 as value \nWHERE time >= $__from / 1000 and time < $__to / 1000",
-          "rawSql": "SELECT strftime('%s','now') AS time, name AS table_name, (SELECT COUNT(*) FROM sqlite_master WHERE type='table') AS table_count FROM sqlite_master WHERE type='table' LIMIT 10;",
+          "rawQueryText": "SELECT\n  id,\n  username,\n  mail\nFROM users\nORDER BY id DESC\nLIMIT 10;",
+          "rawSql": "SELECT\n  id,\n  username,\n  mail\nFROM users\nORDER BY id DESC\nLIMIT 10;",
           "refId": "A",
           "timeColumns": [
             "time",
@@ -782,10 +779,10 @@
       "targets": [
         {
           "format": "table",
-          "queryText": "",
+          "queryText": "SELECT\n  id,\n  substr(content, 1, 80) AS content_preview\nFROM messages\nORDER BY id DESC\nLIMIT 10;",
           "queryType": "table",
-          "rawQueryText": "SELECT CAST(strftime('%s', 'now', '-1 minute') as INTEGER) as time, 4 as value \nWHERE time >= $__from / 1000 and time < $__to / 1000",
-          "rawSql": "SELECT strftime('%s','now') AS time, name AS table_name, (SELECT COUNT(*) FROM sqlite_master WHERE type='table') AS table_count FROM sqlite_master WHERE type='table' LIMIT 10;",
+          "rawQueryText": "SELECT\n  id,\n  substr(content, 1, 80) AS content_preview\nFROM messages\nORDER BY id DESC\nLIMIT 10;",
+          "rawSql": "SELECT\n  id,\n  substr(content, 1, 80) AS content_preview\nFROM messages\nORDER BY id DESC\nLIMIT 10;",
           "refId": "A",
           "timeColumns": [
             "time",

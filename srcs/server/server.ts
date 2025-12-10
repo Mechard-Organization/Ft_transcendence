@@ -135,14 +135,21 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       try {
         const body = await getRequestBody(req);
         const content = body.content;
+        const id = body.id;
 
         if (!content || typeof content !== "string") {
-          res.writeHead(400, { "Content-Type": "application/json" });
+          res.writeHead(401, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "Invalid content" }));
           return;
         }
 
-        const saved = db.addMessage(content);
+        if (!id) {
+          res.writeHead(402, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid content" }));
+          return;
+        }
+          
+        const saved = db.addMessage(content, id);
 
         // 🔥 Broadcast WebSocket
         wss.clients.forEach(client => {
@@ -154,7 +161,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
         res.writeHead(201, { "Content-Type": "application/json" });
         res.end(JSON.stringify(saved));
       } catch (err) {
-        res.writeHead(400, { "Content-Type": "application/json" });
+        res.writeHead(403, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Invalid JSON" }));
       }
       return;
@@ -214,10 +221,13 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
 
     if (req.url === "/api/getuser" && req.method === "POST") {
       const body = await getRequestBody(req);
-      const { id } = body;
-      const users = db.getUserById(id);
+      console.log("body: ", body);
+      const id  = body.id;
+      console.log("id: ", id);
+      const user = db.getUserById(id);
+      console.log("user: ", user);
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify(users));
+      res.end(JSON.stringify(user));
       return;
     }
 
