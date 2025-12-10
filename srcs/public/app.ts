@@ -1,5 +1,5 @@
 import { gamePage } from "./client/vue/game/gamePage";
-import { resetBabylonJs } from "./client/vue/ts/ButtonsAndUI";
+import { resetBabylonJs } from "./client/vue/ts/UI";
 import { messagesPage } from "./client/vue/messages/messagesPage";
 import { homePage } from "./client/vue/home/homePage";
 import { registerPage } from "./client/vue/interface/registerPage";
