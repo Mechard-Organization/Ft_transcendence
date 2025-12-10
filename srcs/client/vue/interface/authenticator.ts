@@ -5,5 +5,5 @@ export async function isAuthenticated() {
   });
   
   const data = await res.json();
-  return data as { authenticated: boolean; id?: number | string; username?: string; reason?: string };
+  return data as { authenticated: boolean; id?: number };
 }

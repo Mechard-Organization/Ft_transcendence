@@ -16,13 +16,6 @@ if (!fs.existsSync(DB_DIR)) {
 const db = new Database(DB_PATH);
 
 // Création de la table si nécessaire
-// --- TABLE MESSAGES ---
-db.prepare(`
-  CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    content TEXT
-  )
-`).run();
 
 // --- TABLE USERS ---
 db.prepare(`
@@ -35,20 +28,34 @@ db.prepare(`
   )
 `).run();
 
+// --- TABLE MESSAGES ---
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    content TEXT,
+    id_author INTEGER,
+    FOREIGN KEY(id_author) REFERENCES users(id)
+  )
+`).run();
+
 // --- FONCTIONS EXPORTÉES ---
 
 // --- MESSAGES FUNCTIONS ---
 
 export function getAllMessages() {
-  const stmt = db.prepare("SELECT id, content FROM messages ORDER BY id ASC");
+  const stmt = db.prepare("SELECT id, id_author, content FROM messages ORDER BY id ASC");
   return stmt.all();
 }
 
-export function addMessage(content: string) {
-  const stmt = db.prepare("INSERT INTO messages (content) VALUES (?)");
-  const info = stmt.run(content);
+export function addMessage(content: string, id: any) {
+  const stmt = db.prepare("INSERT INTO messages (content, id_author) VALUES (?,?)");
+  console.log("content: ", content);
+  console.log("id: ", id);
+  const info = stmt.run(content, id);
+
   return {
     id: info.lastInsertRowid,
+    nb: info.id,
     content
   };
 }
@@ -72,7 +79,7 @@ export function createUser(username: string, password_hash: string, mail: string
 export function getUserById(username: string) {
   const stmt = db.prepare(`
     SELECT id, username, password_hash, mail
-    FROM id
+    FROM users
     WHERE id = ?
   `);
 

@@ -122,12 +122,12 @@ export function registerPage(header: string, footer: string) {
       });
 
       const data = await res.json();
-
+      
       if (!res.ok) {
         alert(data.error || "Erreur lors de la création");
         return;
       }
-
+      
       console.log("Utilisateur créé :", data);
 
       usernameInput.value = "";

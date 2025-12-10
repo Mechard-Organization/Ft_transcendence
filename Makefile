@@ -6,7 +6,7 @@
 #    By: mechard <mechard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2025/12/04 15:36:00 by mechard          ###   ########.fr        #
+#    Updated: 2025/12/10 14:50:33 by mechard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,6 +80,10 @@ help:
 
 prepare:
 	@chmod 777 ./srcs/config/database
+	@mkdir -p ./srcs/config/database/data
+	@chmod 777 ./srcs/config/database/data
+	@mkdir -p ./srcs/config/database/data
+	@chmod 777 ./srcs/config/database/data
 
 up: prepare
 	@$(COMPOSE) up -d

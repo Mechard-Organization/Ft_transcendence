@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   messagesPage.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/11/28 14:11:12 by abutet           ###   ########.fr       */
+/*   Updated: 2025/12/10 14:42:48 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+import { isAuthenticated } from "../interface/authenticator";
 
 /// messagesPage.ts
 export function messagesPage(header: string, footer: string) {
@@ -57,7 +59,14 @@ export function messagesPage(header: string, footer: string) {
   // --- AJOUT D’UN MESSAGE DANS LA LISTE ---
   function addMessageToList(msg: { id: number; content: string }) {
     const li = document.createElement("li");
-    li.textContent = `#${msg.id}: ${msg.content}`;
+    const user = fetch("/api/getuser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id:msg.id_author })
+      });
+    console.log("user front: ", user);
+    console.log("message front : ", msg);
+    li.textContent = `#${msg.id_author}: ${msg.content}`;
     messagesList.appendChild(li);
   }
 
@@ -78,13 +87,17 @@ export function messagesPage(header: string, footer: string) {
   // --- ENVOI D’UN NOUVEAU MESSAGE VIA L’API ---
   sendMessageButton.onclick = async () => {
     const content = newMessageInput.value.trim();
-    if (!content) return;
+    const auth = await isAuthenticated();
+    const id = auth.id;
+
+    console.log("id: ", id);
+    if (!content || !id) return;
 
     try {
       const res = await fetch("/api/hello", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content })
+        body: JSON.stringify({ content, id })
       });
       const data = await res.json();
       console.log("Message envoyé :", data);
