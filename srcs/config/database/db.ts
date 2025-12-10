@@ -43,7 +43,7 @@ db.prepare(`
 // --- MESSAGES FUNCTIONS ---
 
 export function getAllMessages() {
-  const stmt = db.prepare("SELECT id, id_author, content FROM messages ORDER BY id ASC");
+  const stmt = db.prepare("SELECT messages.* , users.username FROM messages INNER JOIN users ON messages.id_author = users.id ORDER BY messages.id ASC");
   return stmt.all();
 }
 

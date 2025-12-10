@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   messagesPage.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/12/10 14:42:48 by mechard          ###   ########.fr       */
+/*   Updated: 2025/12/10 15:36:08 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,8 @@ export function messagesPage(header: string, footer: string) {
   // --- AJOUT D’UN MESSAGE DANS LA LISTE ---
   function addMessageToList(msg: { id: number; content: string }) {
     const li = document.createElement("li");
-    const user = fetch("/api/getuser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id:msg.id_author })
-      });
-    console.log("user front: ", user);
     console.log("message front : ", msg);
-    li.textContent = `#${msg.id_author}: ${msg.content}`;
+    li.textContent = `#${msg.username}: ${msg.content}`;
     messagesList.appendChild(li);
   }
 
@@ -77,6 +71,7 @@ export function messagesPage(header: string, footer: string) {
       const data = await res.json();
 
       messagesList.innerHTML = "";
+      console.log(data);
       data.forEach((msg: { id: number; content: string }) => addMessageToList(msg));
     } catch (err) {
       console.error(err);
