@@ -57,7 +57,7 @@ export function getAllMessages() {
 }
 
 export function addMessage(content: string, id: any) {
-  const authorId = id && !isNaN(Number(id)) ? Number(id) : 0;
+  const authorId: string = id && !isNaN(Number(id)) ? String(Number(id)) : "0";
 
   const stmt = db.prepare("INSERT INTO messages (content, id_author) VALUES (?,?)");
 
@@ -69,7 +69,8 @@ export function addMessage(content: string, id: any) {
   return {
     id: info.lastInsertRowid,
     nb: info.id,
-    content
+    content,
+    username: getUserById(authorId).username
   };
 }
 

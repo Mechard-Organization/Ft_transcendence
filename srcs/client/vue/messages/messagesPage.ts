@@ -6,7 +6,7 @@
 /*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/12/12 14:33:26 by mechard          ###   ########.fr       */
+/*   Updated: 2025/12/12 15:17:29 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ export function messagesPage(header: string, footer: string) {
       console.log("WS reçu :", msg);
 
       if (msg.type === "new_message") {
+        console.log("msg: ", msg);
         addMessageToList(msg.data);
       }
     } catch (e) {
