@@ -43,20 +43,32 @@ db.prepare(`
 // --- MESSAGES FUNCTIONS ---
 
 export function getAllMessages() {
-  const stmt = db.prepare("SELECT messages.* , users.username FROM messages INNER JOIN users ON messages.id_author = users.id ORDER BY messages.id ASC");
+  const stmt = db.prepare(`
+    SELECT
+      messages.*,
+      COALESCE(users.username, 'Anonyme') AS username
+    FROM messages
+    LEFT JOIN users
+      ON messages.id_author = users.id
+    ORDER BY messages.id ASC
+  `);
+
   return stmt.all();
 }
 
 export function addMessage(content: string, id: any) {
+  const authorId: string = id && !isNaN(Number(id)) ? String(Number(id)) : "0";
+
   const stmt = db.prepare("INSERT INTO messages (content, id_author) VALUES (?,?)");
-  console.log("content: ", content);
-  console.log("id: ", id);
+
   const info = stmt.run(content, id);
 
+  console.log("a la con");
   return {
     id: info.lastInsertRowid,
     nb: info.id,
-    content
+    content,
+    username: authorId == "0" ? "Anonyme" : getUserById(authorId).username
   };
 }
 

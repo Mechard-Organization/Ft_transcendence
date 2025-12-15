@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   messagesPage.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/12/10 15:36:08 by abutet           ###   ########.fr       */
+/*   Updated: 2025/12/12 15:17:29 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ export function messagesPage(header: string, footer: string) {
       console.log("WS reçu :", msg);
 
       if (msg.type === "new_message") {
+        console.log("msg: ", msg);
         addMessageToList(msg.data);
       }
     } catch (e) {
@@ -57,9 +58,8 @@ export function messagesPage(header: string, footer: string) {
   };
 
   // --- AJOUT D’UN MESSAGE DANS LA LISTE ---
-  function addMessageToList(msg: { id: number; content: string }) {
+  function addMessageToList(msg: { id: number; content: string; username: string }) {
     const li = document.createElement("li");
-    console.log("message front : ", msg);
     li.textContent = `#${msg.username}: ${msg.content}`;
     messagesList.appendChild(li);
   }
@@ -71,8 +71,7 @@ export function messagesPage(header: string, footer: string) {
       const data = await res.json();
 
       messagesList.innerHTML = "";
-      console.log(data);
-      data.forEach((msg: { id: number; content: string }) => addMessageToList(msg));
+      data.forEach((msg: { id: number; content: string; username: string }) => addMessageToList(msg));
     } catch (err) {
       console.error(err);
       messagesList.innerHTML = "<li>Erreur lors du chargement des messages</li>";
@@ -83,10 +82,9 @@ export function messagesPage(header: string, footer: string) {
   sendMessageButton.onclick = async () => {
     const content = newMessageInput.value.trim();
     const auth = await isAuthenticated();
-    const id = auth.id;
+    const id = auth ? auth.id : 0;
 
-    console.log("id: ", id);
-    if (!content || !id) return;
+    if (!content) return;
 
     try {
       const res = await fetch("/api/hello", {
