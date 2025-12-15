@@ -61,16 +61,14 @@ export function addMessage(content: string, id: any) {
 
   const stmt = db.prepare("INSERT INTO messages (content, id_author) VALUES (?,?)");
 
-  console.log("content: ", content);
-  console.log("authorId: ", authorId);
-
   const info = stmt.run(content, id);
 
+  console.log("a la con");
   return {
     id: info.lastInsertRowid,
     nb: info.id,
     content,
-    username: getUserById(authorId).username
+    username: authorId == "0" ? "Anonyme" : getUserById(authorId).username
   };
 }
 
