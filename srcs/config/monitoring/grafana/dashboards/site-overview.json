@@ -779,10 +779,10 @@
       "targets": [
         {
           "format": "table",
-          "queryText": "SELECT\n  id,\n  substr(content, 1, 80) AS content_preview\nFROM messages\nORDER BY id DESC\nLIMIT 10;",
+          "queryText": "SELECT\n  messages.id,\n  COALESCE(users.username, 'Anonyme') AS Author,\n  substr(messages.content, 1, 80) AS content\nFROM messages\nLEFT JOIN users\n  ON messages.id_author = users.id\nORDER BY messages.id DESC;",
           "queryType": "table",
-          "rawQueryText": "SELECT\n  id,\n  substr(content, 1, 80) AS content_preview\nFROM messages\nORDER BY id DESC\nLIMIT 10;",
-          "rawSql": "SELECT\n  id,\n  substr(content, 1, 80) AS content_preview\nFROM messages\nORDER BY id DESC\nLIMIT 10;",
+          "rawQueryText": "SELECT\n  messages.id,\n  COALESCE(users.username, 'Anonyme') AS Author,\n  substr(messages.content, 1, 80) AS content\nFROM messages\nLEFT JOIN users\n  ON messages.id_author = users.id\nORDER BY messages.id DESC;",
+          "rawSql": "SELECT\n  messages.id,\n  COALESCE(users.username, 'Anonyme') AS Author,\n  substr(messages.content, 1, 80) AS content\nFROM messages\nLEFT JOIN users\n  ON messages.id_author = users.id\nORDER BY messages.id DESC;",
           "refId": "A",
           "timeColumns": [
             "time",

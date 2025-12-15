@@ -142,12 +142,6 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           res.end(JSON.stringify({ error: "Invalid content" }));
           return;
         }
-
-        if (!id) {
-          res.writeHead(402, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "Invalid content" }));
-          return;
-        }
           
         const saved = db.addMessage(content, id);
 
@@ -157,6 +151,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
             client.send(JSON.stringify({ type: "new_message", data: saved }));
           }
         });
+        console.log("saved+: ", saved);
 
         res.writeHead(201, { "Content-Type": "application/json" });
         res.end(JSON.stringify(saved));
@@ -224,7 +219,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       console.log("body: ", body);
       const id  = body.id;
       console.log("id: ", id);
-      const user = db.getUserById(id);
+      const user = id > 0 ? db.getUserById(id) : "Invité.e";
       console.log("user: ", user);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(user));
