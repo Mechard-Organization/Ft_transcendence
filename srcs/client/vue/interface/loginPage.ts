@@ -3,26 +3,28 @@ export function loginPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
-  app.innerHTML = header;
-  app.innerHTML += `
-    <h1 class="title">Login</h1>
+  app.innerHTML = `
+    ${header}
+    <main id="mainContent">
+      <h1 class="title">Login</h1>
 
-    <form id="loginForm" class="form-container">
-      <div class="form-group">
-        <label for="username">Nom d'utilisateur</label>
-        <input type="text" id="username" placeholder="Nom d'utilisateur" />
-      </div>
+      <form id="loginForm" class="form-container">
+        <div class="form-group">
+          <label for="username">Nom d'utilisateur</label>
+          <input type="text" id="username" placeholder="Nom d'utilisateur" />
+        </div>
 
-      <div class="form-group">
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" placeholder="Mot de passe" />
-      </div>
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" id="password" placeholder="Mot de passe" />
+        </div>
 
-      <button id="loginBtn" class="btn-primary" type="submit">Se connecter</button>
-      <p id="loginError" style="color:red;"></p>
-    </form>
+        <button id="loginBtn" class="btn-primary" type="submit">Se connecter</button>
+        <p id="loginError" style="color:red;"></p>
+      </form>
+    </main>
+    ${footer}
   `;
-  app.innerHTML += footer;
   
   const usernameInput = document.getElementById("username") as HTMLInputElement | null;
   const passwordInput = document.getElementById("password") as HTMLInputElement | null;

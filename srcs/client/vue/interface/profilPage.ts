@@ -7,14 +7,16 @@ export async function profilPage(header: string, footer: string) {
   console.log(null, 200, { id: auth.id });
   if (!app) return;
 
-  app.innerHTML = header;
-  app.innerHTML += `
-    <h1>Profil</h1>
-    <div width=10>
-      <button id="logout" class="btn-secondary">Logout</button>
-    </div>
+  app.innerHTML = `
+    ${header}
+    <main id="mainContent">
+      <h1>Profil</h1>
+      <div width=10>
+        <button id="logout" class="btn-secondary">Logout</button>
+      </div>
+    </main>
+    ${footer}
   `;
-  app.innerHTML += footer;
   
   const logoutBtn = document.getElementById("logout");
   if (!logoutBtn) return;
