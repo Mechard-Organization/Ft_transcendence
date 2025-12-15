@@ -6,7 +6,7 @@
 /*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/12/12 15:17:29 by mechard          ###   ########.fr       */
+/*   Updated: 2025/12/15 14:00:26 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@ export function messagesPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
-  app.innerHTML = header;
-  app.innerHTML += `
-    <h1>Messages</h1>
-    <div>
-      <input type="text" id="newMessage" placeholder="Nouveau message" />
-      <button id="sendMessage">Envoyer</button>
-    </div>
-    <ul id="messagesList"></ul>
+  app.innerHTML = `
+    ${header}
+    <main id="mainContent">
+      <h1>Messages</h1>
+      <div>
+        <input type="text" id="newMessage" placeholder="Nouveau message" />
+        <button id="sendMessage">Envoyer</button>
+      </div>
+      <ul id="messagesList"></ul>
+    </main>
+    ${footer}
   `;
-  app.innerHTML += footer;
 
   const messagesList = document.getElementById("messagesList") as HTMLUListElement;
   const newMessageInput = document.getElementById("newMessage") as HTMLInputElement;

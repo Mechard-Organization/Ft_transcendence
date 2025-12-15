@@ -63,7 +63,6 @@ export function addMessage(content: string, id: any) {
 
   const info = stmt.run(content, id);
 
-  console.log("a la con");
   return {
     id: info.lastInsertRowid,
     nb: info.id,
