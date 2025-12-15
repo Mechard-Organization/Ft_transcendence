@@ -50,28 +50,31 @@ export function registerPage(header: string, footer: string) {
   const app = document.getElementById("app");
   if (!app) return;
 
-  app.innerHTML = header;
-  app.innerHTML += `
-    <h1 class="title">Créer un compte</h1>
+  app.innerHTML = `
+    ${header}
+    <main id="mainContent">
+      <h1 class="title">Créer un compte</h1>
 
-  <div class="form-container">
-    <div class="form-group">
-      <label for="username">Nom d'utilisateur</label>
-      <input type="text" id="username" placeholder="Nom d'utilisateur" />
-    </div>
+      <div class="form-container">
+        <div class="form-group">
+          <label for="username">Nom d'utilisateur</label>
+          <input type="text" id="username" placeholder="Nom d'utilisateur" />
+        </div>
 
-    <div class="form-group">
-      <label for="password">Mot de passe</label>
-      <input type="password" id="password" placeholder="Mot de passe" />
-    </div>
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" id="password" placeholder="Mot de passe" />
+        </div>
 
-    <div class="form-group">
-      <label for="mail">E-mail</label>
-      <input type="email" id="mail" placeholder="E-mail" />
-    </div>
+        <div class="form-group">
+          <label for="mail">E-mail</label>
+          <input type="email" id="mail" placeholder="E-mail" />
+        </div>
 
-    <button id="createUser" class="btn-primary">S'enregistrer</button>
-  </div>
+        <button id="createUser" class="btn-primary">S'enregistrer</button>
+      </div>
+    </main>
+    ${footer}
   `;
 
   const usernameInput = document.getElementById("username") as HTMLInputElement;
