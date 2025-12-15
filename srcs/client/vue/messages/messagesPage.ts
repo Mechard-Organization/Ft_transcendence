@@ -6,7 +6,7 @@
 /*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/12/12 15:17:29 by mechard          ###   ########.fr       */
+/*   Updated: 2025/12/15 13:54:13 by mechard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ export function messagesPage(header: string, footer: string) {
     </div>
     <ul id="messagesList"></ul>
   `;
-  app.innerHTML += footer;
 
   const messagesList = document.getElementById("messagesList") as HTMLUListElement;
   const newMessageInput = document.getElementById("newMessage") as HTMLInputElement;
