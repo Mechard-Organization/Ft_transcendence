@@ -4,7 +4,8 @@ import { messagesPage } from "./client/vue/messages/messagesPage";
 import { homePage } from "./client/vue/home/homePage";
 import { registerPage } from "./client/vue/interface/registerPage";
 import { loginPage } from "./client/vue/interface/loginPage";
-import { profilPage } from "./client/vue/interface/profilPage"
+import { profilPage } from "./client/vue/interface/profilPage";
+import { adminPage } from "./client/vue/interface/adminInterface";
 import { isAuthenticated } from "./client/vue/interface/authenticator";
 
 async function buildHeader() {
@@ -15,15 +16,16 @@ async function buildHeader() {
   if (!auth.authenticated) {
     app.innerHTML = `
     <body>
-    <div class="header">
-    <div class="header_links">
-    <a class="header_link" href="#home">Home</a>
-    <a class="header_link" href="#login">Login</a>
-    <a class="header_link" href="#messages">Messages</a>
-    <a class="header_link" href="#register">Register</a>
-    <a class="header_link" href="#about">About</a>
-    </div>
-    </div>
+      <div class="header">
+        <div class="header_links">
+          <a class="header_link" href="#home">Home</a>
+          <a class="header_link" href="#login">Login</a>
+          <a class="header_link" href="#messages">Messages</a>
+          <a class="header_link" href="#register">Register</a>
+          <a class="header_link" href="#admin">Admin</a>
+          <a class="header_link" href="#about">About</a>
+        </div>
+      </div>
     </body>`;
   } else {
     app.innerHTML = `
@@ -43,7 +45,7 @@ async function buildHeader() {
 
 // main function that selects the page asked
 async function showPage(page: string) {
-  
+
   const footer = `
   <div class="footer">
   <div class="footer_links">
@@ -70,6 +72,8 @@ async function showPage(page: string) {
     loginPage(app.innerHTML, footer);
   } else if (page === "profil") {
     profilPage(app.innerHTML, footer);
+  } else if (page === "admin") {
+    adminPage(app.innerHTML, footer);
   } else {
     app.innerHTML += "<h1>Page not found</h1>";
   }

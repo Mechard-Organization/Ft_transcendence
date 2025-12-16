@@ -142,7 +142,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           res.end(JSON.stringify({ error: "Invalid content" }));
           return;
         }
-          
+
         const saved = db.addMessage(content, id);
 
         // 🔥 Broadcast WebSocket
