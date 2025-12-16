@@ -162,8 +162,8 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
-    // POST /api/hello -> Ajouter un message
-    if (req.url === "/api/hello" && req.method === "POST") {
+    // POST /api/alterADD -> alterADD table
+    if (req.url === "/api/alterADD" && req.method === "POST") {
       try {
         const body = await getRequestBody(req);
         const tableContent = body.tableContent;
