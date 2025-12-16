@@ -142,7 +142,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           res.end(JSON.stringify({ error: "Invalid content" }));
           return;
         }
-          
+
         const saved = db.addMessage(content, id);
 
         // 🔥 Broadcast WebSocket
@@ -151,7 +151,6 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
             client.send(JSON.stringify({ type: "new_message", data: saved }));
           }
         });
-        console.log("saved+: ", saved);
 
         res.writeHead(201, { "Content-Type": "application/json" });
         res.end(JSON.stringify(saved));
