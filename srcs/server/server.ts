@@ -162,34 +162,6 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
-    // POST /api/alterADD -> alterADD table
-    if (req.url === "/api/alterADD" && req.method === "POST") {
-      try {
-        const body = await getRequestBody(req);
-        const tableContent = body.tableContent;
-        const colonneContent = body.colonneContent;
-        const typeContent = body.typeContent;
-
-        if (!tableContent || typeof tableContent !== "string"
-            || !colonneContent || typeof colonneContent !== "string"
-            || !typeContent || typeof typeContent !== "string")
-        {
-          res.writeHead(401, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "Invalid content" }));
-          return;
-        }
-
-        const saved = db.ALTER_ADD(tableContent, colonneContent, typeContent);
-
-        res.writeHead(201, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(saved));
-      } catch (err) {
-        res.writeHead(403, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Invalid JSON" }));
-      }
-      return;
-    }
-
     // GET /api/messages -> Liste tous les messages
     if (req.url === "/api/messages" && req.method === "GET") {
       const rows = db.getAllMessages();
