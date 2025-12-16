@@ -142,7 +142,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           res.end(JSON.stringify({ error: "Invalid content" }));
           return;
         }
-          
+
         const saved = db.addMessage(content, id);
 
         // 🔥 Broadcast WebSocket
@@ -152,6 +152,34 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           }
         });
         console.log("saved+: ", saved);
+
+        res.writeHead(201, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(saved));
+      } catch (err) {
+        res.writeHead(403, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid JSON" }));
+      }
+      return;
+    }
+
+    // POST /api/hello -> Ajouter un message
+    if (req.url === "/api/hello" && req.method === "POST") {
+      try {
+        const body = await getRequestBody(req);
+        const tableContent = body.tableContent;
+        const colonneContent = body.colonneContent;
+        const typeContent = body.typeContent;
+
+        if (!tableContent || typeof tableContent !== "string"
+            || !colonneContent || typeof colonneContent !== "string"
+            || !typeContent || typeof typeContent !== "string")
+        {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid content" }));
+          return;
+        }
+
+        const saved = db.ALTER_ADD(tableContent, colonneContent, typeContent);
 
         res.writeHead(201, { "Content-Type": "application/json" });
         res.end(JSON.stringify(saved));
