@@ -225,6 +225,57 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+    // POST /api/updateUserUsername -> Modifie un username
+    if (req.url === "/api/updateUserUsername" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+      const username = body.username;
+      if (!id || !username)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Not log or missing username" }));
+          return;
+      }
+      db.updateUserUsername(username, id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(username));
+      return;
+    }
+
+    // POST /api/updateUserPassword -> Modifie un password_hash
+    if (req.url === "/api/updateUserPassword" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const password_hash = await bcrypt.hash(body.password, 10);
+      const id  = body.id;
+      if (!id || !password_hash)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Not log or missing password" }));
+          return;
+      }
+      db.updateUserPassword(password_hash, id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(password_hash));
+      return;
+    }
+
+    // POST /api/updateUserMail -> Modifie un mail
+    if (req.url === "/api/updateUserMail" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+      const mail = body.mail;
+      if (!id || !mail)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Not log or missing mail" }));
+          return;
+      }
+      db.updateUserMail(mail, id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(mail));
+      return;
+    }
+
     // Route Prometheus /metrics
     if (url === "/metrics") {
       // Pas de compteur ici, pour éviter de compter les scrapes Prometheus

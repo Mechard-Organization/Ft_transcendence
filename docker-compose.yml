@@ -35,6 +35,7 @@ services:
       - ./srcs/public:/app          # frontend (index.html, vite.config, etc.)
       - ./srcs/client:/app/client   # les pages TS (homePage, gamePage...)
       - ./srcs/server:/app/server   # app.ts (le router du front)
+      - ./srcs/services:/app/services
       - /app/node_modules
     env_file: .env
     networks:
@@ -66,7 +67,7 @@ services:
       - transcendence
     restart: unless-stopped
 
-    
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
