@@ -22,6 +22,7 @@ export async function adminPage(header: string, footer: string) {
         <div class="form-group">
           <label for="password">Nouveau mot de passe</label>
           <input type="password" id="password" placeholder="Nouveau mot de passe" />
+          <input type="password" id="password2" placeholder="Nouveau mot de passe encore" />
         </div>
         <button id="updateUserPassword" class="btn-primary">Modifier</button>
       </div>
@@ -40,6 +41,7 @@ export async function adminPage(header: string, footer: string) {
   const usernameInput = document.getElementById("username") as HTMLInputElement;
   const updateUserUsernameBtn = document.getElementById("updateUserUsername") as HTMLButtonElement;
   const passwordInput = document.getElementById("password") as HTMLInputElement;
+  const passwordInput2 = document.getElementById("password2") as HTMLInputElement;
   const updateUserPasswordBtn = document.getElementById("updateUserPassword") as HTMLButtonElement;
   const mailInput = document.getElementById("mail") as HTMLInputElement;
   const updateUserMailBtn = document.getElementById("updateUserMail") as HTMLButtonElement;
@@ -54,6 +56,7 @@ export async function adminPage(header: string, footer: string) {
     usernameInput.addEventListener("keydown", handleEnter(updateUserUsernameBtn));
     updateUserUsernameBtn.addEventListener("keydown", handleEnter(updateUserUsernameBtn));
     passwordInput.addEventListener("keydown", handleEnter(updateUserPasswordBtn));
+    passwordInput2.addEventListener("keydown", handleEnter(updateUserPasswordBtn));
     updateUserPasswordBtn.addEventListener("keydown", handleEnter(updateUserPasswordBtn));
     mailInput.addEventListener("keydown", handleEnter(updateUserMailBtn));
     updateUserMailBtn.addEventListener("keydown", handleEnter(updateUserMailBtn));
@@ -93,11 +96,18 @@ export async function adminPage(header: string, footer: string) {
     // --- Modifie l'utilisateur password ---
     updateUserPasswordBtn.onclick = async () => {
       const password = passwordInput.value.trim();
+      const password2 = passwordInput2.value.trim();
       const auth = await isAuthenticated();
       const id = auth ? auth.id : 0;
 
-      if (!password || !id) {
+      if (!password || !password || !id) {
         alert("Merci de vous connecter et d'entrer un password");
+        return;
+      }
+
+      if (password != password2)
+      {
+        alert("taper 2 fois le même mpd svp");
         return;
       }
 

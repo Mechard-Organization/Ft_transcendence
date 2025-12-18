@@ -230,10 +230,18 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       const body = await getRequestBody(req);
       const id  = body.id;
       const username = body.username;
+
       if (!id || !username)
       {
         res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "Not log or missing username" }));
+          return;
+      }
+
+      if (username == db.getUserById(id).username)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "already yours username" }));
           return;
       }
       db.updateUserUsername(username, id)
@@ -245,14 +253,26 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     // POST /api/updateUserPassword -> Modifie un password_hash
     if (req.url === "/api/updateUserPassword" && req.method === "POST") {
       const body = await getRequestBody(req);
-      const password_hash = await bcrypt.hash(body.password, 10);
+      const password = body.password;
       const id  = body.id;
-      if (!id || !password_hash)
+
+      if (!id || !password)
       {
         res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "Not log or missing password" }));
           return;
       }
+
+      const passwordOk = await verifyPassword(password, db.getUserById(id).password_hash);
+
+      if (passwordOk) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "already yours password" }));
+        return;
+      }
+
+      const password_hash = await bcrypt.hash(body.password, 10);
+
       db.updateUserPassword(password_hash, id)
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(password_hash));
@@ -264,10 +284,25 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       const body = await getRequestBody(req);
       const id  = body.id;
       const mail = body.mail;
+
       if (!id || !mail)
       {
         res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "Not log or missing mail" }));
+          return;
+      }
+
+      if (mail == db.getUserById(id).mail)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "already yours mail" }));
+          return;
+      }
+
+      if (mail == db.getUserById(id).mail)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "already yours mail" }));
           return;
       }
       db.updateUserMail(mail, id)
