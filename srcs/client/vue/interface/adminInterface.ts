@@ -144,6 +144,7 @@ export async function adminPage(header: string, footer: string) {
         }
 
         passwordInput.value = "";
+        passwordInput2.value = "";
 
       } catch (err) {
         console.error(err);
