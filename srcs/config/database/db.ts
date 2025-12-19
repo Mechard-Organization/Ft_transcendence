@@ -87,14 +87,14 @@ export function createUser(username: string, password_hash: string, mail: string
   };
 }
 
-export function getUserById(username: string) {
+export function getUserById(id: string) {
   const stmt = db.prepare(`
     SELECT id, username, password_hash, mail
     FROM users
     WHERE id = ?
   `);
 
-  return stmt.get(username);
+  return stmt.get(id);
 }
 
 export function getUserByUsername(username: string) {
@@ -133,6 +133,38 @@ export type User = {
   created_at: string;
 };
 
-// --- TABLE FUNCTIONS ---
+// |--- TABLE FUNCTIONS ---|
+
+// --- USER FUNCTIONS ---
+
+export function updateUserUsername(username: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET username = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(username, id);
+}
+
+export function updateUserPassword(password_hash: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET password_hash = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(password_hash, id);
+}
+
+export function updateUserMail(mail: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET mail = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(mail, id);
+}
 
 
