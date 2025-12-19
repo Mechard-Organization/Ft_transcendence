@@ -38,6 +38,17 @@ db.prepare(`
   )
 `).run();
 
+// --- TABLE FRIENDS ---
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS friends (
+    id_user INTEGER,
+    id_friend INTEGER,
+    accept BOOL DEFAULT FALSE,
+    FOREIGN KEY(id_user) REFERENCES users(id),
+    FOREIGN KEY(id_friend) REFERENCES users(id)
+  )
+`).run();
+
 // --- FONCTIONS EXPORTÉES ---
 
 // --- MESSAGES FUNCTIONS ---
@@ -132,6 +143,88 @@ export type User = {
   mail: string;
   created_at: string;
 };
+
+// --- FIREND FUNCTIONS ---
+
+export function createFriend(id_user: string, id_friend: string) {
+  const stmt = db.prepare(`
+    INSERT INTO friends (id_user, id_friend)
+    VALUES (?, ?)
+  `);
+
+  const info = stmt.run(id_user, id_friend);
+  const id1 = info.lastInsertRowid;
+
+  const stmt2 = db.prepare(`
+    INSERT INTO friends (id_user, id_friend)
+    VALUES (?, ?)
+  `);
+
+  const info2 = stmt2.run(id_friend, id_user);
+  const id2 = info2.lastInsertRowid;
+
+  return {
+    id1,
+    id2
+  };
+}
+
+export function valideFriend(id_user: string, id_friend: string) {
+  const stmt = db.prepare(`
+    UPDATE friends
+    SET accept = TRUE
+    WHERE id_user = ? AND id_friend = ?
+  `);
+
+  const info = stmt.run(id_user, id_friend);
+
+  const stmt2 = db.prepare(`
+    UPDATE friends
+    SET accept = TRUE
+    WHERE id_user = ? AND id_friend = ?
+  `);
+
+  const info2 = stmt2.run(id_friend, id_user);
+
+  return {
+    info,
+    info2
+  };
+}
+
+export function getFriendValidate(id_user: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM friends
+    LEFT JOIN users
+      ON friends.id_friend = users.id
+    WHERE id_user = ? AND accept = TRUE
+    ORDER BY id_friend ASC
+  `);
+
+  return stmt.all(id_user);
+}
+
+
+export function getFriendNValidate(id_user: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM friends
+    LEFT JOIN users
+      ON friends.id_friend = users.id
+    WHERE id_user = ? AND accept = FALSE
+    ORDER BY id_friend ASC
+  `);
+
+  return stmt.all(id_user);
+}
+
+export function alreadyFriend(id_user: string, id_friend: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM friends
+    WHERE id_user = ? AND id_friend = ?
+  `);
+
+  return stmt.all(id_user, id_friend);
+}
 
 // |--- TABLE FUNCTIONS ---|
 

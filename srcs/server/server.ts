@@ -169,6 +169,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+    // POST /api/users -> creer un user
     if (req.url === "/api/users" && req.method === "POST") {
       try {
         const body = await getRequestBody(req);
@@ -206,6 +207,8 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+
+    // GET /api/users -> récupère les user
     if (req.url === "/api/users" && req.method === "GET") {
       const users = db.getAllUsers();
       res.writeHead(200, { "Content-Type": "application/json" });
@@ -213,6 +216,8 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+
+    // POST /api/getuser -> récupère un user
     if (req.url === "/api/getuser" && req.method === "POST") {
       const body = await getRequestBody(req);
       console.log("body: ", body);
@@ -222,6 +227,94 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       console.log("user: ", user);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(user));
+      return;
+    }
+
+    // POST /api/friend -> creer un friend
+    if (req.url === "/api/friend" && req.method === "POST") {
+      try {
+        const body = await getRequestBody(req);
+        const { id_user, id_friend } = body;
+
+        if (!id_user || !id_friend) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "not log" }));
+          return;
+        }
+
+        // Vérifier si user existe
+        if (!db.getUserById(id_user)) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "User doesn't exist" }));
+          return;
+        }
+
+        // Vérifier si friend existe
+        if (!db.getUserById(id_friend)) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "User doesn't exist" }));
+          return;
+        }
+
+        if (db.alreadyFriend(id_user, id_friend).length != 0)
+        {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Already your friend" }));
+          return;
+        }
+        const user = db.createFriend(id_user, id_friend);
+
+        res.writeHead(201, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(user));
+      } catch {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid JSON" }));
+      }
+      return;
+    }
+
+    // POST /api/getFriendV -> récupère la liste friend validé
+    if (req.url === "/api/getFriendV" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+      if (!id) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "not log" }));
+        return;
+      }
+      const friends = db.getFriendValidate(id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(friends));
+      return;
+    }
+
+    // POST /api/getFriendNV -> récupère la liste friend non validé
+    if (req.url === "/api/getFriendNV" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+      if (!id) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "not log" }));
+        return;
+      }
+      const friends = db.getFriendNValidate(id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(friends));
+      return;
+    }
+
+    // POST /api/acceptFriend -> récupère la liste friend non validé
+    if (req.url === "/api/acceptFriend" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const { id_user, id_friend } = body;
+      if (!id_user || !id_friend) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "not log" }));
+          return;
+        }
+      const friends = db.valideFriend(id_user, id_friend)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(friends));
       return;
     }
 

@@ -49,15 +49,16 @@ async function showPage(page: string) {
 
   const footer = `
   <div class="footer">
-  <div class="footer_links">
-  <a class="footer_link" href="#about">About</a></div>
-  </div>
+    <div class="footer_links">
+      <a class="footer_link" href="#about">About</a></div>
+    </div>
   </div>
   `;
   const app = await buildHeader();
   if (!app)
     return;
   resetBabylonJs();
+  console.log(page.split("#")[0]);
 
   if (page === "home") {
     homePage(app.innerHTML, footer);
@@ -73,7 +74,7 @@ async function showPage(page: string) {
     loginPage(app.innerHTML, footer);
   } else if (page === "profil") {
     profilPage(app.innerHTML, footer);
-  } else if (page === "admin") {
+  } else if (page.split("#")[0] === "admin") {
     adminPage(app.innerHTML, footer);
   } else {
     app.innerHTML += "<h1>Page not found</h1>";
