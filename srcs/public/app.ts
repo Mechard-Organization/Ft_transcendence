@@ -30,14 +30,15 @@ async function buildHeader() {
   } else {
     app.innerHTML = `
     <body>
-    <div class="header">
-    <div class="header_links">
-    <a class="header_link" href="#home">Home</a>
-    <a class="header_link" href="#messages">Messages</a>
-    <a class="header_link" href="#profil">Profil</a>
-    <a class="header_link" href="#about">About</a>
-    </div>
-    </div>
+      <div class="header">
+        <div class="header_links">
+          <a class="header_link" href="#home">Home</a>
+          <a class="header_link" href="#messages">Messages</a>
+          <a class="header_link" href="#profil">Profil</a>
+          <a class="header_link" href="#admin">Admin</a>
+          <a class="header_link" href="#about">About</a>
+        </div>
+      </div>
     </body>`;
   }
   return app;
