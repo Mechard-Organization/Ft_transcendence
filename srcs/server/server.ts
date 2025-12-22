@@ -217,7 +217,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     }
 
 
-    // POST /api/getuser -> récupère un user
+    // POST /api/getuser -> récupère un user via id
     if (req.url === "/api/getuser" && req.method === "POST") {
       const body = await getRequestBody(req);
       console.log("body: ", body);
@@ -230,11 +230,28 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+    // POST /api/getuser -> récupère un user via username
+    if (req.url === "/api/getuserbyname" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const username  = body.username_friend;
+      const user = db.getUserByUsername(username);
+      console.log("user: ", user);
+      if (!user)
+      {
+        res.writeHead(409, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "User doesn't exist" }));
+        return;
+      }
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(user));
+      return;
+    }
+
     // POST /api/friend -> creer un friend
     if (req.url === "/api/friend" && req.method === "POST") {
       try {
         const body = await getRequestBody(req);
-        const { id_user, id_friend } = body;
+        const { id_user, id_friend, id_sender } = body;
 
         if (!id_user || !id_friend) {
           res.writeHead(400, { "Content-Type": "application/json" });
@@ -262,7 +279,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           res.end(JSON.stringify({ error: "Already your friend" }));
           return;
         }
-        const user = db.createFriend(id_user, id_friend);
+        const user = db.createFriend(id_user, id_friend, id_sender);
 
         res.writeHead(201, { "Content-Type": "application/json" });
         res.end(JSON.stringify(user));
@@ -335,6 +352,12 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       {
         res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "already yours username" }));
+          return;
+      }
+      if (username == db.getUserByUsername(username).username)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "username already take" }));
           return;
       }
       db.updateUserUsername(username, id)
