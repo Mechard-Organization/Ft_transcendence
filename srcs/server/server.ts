@@ -356,7 +356,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           res.end(JSON.stringify({ error: "already yours username" }));
           return;
       }
-      if (username == db.getUserByUsername(username).username)
+      if (db.getUserByUsername(username))
       {
         res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "username already take" }));
@@ -417,10 +417,9 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           return;
       }
 
-      if (mail == db.getUserById(id).mail)
-      {
-        res.writeHead(400, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "already yours mail" }));
+      if (db.getUserByMail(mail)) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Mail already exists" }));
           return;
       }
       db.updateUserMail(mail, id)
