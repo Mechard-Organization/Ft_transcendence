@@ -44,7 +44,9 @@ db.prepare(`
     id_user INTEGER,
     id_friend INTEGER,
     accept BOOL DEFAULT FALSE,
+    id_sender INTEGER,
     FOREIGN KEY(id_user) REFERENCES users(id),
+    FOREIGN KEY(id_sender) REFERENCES users(id),
     FOREIGN KEY(id_friend) REFERENCES users(id)
   )
 `).run();
@@ -146,21 +148,21 @@ export type User = {
 
 // --- FIREND FUNCTIONS ---
 
-export function createFriend(id_user: string, id_friend: string) {
+export function createFriend(id_user: string, id_friend: string, id_sender: string) {
   const stmt = db.prepare(`
-    INSERT INTO friends (id_user, id_friend)
-    VALUES (?, ?)
+    INSERT INTO friends (id_user, id_friend, id_sender)
+    VALUES (?, ?, ?)
   `);
 
-  const info = stmt.run(id_user, id_friend);
+  const info = stmt.run(id_user, id_friend, id_sender);
   const id1 = info.lastInsertRowid;
 
   const stmt2 = db.prepare(`
-    INSERT INTO friends (id_user, id_friend)
-    VALUES (?, ?)
+    INSERT INTO friends (id_user, id_friend, id_sender)
+    VALUES (?, ?, ?)
   `);
 
-  const info2 = stmt2.run(id_friend, id_user);
+  const info2 = stmt2.run(id_friend, id_user, id_sender);
   const id2 = info2.lastInsertRowid;
 
   return {
