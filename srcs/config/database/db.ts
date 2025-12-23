@@ -138,6 +138,36 @@ export function getAllUsers() {
   return stmt.all();
 }
 
+export function updateUserUsername(username: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET username = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(username, id);
+}
+
+export function updateUserPassword(password_hash: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET password_hash = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(password_hash, id);
+}
+
+export function updateUserMail(mail: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET mail = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(mail, id);
+}
+
 export type User = {
   id: number;
   username: string;
@@ -228,38 +258,11 @@ export function alreadyFriend(id_user: string, id_friend: string) {
   return stmt.all(id_user, id_friend);
 }
 
-// |--- TABLE FUNCTIONS ---|
-
-// --- USER FUNCTIONS ---
-
-export function updateUserUsername(username: string, id: string) {
+export function deleteFriend(id_user: string, id_friend: string) {
   const stmt = db.prepare(`
-    UPDATE users
-    SET username = ?
-    WHERE id = ?
+    DELETE FROM friends
+    WHERE (id_user = ? AND id_friend = ?) OR (id_user = ? AND id_friend = ?)
   `);
 
-  return stmt.run(username, id);
+  return stmt.run(id_user, id_friend, id_friend, id_user);
 }
-
-export function updateUserPassword(password_hash: string, id: string) {
-  const stmt = db.prepare(`
-    UPDATE users
-    SET password_hash = ?
-    WHERE id = ?
-  `);
-
-  return stmt.run(password_hash, id);
-}
-
-export function updateUserMail(mail: string, id: string) {
-  const stmt = db.prepare(`
-    UPDATE users
-    SET mail = ?
-    WHERE id = ?
-  `);
-
-  return stmt.run(mail, id);
-}
-
-
