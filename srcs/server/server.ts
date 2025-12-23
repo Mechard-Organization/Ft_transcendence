@@ -335,6 +335,20 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+    if (req.url === "/api/delFriend" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const { id_user, id_friend } = body;
+      if (!id_user || !id_friend) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "not log" }));
+          return;
+        }
+      const friends = db.deleteFriend(id_user, id_friend)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(friends));
+      return;
+    }
+
     // POST /api/updateUserUsername -> Modifie un username
     if (req.url === "/api/updateUserUsername" && req.method === "POST") {
       const body = await getRequestBody(req);

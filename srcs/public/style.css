@@ -245,3 +245,16 @@ th {
 .btn-val:hover {
   background-color: #c0392b;
 }
+
+.btn-del {
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-del:hover {
+  background-color: #c0392b;
+}

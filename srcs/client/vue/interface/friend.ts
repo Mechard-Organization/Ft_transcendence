@@ -39,6 +39,7 @@ async function loadRequestFriends() {
 				? `<button class="btn-val" data-id="${friend.id}">accept</button>`
 				: `en attente`
 			}
+			<button class="btn-del" data-id="${friend.id}">reject</button>
 		</td>
       </tr>
     `).join("");
@@ -55,6 +56,40 @@ async function loadRequestFriends() {
 
 			try {
 				const res = await fetch("/api/acceptFriend", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ id_user, id_friend })
+				});
+
+				const data = await res.json();
+
+				if (!res.ok) {
+					alert(data.error || "Erreur lors de l'acceptation");
+					return;
+				}
+
+				// Rafraîchir le tableau
+				await loadRequestFriends();
+				await loadFriends();
+
+			} catch (err) {
+			console.error(err);
+			}
+		};
+	});
+
+	const delButtons = document.querySelectorAll<HTMLButtonElement>(".btn-del");
+
+	delButtons.forEach((btn) => {
+		btn.onclick = async () => {
+			const id_friend = Number(btn.dataset.id);
+			const auth = await isAuthenticated();
+			const id_user = auth ? auth.id : 0;
+
+			if (!id_friend || !id_user) return;
+
+			try {
+				const res = await fetch("/api/delFriend", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ id_user, id_friend })
@@ -89,7 +124,7 @@ async function loadFriends() {
   try {
     const auth = await isAuthenticated();
     if (!auth || !auth.authenticated) {
-      tbody.innerHTML = `<tr><td colspan="3">Non connecté</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4">Non connecté</td></tr>`;
       return;
     }
 
@@ -102,11 +137,11 @@ async function loadFriends() {
 	console.log(friends);
 
     if (!res.ok || !Array.isArray(friends)) {
-      tbody.innerHTML = `<tr><td colspan="3">Erreur de chargement</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4">Erreur de chargement</td></tr>`;
       return;
     }
     if (friends.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="3">Aucun ami</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4">Aucun ami</td></tr>`;
       return;
     }
 
@@ -115,12 +150,47 @@ async function loadFriends() {
         <td>${friend.id}</td>
         <td>${friend.username}</td>
         <td>${friend.mail ?? "-"}</td>
+		<td><button class="btn-del" data-id="${friend.id}">reject</button></td>
       </tr>
     `).join("");
 
+
+	const delButtons = document.querySelectorAll<HTMLButtonElement>(".btn-del");
+
+	delButtons.forEach((btn) => {
+		btn.onclick = async () => {
+			const id_friend = Number(btn.dataset.id);
+			const auth = await isAuthenticated();
+			const id_user = auth ? auth.id : 0;
+
+			if (!id_friend || !id_user) return;
+
+			try {
+				const res = await fetch("/api/delFriend", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ id_user, id_friend })
+				});
+
+				const data = await res.json();
+
+				if (!res.ok) {
+					alert(data.error || "Erreur lors de la suppression");
+					return;
+				}
+
+				// Rafraîchir le tableau
+				await loadFriends();
+
+			} catch (err) {
+			console.error(err);
+			}
+		};
+	});
+
   } catch (err) {
     console.error(err);
-    tbody.innerHTML = `<tr><td colspan="3">Erreur serveur</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4">Erreur serveur</td></tr>`;
   }
 }
 
@@ -168,6 +238,7 @@ export function friendPage(header: string, footer: string) {
 						<th>ID</th>
 						<th>Nom d'utilisateur</th>
 						<th>Email</th>
+						<th>reject</th>
 					</tr>
 				</thead>
 				<tbody id="friendTableBody">
