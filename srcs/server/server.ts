@@ -345,7 +345,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           res.end(JSON.stringify({ error: "not log" }));
           return;
         }
-      const friends = db.deleteFriend(id_user, id_friend)
+      const friends = db.deleteFriend(id_user, id_friend);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(friends));
       return;
@@ -439,6 +439,24 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       db.updateUserMail(mail, id)
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(mail));
+      return;
+    }
+
+    // POST /api/delUser -> delete un user
+    if (req.url === "/api/delUser" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+
+      if (!id)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Not log" }));
+          return;
+      }
+
+      db.deleteUserFriend(id);
+      db.deleteUser(id);
+      handleLogout(req, res);
       return;
     }
 

@@ -168,6 +168,15 @@ export function updateUserMail(mail: string, id: string) {
   return stmt.run(mail, id);
 }
 
+export function deleteUser(id: string) {
+  const stmt = db.prepare(`
+    DELETE FROM users
+    WHERE id = ?
+  `);
+
+  return stmt.run(id);
+}
+
 export type User = {
   id: number;
   username: string;
@@ -265,4 +274,13 @@ export function deleteFriend(id_user: string, id_friend: string) {
   `);
 
   return stmt.run(id_user, id_friend, id_friend, id_user);
+}
+
+export function deleteUserFriend(id_user: string) {
+  const stmt = db.prepare(`
+    DELETE FROM friends
+    WHERE id_user = ? OR id_friend = ?
+  `);
+
+  return stmt.run(id_user, id_user);
 }
