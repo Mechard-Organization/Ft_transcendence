@@ -45,6 +45,7 @@ services:
     build:
       context: ./srcs/server
     container_name: backend
+    env_file: .env
     volumes:
       - ./srcs/server:/app
       - ./srcs/services:/app/services # on monte le dossier services à la racine du conteneur
