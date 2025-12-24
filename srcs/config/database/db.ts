@@ -33,7 +33,7 @@ db.prepare(`
   CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT,
-    id_author INTEGER,
+    id_author INTEGER NULL,
     FOREIGN KEY(id_author) REFERENCES users(id)
   )
 `).run();
@@ -82,6 +82,16 @@ export function addMessage(content: string, id: any) {
     content,
     username: authorId == "0" ? "Anonyme" : getUserById(authorId).username
   };
+}
+
+export function MessageAnonym(id_author: string) {
+  const stmt = db.prepare(`
+    UPDATE messages
+    SET id_author = NULL
+    WHERE id_author = ?
+  `);
+
+  return stmt.run(id_author);
 }
 
 // --- USERS FUNCTIONS ---
