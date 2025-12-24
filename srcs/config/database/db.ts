@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcrypt";
 // db.ts
 const Database = require("better-sqlite3");
 
@@ -24,6 +25,7 @@ db.prepare(`
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     mail TEXT UNIQUE NOT NULL,
+    admin BOOL DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `).run();
@@ -50,6 +52,19 @@ db.prepare(`
     FOREIGN KEY(id_friend) REFERENCES users(id)
   )
 `).run();
+
+// Création du user root
+async function creatAdmin() {
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+  const ADMIN = process.env.ADMIN;
+  const ADMIN_MAIL = process.env.ADMIN_MAIL;
+  if (!ADMIN_PASSWORD || !ADMIN || !ADMIN_MAIL) return;
+  const password_hash = await bcrypt.hash(ADMIN_PASSWORD, 10);
+  db.prepare(` INSERT INTO users (username, password_hash, mail, admin)
+      VALUES (?, ?, ?, TRUE)`).run(ADMIN, password_hash, ADMIN_MAIL);
+}
+
+creatAdmin();
 
 // --- FONCTIONS EXPORTÉES ---
 
