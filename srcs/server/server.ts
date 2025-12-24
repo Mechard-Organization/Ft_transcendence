@@ -455,6 +455,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       }
 
       db.deleteUserFriend(id);
+      db.MessageAnonym(id);
       db.deleteUser(id);
       handleLogout(req, res);
       return;
