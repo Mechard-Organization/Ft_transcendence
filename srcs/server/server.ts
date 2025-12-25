@@ -10,6 +10,8 @@ import { handleLogout } from "@services/logout.service";
 import * as db from "@config/database/db";
 import { handleAuthMe } from "./auth";
 
+import * as gameLogic from "./gameLogic";
+
 const port = 4000;
 
 // --- FONCTION POUR LIRE LE BODY JSON ---
@@ -347,24 +349,44 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
 const wss = new WebSocketServer({ server });
 
 // Quand un client se connecte
-wss.on("connection", ws => {
+wss.on("connection", (ws) => {
   console.log("Client connecté en WebSocket");
 
-  ws.send(JSON.stringify({ type: "welcome", message: "Bienvenue en WebSocket !" }));
+  ws.send(JSON.stringify({
+    type: "welcome",
+    message: "Bienvenue en WebSocket !"
+  }));
 
-  ws.on("message", msg => {
-    console.log("Message reçu :", msg.toString());
+  ws.on("message", (msg) => {
+    let message;
 
-    // Exemple : broadcast à tous les autres clients
-    wss.clients.forEach(client => {
-      if (client.readyState === 1) {
-        client.send(JSON.stringify({ type: "msg", payload: msg.toString() }));
-      }
-    });
+    try {
+      message = JSON.parse(msg.toString());
+    } catch {
+      console.warn("Received non-JSON message");
+      return;
+    }
+
+    // console.log("recieved message of type", message.type);
+
+    switch (message.type) {
+      case "wsMessage":
+        message.player.ws = ws;
+        gameLogic.movePaddlesAndBalls(message);
+        // console.log("ws message recieved", message);
+        break;
+
+      case "newGame":
+        console.log("New game:", message.newGame);
+        break;
+
+      default:
+        console.warn("Unknown message type:", message.type);
+    }
   });
 
   ws.on("close", () => {
-    console.log("Client déconnecté");
+    const player = gameLogic.removePlayerByWS(ws);
   });
 });
 
