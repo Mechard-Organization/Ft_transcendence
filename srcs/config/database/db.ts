@@ -127,7 +127,7 @@ export function createUser(username: string, password_hash: string, mail: string
 
 export function getUserById(id: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail
+    SELECT id, username, password_hash, mail, admin
     FROM users
     WHERE id = ?
   `);
@@ -137,7 +137,7 @@ export function getUserById(id: string) {
 
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail
+    SELECT id, username, password_hash, mail, admin
     FROM users
     WHERE username = ?
   `);
@@ -147,7 +147,7 @@ export function getUserByUsername(username: string) {
 
 export function getUserByMail(mail: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail
+    SELECT id, username, password_hash, mail, admin
     FROM users
     WHERE mail = ?
   `);
@@ -192,6 +192,17 @@ export function updateUserMail(mail: string, id: string) {
 
   return stmt.run(mail, id);
 }
+
+export function updateUserAdmin(status: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET admin = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(status, id);
+}
+
 
 export function deleteUser(id: string) {
   const stmt = db.prepare(`
