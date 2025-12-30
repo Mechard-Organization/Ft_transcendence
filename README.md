@@ -80,6 +80,13 @@ L’objectif est de démontrer notre capacité à :
 
 ### 🚀 Lancement
 ```bash
+make
+
+
+```
+
+### 🏥 Listes des commandes
+```bash
 make help
 
 
