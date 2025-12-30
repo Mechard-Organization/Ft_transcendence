@@ -6,15 +6,22 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:17:53 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/12/08 15:33:59 by ajamshid         ###   ########.fr       */
+/*   Updated: 2025/12/25 17:40:12 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { ColorPicker, AdvancedDynamicTexture, Button, InputText, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
-import { scene, nullifySceneEngine } from "../game/Meshes";
-import { counter, resetGame } from "../game/gameLogic";
-import { createCustomiseBtn, createSaveBtn, createStartBtn, createStartTournamentBtn, createMainMenuBtn, createSinglePlayerBtn, createMultiPlayerBtn, createTwoPlayerBtn, createTournamentBtn, createResumeBtn, createTextInput, createAddBtn, createWallsBtn, createBallBtn, createPaddlesBtn, createTableBtn, createCyberBtn, createNaturalBtn } from "./Buttons";
+import { ColorPicker, AdvancedDynamicTexture,  Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
+import { counter, scene, nullifySceneEngine, thisPlayer, setNewGame } from "../game/Meshes";
+import { createCustomiseBtn, createStartBtn, createStartTournamentBtn, createMainMenuBtn, createSinglePlayerBtn, createMultiPlayerBtn, createTwoPlayerBtn, createTournamentBtn, createResumeBtn, createTextInput, createAddBtn, createWallsBtn, createBallBtn, createPaddlesBtn, createTableBtn, createCyberBtn, createNaturalBtn, colorType, createDefaultBtn } from "./Buttons";
 
+
+interface NewGame {
+  type: "newGame",
+  playerCount: number,
+  mode: number,
+  playerIds?: number[],
+  playername: string[]
+}
 
 export let contestants: string[] = [];
 export let contestantNumber = 0;
@@ -34,6 +41,7 @@ export let disposableUI: AdvancedDynamicTexture | null = null;
 export let tournamentUI: AdvancedDynamicTexture | null = null;
 
 let selectedMesh: any;
+
 
 
 export function resetBabylonJs() {
@@ -59,12 +67,12 @@ export function resetBabylonJs() {
   player2 = player1 = disposableUI = counterUI = resumeUI = customiseUI = multiUI = mainUI = tournamentUI = null;
 }
 
-export function resetGame2(type?: number) {
+export function resetGame(type?: number) {
   if (type === undefined) {
     contestants = [];
     contestantNumber = 0;
   }
-  pause = 0;
+  setPause(0);
   // playBtn = 0;
   playerCount = 0;
   playername[0] = "player1";
@@ -221,10 +229,12 @@ export function createUI() {
   }
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      if(playerCount > 0 && pause == 0){
-      resumeUI.rootContainer.isVisible = true;
-      resumeUI.isForeground = true;
-      pause = 1;
+      if (playerCount > 0 && thisPlayer.gameId) {
+        console.log(thisPlayer.gameId);
+        resumeUI.rootContainer.isVisible = true;
+        resumeUI.isForeground = true;
+        thisPlayer.pause = 1;
+        console.log("pause set to 1")
       }
     }
   });
@@ -264,6 +274,9 @@ export function createdisposableUI(type: number) {
   disposableUI = AdvancedDynamicTexture.CreateFullscreenUI("statsUI");
   disposableUI.background = "rgba(13, 0, 48, 0.5)";
   const statsPanel = new StackPanel();
+  console.log("contestantS ", contestants);
+  console.log("counter ", counter);
+  console.log("contestants length ", contestants.length)
   if (counter[0] == finalGoal) {
     text = createTextBlock(playername[0] + " Won the game!");
     if (contestants.length >= 2) {
@@ -278,6 +291,7 @@ export function createdisposableUI(type: number) {
       contestantNumber++;
     }
   }
+
   statsPanel.width = "300px";
   statsPanel.isVertical = true;
   if (text)
@@ -286,11 +300,22 @@ export function createdisposableUI(type: number) {
   if (contestantNumber > contestants.length - 1)
     contestantNumber = 0;
   if (contestantNumber < contestants.length - 1) {
-    resetGame(scene, 1);
-    pause = 1;
+    resetGame(1);
+    setPause(1);
     playerCount = 2;
     playername[0] = contestants[contestantNumber];
     playername[1] = contestants[contestantNumber + 1];
+    thisPlayer.pause = 1;
+    let newGame: NewGame = {
+      type: "newGame",
+      playerCount: 2,
+      mode: 0,
+      playername: playername
+    }
+    setNewGame(newGame);
+    thisPlayer.pause = 1;
+    // setValues(movePaddlesAndBalls(thisPlayer, newGame));
+
     if (text == undefined) {
       text = createTextBlock(`${contestants[contestantNumber]} VS ${contestants[contestantNumber + 1]}`);
       disposableUI.addControl(text);
@@ -307,7 +332,7 @@ export function createdisposableUI(type: number) {
     statsPanel.addControl(startBtn);
     return;
   }
-  resetGame(scene);
+  // resetGame(scene);
   disposableUI.addControl(statsPanel);
   const mainMenuBtn = createMainMenuBtn();
   statsPanel.addControl(mainMenuBtn);
@@ -318,14 +343,14 @@ export function createdisposableUI(type: number) {
 export function createCutomiseUI() {
   customiseUI = AdvancedDynamicTexture.CreateFullscreenUI("customiseUI");
   customiseUI.background = "rgba(13, 0, 48, 0.5)";
-  const selectortPanel = new StackPanel();
-  selectortPanel.width = "300px";
-  selectortPanel.isVertical = true;
-  selectortPanel.height = "90%";
-  selectortPanel.background = "rgba(13, 0, 48, 0.7)"
-  selectortPanel.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT
+  const selectorPanel = new StackPanel();
+  selectorPanel.width = "300px";
+  selectorPanel.isVertical = true;
+  selectorPanel.height = "95%";
+  selectorPanel.background = "rgba(13, 0, 48, 0.7)"
+  selectorPanel.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT
 
-  customiseUI.addControl(selectortPanel);
+  customiseUI.addControl(selectorPanel);
 
   let picker = new ColorPicker("picker")
   picker.left = "15%"
@@ -337,19 +362,22 @@ export function createCutomiseUI() {
   const ballBtn = createBallBtn();
   const paddlesBtn = createPaddlesBtn();
   const tableBtn = createTableBtn();
+  const defaultBtn = createDefaultBtn();
   const cyber = createCyberBtn();
   const natural = createNaturalBtn();
+  
   // const startTournamentBtn = createSaveBtn();
   customiseUI.addControl(picker);
 
   // selectortPanel.addControl(startTournamentBtn);
-    selectortPanel.addControl(cyber);
-  selectortPanel.addControl(natural);
-  selectortPanel.addControl(ballBtn);
-  selectortPanel.addControl(wallBtn);
-  selectortPanel.addControl(paddlesBtn);
-  selectortPanel.addControl(tableBtn);
-  selectortPanel.addControl(mainMenuBtn);
+  selectorPanel.addControl(cyber);
+  selectorPanel.addControl(natural);
+  selectorPanel.addControl(ballBtn);
+  selectorPanel.addControl(wallBtn);
+  selectorPanel.addControl(paddlesBtn);
+  selectorPanel.addControl(tableBtn);
+  selectorPanel.addControl(defaultBtn);
+  selectorPanel.addControl(mainMenuBtn);
 }
 
 function observerBodyColor(value: any, state: any) {
@@ -358,10 +386,10 @@ function observerBodyColor(value: any, state: any) {
     console.log("selected mesh changing color");
     let dC = selectedMesh.material.diffuseColor;
     let eC = selectedMesh.material.emissiveColor;
-    if(dC.r == 0 && dC.r == 0 && dC.r == 0){
+    if (colorType == 0) {
       selectedMesh.material.emissiveColor = value.clone();
     }
-    if(eC.r == 0 && eC.r == 0 && eC.r == 0){
+    if (colorType == 1) {
       selectedMesh.material.diffuseColor = value.clone();
     }
   }
