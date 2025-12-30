@@ -6,15 +6,14 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/12/08 15:59:26 by ajamshid         ###   ########.fr       */
+/*   Updated: 2025/12/25 17:41:36 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { Button, InputText, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
 import { Color3 } from "@babylonjs/core";
-import { scene, nullifySceneEngine } from "../game/Meshes";
-import { counter, resetGame } from "../game/gameLogic";
-import { setSelectedMesh, createCutomiseUI, createdisposableUI, createTournamentUI, mainUI, multiUI, tournamentUI, resumeUI, counterUI, disposableUI, contestants, contestantNumber, finalGoal, playername, pause, playerCount, player1, player2, drawText, disposeDUI, disposeTUI, setPlayerCount, setPlayerName, setPause, customiseUI } from "./UI"
+import { thisPlayer, scene, username, setNewGame } from "../game/Meshes";
+import { setSelectedMesh, createCutomiseUI, createdisposableUI, createTournamentUI, mainUI, multiUI, tournamentUI, resumeUI, disposableUI, contestants, drawText, disposeDUI, disposeTUI, setPlayerCount, setPlayerName, setPause, customiseUI, resetGame } from "./UI"
 
 function shuffle(array: string[]) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -24,7 +23,33 @@ function shuffle(array: string[]) {
   return array;
 }
 
+export interface Settings {
+  tableMat: Color3,
+  paddleMat: Color3,
+  ballMat: Color3,
+  wallMat: Color3,
+  lightIntensity: number,
+  colorType: number
+}
+export const defaultSettings: Settings = {
+  tableMat: new Color3(0, 0.5, 0),
+  paddleMat: new Color3(0.1, 0.1, 0.1),
+  ballMat: new Color3(0.5, 0, 0),
+  wallMat: new Color3(0.5, 0.5, 0.5),
+  lightIntensity: 0,
+  colorType: 0,
+};
 
+
+export let colorType = defaultSettings.colorType;
+
+interface NewGame {
+  type: "newGame",
+  playerCount: number,
+  mode: number,
+  playerIds?: number[],
+  playername: string[]
+}
 function buttonStyler(button: Button) {
   button.width = "200px";
   button.height = "70px";
@@ -42,7 +67,16 @@ export function createMainMenuBtn(): Button {
   buttonStyler(mainMenuBtn);
   // mainMenuBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   mainMenuBtn.onPointerUpObservable.add(() => {
-    resetGame(scene);
+    resetGame();
+    let newGame: NewGame = {
+      type: "newGame",
+      playerCount: 0,
+      mode: 0,
+      playername: ["Bot", "Bot"]
+    }
+    thisPlayer.pause = 0;
+    setNewGame(newGame);
+    // setValues(movePaddlesAndBalls({type:"wsMessage", player:thisPlayer, newGame:newGame}));
     if (disposableUI) {
       disposeDUI();
     }
@@ -70,9 +104,17 @@ export function createSinglePlayerBtn(): Button {
   buttonStyler(singlePlayerBtn);
   // singlePlayerBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   singlePlayerBtn.onPointerUpObservable.add(() => {
-    resetGame(scene);
-    setPlayerName(["Player", "Bot"]);
+    resetGame();
+    // setPlayerName([username, "Bot"]);
     setPlayerCount(1);
+    let newGame: NewGame = {
+      type: "newGame",
+      playerCount: 1,
+      mode: 0,
+      playername: [username, "Bot"]
+    }
+    setNewGame(newGame);
+    // setValues(movePaddlesAndBalls({type:"wsMessage", player:thisPlayer, newGame:newGame}));
     // playBtn = 1;
     drawText();
     mainUI.rootContainer.isVisible = false;
@@ -106,15 +148,22 @@ export function createTwoPlayerBtn(): Button {
   buttonStyler(twoPlayerBtn);
   // twoPlayerBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   twoPlayerBtn.onPointerUpObservable.add(() => {
-    resetGame(scene);
+    resetGame();
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
     multiUI.rootContainer.isVisible = false;
     multiUI.isForeground = false;
 
     setPlayerCount(2);
-    // playBtn = 1;
     setPlayerName(["Player1", "Player2"]);
+    let newGame: NewGame = {
+      type: "newGame",
+      playerCount: 2,
+      mode: 0,
+      playername: [username, "Player2"]
+    }
+    setNewGame(newGame);
+    // setValues(movePaddlesAndBalls({type:"wsMessage", player:thisPlayer, newGame:newGame}));
     drawText();
     // twoPlayerBtn.metadata.panel.dispose();
     // (twoPlayerBtn.metadata.ui as AdvancedDynamicTexture).dispose();
@@ -131,6 +180,7 @@ export function createTournamentBtn(): Button {
     mainUI.isForeground = false;
     multiUI.rootContainer.isVisible = false;
     multiUI.isForeground = false;
+    resetGame();
     createTournamentUI();
     // tournamentBtn.metadata.panel.dispose();
     // (tournamentBtn.metadata.ui as AdvancedDynamicTexture).dispose();
@@ -150,6 +200,7 @@ export function createResumeBtn(): Button {
     resumeUI.rootContainer.isVisible = false;
     resumeUI.isForeground = false;
     setPause(0);
+    thisPlayer.pause = 0;
     // resumetBtn.metadata.panel.dispose();
     // (resumetBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
@@ -228,10 +279,19 @@ export function createStartBtn(): Button {
     resumeUI.rootContainer.isVisible = false;
     resumeUI.isForeground = false;
 
-    // resetGame(scene);
+    // resetGame();
     // playerCount = 2;
     // playBtn = 1;
     setPause(0);
+    thisPlayer.pause = 0;
+    // let newGame: NewGame = {
+    //   type: "newGame",
+    //   playerCount: playerCount,
+    //   mode: 0,
+    //   playername: playername
+    // }
+    // setNewGame(newGame);
+    // setValues(movePaddlesAndBalls({type:"wsMessage", player:thisPlayer, newGame:newGame}));
     // playername = [contestants[contestantNumber], contestants[contestantNumber + 1]];
     drawText();
 
@@ -253,7 +313,7 @@ export function createCustomiseBtn(): Button {
   return customiseBtn;
 }
 export function createBallBtn(): Button {
-  const ballBtn = Button.CreateSimpleButton("customiseBtn", "Ball");
+  const ballBtn = Button.CreateSimpleButton("ballBtn", "Ball");
   buttonStyler(ballBtn);
   ballBtn.onPointerUpObservable.add(() => {
     setSelectedMesh("ball");
@@ -261,7 +321,7 @@ export function createBallBtn(): Button {
   return ballBtn;
 }
 export function createTableBtn(): Button {
-  const tableBtn = Button.CreateSimpleButton("customiseBtn", "Table");
+  const tableBtn = Button.CreateSimpleButton("tableBtn", "Table");
   buttonStyler(tableBtn);
   tableBtn.onPointerUpObservable.add(() => {
     setSelectedMesh("table");
@@ -269,7 +329,7 @@ export function createTableBtn(): Button {
   return tableBtn;
 }
 export function createPaddlesBtn(): Button {
-  const paddlesBtn = Button.CreateSimpleButton("customiseBtn", "paddles");
+  const paddlesBtn = Button.CreateSimpleButton("paddlesBtn", "paddles");
   buttonStyler(paddlesBtn);
   paddlesBtn.onPointerUpObservable.add(() => {
     setSelectedMesh("paddles");
@@ -277,7 +337,7 @@ export function createPaddlesBtn(): Button {
   return paddlesBtn;
 }
 export function createWallsBtn(): Button {
-  const wallsBtn = Button.CreateSimpleButton("customiseBtn", "walls");
+  const wallsBtn = Button.CreateSimpleButton("wallsBtn", "walls");
   buttonStyler(wallsBtn);
   wallsBtn.onPointerUpObservable.add(() => {
     setSelectedMesh("walls");
@@ -285,11 +345,11 @@ export function createWallsBtn(): Button {
   return wallsBtn;
 }
 export function createCyberBtn(): Button {
-  const cyberBtn = Button.CreateSimpleButton("customiseBtn", "cyber");
+  const cyberBtn = Button.CreateSimpleButton("cyberBtn", "cyber view");
   buttonStyler(cyberBtn);
   cyberBtn.onPointerUpObservable.add(() => {
     let c = scene.getMaterialByName("ballMat");
-    if (c.emissiveColor.r === 0 && c.emissiveColor.g === 0 && c.emissiveColor.b === 0) {
+    if (colorType == 1) {
       c.emissiveColor = c.diffuseColor.clone();
       c.diffuseColor = new Color3(0, 0, 0);
 
@@ -308,16 +368,17 @@ export function createCyberBtn(): Button {
       if (!light)
         console.log("there is not light")
       light.intensity = 0;
+      colorType = 0;
     }
   });
   return cyberBtn;
 }
 export function createNaturalBtn(): Button {
-  const naturalBtn = Button.CreateSimpleButton("customiseBtn", "natural");
+  const naturalBtn = Button.CreateSimpleButton("naturalBtn", "natural view");
   buttonStyler(naturalBtn);
   naturalBtn.onPointerUpObservable.add(() => {
     let c = scene.getMaterialByName("ballMat");
-    if (c.diffuseColor.r === 0 && c.diffuseColor.g === 0 && c.diffuseColor.b === 0) {
+    if (colorType == 0) {
       c.diffuseColor = c.emissiveColor.clone();
       c.emissiveColor = new Color3(0, 0, 0);
 
@@ -337,10 +398,36 @@ export function createNaturalBtn(): Button {
       if (!light)
         console.log("there is not light")
       light.intensity = 1;
+      colorType = 1;
     }
   });
   return naturalBtn;
 }
 
-export function createSaveBtn(): Button {
+export function createDefaultBtn(): Button {
+  const defaultBtn = Button.CreateSimpleButton("defaultBtn", "default settings");
+  buttonStyler(defaultBtn);
+  defaultBtn.onPointerUpObservable.add(() => {
+    let c = scene.getMaterialByName("ballMat");
+    c.emissiveColor = defaultSettings.ballMat.clone();
+    c.diffuseColor = new Color3(0, 0, 0);
+
+    c = scene.getMaterialByName("tableMat");
+    c.emissiveColor = defaultSettings.tableMat.clone();
+    c.diffuseColor = new Color3(0, 0, 0);
+
+    c = scene.getMaterialByName("paddleMat");
+    c.emissiveColor = defaultSettings.paddleMat.clone();
+    c.diffuseColor = new Color3(0, 0, 0);
+
+    c = scene.getMaterialByName("wallMat");
+    c.emissiveColor = defaultSettings.wallMat.clone();
+    c.diffuseColor = new Color3(0, 0, 0);
+    let light = scene.getLightByName("light");
+    if (!light)
+      console.log("there is not light")
+    light.intensity = defaultSettings.lightIntensity;
+    colorType = defaultSettings.colorType;
+  });
+  return defaultBtn;
 }
