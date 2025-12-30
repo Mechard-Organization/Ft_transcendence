@@ -6,13 +6,13 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/12/08 16:00:09 by ajamshid         ###   ########.fr       */
+/*   Updated: 2025/12/25 19:00:06 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { PointerDragBehavior, Texture, Color4, ParticleSystem, KeyboardEventTypes, TrailMesh, Color3, FreeCamera, StandardMaterial, Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, MeshBuilder, Vector3 } from "@babylonjs/core";
-import { canvas, balld, paddleWidth, paddleHeight, wallHeight, resetGame, movePaddles, moveBall, AIDirection } from "./gameLogic";
-import { createUI, drawText } from "../ts/UI";
+import { movePaddlesAndBalls } from "../../../server/gameLogic";
+import { createUI, drawText, setPlayerName, createdisposableUI, finalGoal, resetGame } from "../ts/UI";
 
 let engine: Engine | null = null;
 export let scene: Scene | null = null;
@@ -20,6 +20,15 @@ export let dragPos1 = new Vector3(0, 0, 0);
 export let isDragging1 = false;
 export let dragPos2 = new Vector3(0, 0, 0);
 export let isDragging2 = false;
+export let counter = [0, 0];
+export let username = undefined;
+let usernameWait = 0;
+export let thisNewGame: NewGame | undefined = undefined;
+let ws:any = undefined;
+
+
+const paddleWidth = 10, paddleHeight = 100;
+const wallHeight = 20;
 
 export function nullifySceneEngine() {
   if (engine) {
@@ -30,25 +39,125 @@ export function nullifySceneEngine() {
     scene.dispose?.();
     scene = null;
   }
+  ws?.close();
 }
+interface Vec3 {
+  x: number,
+  y: number,
+  z: number
+}
+
+interface Paddles {
+  paddle1: number;
+  paddle2: number;
+}
+
+interface Talker {
+  type: "talker",
+  gameId: number,
+  paddles: Paddles,
+  ballpos: Vec3,
+  counter: number[],
+  playername: string[],
+  playerCount: number,
+  wallTop?: boolean,
+  wallbottom?: boolean,
+  wallright?: boolean,
+  wallleft?: boolean
+}
+
+interface Player {
+  type: "Player",
+  username: string | undefined,
+  gameId?: number,
+  keys: any,
+  pause: number,
+  isDragging1: boolean,
+  isDragging2: boolean,
+  dragPos1: Vec3,
+  dragPos2: Vec3,
+  ws?: WebSocket
+}
+
+interface NewGame {
+  type: "newGame",
+  playerCount: number,
+  mode: number,
+  playerIds?: number[],
+  playername: string[]
+}
+
+export interface Settings {
+  tableMat: Color3,
+  paddleMat: Color3,
+  ballMat: Color3,
+  wallMat: Color3,
+  lightIntensity: number,
+  colorType: number
+}
+export const defaultSettings: Settings = {
+  tableMat: new Color3(0, 0.5, 0),
+  paddleMat: new Color3(0.1, 0.1, 0.1),
+  ballMat: new Color3(0.5, 0, 0),
+  wallMat: new Color3(0.5, 0.5, 0.5),
+  lightIntensity: 0,
+  colorType: 0,
+};
+
+export function setNewGame(newGameGiven: NewGame) {
+  thisNewGame = newGameGiven;
+  // console.log("newgame set with ", thisNewGame.type);
+}
+
+export function setValues(input: Talker | undefined) {
+  if (input == undefined)
+    return;
+  counter = [...input.counter];
+  setPlayerName([...input.playername]);
+  drawText();
+  if (input.playerCount > 0 && (counter[0] == finalGoal || counter[1] == finalGoal)) {
+    thisPlayer.gameId = undefined;
+    // console.log(thisPlayer.gameId);
+    createdisposableUI(0);
+    return;
+  }
+  // console.log("setVAlues called");
+  scene.getMeshByName("paddle1").position.z = input.paddles.paddle1;
+  scene.getMeshByName("paddle2").position.z = input.paddles.paddle2;
+  scene.getMeshByName("ball").position = new Vector3(input.ballpos.x, input.ballpos.y, input.ballpos.z);
+  thisPlayer.gameId = input.gameId;
+}
+
+
+
+export const keys: { [key: string]: boolean } = {};
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
+export const canvas = document.createElement("canvas");
+canvas.id = "gameCanvas";
+canvas.width = 800;
+canvas.height = 600;
+canvas.style.background = "black";
+canvas.style.display = "block";
+canvas.style.margin = "0 auto";
 
 function createMeshes(scene: any) {
   // Mats for Meshes
 
   const tableMat = new StandardMaterial("tableMat", scene);
-  tableMat.emissiveColor = new Color3(0, 0.5, 0);
+  tableMat.emissiveColor = defaultSettings.tableMat.clone();
   tableMat.diffuseColor = new Color3(0, 0, 0);
 
   const paddleMat = new StandardMaterial("paddleMat", scene);
-  paddleMat.emissiveColor = new Color3(0.1, 0.1, 0.1);
+  paddleMat.emissiveColor = defaultSettings.paddleMat.clone();
   paddleMat.diffuseColor = new Color3(0, 0, 0);
 
   const ballMat = new StandardMaterial("ballMat", scene);
-  ballMat.emissiveColor = new Color3(0.5, 0, 0);
+  ballMat.emissiveColor = defaultSettings.ballMat.clone();
   ballMat.diffuseColor = new Color3(0, 0, 0);
 
   const wallMat = new StandardMaterial("wallMat", scene);
-  wallMat.emissiveColor = new Color3(0.5, 0.5, 0.5);
+  wallMat.emissiveColor = defaultSettings.wallMat.clone();
   wallMat.diffuseColor = new Color3(0, 0, 0);
 
 
@@ -77,8 +186,8 @@ function createMeshes(scene: any) {
   drag2.moveAttached = false;
 
   // Ball
-  const ball = MeshBuilder.CreateSphere("ball", { diameter: (balld.radius * 2) }, scene);
-  ball.position = new Vector3(0, balld.radius + 1, 0);
+  const ball = MeshBuilder.CreateSphere("ball", { diameter: (10 * 2) }, scene);
+  ball.position = new Vector3(0, 10 + 1, 0);
   ball.refreshBoundingInfo();
   ball.material = ballMat;
   // ball.showBoundingBox = true;
@@ -113,16 +222,10 @@ function createMeshes(scene: any) {
   const particleSystem = new ParticleSystem("trail", 2000, scene);
   particleSystem.particleTexture = new Texture("textures/flare.png", scene);
   particleSystem.emitter = ball;
-  // particleSystem.minEmitBox = new Vector3(0, 0, 0);
-  // particleSystem.maxEmitBox = new Vector3(0, 0, 0);
   particleSystem.minSize = 1;
   particleSystem.maxSize = 15;
   particleSystem.emitRate = 1000;
-  // particleSystem.color = new Color4(0, 0, 1, 1);
-  // particleSystem.color2 = new Color4(1, 0, 0, 1);
   particleSystem.blendMode = ParticleSystem.BLENDMODE_ADD;
-  // particleSystem.direction1 = new Vector3(0, 0, 0);
-  // particleSystem.direction2 = new Vector3(0, 0, 0);
   particleSystem.minLifeTime = 0.1;
   particleSystem.maxLifeTime = 0.3;
   particleSystem.start();
@@ -136,7 +239,7 @@ function createScene(engine: any) {
   // camera.attachControl(canvas, true);
   // Light
   const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-  light.intensity = 0;
+  light.intensity = defaultSettings.lightIntensity;
   return scene;
 };
 
@@ -148,10 +251,12 @@ drag1.onDragObservable.add((event: any) => {
 });
 drag1.onDragStartObservable.add(() => {
   isDragging1 = true;
+  // console.log("is dragging 1");
 });
 
 drag1.onDragEndObservable.add(() => {
   isDragging1 = false;
+  // console.log("is dragging 11");
 });
 
 const drag2 = new PointerDragBehavior({
@@ -167,40 +272,108 @@ drag2.onDragStartObservable.add(() => {
 
 drag2.onDragEndObservable.add(() => {
   isDragging2 = false;
-  console.log("is dragging 21");
+  // console.log("is dragging 21");
 });
 
+export let thisPlayer: Player = {
+  type: "Player",
+  username: username,
+  keys: keys,
+  pause: 0,
+  isDragging1: isDragging1,
+  isDragging2: isDragging2,
+  dragPos1: { x: dragPos1.x, y: dragPos1.y, z: dragPos1.z },
+  dragPos2: { x: dragPos2.x, y: dragPos2.y, z: dragPos2.z }
+}
 
-
+function setThisPlayer() {
+  thisPlayer.username = username,
+    thisPlayer.keys = keys,
+    thisPlayer.pause = thisPlayer.pause,
+    thisPlayer.isDragging1 = isDragging1,
+    thisPlayer.isDragging2 = isDragging2,
+    thisPlayer.dragPos1 = { x: dragPos1.x, y: dragPos1.y, z: dragPos1.z },
+    thisPlayer.dragPos2 = { x: dragPos2.x, y: dragPos2.y, z: dragPos2.z }
+}
 
 export function pong(): string {
+  ws = new WebSocket("/ws/");
   const app = document.getElementById("app")!;
-  resetGame(null);
+
+  ws.onopen = () => {
+    ws.send(
+      JSON.stringify({
+        type: "wsMessage",
+        player: thisPlayer,
+        newGame: thisNewGame
+      })
+    );
+  };
+
+  ws.onmessage = (event) => {
+    let message;
+    try {
+      message = JSON.parse(event.data);
+    } catch {
+      console.warn("Received non-JSON message:", event.data);
+      return;
+    }
+    if (message.type === "Player") {
+      thisPlayer.username = message.username;
+      username = message.username;
+      // console.log("user name is set to ", thisPlayer.username);
+    }
+    if (message.type === "talker") {
+      setValues(message);
+    }
+
+    if (message.type === "welcome")
+      console.log(message)
+  };
+
+  ws.onerror = (err) => {
+    console.error("WebSocket error", err);
+  };
+
+  ws.onclose = () => {
+    // console.log("WebSocket closed");
+  };
+
+  resetGame();
+
+
   function play() {
-    if (!app.contains(canvas))
-      app.appendChild(canvas);
+    if (!app.contains(canvas)) app.appendChild(canvas);
+
     engine = new Engine(canvas, true);
     scene = createScene(engine);
+
     createMeshes(scene);
     resetGame(scene);
     createUI();
     drawText();
-    let lastTime = 0;
-    scene.onBeforeRenderObservable.add(() => {
-      scene.onBeforeRenderObservable.add(() => {
-        const now = performance.now();
-        if (now - lastTime >= 1000) {
-          lastTime = now;
-          AIDirection(scene.getMeshByName("ball"));
-        }
-      });
-      movePaddles(scene);
-      moveBall(scene);
-    });
     engine.runRenderLoop(() => {
       scene.render();
+      if (ws.readyState === WebSocket.OPEN && username){
+        ws.send(
+          JSON.stringify({
+            type: "wsMessage",
+            player: thisPlayer,
+            newGame: thisNewGame
+          })
+        );
+        // console.log("newgame sent");
+        if (thisNewGame) {
+          thisNewGame = undefined;
+        }
+        setThisPlayer();
+      }
     });
+
+    // Optional: handle window resize
+    // window.addEventListener("resize", () => engine.resize());
   }
+
   play();
   return "";
 }
