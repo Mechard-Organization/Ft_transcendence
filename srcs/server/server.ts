@@ -440,6 +440,25 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+    // POST /api/updateUserAdmin-> Modifie un admin
+    if (req.url === "/api/updateUserAdmin" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+      const status = body.status;
+
+      if (!id)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Not log" }));
+          return;
+      }
+
+      db.updateUserAdmin(status, id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(status));
+      return;
+    }
+
     // POST /api/delUser -> delete un user
     if (req.url === "/api/delUser" && req.method === "POST") {
       const body = await getRequestBody(req);

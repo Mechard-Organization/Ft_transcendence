@@ -271,7 +271,6 @@ export function friendPage(header: string, footer: string) {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ username_friend })
 			});
-			console.log(friend_res);
 
 			const friend_data = await friend_res.json();
 
