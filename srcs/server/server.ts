@@ -10,6 +10,8 @@ import { handleLogout } from "@services/logout.service";
 import * as db from "@config/database/db";
 import { handleAuthMe } from "./auth";
 
+import * as gameLogic from "./gameLogic";
+
 const port = 4000;
 
 // --- FONCTION POUR LIRE LE BODY JSON ---
@@ -169,6 +171,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+    // POST /api/users -> creer un user
     if (req.url === "/api/users" && req.method === "POST") {
       try {
         const body = await getRequestBody(req);
@@ -206,6 +209,8 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+
+    // GET /api/users -> récupère les user
     if (req.url === "/api/users" && req.method === "GET") {
       const users = db.getAllUsers();
       res.writeHead(200, { "Content-Type": "application/json" });
@@ -213,6 +218,8 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
+
+    // POST /api/getuser -> récupère un user via id
     if (req.url === "/api/getuser" && req.method === "POST") {
       const body = await getRequestBody(req);
       console.log("body: ", body);
@@ -222,6 +229,125 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       console.log("user: ", user);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(user));
+      return;
+    }
+
+    // POST /api/getuser -> récupère un user via username
+    if (req.url === "/api/getuserbyname" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const username  = body.username_friend;
+      const user = db.getUserByUsername(username);
+      console.log("user: ", user);
+      if (!user)
+      {
+        res.writeHead(409, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "User doesn't exist" }));
+        return;
+      }
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(user));
+      return;
+    }
+
+    // POST /api/friend -> creer un friend
+    if (req.url === "/api/friend" && req.method === "POST") {
+      try {
+        const body = await getRequestBody(req);
+        const { id_user, id_friend, id_sender } = body;
+
+        if (!id_user || !id_friend) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "not log" }));
+          return;
+        }
+
+        // Vérifier si user existe
+        if (!db.getUserById(id_user)) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "User doesn't exist" }));
+          return;
+        }
+
+        // Vérifier si friend existe
+        if (!db.getUserById(id_friend)) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "User doesn't exist" }));
+          return;
+        }
+
+        if (db.alreadyFriend(id_user, id_friend).length != 0)
+        {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Already your friend" }));
+          return;
+        }
+        const user = db.createFriend(id_user, id_friend, id_sender);
+
+        res.writeHead(201, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(user));
+      } catch {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Invalid JSON" }));
+      }
+      return;
+    }
+
+    // POST /api/getFriendV -> récupère la liste friend validé
+    if (req.url === "/api/getFriendV" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+      if (!id) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "not log" }));
+        return;
+      }
+      const friends = db.getFriendValidate(id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(friends));
+      return;
+    }
+
+    // POST /api/getFriendNV -> récupère la liste friend non validé
+    if (req.url === "/api/getFriendNV" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+      if (!id) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "not log" }));
+        return;
+      }
+      const friends = db.getFriendNValidate(id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(friends));
+      return;
+    }
+
+    // POST /api/acceptFriend -> récupère la liste friend non validé
+    if (req.url === "/api/acceptFriend" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const { id_user, id_friend } = body;
+      if (!id_user || !id_friend) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "not log" }));
+          return;
+        }
+      const friends = db.valideFriend(id_user, id_friend)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(friends));
+      return;
+    }
+
+    if (req.url === "/api/delFriend" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const { id_user, id_friend } = body;
+      if (!id_user || !id_friend) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "not log" }));
+          return;
+        }
+      const friends = db.deleteFriend(id_user, id_friend);
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(friends));
       return;
     }
 
@@ -242,6 +368,12 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       {
         res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "already yours username" }));
+          return;
+      }
+      if (db.getUserByUsername(username))
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "username already take" }));
           return;
       }
       db.updateUserUsername(username, id)
@@ -299,15 +431,52 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           return;
       }
 
-      if (mail == db.getUserById(id).mail)
-      {
-        res.writeHead(400, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "already yours mail" }));
+      if (db.getUserByMail(mail)) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Mail already exists" }));
           return;
       }
       db.updateUserMail(mail, id)
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(mail));
+      return;
+    }
+
+    // POST /api/updateUserAdmin-> Modifie un admin
+    if (req.url === "/api/updateUserAdmin" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+      const status = body.status;
+
+      if (!id)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Not log" }));
+          return;
+      }
+
+      db.updateUserAdmin(status, id)
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(status));
+      return;
+    }
+
+    // POST /api/delUser -> delete un user
+    if (req.url === "/api/delUser" && req.method === "POST") {
+      const body = await getRequestBody(req);
+      const id  = body.id;
+
+      if (!id)
+      {
+        res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Not log" }));
+          return;
+      }
+
+      db.deleteUserFriend(id);
+      db.MessageAnonym(id);
+      db.deleteUser(id);
+      handleLogout(req, res);
       return;
     }
 
@@ -347,24 +516,44 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
 const wss = new WebSocketServer({ server });
 
 // Quand un client se connecte
-wss.on("connection", ws => {
+wss.on("connection", (ws) => {
   console.log("Client connecté en WebSocket");
 
-  ws.send(JSON.stringify({ type: "welcome", message: "Bienvenue en WebSocket !" }));
+  ws.send(JSON.stringify({
+    type: "welcome",
+    message: "Bienvenue en WebSocket !"
+  }));
 
-  ws.on("message", msg => {
-    console.log("Message reçu :", msg.toString());
+  ws.on("message", (msg) => {
+    let message;
 
-    // Exemple : broadcast à tous les autres clients
-    wss.clients.forEach(client => {
-      if (client.readyState === 1) {
-        client.send(JSON.stringify({ type: "msg", payload: msg.toString() }));
-      }
-    });
+    try {
+      message = JSON.parse(msg.toString());
+    } catch {
+      console.warn("Received non-JSON message");
+      return;
+    }
+
+    // console.log("recieved message of type", message.type);
+
+    switch (message.type) {
+      case "wsMessage":
+        message.player.ws = ws;
+        gameLogic.movePaddlesAndBalls(message);
+        // console.log("ws message recieved", message);
+        break;
+
+      case "newGame":
+        console.log("New game:", message.newGame);
+        break;
+
+      default:
+        console.warn("Unknown message type:", message.type);
+    }
   });
 
   ws.on("close", () => {
-    console.log("Client déconnecté");
+    const player = gameLogic.removePlayerByWS(ws);
   });
 });
 

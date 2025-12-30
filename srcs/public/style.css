@@ -130,6 +130,22 @@ div.header {
   box-shadow: 0px 1px 5px;
 }
 
+.sub-header {
+  display: flex;
+  justify-content: flex-start;
+  height: 50px;
+  width: 100%;
+  margin-top: -30px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 10px;
+  background-color: #280331;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  box-shadow: 0px 1px 5px;
+}
+
 div.header_links {
   width: 100%;
   display: flex;
@@ -196,3 +212,49 @@ a.footer_link {
   margin: 0 10px;
 }
 
+.table-container {
+  margin-bottom: 30px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #d400ff;
+  background-color: #0acf63;
+}
+
+th {
+  background-color: #00d9ff;
+  text-align: left;
+}
+
+.btn-val {
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-val:hover {
+  background-color: #c0392b;
+}
+
+.btn-del {
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-del:hover {
+  background-color: #c0392b;
+}

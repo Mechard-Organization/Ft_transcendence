@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcrypt";
 // db.ts
 const Database = require("better-sqlite3");
 
@@ -24,6 +25,7 @@ db.prepare(`
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     mail TEXT UNIQUE NOT NULL,
+    admin BOOL DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `).run();
@@ -33,10 +35,36 @@ db.prepare(`
   CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT,
-    id_author INTEGER,
+    id_author INTEGER NULL,
     FOREIGN KEY(id_author) REFERENCES users(id)
   )
 `).run();
+
+// --- TABLE FRIENDS ---
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS friends (
+    id_user INTEGER,
+    id_friend INTEGER,
+    accept BOOL DEFAULT FALSE,
+    id_sender INTEGER,
+    FOREIGN KEY(id_user) REFERENCES users(id),
+    FOREIGN KEY(id_sender) REFERENCES users(id),
+    FOREIGN KEY(id_friend) REFERENCES users(id)
+  )
+`).run();
+
+// Création du user root
+async function creatAdmin() {
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+  const ADMIN = process.env.ADMIN;
+  const ADMIN_MAIL = process.env.ADMIN_MAIL;
+  if (!ADMIN_PASSWORD || !ADMIN || !ADMIN_MAIL) return;
+  const password_hash = await bcrypt.hash(ADMIN_PASSWORD, 10);
+  db.prepare(` INSERT INTO users (username, password_hash, mail, admin)
+      VALUES (?, ?, ?, TRUE)`).run(ADMIN, password_hash, ADMIN_MAIL);
+}
+
+creatAdmin();
 
 // --- FONCTIONS EXPORTÉES ---
 
@@ -71,6 +99,16 @@ export function addMessage(content: string, id: any) {
   };
 }
 
+export function MessageAnonym(id_author: string) {
+  const stmt = db.prepare(`
+    UPDATE messages
+    SET id_author = NULL
+    WHERE id_author = ?
+  `);
+
+  return stmt.run(id_author);
+}
+
 // --- USERS FUNCTIONS ---
 
 export function createUser(username: string, password_hash: string, mail: string) {
@@ -89,7 +127,7 @@ export function createUser(username: string, password_hash: string, mail: string
 
 export function getUserById(id: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail
+    SELECT id, username, password_hash, mail, admin
     FROM users
     WHERE id = ?
   `);
@@ -99,7 +137,7 @@ export function getUserById(id: string) {
 
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail
+    SELECT id, username, password_hash, mail, admin
     FROM users
     WHERE username = ?
   `);
@@ -109,7 +147,7 @@ export function getUserByUsername(username: string) {
 
 export function getUserByMail(mail: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail
+    SELECT id, username, password_hash, mail, admin
     FROM users
     WHERE mail = ?
   `);
@@ -124,18 +162,6 @@ export function getAllUsers() {
 
   return stmt.all();
 }
-
-export type User = {
-  id: number;
-  username: string;
-  password_hash: string;
-  mail: string;
-  created_at: string;
-};
-
-// |--- TABLE FUNCTIONS ---|
-
-// --- USER FUNCTIONS ---
 
 export function updateUserUsername(username: string, id: string) {
   const stmt = db.prepare(`
@@ -167,4 +193,130 @@ export function updateUserMail(mail: string, id: string) {
   return stmt.run(mail, id);
 }
 
+export function updateUserAdmin(status: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET admin = ?
+    WHERE id = ?
+  `);
 
+  return stmt.run(status, id);
+}
+
+
+export function deleteUser(id: string) {
+  const stmt = db.prepare(`
+    DELETE FROM users
+    WHERE id = ?
+  `);
+
+  return stmt.run(id);
+}
+
+export type User = {
+  id: number;
+  username: string;
+  password_hash: string;
+  mail: string;
+  created_at: string;
+};
+
+// --- FIREND FUNCTIONS ---
+
+export function createFriend(id_user: string, id_friend: string, id_sender: string) {
+  const stmt = db.prepare(`
+    INSERT INTO friends (id_user, id_friend, id_sender)
+    VALUES (?, ?, ?)
+  `);
+
+  const info = stmt.run(id_user, id_friend, id_sender);
+  const id1 = info.lastInsertRowid;
+
+  const stmt2 = db.prepare(`
+    INSERT INTO friends (id_user, id_friend, id_sender)
+    VALUES (?, ?, ?)
+  `);
+
+  const info2 = stmt2.run(id_friend, id_user, id_sender);
+  const id2 = info2.lastInsertRowid;
+
+  return {
+    id1,
+    id2
+  };
+}
+
+export function valideFriend(id_user: string, id_friend: string) {
+  const stmt = db.prepare(`
+    UPDATE friends
+    SET accept = TRUE
+    WHERE id_user = ? AND id_friend = ?
+  `);
+
+  const info = stmt.run(id_user, id_friend);
+
+  const stmt2 = db.prepare(`
+    UPDATE friends
+    SET accept = TRUE
+    WHERE id_user = ? AND id_friend = ?
+  `);
+
+  const info2 = stmt2.run(id_friend, id_user);
+
+  return {
+    info,
+    info2
+  };
+}
+
+export function getFriendValidate(id_user: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM friends
+    LEFT JOIN users
+      ON friends.id_friend = users.id
+    WHERE id_user = ? AND accept = TRUE
+    ORDER BY id_friend ASC
+  `);
+
+  return stmt.all(id_user);
+}
+
+
+export function getFriendNValidate(id_user: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM friends
+    LEFT JOIN users
+      ON friends.id_friend = users.id
+    WHERE id_user = ? AND accept = FALSE
+    ORDER BY id_friend ASC
+  `);
+
+  return stmt.all(id_user);
+}
+
+export function alreadyFriend(id_user: string, id_friend: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM friends
+    WHERE id_user = ? AND id_friend = ?
+  `);
+
+  return stmt.all(id_user, id_friend);
+}
+
+export function deleteFriend(id_user: string, id_friend: string) {
+  const stmt = db.prepare(`
+    DELETE FROM friends
+    WHERE (id_user = ? AND id_friend = ?) OR (id_user = ? AND id_friend = ?)
+  `);
+
+  return stmt.run(id_user, id_friend, id_friend, id_user);
+}
+
+export function deleteUserFriend(id_user: string) {
+  const stmt = db.prepare(`
+    DELETE FROM friends
+    WHERE id_user = ? OR id_friend = ?
+  `);
+
+  return stmt.run(id_user, id_user);
+}

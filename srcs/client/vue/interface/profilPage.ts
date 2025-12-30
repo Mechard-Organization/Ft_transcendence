@@ -14,10 +14,14 @@ export async function profilPage(header: string, footer: string) {
       <div width=10>
         <button id="logout" class="btn-secondary">Logout</button>
       </div>
+      </br>
+      <div width=10>
+        <button id="del" class="btn-secondary">delete user</button>
+      </div>
     </main>
     ${footer}
   `;
-  
+
   const logoutBtn = document.getElementById("logout");
   if (!logoutBtn) return;
 
@@ -39,6 +43,34 @@ export async function profilPage(header: string, footer: string) {
       // await buildHeader();
     } catch (err) {
       console.error("Logout error:", err);
+    }
+  });
+
+  const delBtn = document.getElementById("del");
+  if (!delBtn) return;
+
+  delBtn.addEventListener("click", async () => {
+    const auth = await isAuthenticated();
+		const id = auth ? auth.id : 0;
+    try {
+      const res = await fetch("/api/delUser", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+
+      if (!res.ok) {
+        console.error("del failed");
+        return;
+      }
+
+      // 👉 Tu veux vider la session côté SPA
+      window.location.hash = "#login";
+
+      // await buildHeader();
+    } catch (err) {
+      console.error("del error:", err);
     }
   });
 }
