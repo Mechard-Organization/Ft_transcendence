@@ -235,7 +235,7 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     // POST /api/getuser -> récupère un user via username
     if (req.url === "/api/getuserbyname" && req.method === "POST") {
       const body = await getRequestBody(req);
-      const username  = body.username_friend;
+      const username  = body.username
       const user = db.getUserByUsername(username);
       console.log("user: ", user);
       if (!user)

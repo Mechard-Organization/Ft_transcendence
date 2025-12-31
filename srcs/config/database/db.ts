@@ -194,14 +194,14 @@ export function updateUserMail(mail: string, id: string) {
   return stmt.run(mail, id);
 }
 
-export function updateUserAdmin(status: string, id: string) {
+export function updateUserAdmin(status: boolean, id: string) {
   const stmt = db.prepare(`
     UPDATE users
     SET admin = ?
     WHERE id = ?
   `);
 
-  return stmt.run(status, id);
+  return stmt.run(status ? 1 : 0, id);
 }
 
 

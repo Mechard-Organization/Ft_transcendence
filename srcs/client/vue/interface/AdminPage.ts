@@ -25,7 +25,7 @@ export async function adminOnlyPage(header: string, footer: string) {
 					<label for="supAdmin">username</label>
 					<input type="text" id="supAdmin" placeholder="username" />
 				</div>
-				<button id="supAdmin" class="btn-primary">Supprimer</button>
+				<button id="supAdminb" class="btn-primary">Supprimer</button>
 			</div>
 		</main>
 		${footer}
@@ -94,7 +94,7 @@ export async function adminOnlyPage(header: string, footer: string) {
 	};
 
 	const supAdminInput = document.getElementById("supAdmin") as HTMLInputElement;
-	const supAdminBtn = document.getElementById("supAdmin") as HTMLButtonElement;
+	const supAdminBtn = document.getElementById("supAdminb") as HTMLButtonElement;
 
 
 	supAdminInput.addEventListener("keydown", handleEnter(supAdminBtn));

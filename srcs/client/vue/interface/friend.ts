@@ -269,7 +269,7 @@ export function friendPage(header: string, footer: string) {
 			const friend_res = await fetch("/api/getuserbyname", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ username_friend })
+				body: JSON.stringify({ username: username_friend })
 			});
 
 			const friend_data = await friend_res.json();
