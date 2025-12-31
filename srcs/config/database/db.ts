@@ -59,6 +59,7 @@ async function creatAdmin() {
   const ADMIN = process.env.ADMIN;
   const ADMIN_MAIL = process.env.ADMIN_MAIL;
   if (!ADMIN_PASSWORD || !ADMIN || !ADMIN_MAIL) return;
+  if (getUserByUsername(ADMIN)) return;
   const password_hash = await bcrypt.hash(ADMIN_PASSWORD, 10);
   db.prepare(` INSERT INTO users (username, password_hash, mail, admin)
       VALUES (?, ?, ?, TRUE)`).run(ADMIN, password_hash, ADMIN_MAIL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   messagesPage.ts                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/12/15 14:00:26 by mechard          ###   ########.fr       */
+/*   Updated: 2025/12/31 13:27:24 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,16 @@ export function messagesPage(header: string, footer: string) {
 
   ws.onopen = () => {
     console.log("WebSocket connecté !");
+    ws.send(
+      JSON.stringify({
+        type: "wsChat"
+      })
+    );
   };
 
   ws.onmessage = (event) => {
     try {
       const msg = JSON.parse(event.data);
-      console.log("WS reçu :", msg);
 
       if (msg.type === "new_message") {
         console.log("msg: ", msg);

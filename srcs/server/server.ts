@@ -546,6 +546,16 @@ wss.on("connection", (ws) => {
       case "newGame":
         console.log("New game:", message.newGame);
         break;
+      case "wsChat":
+        console.log("Message reçu :", msg.toString());
+
+        // Exemple : broadcast à tous les autres clients
+        wss.clients.forEach(client => {
+          if (client.readyState === 1) {
+            client.send(JSON.stringify({ type: "msg", payload: msg.toString() }));
+          }
+        });
+        break;
 
       default:
         console.warn("Unknown message type:", message.type);
