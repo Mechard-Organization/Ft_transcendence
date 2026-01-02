@@ -222,11 +222,8 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
     // POST /api/getuser -> récupère un user via id
     if (req.url === "/api/getuser" && req.method === "POST") {
       const body = await getRequestBody(req);
-      console.log("body: ", body);
       const id  = body.id;
-      console.log("id: ", id);
       const user = id > 0 ? db.getUserById(id) : "Invité.e";
-      console.log("user: ", user);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(user));
       return;
@@ -283,6 +280,12 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
         }
         const user = db.createFriend(id_user, id_friend, id_sender);
 
+        wss.clients.forEach(client => {
+          if (client.readyState === 1) {
+            client.send(JSON.stringify({ type: "friend", data: user }));
+          }
+        });
+
         res.writeHead(201, { "Content-Type": "application/json" });
         res.end(JSON.stringify(user));
       } catch {
@@ -322,21 +325,30 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
       return;
     }
 
-    // POST /api/acceptFriend -> récupère la liste friend non validé
+    // POST /api/acceptFriend -> accept l'amitie
     if (req.url === "/api/acceptFriend" && req.method === "POST") {
       const body = await getRequestBody(req);
       const { id_user, id_friend } = body;
       if (!id_user || !id_friend) {
-          res.writeHead(400, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "not log" }));
-          return;
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "not log" }));
+        return;
+      }
+
+      const friends = db.valideFriend(id_user, id_friend);
+
+      wss.clients.forEach(client => {
+        if (client.readyState === 1) {
+          client.send(JSON.stringify({ type: "friend", data: friends }));
         }
-      const friends = db.valideFriend(id_user, id_friend)
+      });
+
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(friends));
       return;
     }
 
+    // POST /api/delFriend -> refuse l'amitie
     if (req.url === "/api/delFriend" && req.method === "POST") {
       const body = await getRequestBody(req);
       const { id_user, id_friend } = body;
@@ -344,8 +356,15 @@ const server = createServer(async (req: IncomingMessage, res: ServerResponse) =>
           res.writeHead(400, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ error: "not log" }));
           return;
-        }
+      }
       const friends = db.deleteFriend(id_user, id_friend);
+
+      wss.clients.forEach(client => {
+        if (client.readyState === 1) {
+          client.send(JSON.stringify({ type: "friend", data: friends }));
+        }
+      });
+
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(friends));
       return;
@@ -555,6 +574,16 @@ wss.on("connection", (ws) => {
             client.send(JSON.stringify({ type: "msg", payload: msg.toString() }));
           }
         });
+        break;
+        case "wsFriend":
+          console.log("Message reçu :", msg.toString());
+
+          // Exemple : broadcast à tous les autres clients
+          wss.clients.forEach(client => {
+            if (client.readyState === 1) {
+              client.send(JSON.stringify({ type: "friend", payload: msg.toString() }));
+            }
+          });
         break;
 
       default:

@@ -121,77 +121,77 @@ async function loadFriends() {
   const tbody = document.getElementById("friendTableBody");
   if (!tbody) return;
 
-  try {
-    const auth = await isAuthenticated();
-    if (!auth || !auth.authenticated) {
-      tbody.innerHTML = `<tr><td colspan="4">Non connecté</td></tr>`;
-      return;
-    }
+  	try {
+		const auth = await isAuthenticated();
+		if (!auth || !auth.authenticated) {
+		tbody.innerHTML = `<tr><td colspan="4">Non connecté</td></tr>`;
+		return;
+		}
 
-	const res = await fetch("/api/getFriendV", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ id: auth.id })
-		});
-    const friends = await res.json();
-	console.log(friends);
+		const res = await fetch("/api/getFriendV", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ id: auth.id })
+			});
+		const friends = await res.json();
+		console.log(friends);
 
-    if (!res.ok || !Array.isArray(friends)) {
-      tbody.innerHTML = `<tr><td colspan="4">Erreur de chargement</td></tr>`;
-      return;
-    }
-    if (friends.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4">Aucun ami</td></tr>`;
-      return;
-    }
+		if (!res.ok || !Array.isArray(friends)) {
+		tbody.innerHTML = `<tr><td colspan="4">Erreur de chargement</td></tr>`;
+		return;
+		}
+		if (friends.length === 0) {
+		tbody.innerHTML = `<tr><td colspan="4">Aucun ami</td></tr>`;
+		return;
+		}
 
-    tbody.innerHTML = friends.map((friend: any) => `
-      <tr>
-        <td>${friend.id}</td>
-        <td>${friend.username}</td>
-        <td>${friend.mail ?? "-"}</td>
-		<td><button class="btn-del" data-id="${friend.id}">reject</button></td>
-      </tr>
-    `).join("");
+		tbody.innerHTML = friends.map((friend: any) => `
+		<tr>
+			<td>${friend.id}</td>
+			<td>${friend.username}</td>
+			<td>${friend.mail ?? "-"}</td>
+			<td><button class="btn-del" data-id="${friend.id}">reject</button></td>
+		</tr>
+		`).join("");
 
 
-	const delButtons = document.querySelectorAll<HTMLButtonElement>(".btn-del");
+		const delButtons = document.querySelectorAll<HTMLButtonElement>(".btn-del");
 
-	delButtons.forEach((btn) => {
-		btn.onclick = async () => {
-			const id_friend = Number(btn.dataset.id);
-			const auth = await isAuthenticated();
-			const id_user = auth ? auth.id : 0;
+		delButtons.forEach((btn) => {
+			btn.onclick = async () => {
+				const id_friend = Number(btn.dataset.id);
+				const auth = await isAuthenticated();
+				const id_user = auth ? auth.id : 0;
 
-			if (!id_friend || !id_user) return;
+				if (!id_friend || !id_user) return;
 
-			try {
-				const res = await fetch("/api/delFriend", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ id_user, id_friend })
-				});
+				try {
+					const res = await fetch("/api/delFriend", {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ id_user, id_friend })
+					});
 
-				const data = await res.json();
+					const data = await res.json();
 
-				if (!res.ok) {
-					alert(data.error || "Erreur lors de la suppression");
-					return;
+					if (!res.ok) {
+						alert(data.error || "Erreur lors de la suppression");
+						return;
+					}
+
+					// Rafraîchir le tableau
+					await loadFriends();
+
+				} catch (err) {
+				console.error(err);
 				}
+			};
+		});
 
-				// Rafraîchir le tableau
-				await loadFriends();
-
-			} catch (err) {
-			console.error(err);
-			}
-		};
-	});
-
-  } catch (err) {
-    console.error(err);
-    tbody.innerHTML = `<tr><td colspan="4">Erreur serveur</td></tr>`;
-  }
+	} catch (err) {
+		console.error(err);
+		tbody.innerHTML = `<tr><td colspan="4">Erreur serveur</td></tr>`;
+	}
 }
 
 
@@ -257,6 +257,35 @@ export function friendPage(header: string, footer: string) {
 
 	friendInput.addEventListener("keydown", handleEnter(newFriendBtn));
     newFriendBtn.addEventListener("keydown", handleEnter(newFriendBtn));
+
+	// --- WEBSOCKET ---
+	const ws = new WebSocket("/ws/");
+
+	ws.onopen = () => {
+		console.log("WebSocket connecté !");
+		ws.send(
+			JSON.stringify({
+				type: "wsFriend"
+			})
+		);
+	};
+
+	ws.onmessage = (event) => {
+		try {
+			const msg = JSON.parse(event.data);
+
+			if (msg.type === "friend") {
+				loadFriends();
+				loadRequestFriends();
+			}
+		} catch (e) {
+			console.error("Erreur WS:", e);
+		}
+	};
+
+	ws.onclose = () => {
+		console.log("WebSocket déconnecté");
+	};
 
 	// --- Modifie l'utilisateur username ---
 	newFriendBtn.onclick = async () => {
