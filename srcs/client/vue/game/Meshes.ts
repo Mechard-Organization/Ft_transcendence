@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Meshes.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/12/25 19:00:06 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/05 15:19:33 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { PointerDragBehavior, Texture, Color4, ParticleSystem, KeyboardEventTypes, TrailMesh, Color3, FreeCamera, StandardMaterial, Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, MeshBuilder, Vector3 } from "@babylonjs/core";
 import { movePaddlesAndBalls } from "../../../server/gameLogic";
 import { createUI, drawText, setPlayerName, createdisposableUI, finalGoal, resetGame } from "../ts/UI";
-
+import { isAuthenticated } from "../interface/authenticator";
 let engine: Engine | null = null;
 export let scene: Scene | null = null;
 export let dragPos1 = new Vector3(0, 0, 0);
@@ -21,7 +21,8 @@ export let isDragging1 = false;
 export let dragPos2 = new Vector3(0, 0, 0);
 export let isDragging2 = false;
 export let counter = [0, 0];
-export let username = undefined;
+export let username: string | null = null;
+let usernameLoaded = false;
 let usernameWait = 0;
 export let thisNewGame: NewGame | undefined = undefined;
 let ws:any = undefined;
@@ -296,7 +297,48 @@ function setThisPlayer() {
     thisPlayer.dragPos2 = { x: dragPos2.x, y: dragPos2.y, z: dragPos2.z }
 }
 
-export function pong(): string {
+async function loadUsernameFromCookie() {
+
+  try {
+    const auth = await isAuthenticated();
+    const id = auth ? auth.id : 0;
+
+    if (!id)
+    {
+      thisPlayer.username = undefined;
+      username = null;
+      usernameLoaded = false;
+      return;
+    }
+
+    if (usernameLoaded) return;
+
+    usernameLoaded = true;
+
+    const resuser = await fetch("/api/getuser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id })
+    });
+
+    const datauser = await resuser.json();
+
+    if (!resuser.ok) {
+      alert(datauser.error || "Erreur lors de la création");
+      return;
+    }
+    if (datauser.username) {
+      thisPlayer.username = datauser.username;
+      username = datauser.username;
+    }
+  } catch (err) {
+    console.warn("No cookie username");
+  }
+}
+
+export async function pong(): Promise<string> {
+  await loadUsernameFromCookie();
+  console.log("AAAAAAAAAAAAaa", username, thisPlayer.username);
   ws = new WebSocket("/ws/");
   const app = document.getElementById("app")!;
 
@@ -319,9 +361,11 @@ export function pong(): string {
       return;
     }
     if (message.type === "Player") {
-      thisPlayer.username = message.username;
-      username = message.username;
-      // console.log("user name is set to ", thisPlayer.username);
+      if (!username) {
+        thisPlayer.username = message.username;
+        username = message.username;
+      }
+      console.log("user name is set to ", thisPlayer.username);
     }
     if (message.type === "talker") {
       setValues(message);
@@ -352,21 +396,28 @@ export function pong(): string {
     resetGame(scene);
     createUI();
     drawText();
+    let lastSend = 0;
+    const SEND_INTERVAL = 50; // ms = 20 fois/sec
+
     engine.runRenderLoop(() => {
       scene.render();
-      if (ws.readyState === WebSocket.OPEN && username){
-        ws.send(
-          JSON.stringify({
-            type: "wsMessage",
-            player: thisPlayer,
-            newGame: thisNewGame
-          })
-        );
-        // console.log("newgame sent");
-        if (thisNewGame) {
-          thisNewGame = undefined;
-        }
+
+      const now = performance.now();
+      if (
+        ws.readyState === WebSocket.OPEN &&
+        username &&
+        now - lastSend > SEND_INTERVAL
+      ) {
+        lastSend = now;
+
         setThisPlayer();
+        ws.send(JSON.stringify({
+          type: "wsMessage",
+          player: thisPlayer,
+          newGame: thisNewGame
+        }));
+
+        if (thisNewGame) thisNewGame = undefined;
       }
     });
 
