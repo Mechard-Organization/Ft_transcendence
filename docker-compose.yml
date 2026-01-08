@@ -51,6 +51,7 @@ services:
       - ./srcs/services:/app/services # on monte le dossier services à la racine du conteneur
       - ./srcs/config:/app/config     # on monte le dossier config à la racine du conteneur
       - ./srcs/config/database/data:/app/config/database/data
+      - ./srcs/certs/data:/app/certs
       - /app/node_modules
     networks:
       - transcendence
