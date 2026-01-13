@@ -12,7 +12,7 @@ async function loadRequestFriends() {
       return;
     }
 
-	const res = await fetch("/api/getFriendNV", {
+	const res = await fetch("/api/friend/getFriendNV", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ id: auth.id })
@@ -55,7 +55,7 @@ async function loadRequestFriends() {
 			if (!id_friend || !id_user) return;
 
 			try {
-				const res = await fetch("/api/acceptFriend", {
+				const res = await fetch("/api/friend/acceptFriend", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ id_user, id_friend })
@@ -89,7 +89,7 @@ async function loadRequestFriends() {
 			if (!id_friend || !id_user) return;
 
 			try {
-				const res = await fetch("/api/delFriend", {
+				const res = await fetch("/api/friend/delFriend", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ id_user, id_friend })
@@ -128,7 +128,7 @@ async function loadFriends() {
 		return;
 		}
 
-		const res = await fetch("/api/getFriendV", {
+		const res = await fetch("/api/friend/getFriendV", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ id: auth.id })
@@ -166,7 +166,7 @@ async function loadFriends() {
 				if (!id_friend || !id_user) return;
 
 				try {
-					const res = await fetch("/api/delFriend", {
+					const res = await fetch("/api/friend/delFriend", {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({ id_user, id_friend })
@@ -325,7 +325,7 @@ export function friendPage(header: string, footer: string) {
 				return;
 			}
 
-			const res = await fetch("/api/friend", {
+			const res = await fetch("/api/friend/friend", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ id_user, id_friend, id_sender: id_user })

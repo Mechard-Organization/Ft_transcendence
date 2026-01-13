@@ -20,6 +20,16 @@ export default async function friendRoutes(fastify: FastifyInstance) {
     return user;
   });
 
+  fastify.post("/getFriendV", async (request) => {
+    const { id } = request.body as any;
+    return db.getFriendValidate(id);
+  });
+
+  fastify.post("/getFriendNV", async (request) => {
+    const { id } = request.body as any;
+    return db.getFriendNValidate(id);
+  });
+
   fastify.post("/acceptFriend", async (request) => {
     const { id_user, id_friend } = request.body as any;
     return db.valideFriend(id_user, id_friend);

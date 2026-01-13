@@ -20,9 +20,9 @@ async function start() {
 
   // Routes
   await fastify.register(authRoutes, { prefix: "/api/auth" });
+  await fastify.register(friendRoutes, { prefix: "/api/friend" });
   await fastify.register(userRoutes, { prefix: "/api" });
   await fastify.register(messageRoutes, { prefix: "/api" });
-  await fastify.register(friendRoutes, { prefix: "/api" });
   await fastify.register(metricsRoutes);
 
   await fastify.register(websocketPlugin);

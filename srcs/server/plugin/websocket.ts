@@ -58,6 +58,9 @@ export default async function websocketPlugin(fastify: FastifyInstance) {
 			console.warn("Unknown message type:", message.type);
 		}
     });
+	  ws.on("close", () => {
+		const player = gameLogic.removePlayerByWS(ws);
+	});
   });
 }
 
