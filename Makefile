@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mechard <mechard@student.42.fr>            +#+  +:+       +#+         #
+#    By: abutet <abutet@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2025/12/30 14:59:59 by mechard          ###   ########.fr        #
+#    Updated: 2026/01/14 16:05:57 by abutet           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,6 +85,8 @@ prepare:
 	@chmod 777 ./srcs/config/database/data
 	@mkdir -p ./srcs/config/database/data
 	@chmod 777 ./srcs/config/database/data
+	@mkdir -p srcs/server/uploads/avatars
+	@chmod 777 srcs/server/uploads/avatars
 
 up: prepare
 	@$(COMPOSE) up -d
@@ -158,6 +160,7 @@ fclean: clean
 	@rm -rf srcs/server/config
 	@rm -rf srcs/server/node_modules
 	@rm -rf srcs/server/services
+	@find srcs/server/uploads/avatars -type f ! -name "default.png" -delete
 	@$(COMPOSE) rm -fsv || true
 
 prune: down clean

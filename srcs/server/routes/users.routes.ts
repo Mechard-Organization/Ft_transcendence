@@ -1,8 +1,11 @@
 import { FastifyInstance } from "fastify";
 import bcrypt from "bcrypt";
+import fs from "fs";
+import path from "path";
+import sharp from "sharp";
+import crypto from "crypto";
 import * as db from "@config/database/db";
 import { verifyPassword } from "@services/login.service";
-import { handleLogout } from "@services/logout.service";
 
 export default async function userRoutes(fastify: FastifyInstance) {
 
@@ -50,7 +53,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   fastify.post("/updateUserUsername", async (request) => {
     const { id , username } = request.body as any;
-    const user = db.getUserById(id);
 
     if (username == db.getUserById(id).username)
     {
@@ -66,7 +68,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   fastify.post("/updateUserMail", async (request) => {
     const { id , mail } = request.body as any;
-    const user = db.getUserById(id);
 
     if (mail == db.getUserById(id).mail)
     {
@@ -82,7 +83,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   fastify.post("/updateUserAdmin", async (request) => {
     const { id , status } = request.body as any;
-    const user = db.getUserById(id);
 
     db.updateUserAdmin(status, id);
     return { ok: true };
@@ -97,5 +97,57 @@ export default async function userRoutes(fastify: FastifyInstance) {
     db.deleteUser(id);
     reply.clearCookie("access_token", { path: "/" });
     return { ok: true };
+  });
+
+  fastify.post("/users/me/avatar", async (req, reply) => {
+
+    const file = await req.file();
+
+    if (!file) {
+      return reply.badRequest("Aucun fichier envoyé");
+    }
+
+    if (!file.mimetype.startsWith("image/")) {
+      return reply.badRequest("Format invalide");
+    }
+
+    const buffer = await file.toBuffer();
+
+    const filename = `${crypto.randomUUID()}.jpg`;
+    const filepath = path.join("uploads/avatars", filename);
+
+    // 🔹 Resize + optimisation
+    await sharp(buffer)
+      .resize(256, 256)
+      .jpeg({ quality: 80 })
+      .toFile(filepath);
+
+    // 🔹 Supprimer l'ancien avatar si existant
+    const { id } = req.body as any;
+    const user = db.getUserById(id);
+
+    if (user?.avatarUrl) {
+      const oldPath = path.join(process.cwd(), user.avatarUrl);
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+    }
+
+    // 🔹 Sauvegarde DB
+    db.updateUserPp(`/uploads/avatars/${filename}`, id);
+
+    return { avatarUrl: `/uploads/avatars/${filename}` };
+  });
+
+  fastify.delete("/users/me/avatar", async (req, reply) => {
+    const { id } = req.body as any;
+    const user = db.getUserById(id);
+
+    if (user?.avatarUrl) {
+      const filepath = path.join(process.cwd(), user.avatarUrl);
+      if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+    }
+
+    db.updateUserPp("", id);
+
+    return { success: true };
   });
 }

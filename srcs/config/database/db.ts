@@ -26,6 +26,7 @@ db.prepare(`
     password_hash TEXT NOT NULL,
     mail TEXT UNIQUE NOT NULL,
     admin BOOL DEFAULT FALSE,
+    avatarUrl TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `).run();
@@ -204,6 +205,15 @@ export function updateUserAdmin(status: boolean, id: string) {
   return stmt.run(status ? 1 : 0, id);
 }
 
+export function updateUserPp(url: string, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET avatarUrl = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(url, id);
+}
 
 export function deleteUser(id: string) {
   const stmt = db.prepare(`
