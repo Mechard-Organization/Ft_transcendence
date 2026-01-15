@@ -100,18 +100,31 @@ export default async function userRoutes(fastify: FastifyInstance) {
   });
 
   fastify.post("/users/me/avatar", async (req, reply) => {
+    let id: string | undefined;
+    let buffer: Buffer | undefined;
+    let mimeType = "";
 
-    const file = await req.file();
+    for await (const part of req.parts()) {
+      if (part.type === "file") {
+        if (!part.mimetype.startsWith("image/")) {
+          return fastify.httpErrors.badRequest("Format invalide");
+        }
 
-    if (!file) {
-      return reply.badRequest("Aucun fichier envoyé");
+        mimeType = part.mimetype;
+        buffer = await part.toBuffer();
+      } else {
+        if (part.fieldname === "id") {
+          id = part.value as string;
+        }
+      }
     }
 
-    if (!file.mimetype.startsWith("image/")) {
-      return reply.badRequest("Format invalide");
+    if (!buffer) {
+      return fastify.httpErrors.badRequest("Fichier manquant");
     }
-
-    const buffer = await file.toBuffer();
+    if (!id) {
+      return fastify.httpErrors.badRequest("ID manquant");
+    }
 
     const filename = `${crypto.randomUUID()}.jpg`;
     const filepath = path.join("uploads/avatars", filename);
@@ -123,7 +136,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
       .toFile(filepath);
 
     // 🔹 Supprimer l'ancien avatar si existant
-    const { id } = req.body as any;
     const user = db.getUserById(id);
 
     if (user?.avatarUrl) {
@@ -137,17 +149,15 @@ export default async function userRoutes(fastify: FastifyInstance) {
     return { avatarUrl: `/uploads/avatars/${filename}` };
   });
 
-  fastify.delete("/users/me/avatar", async (req, reply) => {
+  fastify.post("/users/me/delavatar", async (req, reply) => {
     const { id } = req.body as any;
     const user = db.getUserById(id);
 
     if (user?.avatarUrl) {
       const filepath = path.join(process.cwd(), user.avatarUrl);
       if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
+      db.updateUserPp(null, id);
     }
-
-    db.updateUserPp("", id);
-
     return { success: true };
   });
 }

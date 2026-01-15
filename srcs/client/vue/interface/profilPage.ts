@@ -11,7 +11,7 @@ type UserMe = {
 export async function profilPage(header: string, footer: string) {
   const app = document.getElementById("app");
   const auth = await isAuthenticated();
-  const id = auth.authenticated ? auth.id : 0;
+  const id = auth.authenticated && auth.id ? auth.id : 0;
 
   if (!app || !auth) return;
 
@@ -35,14 +35,12 @@ export async function profilPage(header: string, footer: string) {
     console.error("User fetch error:", err);
     return;
   }
-
   const avatarSrc =
     user.avatarUrl ?? "/uploads/avatars/default.png";
 
   /* =====================
      RENDER
   ===================== */
-  console.log(avatarSrc);
   app.innerHTML = `
     ${header}
     <main id="mainContent">
@@ -114,7 +112,8 @@ export async function profilPage(header: string, footer: string) {
     avatarImg.src = URL.createObjectURL(file);
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("img", file);
+    formData.append("id", String(id));
 
     try {
       const res = await fetch("/api/users/me/avatar", {
@@ -140,9 +139,10 @@ export async function profilPage(header: string, footer: string) {
   // Suppression avatar
   deleteAvatarBtn?.addEventListener("click", async () => {
     try {
-      const res = await fetch("/api/users/me/avatar", {
-        method: "DELETE",
-        credentials: "include"
+      const res = await fetch("/api/users/me/delavatar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id })
       });
 
       if (!res.ok) {

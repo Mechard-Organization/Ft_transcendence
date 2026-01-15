@@ -6,7 +6,7 @@
 #    By: abutet <abutet@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2026/01/14 16:05:57 by abutet           ###   ########.fr        #
+#    Updated: 2026/01/15 13:38:36 by abutet           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,7 +86,7 @@ prepare:
 	@mkdir -p ./srcs/config/database/data
 	@chmod 777 ./srcs/config/database/data
 	@mkdir -p srcs/server/uploads/avatars
-	@chmod 777 srcs/server/uploads/avatars
+	@chmod 777 ./uploads/avatars
 
 up: prepare
 	@$(COMPOSE) up -d
@@ -159,8 +159,7 @@ fclean: clean
 	@rm -rf srcs/public/server
 	@rm -rf srcs/server/config
 	@rm -rf srcs/server/node_modules
-	@rm -rf srcs/server/services
-	@find srcs/server/uploads/avatars -type f ! -name "default.png" -delete
+	@rm -r ./uploads/avatars -type f ! -name "default.png" -delete
 	@$(COMPOSE) rm -fsv || true
 
 prune: down clean

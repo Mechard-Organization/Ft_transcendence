@@ -18,7 +18,6 @@ async function loadRequestFriends() {
 			body: JSON.stringify({ id: auth.id })
 		});
     const friends = await res.json();
-	console.log(friends);
 
     if (!res.ok || !Array.isArray(friends)) {
       tbody.innerHTML = `<tr><td colspan="4">Erreur de chargement</td></tr>`;
@@ -134,7 +133,6 @@ async function loadFriends() {
 				body: JSON.stringify({ id: auth.id })
 			});
 		const friends = await res.json();
-		console.log(friends);
 
 		if (!res.ok || !Array.isArray(friends)) {
 		tbody.innerHTML = `<tr><td colspan="4">Erreur de chargement</td></tr>`;
@@ -314,7 +312,6 @@ export function friendPage(header: string, footer: string) {
 			}
 
 			const id_friend = friend_data.id;
-			console.log(id_user, id_friend);
 			if (!id_friend || !id_user) {
 				alert("Merci de vous connecter et d'entrer un reel ami");
 				return;

@@ -6,7 +6,7 @@
 /*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2025/12/31 13:27:24 by abutet           ###   ########.fr       */
+/*   Updated: 2026/01/15 15:40:05 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ export function messagesPage(header: string, footer: string) {
       const msg = JSON.parse(event.data);
 
       if (msg.type === "new_message") {
-        console.log("msg: ", msg);
         addMessageToList(msg.data);
       }
     } catch (e) {
@@ -99,7 +98,6 @@ export function messagesPage(header: string, footer: string) {
         body: JSON.stringify({ content, id })
       });
       const data = await res.json();
-      console.log("Message envoyé :", data);
 
       newMessageInput.value = "";
       // ❌ plus besoin de fetchMessages() ici
