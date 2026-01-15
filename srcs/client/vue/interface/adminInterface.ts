@@ -20,7 +20,7 @@ export async function adminPage(header: string, footer: string) {
   try
   {
     const auth = await isAuthenticated();
-		const id = auth ? auth.id : 0;
+		const id = auth.authenticated ? auth.id : 0;
 
     const resuser = await fetch("/api/getuser", {
       method: "POST",

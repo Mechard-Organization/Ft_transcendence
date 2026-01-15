@@ -71,7 +71,6 @@ export function registerPage(header: string, footer: string) {
       return;
     }
 
-    console.log(null, 200, { user: username, password: password, mail: mail});
     try {
       const res = await fetch("/api/users", {
         method: "POST",
@@ -85,8 +84,6 @@ export function registerPage(header: string, footer: string) {
         alert(data.error || "Erreur lors de la création");
         return;
       }
-
-      console.log("Utilisateur créé :", data);
 
       usernameInput.value = "";
       passwordInput.value = "";
