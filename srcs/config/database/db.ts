@@ -26,6 +26,7 @@ db.prepare(`
     password_hash TEXT NOT NULL,
     mail TEXT UNIQUE NOT NULL,
     admin BOOL DEFAULT FALSE,
+    avatarUrl TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
 `).run();
@@ -59,6 +60,7 @@ async function creatAdmin() {
   const ADMIN = process.env.ADMIN;
   const ADMIN_MAIL = process.env.ADMIN_MAIL;
   if (!ADMIN_PASSWORD || !ADMIN || !ADMIN_MAIL) return;
+  if (getUserByUsername(ADMIN)) return;
   const password_hash = await bcrypt.hash(ADMIN_PASSWORD, 10);
   db.prepare(` INSERT INTO users (username, password_hash, mail, admin)
       VALUES (?, ?, ?, TRUE)`).run(ADMIN, password_hash, ADMIN_MAIL);
@@ -127,7 +129,7 @@ export function createUser(username: string, password_hash: string, mail: string
 
 export function getUserById(id: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin
+    SELECT id, username, password_hash, mail, admin, avatarUrl
     FROM users
     WHERE id = ?
   `);
@@ -137,7 +139,7 @@ export function getUserById(id: string) {
 
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin
+    SELECT id, username, password_hash, mail, admin, avatarUrl
     FROM users
     WHERE username = ?
   `);
@@ -147,7 +149,7 @@ export function getUserByUsername(username: string) {
 
 export function getUserByMail(mail: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin
+    SELECT id, username, password_hash, mail, admin, avatarUrl
     FROM users
     WHERE mail = ?
   `);
@@ -193,16 +195,25 @@ export function updateUserMail(mail: string, id: string) {
   return stmt.run(mail, id);
 }
 
-export function updateUserAdmin(status: string, id: string) {
+export function updateUserAdmin(status: boolean, id: string) {
   const stmt = db.prepare(`
     UPDATE users
     SET admin = ?
     WHERE id = ?
   `);
 
-  return stmt.run(status, id);
+  return stmt.run(status ? 1 : 0, id);
 }
 
+export function updateUserPp(url: string | null, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET avatarUrl = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(url, id);
+}
 
 export function deleteUser(id: string) {
   const stmt = db.prepare(`

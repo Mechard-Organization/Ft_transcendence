@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/12/25 18:39:09 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/08 16:24:04 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,7 +362,7 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
     player.gameId = gameId;
     players[gameId] = player
     console.log(player.username)
-    player.ws?.send(JSON.stringify(player))
+    player.ws?.send(JSON.stringify({type: "Playername", username: player.username}))
     return;
   }
   else {

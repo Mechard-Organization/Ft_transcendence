@@ -1,42 +1,21 @@
-import { IncomingMessage, ServerResponse } from "http";
+import { FastifyRequest, FastifyReply } from "fastify";
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-me";
 
-export function parseCookies(cookieHeader?: string) {
-  const cookies: Record<string, string> = {};
-  if (!cookieHeader) return cookies;
-  
-  const parts = cookieHeader.split(";");
-  for (const part of parts) {
-    const [key, ...rest] = part.trim().split("=");
-    if (!key) continue;
-    cookies[key] = decodeURIComponent(rest.join("="));
-  }
-  return cookies;
-}
+export async function handleAuthMe(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  // Fastify gère déjà la méthode HTTP
+  // donc plus besoin de vérifier GET
 
-function sendJson(res: ServerResponse, statusCode: number, body: unknown) {
-  const json = JSON.stringify(body);
-  res.statusCode = statusCode;
-  res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("Content-Length", Buffer.byteLength(json));
-  res.end(json);
-}
+  // 🍪 Cookies via @fastify/cookie
+  const token = request.cookies?.access_token;
 
-export function handleAuthMe(req: IncomingMessage, res: ServerResponse) {
-  if (req.method !== "GET") {
-    res.statusCode = 405;
-    res.setHeader("Allow", "GET");
-    return res.end();
-  }
-
-  const cookies = parseCookies(req.headers.cookie);
-  const token = cookies["access_token"];
-
-  // ✅ Cas 1 : aucun token → utilisateur NON connecté
+  // ✅ Cas 1 : pas de token
   if (!token) {
-    return sendJson(res, 200, {
+    return reply.code(200).send({
       authenticated: false,
     });
   }
@@ -47,16 +26,16 @@ export function handleAuthMe(req: IncomingMessage, res: ServerResponse) {
       id?: string;
     };
 
-    // ✅ Cas 2 : token valide → utilisateur connecté
-    return sendJson(res, 200, {
+    // ✅ Cas 2 : token valide
+    return reply.code(200).send({
       authenticated: true,
       id: payload.sub,
     });
   } catch (err) {
     console.error("JWT verify error:", err);
 
-    // ✅ Cas 3 : token invalide / expiré → NON connecté
-    return sendJson(res, 200, {
+    // ✅ Cas 3 : token invalide / expiré
+    return reply.code(200).send({
       authenticated: false,
       reason: "invalid_or_expired",
     });
