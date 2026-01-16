@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Meshes.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/08 16:23:00 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/16 15:57:35 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,15 @@ export function setNewGame(newGameGiven: NewGame) {
   // console.log("newgame set with ", thisNewGame.type);
 }
 
+async function saveValues(input: Talker, counter: number[])
+{
+  const resuser = await fetch("/api/match", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name_player1: input.playername[0], name_player2: input.playername[1], score1: counter[0], score2: counter[1] })
+  });
+}
+
 export function setValues(input: Talker | undefined) {
   if (input == undefined)
     return;
@@ -117,6 +126,7 @@ export function setValues(input: Talker | undefined) {
   setPlayerName([...input.playername]);
   drawText();
   if (input.playerCount > 0 && (counter[0] == finalGoal || counter[1] == finalGoal)) {
+    // saveValues(input, counter);
     thisPlayer.gameId = undefined;
     // console.log(thisPlayer.gameId);
     createdisposableUI(0);
@@ -338,7 +348,6 @@ async function loadUsernameFromCookie() {
 
 export async function pong(): Promise<string> {
   await loadUsernameFromCookie();
-  console.log("AAAAAAAAAAAAaa", username, thisPlayer.username);
   ws = new WebSocket("/ws/");
   const app = document.getElementById("app")!;
 
