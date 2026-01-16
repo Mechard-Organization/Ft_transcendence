@@ -6,7 +6,7 @@
 /*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/16 15:57:35 by abutet           ###   ########.fr       */
+/*   Updated: 2026/01/16 16:07:58 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ export function setValues(input: Talker | undefined) {
   setPlayerName([...input.playername]);
   drawText();
   if (input.playerCount > 0 && (counter[0] == finalGoal || counter[1] == finalGoal)) {
-    // saveValues(input, counter);
+    saveValues(input, counter);
     thisPlayer.gameId = undefined;
     // console.log(thisPlayer.gameId);
     createdisposableUI(0);
