@@ -6,7 +6,7 @@
 #    By: abutet <abutet@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2026/01/16 15:47:54 by abutet           ###   ########.fr        #
+#    Updated: 2026/01/19 15:22:35 by abutet           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -159,7 +159,7 @@ fclean: clean
 	@rm -rf srcs/public/server
 	@rm -rf srcs/server/config
 	@rm -rf srcs/server/node_modules
-	@find srcs/server/uploads/avatars -type f ! -name "default.png" -delete
+	@find ./uploads/avatars -type f ! -name "default.png" -delete
 	@$(COMPOSE) rm -fsv || true
 
 prune: down clean

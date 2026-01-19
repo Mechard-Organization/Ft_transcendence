@@ -5,6 +5,7 @@ import { homePage } from "./client/vue/home/homePage";
 import { registerPage } from "./client/vue/interface/registerPage";
 import { loginPage } from "./client/vue/interface/loginPage";
 import { profilPage } from "./client/vue/interface/profilPage";
+import { otherProfilPage } from "./client/vue/interface/otherProfilPage";
 import { adminPage } from "./client/vue/interface/adminInterface";
 import { isAuthenticated } from "./client/vue/interface/authenticator";
 
@@ -72,8 +73,11 @@ async function showPage(page: string) {
     registerPage(app.innerHTML, footer);
   } else if (page === "login") {
     loginPage(app.innerHTML, footer);
-  } else if (page === "profil") {
-    profilPage(app.innerHTML, footer);
+  } else if (page.split("#")[0] === "profil") {
+    if (page.split("#")[1])
+      otherProfilPage(app.innerHTML, footer);
+    else
+      profilPage(app.innerHTML, footer);
   } else if (page.split("#")[0] === "admin") {
     adminPage(app.innerHTML, footer);
   } else {
