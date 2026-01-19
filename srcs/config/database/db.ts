@@ -54,6 +54,18 @@ db.prepare(`
   )
 `).run();
 
+// --- TABLE MATCH ---
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS match (
+    id_match INTEGER PRIMARY KEY AUTOINCREMENT,
+    name_player1 INTEGER NULL,
+    name_player2 INTEGER NULL,
+    score1 TEXT,
+    score2 TEXT,
+    date TEXT DEFAULT (datetime('now'))
+  )
+`).run();
+
 // Création du user root
 async function creatAdmin() {
   const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
@@ -330,4 +342,38 @@ export function deleteUserFriend(id_user: string) {
   `);
 
   return stmt.run(id_user, id_user);
+}
+
+// --- MATCH FUNCTIONS ---
+
+export function createMatch(name_player1: string, name_player2: string, score1: string, score2: string) {
+  const stmt = db.prepare(`
+    INSERT INTO match (name_player1, name_player2, score1, score2)
+    VALUES (?, ?, ?, ?)
+  `);
+
+  const info = stmt.run(name_player1, name_player2, score1, score2);
+  const id = info.lastInsertRowid;
+
+  return id;
+}
+
+export function getMatch(name_player: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM match
+    WHERE name_player1 = ? OR name_player2 = ?
+    ORDER BY date DESC
+  `);
+
+  return stmt.all(name_player, name_player);
+}
+
+
+export function deleteMatch(name_user: string) {
+  const stmt = db.prepare(`
+    DELETE FROM match
+    WHERE name_player1 = ? OR name_player2 = ?
+  `);
+
+  return stmt.run(name_user, name_user);
 }
