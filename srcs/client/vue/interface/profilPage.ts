@@ -71,7 +71,7 @@ async function loadMatch() {
         return `
           <tr>
             <td>${match.date}</td>
-            <td>${adv_name}</td>
+            <td><a href="#profil#${adv_name}">${adv_name}</a></td>
             <td>${user_score} - ${adv_score}</td>
           </tr>
         `;

@@ -37,7 +37,24 @@ db.prepare(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT,
     id_author INTEGER NULL,
-    FOREIGN KEY(id_author) REFERENCES users(id)
+    id_group INTEGER NULL,
+    FOREIGN KEY(id_author) REFERENCES users(id),
+    FOREIGN KEY(id_group) REFERENCES groupmsg(id)
+  )
+`).run();
+
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS groupmsg (
+    id INTEGER PRIMARY KEY AUTOINCREMENT
+  )
+`).run();
+
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS laisonmsg (
+    id_group INTEGER,
+    id_user INTEGER NULL,
+    FOREIGN KEY(id_group) REFERENCES groupmsg(id),
+    FOREIGN KEY(id_user) REFERENCES users(id)
   )
 `).run();
 
@@ -51,6 +68,16 @@ db.prepare(`
     FOREIGN KEY(id_user) REFERENCES users(id),
     FOREIGN KEY(id_sender) REFERENCES users(id),
     FOREIGN KEY(id_friend) REFERENCES users(id)
+  )
+`).run();
+
+// --- TABLE BLOCK ---
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS block (
+    id_user INTEGER,
+    id_block INTEGER,
+    FOREIGN KEY(id_user) REFERENCES users(id),
+    FOREIGN KEY(id_block) REFERENCES users(id)
   )
 `).run();
 
@@ -84,7 +111,7 @@ creatAdmin();
 
 // --- MESSAGES FUNCTIONS ---
 
-export function getAllMessages() {
+export function getAllMessages(id_group: string) {
   const stmt = db.prepare(`
     SELECT
       messages.*,
@@ -92,18 +119,19 @@ export function getAllMessages() {
     FROM messages
     LEFT JOIN users
       ON messages.id_author = users.id
+    WHERE id_group = ?
     ORDER BY messages.id ASC
   `);
 
-  return stmt.all();
+  return stmt.all(id_group);
 }
 
-export function addMessage(content: string, id: any) {
+export function addMessage(content: string, id: any, id_group: string) {
   const authorId: string = id && !isNaN(Number(id)) ? String(Number(id)) : "0";
 
-  const stmt = db.prepare("INSERT INTO messages (content, id_author) VALUES (?,?)");
+  const stmt = db.prepare("INSERT INTO messages (content, id_author, id_group) VALUES (?,?,?)");
 
-  const info = stmt.run(content, id);
+  const info = stmt.run(content, id, id_group);
 
   return {
     id: info.lastInsertRowid,
@@ -121,6 +149,30 @@ export function MessageAnonym(id_author: string) {
   `);
 
   return stmt.run(id_author);
+}
+
+export function createGroup() {
+  const stmt = db.prepare(`
+    INSERT INTO groupmsg DEFAULT VALUES
+  `);
+
+  const info = stmt.run();
+
+  return {
+    id: info.lastInsertRowid
+  };
+}
+
+export function addUsereGroup(id_group: string, id_user: string) {
+  const stmt = db.prepare(`
+    INSERT INTO laisonmsg (id_group, id_user) VALUES (?,?)
+  `);
+
+  const info = stmt.run(id_group, id_user);
+
+  return {
+    id: info.lastInsertRowid
+  };
 }
 
 // --- USERS FUNCTIONS ---
@@ -342,6 +394,58 @@ export function deleteUserFriend(id_user: string) {
   `);
 
   return stmt.run(id_user, id_user);
+}
+
+// --- BLOCK FUNCTIONS ---
+
+export function createBlock(id_user: string, id_block: string) {
+  const stmt = db.prepare(`
+    INSERT INTO block (id_user, id_block)
+    VALUES (?, ?)
+  `);
+
+  const info = stmt.run(id_user, id_block);
+  const id = info.lastInsertRowid;
+
+  return id;
+}
+
+export function getBlock(id_user: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM block
+    WHERE id_user = ?
+    ORDER BY id_block ASC
+  `);
+
+  return stmt.all(id_user);
+}
+
+export function ItIsBlock(id_user: string, id_block: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM block
+    WHERE id_user = ? AND id_block = ?
+  `);
+
+  return stmt.all(id_user, id_block);
+}
+
+
+export function deleteBlock(id_user: string, id_block: string) {
+  const stmt = db.prepare(`
+    DELETE FROM friends
+    WHERE id_user = ? AND id_block = ?
+  `);
+
+  return stmt.run(id_user, id_block);
+}
+
+export function deleteAllBlock(id_user: string) {
+  const stmt = db.prepare(`
+    DELETE FROM friends
+    WHERE id_user = ?
+  `);
+
+  return stmt.run(id_user);
 }
 
 // --- MATCH FUNCTIONS ---
