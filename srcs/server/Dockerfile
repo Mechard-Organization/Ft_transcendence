@@ -7,8 +7,8 @@ COPY package*.json ./
 
 # Install packages
 RUN npm install
-RUN npm install --save-dev ts-node ts-node-dev typescript tsconfig-paths @types/node @types/bcrypt @types/jsonwebtoken
-RUN npm install bcrypt jsonwebtoken fastify @fastify/cookie @fastify/websocket @fastify/sensible @fastify/multipart @fastify/static sharp ws @types/ws better-sqlite3 prom-client
+RUN npm install --save-dev ts-node ts-node-dev typescript tsconfig-paths @types/node @types/bcrypt @types/jsonwebtoken @types/qrcode
+RUN npm install bcrypt jsonwebtoken fastify @fastify/cookie @fastify/websocket @fastify/sensible @fastify/multipart @fastify/static sharp ws @types/ws better-sqlite3 prom-client otplib qrcode
 
 # Copie le code
 COPY . .

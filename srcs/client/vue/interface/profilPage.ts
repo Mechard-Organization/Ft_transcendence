@@ -4,6 +4,7 @@ import { isAuthenticated } from "./authenticator";
 type UserMe = {
   id: number;
   avatarUrl: string | null;
+  twofa_enabled?: number;
 };
 
 async function loadMatch() {
@@ -114,8 +115,8 @@ export async function profilPage(header: string, footer: string) {
     console.error("User fetch error:", err);
     return;
   }
-  const avatarSrc =
-    user.avatarUrl ?? "/uploads/avatars/default.png";
+  const avatarSrc = user.avatarUrl ?? "/uploads/avatars/default.png";
+  const twofaEnabled = user.twofa_enabled === 1;
 
   /* =====================
      RENDER
@@ -155,6 +156,26 @@ export async function profilPage(header: string, footer: string) {
           <button id="deleteAvatar" class="btn-secondary">
             Supprimer la photo
           </button>
+        </div>
+      </section>
+
+      <section id="twofaSection" style="margin-bottom: 20px;">
+        <h2>2FA</h2>
+        <p id="twofaStatus">${twofaEnabled ? "2FA active" : "2FA inactive"}</p>
+        <button id="twofaSetup" class="btn-primary"${twofaEnabled ? " disabled" : ""}>
+          Activer 2FA
+        </button>
+        <button id="twofaDisable" class="btn-secondary"${twofaEnabled ? "" : " style=\"display:none;\""}>
+          Desactiver 2FA
+        </button>
+        <div id="twofaEnroll" style="display:none;">
+          <img id="twofaQr" alt="QR 2FA" width="160" height="160" />
+          <div class="form-group">
+            <label for="twofaCode">Code de verification</label>
+            <input type="text" id="twofaCode" placeholder="123456" />
+          </div>
+          <button id="twofaVerify" class="btn-primary">Valider</button>
+          <p id="twofaError" style="color:red;"></p>
         </div>
       </section>
 
@@ -249,6 +270,101 @@ export async function profilPage(header: string, footer: string) {
       avatarImg.src = "/uploads/avatars/default.png";
     } catch (err) {
       console.error("Delete avatar error:", err);
+    }
+  });
+
+  /* =====================
+     2FA
+  ===================== */
+
+  const twofaSetupBtn = document.getElementById("twofaSetup") as HTMLButtonElement | null;
+  const twofaDisableBtn = document.getElementById("twofaDisable") as HTMLButtonElement | null;
+  const twofaEnroll = document.getElementById("twofaEnroll") as HTMLDivElement | null;
+  const twofaQr = document.getElementById("twofaQr") as HTMLImageElement | null;
+  const twofaCodeInput = document.getElementById("twofaCode") as HTMLInputElement | null;
+  const twofaVerifyBtn = document.getElementById("twofaVerify") as HTMLButtonElement | null;
+  const twofaStatus = document.getElementById("twofaStatus") as HTMLParagraphElement | null;
+  const twofaError = document.getElementById("twofaError") as HTMLParagraphElement | null;
+
+  twofaSetupBtn?.addEventListener("click", async () => {
+    if (twofaError) twofaError.textContent = "";
+
+    try {
+      const res = await fetch("/api/auth/2fa/setup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (twofaError) twofaError.textContent = data.error || "Erreur 2FA.";
+        return;
+      }
+
+      if (twofaQr) twofaQr.src = data.qr;
+      if (twofaEnroll) twofaEnroll.style.display = "block";
+    } catch (err) {
+      console.error("2FA setup error:", err);
+      if (twofaError) twofaError.textContent = "Erreur reseau.";
+    }
+  });
+
+  twofaVerifyBtn?.addEventListener("click", async () => {
+    if (!twofaCodeInput?.value) {
+      if (twofaError) twofaError.textContent = "Code requis.";
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/auth/2fa/enable", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id, code: twofaCodeInput.value.trim() })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (twofaError) twofaError.textContent = data.error || "Code invalide.";
+        return;
+      }
+
+      if (twofaStatus) twofaStatus.textContent = "2FA active";
+      if (twofaEnroll) twofaEnroll.style.display = "none";
+      if (twofaSetupBtn) twofaSetupBtn.disabled = true;
+      if (twofaDisableBtn) twofaDisableBtn.style.display = "inline-block";
+    } catch (err) {
+      console.error("2FA enable error:", err);
+      if (twofaError) twofaError.textContent = "Erreur reseau.";
+    }
+  });
+
+  twofaDisableBtn?.addEventListener("click", async () => {
+    if (twofaError) twofaError.textContent = "";
+
+    try {
+      const res = await fetch("/api/auth/2fa/disable", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (twofaError) twofaError.textContent = data.error || "Erreur 2FA.";
+        return;
+      }
+
+      if (twofaStatus) twofaStatus.textContent = "2FA inactive";
+      if (twofaEnroll) twofaEnroll.style.display = "none";
+      if (twofaSetupBtn) twofaSetupBtn.disabled = false;
+      if (twofaDisableBtn) twofaDisableBtn.style.display = "none";
+    } catch (err) {
+      console.error("2FA disable error:", err);
+      if (twofaError) twofaError.textContent = "Erreur reseau.";
     }
   });
 
