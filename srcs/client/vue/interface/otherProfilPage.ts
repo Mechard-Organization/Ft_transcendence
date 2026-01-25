@@ -89,8 +89,8 @@ export async function otherProfilPage(header: string, footer: string) {
   const app = document.getElementById("app");
   const currentHref = location.hash.slice(1);
   const subHref = currentHref.split('#');
-  // const auth = await isAuthenticated();
-  // const id = auth.authenticated && auth.id ? auth.id : 0;
+  const auth = await isAuthenticated();
+  const id = auth.authenticated && auth.id ? auth.id : 0;
 
   if (!app) return;
 
@@ -98,7 +98,8 @@ export async function otherProfilPage(header: string, footer: string) {
      FETCH USER PROFILE
   ===================== */
 
-  let user: UserMe;
+  let user: any;
+  let me: any;
 
   try {
     const res = await fetch("/api/getuserbyname", {
@@ -107,15 +108,19 @@ export async function otherProfilPage(header: string, footer: string) {
       body: JSON.stringify({ username: subHref[1] })
     });
 
-    // const res = await fetch("/api/getuser", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ id })
-    // });
-
     if (!res.ok) throw new Error("Failed to fetch user");
-
+    
     user = await res.json();
+    
+    const resme = await fetch("/api/getuser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id })
+    });
+
+    if (!resme.ok) throw new Error("Failed to fetch user");
+    
+    me = await resme.json();
   } catch (err) {
     console.error("User fetch error:", err);
     return;
@@ -148,6 +153,10 @@ export async function otherProfilPage(header: string, footer: string) {
         />
       </section>
 
+      <div>
+        <button id="chat" class="btn-secondary">chat</button>
+      </div>
+
       <h1> liste des matchs</h1>
       <div class="table-container">
         <table id="matchTable">
@@ -168,5 +177,25 @@ export async function otherProfilPage(header: string, footer: string) {
     </main>
     ${footer}
   `;
+   document.getElementById("chat")?.addEventListener("click", async () => {
+    try {
+      const res = await fetch("/api/addUserToGroup", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: me.id , user})
+      });
+
+      if (!res.ok) {
+        console.error("Logout failed");
+        return;
+      }
+
+      const id_group = await res.json();
+      window.location.hash = "#messages#" + id_group;
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  });
   loadMatch();
 }

@@ -29,26 +29,42 @@ export default async function messageRoutes(fastify: FastifyInstance) {
   fastify.post("/addUserToGroup", async (request) => {
     const { user, id, id_group } = request.body as any;
     let group;
-    const id_invit = db.getUserByUsername(user);
 
-    if (!id_invit) {
+    if (!user.id || !id) {
       throw fastify.httpErrors.badRequest("Invalid user");
     }
 
     if (!id_group)
-    {}
-    group = db.createGroup().id;
-    console.log(group);
-    // const saved1 = db.addUsereGroup(id, id_group);
-    // const saved2 = db.addUsereGroup(id_invit, id_group);
-    const saved = db.addMessage( user + " has join the group", id, id_group);
+    {
+      group = db.createGroup().id;
+      db.addUserGroup(id_group, id);
+    }
+    db.addUserGroup(id_group, user.id);
+    const saved = db.addMessage( user.username + " has join the group", id, id_group);
 
-    // fastify.websocketServer.clients.forEach(client => {
-    //   if (client.readyState === 1) {
-    //     client.send(JSON.stringify({ type: "new_message", data: { saved1, saved2 } }));
-    //   }
-    // });
+    fastify.websocketServer.clients.forEach(client => {
+      if (client.readyState === 1) {
+        client.send(JSON.stringify({ type: "new_message", data: { saved } }));
+      }
+    });
 
-    return { saved };
+    return id_group;
+  });
+
+  fastify.post("/UserInGroup", async (request) => {
+    const { id, id_group } = request.body as any;
+    let group;
+
+    if (!id) {
+      throw fastify.httpErrors.badRequest("Invalid user");
+    }
+
+    if (!id_group)
+    {
+      throw fastify.httpErrors.badRequest("Invalid group");
+    }
+    const saved = db.usereInGroup(id_group, id);
+
+    return saved;
   });
 }

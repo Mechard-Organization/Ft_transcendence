@@ -19,7 +19,34 @@ export function priveMessagesPage(header: string, footer: string) {
   const subHref = currentHref.split('#');
   if (!app) return;
   const id_group: string = subHref[1] && !isNaN(Number(subHref[1])) ? String(Number(subHref[1])) : "0";
-  if (!id_group) return;
+  if (!id_group) return; 
+  async function connect() {
+    try {
+      const auth = await isAuthenticated();
+      const id = auth ? auth.id : null;
+      const res = await fetch("/api/UserInGroup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_group: subHref[1], id })
+      });
+
+      if (!res.ok) {
+        console.error("Logout failed");
+        return;
+      }
+
+      const group = await res.json();
+
+      if (!Array.isArray(group) || group.length === 0)
+      {
+        alert("you need to be invite in this chat");
+        window.location.hash = "#messages";
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  connect();
 
   app.innerHTML = `
     ${header}
@@ -108,13 +135,11 @@ export function priveMessagesPage(header: string, footer: string) {
     if (!content) return;
 
     try {
-      console.log({ content, id, id_group });
       const res = await fetch("/api/hello", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content, id, id_group })
       });
-      const data = await res.json();
 
       newMessageInput.value = "";
     } catch (err) {
@@ -130,13 +155,31 @@ export function priveMessagesPage(header: string, footer: string) {
     if (!user) return;
 
     try {
-      console.log({ user, id, id_group });
-      const res = await fetch("/api/addUserToGroup", {
+      const resin = await fetch("/api/UserInGroup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user, id, id_group })
+        body: JSON.stringify({ id_group: subHref[1], id })
       });
-      const data = await res.json();
+
+      if (!resin.ok) {
+        console.error("Logout failed");
+        return;
+      }
+
+      const group = await resin.json();
+
+      if (group.length != 0)
+      {
+        alert("already in this chat");
+      }
+      else
+      {
+        const res = await fetch("/api/addUserToGroup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user, id, id_group })
+        });
+      }
 
       newUserInput.value = "";
     } catch (err) {

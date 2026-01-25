@@ -163,9 +163,23 @@ export function createGroup() {
   };
 }
 
-export function addUsereGroup(id_group: string, id_user: string) {
+export function addUserGroup(id_group: string, id_user: string) {
   const stmt = db.prepare(`
     INSERT INTO laisonmsg (id_group, id_user) VALUES (?,?)
+  `);
+
+  const info = stmt.run(id_group, id_user);
+
+  return {
+    id: info.lastInsertRowid
+  };
+}
+
+export function userInGroup(id_group: string, id_user: string) {
+  const stmt = db.prepare(`
+    SELECT * 
+    FROM laisonmsg 
+    WHERE id_group = ? AND id_user = ? 
   `);
 
   const info = stmt.run(id_group, id_user);
