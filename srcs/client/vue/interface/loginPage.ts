@@ -22,6 +22,15 @@ export function loginPage(header: string, footer: string) {
         <button id="loginBtn" class="btn-primary" type="submit">Se connecter</button>
         <p id="loginError" style="color:red;"></p>
       </form>
+
+      <section id="twofaSection" style="display:none;">
+        <h2>2FA</h2>
+        <div class="form-group">
+          <label for="twofaCode">Code de verification</label>
+          <input type="text" id="twofaCode" placeholder="123456" />
+        </div>
+        <button id="twofaBtn" class="btn-primary">Verifier</button>
+      </section>
     </main>
     ${footer}
   `;
@@ -30,6 +39,9 @@ export function loginPage(header: string, footer: string) {
   const passwordInput = document.getElementById("password") as HTMLInputElement | null;
   const errorEl = document.getElementById("loginError") as HTMLParagraphElement | null;
   const form = document.getElementById("loginForm") as HTMLFormElement | null;
+  const twofaSection = document.getElementById("twofaSection") as HTMLElement | null;
+  const twofaCodeInput = document.getElementById("twofaCode") as HTMLInputElement | null;
+  const twofaBtn = document.getElementById("twofaBtn") as HTMLButtonElement | null;
 
   // if (!usernameInput || !passwordInput || !errorEl || !form) {
   //   console.error("LoginPage: élément manquant dans le DOM");
@@ -57,17 +69,49 @@ export function loginPage(header: string, footer: string) {
         body: JSON.stringify({ username, password }),
       });
 
+      const data = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
         errorEl.textContent = data.message || "Identifiants invalides.";
         return;
       }
 
-      // Ici, le cookie HttpOnly est déjà posé côté navigateur
+      if (data.twofa_required) {
+        if (twofaSection) twofaSection.style.display = "block";
+        return;
+      }
+
       window.location.hash = "#profil";
     } catch (err) {
       console.error(err);
       errorEl.textContent = "Erreur réseau, réessaie plus tard.";
     }
   };
+
+  twofaBtn?.addEventListener("click", async () => {
+    if (!twofaCodeInput?.value) {
+      errorEl.textContent = "Code requis.";
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/auth/login/2fa/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ code: twofaCodeInput.value.trim() }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        errorEl.textContent = data.error || "Code invalide.";
+        return;
+      }
+
+      window.location.hash = "#profil";
+    } catch (err) {
+      console.error(err);
+      errorEl.textContent = "Erreur réseau, réessaie plus tard.";
+    }
+  });
 }

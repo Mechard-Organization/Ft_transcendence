@@ -27,7 +27,10 @@ db.prepare(`
     mail TEXT UNIQUE NOT NULL,
     admin BOOL DEFAULT FALSE,
     avatarUrl TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    twofa_enabled INTEGER NOT NULL DEFAULT 0,
+    twofa_secret TEXT,
+    twofa_temp_secret TEXT
   )
 `).run();
 
@@ -207,7 +210,7 @@ export function createUser(username: string, password_hash: string, mail: string
 
 export function getUserById(id: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl
+    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret
     FROM users
     WHERE id = ?
   `);
@@ -217,7 +220,7 @@ export function getUserById(id: string) {
 
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl
+    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret
     FROM users
     WHERE username = ?
   `);
@@ -227,13 +230,49 @@ export function getUserByUsername(username: string) {
 
 export function getUserByMail(mail: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl
+    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret
     FROM users
     WHERE mail = ?
   `);
 
   return stmt.get(mail);
 }
+
+// --- 2FA in USER FONCTIONS --- //
+
+export function setTwofaTempSecret(userId: number, secret: string) {
+  return db.prepare(`
+    UPDATE users SET twofa_temp_secret = ? WHERE id = ?
+  `).run(secret, userId);
+}
+
+export function enableTwofa(userId: number) {
+  return db.prepare(`
+    UPDATE users
+    SET twofa_enabled = 1,
+        twofa_secret = twofa_temp_secret,
+        twofa_temp_secret = NULL
+    WHERE id = ?
+  `).run(userId);
+}
+
+export function disableTwofa(userId: number) {
+  return db.prepare(`
+    UPDATE users
+    SET twofa_enabled = 0,
+        twofa_secret = NULL,
+        twofa_temp_secret = NULL
+    WHERE id = ?
+  `).run(userId);
+}
+
+export function getTwofaStatus(userId: number) {
+  return db.prepare(`
+    SELECT twofa_enabled FROM users WHERE id = ?
+  `).get(userId);
+}
+
+// --------------------------- //
 
 export function getAllUsers() {
   const stmt = db.prepare(`
