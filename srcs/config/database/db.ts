@@ -114,7 +114,23 @@ creatAdmin();
 
 // --- MESSAGES FUNCTIONS ---
 
-export function getAllMessages(id_group: string) {
+export function getAllMessages() {
+  const stmt = db.prepare(`
+    SELECT
+      messages.*,
+      COALESCE(users.username, 'Anonyme') AS username
+    FROM messages
+    LEFT JOIN users
+      ON messages.id_author = users.id
+    WHERE id_group IS NULL
+    ORDER BY messages.id ASC
+  `);
+
+  return stmt.all();
+}
+
+
+export function getMessagesInGroup(id_group: string) {
   const stmt = db.prepare(`
     SELECT
       messages.*,
@@ -180,9 +196,9 @@ export function addUserGroup(id_group: string, id_user: string) {
 
 export function userInGroup(id_group: string, id_user: string) {
   const stmt = db.prepare(`
-    SELECT * 
-    FROM laisonmsg 
-    WHERE id_group = ? AND id_user = ? 
+    SELECT *
+    FROM laisonmsg
+    WHERE id_group = ? AND id_user = ?
   `);
 
   const info = stmt.run(id_group, id_user);

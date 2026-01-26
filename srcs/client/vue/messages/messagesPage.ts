@@ -6,7 +6,7 @@
 /*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2026/01/23 15:50:24 by abutet           ###   ########.fr       */
+/*   Updated: 2026/01/26 14:20:47 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,15 @@ export function messagesPage(header: string, footer: string) {
 
   // --- AJOUT D’UN MESSAGE DANS LA LISTE ---
   function addMessageToList(msg: { id: number; content: string; username: string }) {
-    const li = document.createElement("li");
-    li.textContent = `#${msg.username}: ${msg.content}`;
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = `#profil#${msg.username}`;
+      a.textContent = msg.username;
+
+      li.append("#");
+      li.appendChild(a);
+      li.append(`: ${msg.content}`);
+      messagesList.appendChild(li);
     messagesList.appendChild(li);
   }
 
@@ -75,7 +82,7 @@ export function messagesPage(header: string, footer: string) {
       const res = await fetch("/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_group: null })
+        body: JSON.stringify({ id_group: undefined })
       });
       const data = await res.json();
 
