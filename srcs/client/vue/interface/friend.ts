@@ -31,7 +31,7 @@ async function loadRequestFriends() {
     tbody.innerHTML = friends.map((friend: any) => `
       <tr>
         <td>${friend.id}</td>
-        <td>${friend.username}</td>
+        <td><a href="#profil#${friend.username}">${friend.username}</a></td>
         <td>${friend.mail ?? "-"}</td>
 		<td>
 			${friend.id_sender == friend.id
@@ -146,7 +146,7 @@ async function loadFriends() {
 		tbody.innerHTML = friends.map((friend: any) => `
 		<tr>
 			<td>${friend.id}</td>
-			<td>${friend.username}</td>
+			<td><a href="#profil#${friend.username}">${friend.username}</a></td>
 			<td>${friend.mail ?? "-"}</td>
 			<td><button class="btn-del" data-id="${friend.id}">reject</button></td>
 		</tr>
