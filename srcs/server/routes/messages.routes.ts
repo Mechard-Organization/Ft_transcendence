@@ -5,7 +5,12 @@ export default async function messageRoutes(fastify: FastifyInstance) {
 
   fastify.post("/messages", async (request) => {
     const { id_group } = request.body as any;
-    return db.getAllMessages(id_group);
+    let saved: any;
+    if (id_group)
+      saved = db.getMessagesInGroup(id_group);
+    else
+      saved = db.getAllMessages();
+    return saved;
   });
 
   fastify.post("/hello", async (request) => {
@@ -63,7 +68,7 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     {
       throw fastify.httpErrors.badRequest("Invalid group");
     }
-    const saved = db.usereInGroup(id_group, id);
+    const saved = db.userInGroup(id_group, id);
 
     return saved;
   });
