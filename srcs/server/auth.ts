@@ -41,3 +41,35 @@ export async function handleAuthMe(
     });
   }
 }
+
+export function getAccessUserId(request: FastifyRequest): number | null {
+  const token = request.cookies?.access_token;
+  if (!token) return null;
+  try {
+    const payload = jwt.verify(token, JWT_SECRET) as { sub: number | string };
+    const userId = Number(payload.sub);
+    return Number.isFinite(userId) ? userId : null;
+  } catch {
+    return null;
+  }
+}
+
+// créer un jeton signé (temporaire)
+export function signTwofaPending(userId: number) {
+  return jwt.sign(
+    { sub: userId, type: "2fa_pending" },
+    JWT_SECRET,
+    { expiresIn: "5m" }
+  );
+}
+
+// vérifier que le ticket est valide
+export function verifyTwofaPending(token: string): number | null {
+  try {
+    const payload = jwt.verify(token, JWT_SECRET) as any;
+    if (payload.type !== "2fa_pending") return null;
+    return Number(payload.sub);
+  } catch {
+    return null;
+  }
+}

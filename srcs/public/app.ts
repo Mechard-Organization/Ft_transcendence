@@ -1,6 +1,7 @@
 import { gamePage } from "./client/vue/game/gamePage";
 import { resetBabylonJs } from "./client/vue/ts/UI";
 import { messagesPage } from "./client/vue/messages/messagesPage";
+import { priveMessagesPage } from "./client/vue/messages/priveMessagesPage";
 import { homePage } from "./client/vue/home/homePage";
 import { registerPage } from "./client/vue/interface/registerPage";
 import { loginPage } from "./client/vue/interface/loginPage";
@@ -67,8 +68,11 @@ async function showPage(page: string) {
     app.innerHTML += "<h1>About</h1>";
   } else if (page === "game") {
     gamePage(app.innerHTML, footer);
-  } else if (page === "messages") {
-    messagesPage(app.innerHTML, footer);
+  } else if (page.split("#")[0] === "messages") {
+    if (!page.split("#")[1] || page.split("#")[1] === "0")
+      messagesPage(app.innerHTML, footer);
+    else
+      priveMessagesPage(app.innerHTML, footer);
   } else if (page === "register") {
     registerPage(app.innerHTML, footer);
   } else if (page === "login") {
