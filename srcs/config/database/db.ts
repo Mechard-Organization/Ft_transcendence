@@ -201,11 +201,21 @@ export function userInGroup(id_group: string, id_user: string) {
     WHERE id_group = ? AND id_user = ?
   `);
 
-  const info = stmt.run(id_group, id_user);
+  return stmt.get(id_group, id_user);
+}
 
-  return {
-    id: info.lastInsertRowid
-  };
+export function oldGroup(id1: string, id2: string) {
+  const stmt = db.prepare(`
+    SELECT id_group
+    FROM laisonmsg
+    GROUP BY id_group
+    HAVING
+      COUNT(*) = 2
+      AND SUM(CASE WHEN id_user IN (?, ?) THEN 1 ELSE 0 END) = 2
+    LIMIT 1
+  `);
+
+  return stmt.get(id1, id2); // renvoie le groupe si trouvé, sinon undefined
 }
 
 // --- USERS FUNCTIONS ---
