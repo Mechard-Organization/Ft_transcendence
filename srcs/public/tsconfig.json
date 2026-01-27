@@ -1,11 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
-    "outDir": "dest",
-    "rootDir": "public/client",
+    "target": "ES2020",
+    "lib": ["DOM", "ES2020"],
+
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    "jsx": "react-jsx",
+
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+    "noEmit": true,
+    "types": ["react", "react-dom"]
   },
-  "include": ["client/**/*"]
+
+  "include": [
+    "../client/**/*.ts",
+    "../client/**/*.tsx",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ],
+
+  "exclude": ["node_modules", "dest"]
 }
