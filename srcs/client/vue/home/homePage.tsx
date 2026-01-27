@@ -8,7 +8,7 @@ export default function HomePage() {
       <main className="flex-grow flex flex-col items-center mt-25">
         <div className="text-center">
           <div className="inline-block">
-            <img src=  "../shared-assets/pompompurin/profil/main.jpeg" alt="personnage Home image" className="w-25 h-25 object-cover rounded-full" />
+            <img src=  "./shared-assets/pompompurin/profil/main.jpeg" alt="personnage Home image" className="w-25 h-25 object-cover rounded-full" />
           </div>
           <h1 className="text-6xl mb-4 text-[#8B5A3C]">Bienvenue !</h1>
           <p className="text-2xl text-[#A67C52]">Jouez, chattez et amusez-vous !</p>
