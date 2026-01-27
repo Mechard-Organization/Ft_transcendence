@@ -182,4 +182,12 @@ export default async function userRoutes(fastify: FastifyInstance) {
     }
     return { success: true };
   });
+
+  fastify.post("/users/me/getavatar", async (req) => {
+  const { id } = req.body as any;
+  const user = db.getUserById(id);
+  if (!user) throw fastify.httpErrors.notFound("User not found");
+  return { avatarUrl: user.avatarUrl || null };
+  });
+
 }

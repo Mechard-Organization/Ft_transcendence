@@ -1,25 +1,43 @@
 import { useState } from 'react';
 import { Trophy, Target, Clock } from 'lucide-react';
 import Footer from '../ts/Footer';
+import { isAuthenticated } from "../interface/authenticator";
 
 export default function ProfilePage() {
   const [profilePic, setProfilePic] = useState(1);
   const userStats = {
     name: 'Pompompurin',
-    gamesPlayed: 42,
-    gamesWon: 28,
-    highScore: 15,
-    totalPlayTime: '12h 34min',
-    winRate: 67,
+    // gamesPlayed: 42,
+    // gamesWon: 28,
+    // highScore: 15,
+    // totalPlayTime: '12h 34min',
+    // winRate: 67,
   };
-  const changeProfilePic = () => {
-      setProfilePic(prev => (prev < 23 ? prev + 1 : 1));
-    };
-  
+
+  const changeProfilePic = async () => {
+    const newPic = profilePic < 23 ? profilePic + 1 : 1;
+    const auth = await isAuthenticated();
+    const id = auth ? auth.id : null;
+    setProfilePic(newPic);
+    try {
+      await fetch("/api/users.routes/users/me/avatar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: `/shared-assets/pompompurin/profil/${newPic}.jpeg`,
+          id: id
+        }),
+      });
+      console.log("Avatar mis à jour !");
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour de l'avatar :", err);
+    }
+  }; 
   return (
     <div className="min-h-[calc(100vh-80px)] flex flex-col p-8">
         <div className="mb-8 max-w-4xl w-full mx-auto text-center">
           <button onClick={changeProfilePic} className="inline-block cursor-pointer">
+            
             <img
               src={`/shared-assets/pompompurin/profil/${profilePic}.jpeg`}
               alt="personnage profil"

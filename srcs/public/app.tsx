@@ -12,7 +12,7 @@ export default function App() {
         className="min-h-screen bg-[#FFFAED]"
         style={{
           backgroundImage: `
-            radial-gradient(circle at 20% 50%, rgba(254, 233, 110, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 20% 50%, hsla(51, 99%, 71%, 0.15) 0%, transparent 50%),
             radial-gradient(circle at 80% 80%, rgba(254, 233, 110, 0.15) 0%, transparent 50%),
             radial-gradient(circle at 40% 20%, rgba(139, 90, 60, 0.05) 0%, transparent 50%)
           `,
