@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Meshes.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/16 16:07:58 by abutet           ###   ########.fr       */
+/*   Updated: 2026/01/27 16:14:55 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ interface NewGame {
   type: "newGame",
   playerCount: number,
   mode: number,
-  playerIds?: number[],
+  gameId?: number,
   playername: string[]
 }
 

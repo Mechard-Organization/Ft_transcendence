@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/08 16:24:04 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/27 16:46:57 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ interface Game {
   paddles: Paddles,
   balld: Balld,
   ballPos: Vec3,
-  playerIds?: number[],
+  playerIds: number[],
   playername: string[],
   wallTop?: boolean,
   wallbottom?: boolean,
@@ -98,7 +98,7 @@ interface NewGame {
   type: "newGame",
   playerCount: number,
   mode: number,
-  playerIds?: number[],
+  gameId?: number,
   playername: string[]
 }
 
@@ -190,17 +190,111 @@ export function moveBall(games: Game): Vec3 {
   return games.ballPos;
 }
 
+// export function movePaddles(games: Game): Paddles {
+
+
+//   let playerCount = games.playerCount;
+//   let keys = undefined;
+
+//   let isDragging1: boolean = false;
+//   let isDragging2: boolean = false;
+//   let dragPos1: Vec3 = { x: 0, y: 0, z: 0 };
+//   let dragPos2: Vec3 = { x: 0, y: 0, z: 0 };
+
+
+//   if (games.mode == 0) {
+//     let playerIndex = findPlayer(undefined, games.gameId);
+//     if (playerIndex == -1) {
+//       console.log("player not found mode = 0, index -1")
+//       if (keys == undefined)
+//         return (games.paddles);
+//     }
+//     else {
+//       keys = players[playerIndex].keys;
+//       isDragging2 = players[playerIndex].isDragging2;
+//       isDragging1 = players[playerIndex].isDragging1;
+//       dragPos1 = players[playerIndex].dragPos1;
+//       dragPos2 = players[playerIndex].dragPos2;
+
+//     }
+//   }
+
+//   if (games.mode == 1) {
+//     //   // let playerIndex = findPlayer(games.playername[0]);
+//     //   // if (playerIndex == -1) {
+//     //   //   console.log("player not found mode = 0, index -1")
+//     //   //   if (keys == undefined)
+//     //   //     return (games.paddles);
+//     //   // }
+//     //   // else {
+//     //   //   keys = players[playerIndex].keys;
+//     //   //   isDragging2 = players[playerIndex].isDragging2;
+//     //   //   isDragging1 = players[playerIndex].isDragging1;
+//     //   //   dragPos1 = players[playerIndex].dragPos1;
+//     //   //   dragPos2 = players[playerIndex].dragPos2;
+
+//     //   // }
+//     //   // games.paddles.paddle1 = find_game_paddle_for_online_game(player1);
+//     //   // playerIndex = findPlayer(games.playername[1]);
+//     //   // if (playerIndex == -1) {
+//     //   //   console.log("player not found mode = 0, index -1")
+//     //   //   if (keys == undefined)
+//     //   //     return (games.paddles);
+//     //   // }
+//     //   // else {
+//     //   //   keys = players[playerIndex].keys;
+//     //   //   isDragging2 = players[playerIndex].isDragging2;
+//     //   //   isDragging1 = players[playerIndex].isDragging1;
+//     //   //   dragPos1 = players[playerIndex].dragPos1;
+//     //   //   dragPos2 = players[playerIndex].dragPos2;
+//     //   //   games.paddles.paddle2 = find_game_paddle_for_online_game(player2);
+
+//     //   // }
+//     return (games.paddles);
+//   }
+
+//   let Direction = games.aiDirection;
+
+//   if (playerCount > 0) {
+//     if (isDragging1) {
+//       console.log("is dragging 1");
+//       if ((dragPos1.z < games.paddles.paddle1) && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
+//       if ((dragPos1.z > games.paddles.paddle1) && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
+//     }
+//     if (keys["w"] && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
+//     if (keys["s"] && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
+//   }
+//   else {
+//     if ((Direction < games.paddles.paddle1) && games.paddles.paddle1 > -tableHeight / 2 + 50 && games.balld.dx > 0) games.paddles.paddle1 -= paddleSpeed;
+//     if ((Direction > games.paddles.paddle1) && games.paddles.paddle1 < tableHeight / 2 - 50 && games.balld.dx > 0) games.paddles.paddle1 += paddleSpeed;
+//   }
+
+//   if (playerCount > 1) {
+//     if (isDragging2) {
+//       console.log("is gragging 2");
+//       if ((dragPos2.z < games.paddles.paddle2) && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
+//       if ((dragPos2.z > games.paddles.paddle2) && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
+//     }
+//     if (keys["ArrowUp"] && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
+//     if (keys["ArrowDown"] && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
+//   }
+//   else {
+//     if ((Direction < games.paddles.paddle2) && games.paddles.paddle2 > -tableHeight / 2 + 50 && games.balld.dx < 0) games.paddles.paddle2 -= paddleSpeed;
+//     if ((Direction > games.paddles.paddle2) && games.paddles.paddle2 < tableHeight / 2 - 50 && games.balld.dx < 0) games.paddles.paddle2 += paddleSpeed;
+//   }
+//   return games.paddles;
+// }
+
+// function movePaddle1(games: Game, playerCount: number,): Paddles {
+
+// }
 export function movePaddles(games: Game): Paddles {
-
-
   let playerCount = games.playerCount;
   let keys = undefined;
-
   let isDragging1: boolean = false;
   let isDragging2: boolean = false;
   let dragPos1: Vec3 = { x: 0, y: 0, z: 0 };
   let dragPos2: Vec3 = { x: 0, y: 0, z: 0 };
-
 
   if (games.mode == 0) {
     let playerIndex = findPlayer(undefined, games.gameId);
@@ -218,28 +312,53 @@ export function movePaddles(games: Game): Paddles {
 
     }
   }
-  // let i = findPlayer(games.playername[0])
-  // if (i != -1) {
-  //   keys = players[i].keys;
-  //   isDragging2 = players[i].isDragging2
-  //   isDragging1 = players[i].isDragging1
-  //   dragPos1 = players[i].dragPos1
-  //   dragPos2 = players[i].dragPos2
-  // }
-  let Direction = games.aiDirection;
 
+  if (games.mode == 1) {
+    let playerIndex = findPlayer(games.playername[0]);
+    if (playerIndex == -1 || games.playerIds[1] == 0 || games.playerIds[0] == 0) {
+      console.log("player not found mode = 0, index -1")
+      isDragging1 = false;
+      keys = undefined;
+    }
+    else {
+      keys = players[playerIndex].keys;
+      isDragging2 = players[playerIndex].isDragging2;
+      isDragging1 = players[playerIndex].isDragging1;
+      dragPos1 = players[playerIndex].dragPos1;
+      dragPos2 = players[playerIndex].dragPos2;
+    }
+  }
+
+  let Direction = games.aiDirection;
   if (playerCount > 0) {
     if (isDragging1) {
       console.log("is dragging 1");
       if ((dragPos1.z < games.paddles.paddle1) && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
       if ((dragPos1.z > games.paddles.paddle1) && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
     }
-    if (keys["w"] && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
-    if (keys["s"] && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
+    if (keys && keys["w"] && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
+    if (keys && keys["s"] && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
   }
   else {
     if ((Direction < games.paddles.paddle1) && games.paddles.paddle1 > -tableHeight / 2 + 50 && games.balld.dx > 0) games.paddles.paddle1 -= paddleSpeed;
     if ((Direction > games.paddles.paddle1) && games.paddles.paddle1 < tableHeight / 2 - 50 && games.balld.dx > 0) games.paddles.paddle1 += paddleSpeed;
+  }
+
+  if (games.mode == 1) {
+
+    let playerIndex = findPlayer(games.playername[1]);
+    if (playerIndex == -1 || games.playerIds[1] == 0 || games.playerIds[0] == 0) {
+      console.log("player not found mode = 0, index -1")
+      isDragging2 = false;
+      keys = undefined;
+    }
+    else {
+      keys = players[playerIndex].keys;
+      isDragging2 = players[playerIndex].isDragging2;
+      isDragging1 = players[playerIndex].isDragging1;
+      dragPos1 = players[playerIndex].dragPos1;
+      dragPos2 = players[playerIndex].dragPos2;
+    }
   }
 
   if (playerCount > 1) {
@@ -248,8 +367,8 @@ export function movePaddles(games: Game): Paddles {
       if ((dragPos2.z < games.paddles.paddle2) && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
       if ((dragPos2.z > games.paddles.paddle2) && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
     }
-    if (keys["ArrowUp"] && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
-    if (keys["ArrowDown"] && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
+    if (keys && keys["ArrowUp"] && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
+    if (keys && keys["ArrowDown"] && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
   }
   else {
     if ((Direction < games.paddles.paddle2) && games.paddles.paddle2 > -tableHeight / 2 + 50 && games.balld.dx < 0) games.paddles.paddle2 -= paddleSpeed;
@@ -268,6 +387,7 @@ function findPlayer(username?: string, gId?: number): number {
   }
   return -1;
 }
+
 export function removePlayerByWS(ws: WS) {
   console.log("removebyws called on ")
   const player: Player | undefined = Object.values(players).find(player => player.ws === ws);
@@ -277,18 +397,32 @@ export function removePlayerByWS(ws: WS) {
     const gameIndex = games.findIndex(g => g.gameId === player.gameId);
     let talkerindex = talkerTemp.findIndex(g => g.gameId === player.gameId);
     const playerIndex = findPlayer(player.username);
-    if (player.gameId != undefined) {
+    if (gameIndex != undefined) {
+      if (games[gameIndex].mode == 0 || games[gameIndex].playername[0] == player.username)
+        games[gameIndex].playerIds[0] = 0;
+      if (games[gameIndex].mode == 0 || games[gameIndex].playername[1] == player.username)
+        games[gameIndex].playerIds[1] = 0;
+    }
+    if (gameIndex != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
       //remove the player from game and see if there are other players on the game
+      console.log("removed game", games[gameIndex].gameId);
       games.splice(gameIndex, 1);
       talkerTemp.splice(talkerindex, 1);
+
     }
     delete players[playerIndex];
   }
 }
 
 function createNewGame(newGame?: NewGame) {
-  const gameId = gId++;
+  console.log("mode, gameId, playername", newGame?.mode, newGame?.gameId, typeof (newGame?.gameId))
+  if (newGame?.mode == 1 && newGame?.gameId != undefined && games[newGame.gameId]) {
+    if (games[newGame.gameId].playername[1] == newGame.playername[0])
+      games[newGame.gameId].playerIds[1] = 1;
+    return newGame.gameId;
+  }
 
+  const gameId = gId++;
   games.push({
     gameId,
     playerCount: newGame?.playerCount ?? 0,
@@ -305,9 +439,10 @@ function createNewGame(newGame?: NewGame) {
       speedAfterHit: 6
     },
     ballPos: { x: 0, y: 11, z: (Math.random() * 200) * (Math.random() > 0.5 ? 1 : -1) },
-    playerIds: newGame?.playerIds ?? [0],
+    playerIds: [1, 0],
     playername: newGame?.playername ?? ["BOT", "BOT"]
   });
+
 
   const gameindex = games.length - 1;
 
@@ -331,14 +466,27 @@ export function removeOldAddNewGame(player: Player, gId: number) {
   console.log("removeOldAddNewGame", gameIndex, talkerindex, "calles player, GID ", player.username, gId)
   const playerIndex = findPlayer(player.username);
   if (gameIndex !== -1) {
+    console.log(games[gameIndex].playername[0], player.username)
+    if (games[gameIndex].mode == 0 || games[gameIndex].playername[0] == player.username) {
+      console.log("playerid 0 set to 0")
+      games[gameIndex].playerIds[0] = 0;
+    }
+    if (games[gameIndex].mode == 0 || games[gameIndex].playername[1] == player.username) {
+      games[gameIndex].playerIds[1] = 0;
+    }
+  }
+  if (gameIndex !== -1 && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
+    console.log("removed game", games[gameIndex].gameId);
     games.splice(gameIndex, 1);
-  }
-
-  if (talkerindex !== -1) {
     talkerTemp.splice(talkerindex, 1);
+
   }
+  // if (talkerindex !== -1 && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
+
+  // }
   if (gId >= 0)
     players[playerIndex].gameId = gId;
+  console.log("new game is ", gId)
 }
 
 export function movePaddlesAndBalls(wsMessage: WSMessage) {
@@ -362,7 +510,7 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
     player.gameId = gameId;
     players[gameId] = player
     console.log(player.username)
-    player.ws?.send(JSON.stringify({type: "Playername", username: player.username}))
+    player.ws?.send(JSON.stringify({ type: "Playername", username: player.username }))
     return;
   }
   else {
@@ -383,8 +531,14 @@ setInterval(() => {
   while (games.length > i) {
     let talkerindex = talkerTemp.findIndex(g => g.gameId === games[i].gameId)
     let playerIndex = findPlayer(undefined, games[i].gameId)
-    if (playerIndex != -1 && players[playerIndex].pause == 1) {
-      console.log("game paused", i, "  ", talkerindex);
+    if (playerIndex != -1 && players[playerIndex].pause == 1 && games[i].mode == 0) {
+      // console.log("game paused", i, "  ", talkerindex);
+      i++;
+      continue;
+    }
+    if (games[i].mode == 1 && (games[i].playerIds[0] == 0 || games[i].playerIds[1] == 0)) {
+      // console.log("game paused", i, "  ", talkerindex);
+
       i++;
       continue;
     }
@@ -395,10 +549,12 @@ setInterval(() => {
     talkerTemp[talkerindex].counter = games[i].counter;
 
 
-    if (games[i].mode == 0) {
+    if (games[i] && games[i].mode == 0) {
       let playerIndex = findPlayer(undefined, games[i].gameId);
       if (playerIndex == -1) {
         console.log("player not found mode = 0, index -1")
+        // games.splice(i, 1);
+        // continue;
       }
       else {
         players[playerIndex].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
@@ -408,17 +564,42 @@ setInterval(() => {
         }
       }
     }
+    if (games[i] && games[i].mode == 1) {
+      let playerIndex = findPlayer(games[i].playername[0]);
+      let playerIndex2 = findPlayer(games[i].playername[1]);
+      if (playerIndex != -1) {
+        players[playerIndex].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
+      }
+      if (playerIndex2 != -1) {
+        players[playerIndex2].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
+      }
+      if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal) {
+        removeOldAddNewGame(players[playerIndex], -1);
+        removeOldAddNewGame(players[playerIndex2], -1);
+        continue;
+      }
+    }
+  // if (games[i] && games[i].mode == 1) {
+  //   let playerIndex = findPlayer(games[i].playername[1]);
+  //   if (playerIndex != -1) {
+  //     players[playerIndex].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
+  //     if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal) {
+  //       removeOldAddNewGame(players[playerIndex], -1);
+  //       continue;
+  //     }
+  //   }
+  // }
 
-    // let j = findPlayer(games[i].playername[0])
-    // if (j != -1) {
-    //   players[j].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
-    //   if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal)
-    //     removeOldAddNewGame(players[playerIndex], -1);
-    //   console.log("came in first ifff j counter 0 and 1 = ", j, talkerTemp[talkerindex].counter[0], talkerTemp[talkerindex].counter[1])
-    //   break;
-    // }
-    i++;
-  }
+  // let j = findPlayer(games[i].playername[0])
+  // if (j != -1) {
+  //   players[j].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
+  //   if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal)
+  //     removeOldAddNewGame(players[playerIndex], -1);
+  //   console.log("came in first ifff j counter 0 and 1 = ", j, talkerTemp[talkerindex].counter[0], talkerTemp[talkerindex].counter[1])
+  //   break;
+  // }
+  i++;
+}
   i = 0;
 }, 1000 / 60);
 
