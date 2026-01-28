@@ -252,7 +252,7 @@ export function createOAuthUser(username: string, password_hash: string, mail: s
 
 export function getUserById(id: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret
+    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret, oauth_enabled
     FROM users
     WHERE id = ?
   `);
@@ -262,7 +262,7 @@ export function getUserById(id: string) {
 
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret
+    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret, oauth_enabled
     FROM users
     WHERE username = ?
   `);
@@ -272,7 +272,7 @@ export function getUserByUsername(username: string) {
 
 export function getUserByMail(mail: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret
+    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret, oauth_enabled
     FROM users
     WHERE mail = ?
   `);
