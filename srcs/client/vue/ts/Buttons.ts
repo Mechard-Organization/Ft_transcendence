@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/27 16:16:46 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/28 13:38:34 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,26 @@ interface NewGame {
   gameId?: number,
   playername: string[]
 }
-function buttonStyler(button: Button) {
+function buttonStyler(button: Button, str: string) {
+  const text = new TextBlock();
+  text.text = str;
+  text.color = "rgba(166, 124, 82, 1)";
+  text.fontFamily = "impact";
+  text.fontWeight = "bold"
+  button.addControl(text);
+  button.cornerRadius = 10;
+  button.thickness = 4;
+  button.color = "rgba(254, 233, 110, 1)";
   button.width = "200px";
   button.height = "70px";
-  button.color = "white";
-  button.fontFamily = "impact";
-  button.fontWeight = "bold";
-  button.paddingTop = "10px";
-  button.paddingBottom = "10px";
-  button.background = "rgb(20,20,50)";
-  button.thickness = 0;
+  button.paddingTop = "7px";
+  button.paddingBottom = "7px";
+  button.background = "rgba(255, 255, 255, 1)";
 }
 
 export function createMainMenuBtn(): Button {
-  const mainMenuBtn = Button.CreateSimpleButton("mainMenuBtn", "Main Menu");
-  buttonStyler(mainMenuBtn);
+  const mainMenuBtn = Button.CreateSimpleButton("mainMenuBtn");
+  buttonStyler(mainMenuBtn, "Main Menu");
   // mainMenuBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   mainMenuBtn.onPointerUpObservable.add(() => {
     resetGame();
@@ -95,15 +100,16 @@ export function createMainMenuBtn(): Button {
     resumeUI.isForeground = false;
     remoteUI.rootContainer.isVisible = false;
     remoteUI.isForeground = false;
-    // (mainMenuBtn.metadata.ui as AdvancedDynamicTexture).dispose();
-    // mainUI = null;
+
+    const input = remoteUI.getControlByName("remotePanel")?.children.find(c => c.name === "textInput");
+    if (input) input.text = '';
   });
   return (mainMenuBtn);
 }
 
 export function createSinglePlayerBtn(): Button {
-  const singlePlayerBtn = Button.CreateSimpleButton("singlePlayerBtn", "Single Player");
-  buttonStyler(singlePlayerBtn);
+  const singlePlayerBtn = Button.CreateSimpleButton("singlePlayerBtn");
+  buttonStyler(singlePlayerBtn, "Single Player");
   // singlePlayerBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   singlePlayerBtn.onPointerUpObservable.add(() => {
     resetGame();
@@ -131,8 +137,8 @@ export function createSinglePlayerBtn(): Button {
 }
 
 export function createMultiPlayerBtn(): Button {
-  const multiPlayerBtn = Button.CreateSimpleButton("multiPlayerBtn", "MultiPlayer");
-  buttonStyler(multiPlayerBtn);
+  const multiPlayerBtn = Button.CreateSimpleButton("multiPlayerBtn");
+  buttonStyler(multiPlayerBtn, "MultiPlayer");
   // multiPlayerBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   multiPlayerBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
@@ -146,8 +152,8 @@ export function createMultiPlayerBtn(): Button {
   return multiPlayerBtn;
 }
 export function createTwoPlayerBtn(): Button {
-  const twoPlayerBtn = Button.CreateSimpleButton("twoPlayerBtn", "Two Players");
-  buttonStyler(twoPlayerBtn);
+  const twoPlayerBtn = Button.CreateSimpleButton("twoPlayerBtn");
+  buttonStyler(twoPlayerBtn, "Two Players");
   // twoPlayerBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   twoPlayerBtn.onPointerUpObservable.add(() => {
     resetGame();
@@ -174,8 +180,8 @@ export function createTwoPlayerBtn(): Button {
 }
 
 export function createTournamentBtn(): Button {
-  const tournamentBtn = Button.CreateSimpleButton("tournamentBtn", "Tournament");
-  buttonStyler(tournamentBtn);
+  const tournamentBtn = Button.CreateSimpleButton("tournamentBtn");
+  buttonStyler(tournamentBtn, "Tournament");
   // tournamentBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   tournamentBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
@@ -190,8 +196,8 @@ export function createTournamentBtn(): Button {
   return tournamentBtn;
 }
 export function createResumeBtn(): Button {
-  const resumetBtn = Button.CreateSimpleButton("resumetBtn", "Resume");
-  buttonStyler(resumetBtn);
+  const resumetBtn = Button.CreateSimpleButton("resumetBtn");
+  buttonStyler(resumetBtn, "Resume");
   // resumetBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   resumetBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
@@ -208,35 +214,45 @@ export function createResumeBtn(): Button {
   });
   return resumetBtn;
 }
-export function createTextInput(): InputText {
-  var input = new InputText();
+
+export function createTextInput(name: string): InputText {
+  var input = new InputText(name);
+
   input.width = "200px";
   input.maxWidth = "200px";
   input.height = "70px";
-  input.color = "white";
-  input.background = "rgba(81, 81, 138, 1)";
-  input.promptMessage = "Enter your name...";
+  input.thickness = 3;
+  input.background = "rgba(255, 255, 255, 1)";
+  input.color = "rgba(166, 124, 82, 1)";
+  input.promptColor = "rgba(0, 0, 0, 1)";
+
+  input.focusedBackground = "rgba(255, 255, 255, 1)";
+  input.focusedColor = "rgba(166, 124, 82, 1)";
+  input.promptMessage = "contestant name";
   input.paddingTop = "10px";
   input.paddingBottom = "10px";
-  input.thickness = 0;
+
   return input;
 }
 
 
 export function createAddBtn(input: InputText, aliasPanel: StackPanel): Button {
-  const addBtn = Button.CreateSimpleButton("addBtn", "Add");
-  buttonStyler(addBtn);
+  const addBtn = Button.CreateSimpleButton("addBtn");
+  buttonStyler(addBtn, "Add");
   // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   addBtn.onPointerUpObservable.add(() => {
     if (input.text === "" || (contestants.indexOf(input.text) + 1))
-      input.background = "red";
-    else {
+      input.background = "rgba(255, 110, 110, 1)";
+    else if (contestants.length < 8) {
       const text = new TextBlock("text", input.text);
-      text.height = "30px";
-      input.background = "rgba(81, 81, 138, 1)";
+      text.height = "40px";
+      text.top = "20px";
+      text.left = "30px";
+      input.background = "rgba(255, 255, 255, 1)";
       text.fontFamily = "impact";
-      text.color = "white";
-      text.size = "20px";
+      text.color = "rgba(166, 124, 82, 1)";
+      text.fontSize = "25px";
+      // text.fontWeight = "";
       text.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
       text.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
       aliasPanel.addControl(text);
@@ -251,8 +267,8 @@ export function createAddBtn(input: InputText, aliasPanel: StackPanel): Button {
 }
 
 export function createStartTournamentBtn(): Button {
-  const startTournamentBtn = Button.CreateSimpleButton("startBtn", "Start Tournament");
-  buttonStyler(startTournamentBtn);
+  const startTournamentBtn = Button.CreateSimpleButton("startBtn");
+  buttonStyler(startTournamentBtn, "Start Tournament");
   // startBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   startTournamentBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
@@ -272,8 +288,8 @@ export function createStartTournamentBtn(): Button {
 }
 
 export function createStartBtn(): Button {
-  const startBtn = Button.CreateSimpleButton("startBtn", "Start");
-  buttonStyler(startBtn);
+  const startBtn = Button.CreateSimpleButton("startBtn");
+  buttonStyler(startBtn, "Start");
   startBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
@@ -306,8 +322,8 @@ export function createStartBtn(): Button {
 }
 
 export function createCustomiseBtn(): Button {
-  const customiseBtn = Button.CreateSimpleButton("customiseBtn", "Customise");
-  buttonStyler(customiseBtn);
+  const customiseBtn = Button.CreateSimpleButton("customiseBtn");
+  buttonStyler(customiseBtn, "Customise");
   customiseBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
@@ -316,32 +332,32 @@ export function createCustomiseBtn(): Button {
   return customiseBtn;
 }
 export function createBallBtn(): Button {
-  const ballBtn = Button.CreateSimpleButton("ballBtn", "Ball");
-  buttonStyler(ballBtn);
+  const ballBtn = Button.CreateSimpleButton("ballBtn");
+  buttonStyler(ballBtn, "Ball");
   ballBtn.onPointerUpObservable.add(() => {
     setSelectedMesh("ball");
   });
   return ballBtn;
 }
 export function createTableBtn(): Button {
-  const tableBtn = Button.CreateSimpleButton("tableBtn", "Table");
-  buttonStyler(tableBtn);
+  const tableBtn = Button.CreateSimpleButton("tableBtn");
+  buttonStyler(tableBtn, "Table");
   tableBtn.onPointerUpObservable.add(() => {
     setSelectedMesh("table");
   });
   return tableBtn;
 }
 export function createPaddlesBtn(): Button {
-  const paddlesBtn = Button.CreateSimpleButton("paddlesBtn", "paddles");
-  buttonStyler(paddlesBtn);
+  const paddlesBtn = Button.CreateSimpleButton("paddlesBtn");
+  buttonStyler(paddlesBtn, "paddles");
   paddlesBtn.onPointerUpObservable.add(() => {
     setSelectedMesh("paddles");
   });
   return paddlesBtn;
 }
 export function createWallsBtn(): Button {
-  const wallsBtn = Button.CreateSimpleButton("wallsBtn", "walls");
-  buttonStyler(wallsBtn);
+  const wallsBtn = Button.CreateSimpleButton("wallsBtn");
+  buttonStyler(wallsBtn, "walls");
   wallsBtn.onPointerUpObservable.add(() => {
     setSelectedMesh("walls");
   });
@@ -349,8 +365,8 @@ export function createWallsBtn(): Button {
 }
 
 export function createRemoteBtn(): Button {
-  const startBtn = Button.CreateSimpleButton("remotePlayer", "Remote Player");
-  buttonStyler(startBtn);
+  const startBtn = Button.CreateSimpleButton("remotePlayer");
+  buttonStyler(startBtn, "Remote Player");
   startBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
@@ -369,8 +385,8 @@ export function createRemoteBtn(): Button {
 }
 
 export function createRemotePlayBtn(input: InputText): Button {
-  const addBtn = Button.CreateSimpleButton("addBtn", "Add");
-  buttonStyler(addBtn);
+  const addBtn = Button.CreateSimpleButton("addBtn");
+  buttonStyler(addBtn, "Create New Game");
   // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   addBtn.onPointerUpObservable.add(() => {
     if (input.text === "" || (contestants.indexOf(input.text) + 1))
@@ -408,8 +424,8 @@ export function createRemotePlayBtn(input: InputText): Button {
 }
 
 export function createRemotePlayPlayBtn(input: InputText): Button {
-  const addBtn = Button.CreateSimpleButton("addBtn", "Add");
-  buttonStyler(addBtn);
+  const addBtn = Button.CreateSimpleButton("addBtn");
+  buttonStyler(addBtn, "Join Remote Game");
   // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   addBtn.onPointerUpObservable.add(() => {
     if (input.text === "" || (contestants.indexOf(input.text) + 1))
@@ -448,8 +464,8 @@ export function createRemotePlayPlayBtn(input: InputText): Button {
 }
 
 export function createCyberBtn(): Button {
-  const cyberBtn = Button.CreateSimpleButton("cyberBtn", "cyber view");
-  buttonStyler(cyberBtn);
+  const cyberBtn = Button.CreateSimpleButton("cyberBtn");
+  buttonStyler(cyberBtn, "cyber view");
   cyberBtn.onPointerUpObservable.add(() => {
     let c = scene.getMaterialByName("ballMat");
     if (colorType == 1) {
@@ -477,8 +493,8 @@ export function createCyberBtn(): Button {
   return cyberBtn;
 }
 export function createNaturalBtn(): Button {
-  const naturalBtn = Button.CreateSimpleButton("naturalBtn", "natural view");
-  buttonStyler(naturalBtn);
+  const naturalBtn = Button.CreateSimpleButton("naturalBtn");
+  buttonStyler(naturalBtn, "natural view");
   naturalBtn.onPointerUpObservable.add(() => {
     let c = scene.getMaterialByName("ballMat");
     if (colorType == 0) {
@@ -508,8 +524,8 @@ export function createNaturalBtn(): Button {
 }
 
 export function createDefaultBtn(): Button {
-  const defaultBtn = Button.CreateSimpleButton("defaultBtn", "default settings");
-  buttonStyler(defaultBtn);
+  const defaultBtn = Button.CreateSimpleButton("defaultBtn");
+  buttonStyler(defaultBtn, "default settings");
   defaultBtn.onPointerUpObservable.add(() => {
     let c = scene.getMaterialByName("ballMat");
     c.emissiveColor = defaultSettings.ballMat.clone();
