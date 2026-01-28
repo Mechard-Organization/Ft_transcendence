@@ -85,7 +85,7 @@ export default function HomePage() {
               </div>
             </Link>
           ) : (
-            <Link to={userId ? `/profil/${userId}` : "/profil"}>
+            <Link to="/profile">
               <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-[#FEE96E] cursor-pointer">
                 <div className="bg-[#FEE96E] rounded-full p-6 w-20 h-20 flex items-center justify-center mb-4 mx-auto">
                   <User className="w-10 h-10 text-[#8B5A3C]" />

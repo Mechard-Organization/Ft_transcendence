@@ -5,6 +5,7 @@ import GamePage from './client/vue/game/gamePage';
 import ChatPage from './client/vue/messages/messagesPage';
 import ProfilePage from './client/vue/home/profilPage';
 import LoginPage from './client/vue/interface/loginPage';
+import RegisterPage from './client/vue/interface/registerPage';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </div>
     </Router>
