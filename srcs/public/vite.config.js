@@ -1,6 +1,18 @@
 import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import path from "path";
 
 export default defineConfig({
+  plugins: [
+    react(),
+    tailwindcss()
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./client")
+    }
+  },
   optimizeDeps: {
     include: [
       "@babylonjs/core",
@@ -8,13 +20,9 @@ export default defineConfig({
       "@babylonjs/gui/2D"
     ]
   },
-  root: ".",
-  build: {
-    outDir: "./dist",
-    emptyOutDir: true,
-  },
   server: {
     host: true,
+<<<<<<< HEAD
     port: 3000,
     allowedHosts: [
       "ft-transcendence-42.app",
@@ -22,4 +30,12 @@ export default defineConfig({
       "localhost"
     ],
   },
+=======
+    port: 3000
+  },
+  build: {
+    outDir: "dist",
+    emptyOutDir: true
+  }
+>>>>>>> Graphics
 });
