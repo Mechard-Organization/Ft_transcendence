@@ -5,7 +5,7 @@ export default function GamePage() {
   const gameContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-      pong();
+      pong(gameContainer.current);
   }, []);
 
   return (

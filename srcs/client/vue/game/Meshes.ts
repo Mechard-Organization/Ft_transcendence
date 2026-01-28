@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Meshes.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/28 10:55:34 by mechard          ###   ########.fr       */
+/*   Updated: 2026/01/28 14:51:47 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -346,7 +346,7 @@ async function loadUsernameFromCookie() {
   }
 }
 
-export async function pong(): Promise<string> {
+export async function pong(container): Promise<string> {
   await loadUsernameFromCookie();
   ws = new WebSocket("/ws/");
   const app = document.getElementById("app")!;
@@ -396,7 +396,7 @@ export async function pong(): Promise<string> {
 
 
   function play() {
-    if (!app.contains(canvas)) app.appendChild(canvas);
+    if (!container.contains(canvas)) container.appendChild(canvas);
 
     engine = new Engine(canvas, true);
     scene = createScene(engine);
