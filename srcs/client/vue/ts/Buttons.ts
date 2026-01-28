@@ -6,14 +6,14 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/12/25 17:41:36 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/27 16:16:46 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { Button, InputText, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
 import { Color3 } from "@babylonjs/core";
 import { thisPlayer, scene, username, setNewGame } from "../game/Meshes";
-import { setSelectedMesh, createCutomiseUI, createdisposableUI, createTournamentUI, mainUI, multiUI, tournamentUI, resumeUI, disposableUI, contestants, drawText, disposeDUI, disposeTUI, setPlayerCount, setPlayerName, setPause, customiseUI, resetGame } from "./UI"
+import { setSelectedMesh, createCutomiseUI, createdisposableUI, createTournamentUI, mainUI, multiUI, tournamentUI, resumeUI, disposableUI, contestants, drawText, disposeDUI, disposeTUI, setPlayerCount, setPlayerName, setPause, customiseUI, resetGame, remoteUI } from "./UI"
 
 function shuffle(array: string[]) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -47,7 +47,7 @@ interface NewGame {
   type: "newGame",
   playerCount: number,
   mode: number,
-  playerIds?: number[],
+  gameId?: number,
   playername: string[]
 }
 function buttonStyler(button: Button) {
@@ -93,6 +93,8 @@ export function createMainMenuBtn(): Button {
     }
     resumeUI.rootContainer.isVisible = false;
     resumeUI.isForeground = false;
+    remoteUI.rootContainer.isVisible = false;
+    remoteUI.isForeground = false;
     // (mainMenuBtn.metadata.ui as AdvancedDynamicTexture).dispose();
     // mainUI = null;
   });
@@ -268,6 +270,7 @@ export function createStartTournamentBtn(): Button {
   });
   return startTournamentBtn;
 }
+
 export function createStartBtn(): Button {
   const startBtn = Button.CreateSimpleButton("startBtn", "Start");
   buttonStyler(startBtn);
@@ -344,6 +347,106 @@ export function createWallsBtn(): Button {
   });
   return wallsBtn;
 }
+
+export function createRemoteBtn(): Button {
+  const startBtn = Button.CreateSimpleButton("remotePlayer", "Remote Player");
+  buttonStyler(startBtn);
+  startBtn.onPointerUpObservable.add(() => {
+    mainUI.rootContainer.isVisible = false;
+    mainUI.isForeground = false;
+    multiUI.rootContainer.isVisible = false;
+    multiUI.isForeground = false;
+    resumeUI.rootContainer.isVisible = false;
+    resumeUI.isForeground = false;
+    remoteUI.rootContainer.isVisible = true;
+    remoteUI.isForeground = true;
+
+    if (disposableUI) {
+      disposeDUI();
+    }
+  });
+  return startBtn;
+}
+
+export function createRemotePlayBtn(input: InputText): Button {
+  const addBtn = Button.CreateSimpleButton("addBtn", "Add");
+  buttonStyler(addBtn);
+  // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+  addBtn.onPointerUpObservable.add(() => {
+    if (input.text === "" || (contestants.indexOf(input.text) + 1))
+      input.background = "red";
+    else {
+      mainUI.rootContainer.isVisible = false;
+      mainUI.isForeground = false;
+      multiUI.rootContainer.isVisible = false;
+      multiUI.isForeground = false;
+      resumeUI.rootContainer.isVisible = false;
+      resumeUI.isForeground = false;
+      remoteUI.rootContainer.isVisible = false;
+      remoteUI.isForeground = false;
+
+      setPlayerCount(2);
+      setPlayerName(["Player1", "Player2"]);
+      let newGame: NewGame = {
+        type: "newGame",
+        playerCount: 2,
+        mode: 1,
+        playername: [username, input.text]
+      }
+      console.log("new game created ", newGame)
+      setNewGame(newGame);
+
+      if (disposableUI) {
+        disposeDUI();
+      }
+
+    }
+    // addBtn.metadata.panel.dispose();
+    // (addBtn.metadata.ui as AdvancedDynamicTexture).dispose();
+  });
+  return addBtn;
+}
+
+export function createRemotePlayPlayBtn(input: InputText): Button {
+  const addBtn = Button.CreateSimpleButton("addBtn", "Add");
+  buttonStyler(addBtn);
+  // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+  addBtn.onPointerUpObservable.add(() => {
+    if (input.text === "" || (contestants.indexOf(input.text) + 1))
+      input.background = "red";
+    else {
+      mainUI.rootContainer.isVisible = false;
+      mainUI.isForeground = false;
+      multiUI.rootContainer.isVisible = false;
+      multiUI.isForeground = false;
+      resumeUI.rootContainer.isVisible = false;
+      resumeUI.isForeground = false;
+      remoteUI.rootContainer.isVisible = false;
+      remoteUI.isForeground = false;
+
+      setPlayerCount(2);
+      setPlayerName(["Player1", "Player2"]);
+      let newGame: NewGame = {
+        type: "newGame",
+        playerCount: 2,
+        mode: 1,
+        gameId: Number(input.text),
+        playername: [username, "player2"]
+      }
+      console.log("new game created ", newGame)
+      setNewGame(newGame);
+
+      if (disposableUI) {
+        disposeDUI();
+      }
+
+    }
+    // addBtn.metadata.panel.dispose();
+    // (addBtn.metadata.ui as AdvancedDynamicTexture).dispose();
+  });
+  return addBtn;
+}
+
 export function createCyberBtn(): Button {
   const cyberBtn = Button.CreateSimpleButton("cyberBtn", "cyber view");
   buttonStyler(cyberBtn);

@@ -6,20 +6,20 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:17:53 by ajamshid          #+#    #+#             */
-/*   Updated: 2025/12/25 17:40:12 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/27 16:15:11 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { ColorPicker, AdvancedDynamicTexture,  Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
+import { ColorPicker, AdvancedDynamicTexture, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
 import { counter, scene, nullifySceneEngine, thisPlayer, setNewGame } from "../game/Meshes";
-import { createCustomiseBtn, createStartBtn, createStartTournamentBtn, createMainMenuBtn, createSinglePlayerBtn, createMultiPlayerBtn, createTwoPlayerBtn, createTournamentBtn, createResumeBtn, createTextInput, createAddBtn, createWallsBtn, createBallBtn, createPaddlesBtn, createTableBtn, createCyberBtn, createNaturalBtn, colorType, createDefaultBtn } from "./Buttons";
+import { createRemotePlayPlayBtn, createRemoteBtn, createRemotePlayBtn, createCustomiseBtn, createStartBtn, createStartTournamentBtn, createMainMenuBtn, createSinglePlayerBtn, createMultiPlayerBtn, createTwoPlayerBtn, createTournamentBtn, createResumeBtn, createTextInput, createAddBtn, createWallsBtn, createBallBtn, createPaddlesBtn, createTableBtn, createCyberBtn, createNaturalBtn, colorType, createDefaultBtn } from "./Buttons";
 
 
 interface NewGame {
   type: "newGame",
   playerCount: number,
   mode: number,
-  playerIds?: number[],
+  gameId?: number,
   playername: string[]
 }
 
@@ -39,6 +39,7 @@ export let resumeUI: AdvancedDynamicTexture | null = null;
 export let counterUI: AdvancedDynamicTexture | null = null;
 export let disposableUI: AdvancedDynamicTexture | null = null;
 export let tournamentUI: AdvancedDynamicTexture | null = null;
+export let remoteUI: AdvancedDynamicTexture | null = null;
 
 let selectedMesh: any;
 
@@ -64,7 +65,9 @@ export function resetBabylonJs() {
     player2.dispose();
   if (tournamentUI)
     tournamentUI.dispose();
-  player2 = player1 = disposableUI = counterUI = resumeUI = customiseUI = multiUI = mainUI = tournamentUI = null;
+  if (remoteUI)
+    remoteUI.dispose();
+  player2 = player1 = disposableUI = counterUI = resumeUI = customiseUI = multiUI = mainUI = tournamentUI = remoteUI = null;
 }
 
 export function resetGame(type?: number) {
@@ -172,12 +175,14 @@ export function createUI() {
 
     const singlePlayerBtn = createSinglePlayerBtn();
     const multiPlayerBtn = createMultiPlayerBtn();
-    const customiseBtn = createCustomiseBtn()
+    const remotePlayerBtn = createRemoteBtn();
+    const customiseBtn = createCustomiseBtn();
     const mainMenuBtn = createMainMenuBtn();
     // singlePlayerBtn.metadata = { ui: mainUI };
     // multiPlayerBtn.metadata = { ui: mainUI };
     mainPanel.addControl(singlePlayerBtn);
     mainPanel.addControl(multiPlayerBtn);
+    mainPanel.addControl(remotePlayerBtn);
     mainPanel.addControl(customiseBtn);
     mainPanel.addControl(mainMenuBtn);
 
@@ -206,6 +211,32 @@ export function createUI() {
 
     multiUI.rootContainer.isVisible = false;
     multiUI.isForeground = false;
+  }
+  {
+    remoteUI = AdvancedDynamicTexture.CreateFullscreenUI("remoteUI");
+    remoteUI.background = "rgba(13, 0, 48, 0.5)";
+    const remotePanel = new StackPanel();
+    const text = createTextBlock("Please Enter Id of the second player");
+    remotePanel.width = "220px";
+    remotePanel.isVertical = true;
+
+    remoteUI.addControl(text);
+    remoteUI.addControl(remotePanel);
+
+    const textInput = createTextInput();
+    const mainMenuBtn = createMainMenuBtn();
+    const addBtn = createRemotePlayBtn(textInput);
+
+    const textInput2 = createTextInput();
+const addBtn2 = createRemotePlayPlayBtn(textInput2);
+
+    remotePanel.addControl(textInput);
+    remotePanel.addControl(addBtn);
+    remotePanel.addControl(textInput2);
+    remotePanel.addControl(addBtn2);
+    remotePanel.addControl(mainMenuBtn);
+    remoteUI.rootContainer.isVisible = false;
+    remoteUI.isForeground = false;
   }
   {
     resumeUI = AdvancedDynamicTexture.CreateFullscreenUI("resumeUI");
@@ -365,7 +396,7 @@ export function createCutomiseUI() {
   const defaultBtn = createDefaultBtn();
   const cyber = createCyberBtn();
   const natural = createNaturalBtn();
-  
+
   // const startTournamentBtn = createSaveBtn();
   customiseUI.addControl(picker);
 
@@ -394,3 +425,4 @@ function observerBodyColor(value: any, state: any) {
     }
   }
 }
+
