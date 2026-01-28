@@ -52,9 +52,7 @@ export default function LoginPage() {
         return;
       }
 
-      // Route React (si tu utilises React Router) : idéalement useNavigate()
-      // Ici je garde ton comportement simple:
-      window.location.hash = "#profil";
+      window.location.href = "/profile";
     } catch (err) {
       console.error(err);
       setError("Erreur réseau, réessaie plus tard.");
@@ -88,7 +86,7 @@ export default function LoginPage() {
         return;
       }
 
-      window.location.hash = "#profil";
+      window.location.href = "/profile";
     } catch (err) {
       console.error(err);
       setError("Erreur réseau, réessaie plus tard.");
