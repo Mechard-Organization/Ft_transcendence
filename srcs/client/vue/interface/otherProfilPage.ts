@@ -109,9 +109,9 @@ export async function otherProfilPage(header: string, footer: string) {
     });
 
     if (!res.ok) throw new Error("Failed to fetch user");
-    
+
     user = await res.json();
-    
+
     const resme = await fetch("/api/getuser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -119,7 +119,7 @@ export async function otherProfilPage(header: string, footer: string) {
     });
 
     if (!resme.ok) throw new Error("Failed to fetch user");
-    
+
     me = await resme.json();
   } catch (err) {
     console.error("User fetch error:", err);
@@ -190,9 +190,9 @@ export async function otherProfilPage(header: string, footer: string) {
         console.error("Logout failed");
         return;
       }
-
       const id_group = await res.json();
-      window.location.hash = "#messages#" + id_group;
+      console.log("hallo ", id_group.group);
+      window.location.hash = "#messages#" + id_group.group;
     } catch (err) {
       console.error("Logout error:", err);
     }

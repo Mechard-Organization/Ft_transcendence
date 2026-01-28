@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: abutet <abutet@student.42.fr>              +#+  +:+       +#+         #
+#    By: jealefev <jealefev@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2026/01/19 15:22:35 by abutet           ###   ########.fr        #
+#    Updated: 2026/01/27 10:49:14 by jealefev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,7 +79,13 @@ help:
 # Start / Stop
 # =========================
 
+
+# npm_install_frontend:
+# 	cd srcs/public && npm install
+
+
 prepare:
+	
 	@chmod 777 ./srcs/config/database
 	@mkdir -p ./srcs/config/database/data
 	@chmod 777 ./srcs/config/database/data
@@ -91,7 +97,7 @@ prepare:
 up: prepare
 	@$(COMPOSE) up -d
 
-start: build up
+start:  build up
 
 down:
 	@$(COMPOSE) down
