@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Meshes.ts                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
+/*   Updated: 2026/01/28 10:55:34 by mechard          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 import { PointerDragBehavior, Texture, Color4, ParticleSystem, KeyboardEventTypes, TrailMesh, Color3, FreeCamera, StandardMaterial, Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, MeshBuilder, Vector3 } from "@babylonjs/core";
 import { movePaddlesAndBalls } from "../../../server/gameLogic";
@@ -73,7 +84,7 @@ interface NewGame {
   type: "newGame",
   playerCount: number,
   mode: number,
-  playerIds?: number[],
+  gameId?: number,
   playername: string[]
 }
 
