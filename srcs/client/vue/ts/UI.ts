@@ -6,11 +6,11 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:17:53 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/27 16:15:11 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/28 13:32:54 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { ColorPicker, AdvancedDynamicTexture, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
+import { Rectangle, ColorPicker, AdvancedDynamicTexture, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
 import { counter, scene, nullifySceneEngine, thisPlayer, setNewGame } from "../game/Meshes";
 import { createRemotePlayPlayBtn, createRemoteBtn, createRemotePlayBtn, createCustomiseBtn, createStartBtn, createStartTournamentBtn, createMainMenuBtn, createSinglePlayerBtn, createMultiPlayerBtn, createTwoPlayerBtn, createTournamentBtn, createResumeBtn, createTextInput, createAddBtn, createWallsBtn, createBallBtn, createPaddlesBtn, createTableBtn, createCyberBtn, createNaturalBtn, colorType, createDefaultBtn } from "./Buttons";
 
@@ -86,7 +86,7 @@ function createTextBlock(input: string): TextBlock {
   const text = new TextBlock("text", input);
   text.fontFamily = "impact";
   text.fontWeight = "bold";
-  text.color = "white";
+  text.color = "rgba(166, 124, 82, 1)";
   text.fontSize = 24;
   text.top = "100px";
   text.textVerticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
@@ -98,7 +98,7 @@ export function drawText() {
     player1 = new TextBlock("infoText", "player1");
     player1.fontFamily = "impact";
     player1.fontWeight = "bold";
-    player1.color = "white";
+    player1.color = "rgba(166, 124, 82, 1)";
     player1.fontSize = 30;
     player1.top = "50px";
     player1.left = "50px";
@@ -110,7 +110,7 @@ export function drawText() {
     player2 = new TextBlock("infoText", "player1");
     player2.fontFamily = "impact";
     player2.fontWeight = "bold";
-    player2.color = "white";
+    player2.color = "rgba(166, 124, 82, 1)";
     player2.fontSize = 30;
     player2.top = "50px";
     player2.left = "-50px";
@@ -165,7 +165,7 @@ export function createUI() {
   counterUI = AdvancedDynamicTexture.CreateFullscreenUI("counterUI");
   {
     mainUI = AdvancedDynamicTexture.CreateFullscreenUI("mainUI");
-    mainUI.background = "rgba(13, 0, 48, 0.5)";
+    mainUI.background = "rgba(255, 255, 255, 0.5)";
     const mainPanel = new StackPanel();
     const text = createTextBlock("Please select a game mode!");
     mainPanel.width = "220px";
@@ -177,20 +177,18 @@ export function createUI() {
     const multiPlayerBtn = createMultiPlayerBtn();
     const remotePlayerBtn = createRemoteBtn();
     const customiseBtn = createCustomiseBtn();
-    const mainMenuBtn = createMainMenuBtn();
     // singlePlayerBtn.metadata = { ui: mainUI };
     // multiPlayerBtn.metadata = { ui: mainUI };
     mainPanel.addControl(singlePlayerBtn);
     mainPanel.addControl(multiPlayerBtn);
     mainPanel.addControl(remotePlayerBtn);
     mainPanel.addControl(customiseBtn);
-    mainPanel.addControl(mainMenuBtn);
 
     // mainUI.isForeground = false;
   }
   {
     multiUI = AdvancedDynamicTexture.CreateFullscreenUI("multiUI");
-    multiUI.background = "rgba(13, 0, 48, 0.5)";
+    multiUI.background = "rgba(255, 255, 255, 0.5)";
     const multiPlayerPanel = new StackPanel();
     const text = createTextBlock("Please select a game mode!");
     multiPlayerPanel.width = "220px";
@@ -214,8 +212,8 @@ export function createUI() {
   }
   {
     remoteUI = AdvancedDynamicTexture.CreateFullscreenUI("remoteUI");
-    remoteUI.background = "rgba(13, 0, 48, 0.5)";
-    const remotePanel = new StackPanel();
+    remoteUI.background = "rgba(255, 255, 255, 0.5)";
+    const remotePanel = new StackPanel("remotePanel");
     const text = createTextBlock("Please Enter Id of the second player");
     remotePanel.width = "220px";
     remotePanel.isVertical = true;
@@ -223,16 +221,13 @@ export function createUI() {
     remoteUI.addControl(text);
     remoteUI.addControl(remotePanel);
 
-    const textInput = createTextInput();
+    const textInput = createTextInput("textInput");
     const mainMenuBtn = createMainMenuBtn();
     const addBtn = createRemotePlayBtn(textInput);
-
-    const textInput2 = createTextInput();
-const addBtn2 = createRemotePlayPlayBtn(textInput2);
+    const addBtn2 = createRemotePlayPlayBtn(textInput);
 
     remotePanel.addControl(textInput);
     remotePanel.addControl(addBtn);
-    remotePanel.addControl(textInput2);
     remotePanel.addControl(addBtn2);
     remotePanel.addControl(mainMenuBtn);
     remoteUI.rootContainer.isVisible = false;
@@ -240,12 +235,12 @@ const addBtn2 = createRemotePlayPlayBtn(textInput2);
   }
   {
     resumeUI = AdvancedDynamicTexture.CreateFullscreenUI("resumeUI");
-    resumeUI.background = "rgba(13, 0, 48, 0.5)";
+    resumeUI.background = "rgba(255, 255, 255, 0.5)";
     const resumePanel = new StackPanel();
     const text = createTextBlock("Game is paused");
     resumePanel.width = "300px";
     resumePanel.isVertical = true;
-    resumePanel.background = "black";
+    // resumePanel.background = "rgba(255, 255, 255, 0)";
 
     resumeUI.addControl(text);
     resumeUI.addControl(resumePanel);
@@ -272,14 +267,35 @@ const addBtn2 = createRemotePlayPlayBtn(textInput2);
 }
 export function createTournamentUI() {
   tournamentUI = AdvancedDynamicTexture.CreateFullscreenUI("tournamentUI");
-  tournamentUI.background = "rgba(13, 0, 48, 0.5)";
+  tournamentUI.background = "rgba(255, 255, 255, 0.5)";
   const tournamentPanel = new StackPanel();
   const aliasPanel = new StackPanel();
   const text = createTextBlock("Please add 4 to 8 player Aliases!");
   tournamentPanel.width = aliasPanel.width = "300px";
   tournamentPanel.isVertical = aliasPanel.isVertical = true;
-  tournamentPanel.height = aliasPanel.height = "70%";
-  tournamentPanel.background = aliasPanel.background = "rgba(13, 0, 48, 0.7)"
+  tournamentPanel.height = aliasPanel.height = "60%";
+  aliasPanel.left = "-40px";
+  aliasPanel.top = "-40px";
+
+  const rect = new Rectangle();
+  rect.width = "100%";
+  rect.height = "100%";
+  rect.cornerRadius = 10;
+  rect.thickness = 3;
+  rect.color = "yellow";
+  rect.background = "#ffffffff";
+  aliasPanel.addControl(rect);
+
+  const content = new StackPanel();
+  content.isVertical = true;
+  content.width = 1;
+  content.height = 1;
+  content.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
+  content.verticalAlignment = Control.VERTICAL_ALIGNMENT_CENTER;
+
+  rect.addControl(content);
+
+
   tournamentPanel.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT
   tournamentPanel.verticalAlignment = aliasPanel.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
   aliasPanel.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT
@@ -288,10 +304,10 @@ export function createTournamentUI() {
   tournamentUI.addControl(tournamentPanel);
   tournamentUI.addControl(aliasPanel);
 
-  const textInput = createTextInput();
+  const textInput = createTextInput("");
   const mainMenuBtn = createMainMenuBtn();
   const startTournamentBtn = createStartTournamentBtn();
-  const addBtn = createAddBtn(textInput, aliasPanel);
+  const addBtn = createAddBtn(textInput, content);
 
   tournamentPanel.addControl(textInput);
   tournamentPanel.addControl(addBtn);
@@ -300,10 +316,11 @@ export function createTournamentUI() {
 }
 
 export function createdisposableUI(type: number) {
-
+  resumeUI.rootContainer.isVisible = false;
+  resumeUI.isForeground = false;
   let text: TextBlock | undefined;
   disposableUI = AdvancedDynamicTexture.CreateFullscreenUI("statsUI");
-  disposableUI.background = "rgba(13, 0, 48, 0.5)";
+  disposableUI.background = "rgba(255, 255, 255, 0.5)";
   const statsPanel = new StackPanel();
   console.log("contestantS ", contestants);
   console.log("counter ", counter);
@@ -373,12 +390,12 @@ export function createdisposableUI(type: number) {
 
 export function createCutomiseUI() {
   customiseUI = AdvancedDynamicTexture.CreateFullscreenUI("customiseUI");
-  customiseUI.background = "rgba(13, 0, 48, 0.5)";
+  customiseUI.background = "rgba(255, 255, 255, 0.5)";
   const selectorPanel = new StackPanel();
   selectorPanel.width = "300px";
   selectorPanel.isVertical = true;
   selectorPanel.height = "95%";
-  selectorPanel.background = "rgba(13, 0, 48, 0.7)"
+  selectorPanel.background = "rgba(255, 255, 255, 0.7)"
   selectorPanel.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT
 
   customiseUI.addControl(selectorPanel);
