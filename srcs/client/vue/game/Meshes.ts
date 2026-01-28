@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/28 14:51:47 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/28 14:59:28 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,8 @@ document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => keys[e.key] = false);
 export const canvas = document.createElement("canvas");
 canvas.id = "gameCanvas";
+canvas.style.borderRadius = "10px";
+canvas.style.outline = "none";
 canvas.width = 800;
 canvas.height = 600;
 canvas.style.background = "black";
