@@ -6,13 +6,13 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/28 14:59:28 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/28 19:50:08 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { PointerDragBehavior, Texture, Color4, ParticleSystem, KeyboardEventTypes, TrailMesh, Color3, FreeCamera, StandardMaterial, Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, MeshBuilder, Vector3 } from "@babylonjs/core";
 import { movePaddlesAndBalls } from "../../../server/gameLogic";
-import { createUI, drawText, setPlayerName, createdisposableUI, finalGoal, resetGame } from "../ts/UI";
+import { createUI, drawText, setPlayerName, createdisposableUI, finalGoal, resetGame, resetBabylonJs } from "../ts/UI";
 import { isAuthenticated } from "../interface/authenticator";
 let engine: Engine | null = null;
 export let scene: Scene | null = null;
@@ -25,7 +25,7 @@ export let username: string | null = null;
 let usernameLoaded = false;
 let usernameWait = 0;
 export let thisNewGame: NewGame | undefined = undefined;
-let ws:any = undefined;
+let ws: any = undefined;
 
 
 const paddleWidth = 10, paddleHeight = 100;
@@ -110,8 +110,7 @@ export function setNewGame(newGameGiven: NewGame) {
   // console.log("newgame set with ", thisNewGame.type);
 }
 
-async function saveValues(input: Talker, counter: number[])
-{
+async function saveValues(input: Talker, counter: number[]) {
   const resuser = await fetch("/api/match", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -120,6 +119,7 @@ async function saveValues(input: Talker, counter: number[])
 }
 
 export function setValues(input: Talker | undefined) {
+  
   if (input == undefined)
     return;
   counter = [...input.counter];
@@ -133,9 +133,17 @@ export function setValues(input: Talker | undefined) {
     return;
   }
   // console.log("setVAlues called");
-  scene.getMeshByName("paddle1").position.z = input.paddles.paddle1;
-  scene.getMeshByName("paddle2").position.z = input.paddles.paddle2;
-  scene.getMeshByName("ball").position = new Vector3(input.ballpos.x, input.ballpos.y, input.ballpos.z);
+  if (!scene) return;
+
+  const paddle1 = scene.getMeshByName("paddle1");
+  paddle1 && (paddle1.position.z = input.paddles.paddle1);
+
+  const paddle2 = scene.getMeshByName("paddle2");
+  paddle2 && (paddle2.position.z = input.paddles.paddle2);
+
+  const ball = scene.getMeshByName("ball");
+  ball && (ball.position = new Vector3(input.ballpos.x, input.ballpos.y, input.ballpos.z));
+console.log("setvalues called");
   thisPlayer.gameId = input.gameId;
 }
 
@@ -144,17 +152,15 @@ export function setValues(input: Talker | undefined) {
 export const keys: { [key: string]: boolean } = {};
 document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => keys[e.key] = false);
-export const canvas = document.createElement("canvas");
-canvas.id = "gameCanvas";
-canvas.style.borderRadius = "10px";
-canvas.style.outline = "none";
-canvas.width = 800;
-canvas.height = 600;
-canvas.style.background = "black";
-canvas.style.display = "block";
-canvas.style.margin = "0 auto";
+// export const canvas = document.createElement("canvas");
+// canvas.id = "gameCanvas";
+// canvas.width = 800;
+// canvas.height = 600;
+// canvas.style.background = "black";
+// canvas.style.display = "block";
+// canvas.style.margin = "0 auto";
 
-function createMeshes(scene: any) {
+function createMeshes(scene: any, canvas: any) {
   // Mats for Meshes
 
   const tableMat = new StandardMaterial("tableMat", scene);
@@ -244,7 +250,7 @@ function createMeshes(scene: any) {
   particleSystem.start();
 
 }
-function createScene(engine: any) {
+function createScene(engine: any, canvas: any) {
   const scene = new Scene(engine);
   // Camera
   const camera = new FreeCamera("camera", new Vector3(0, canvas.width, canvas.height), scene);
@@ -315,8 +321,7 @@ async function loadUsernameFromCookie() {
     const auth = await isAuthenticated();
     const id = auth ? auth.id : 0;
 
-    if (!id)
-    {
+    if (!id) {
       thisPlayer.username = undefined;
       username = null;
       usernameLoaded = false;
@@ -348,22 +353,44 @@ async function loadUsernameFromCookie() {
   }
 }
 
-export async function pong(container): Promise<string> {
-  await loadUsernameFromCookie();
-  ws = new WebSocket("/ws/");
-  const app = document.getElementById("app")!;
+export async function pong(canvas) {
+  let alive = true; // lifecycle flag
 
+  await loadUsernameFromCookie();
+
+  // const canvas = document.createElement("canvas");
+  canvas.width = 800;
+  canvas.height = 600;
+  canvas.style.display = "block";
+  canvas.style.margin = "0 auto";
+
+  // if (!container.contains(canvas)) container.appendChild(canvas);
+
+  engine = new Engine(canvas, true);
+  scene = createScene(engine, canvas);
+  if (engine == null || scene == null)
+    return;
+  createMeshes(scene, canvas);
+  resetGame(scene);
+  createUI();
+  drawText();
+
+  const ws = new WebSocket("/ws/");
+
+  // WebSocket lifecycle guarded by `alive`
   ws.onopen = () => {
-    ws.send(
-      JSON.stringify({
-        type: "wsMessage",
-        player: thisPlayer,
-        newGame: thisNewGame
-      })
-    );
+    if (!alive || ws.readyState !== WebSocket.OPEN) return;
+
+    ws.send(JSON.stringify({
+      type: "wsMessage",
+      player: thisPlayer,
+      newGame: thisNewGame
+    }));
   };
 
   ws.onmessage = (event) => {
+    if (!alive || !scene) return;
+
     let message;
     try {
       message = JSON.parse(event.data);
@@ -371,71 +398,61 @@ export async function pong(container): Promise<string> {
       console.warn("Received non-JSON message:", event.data);
       return;
     }
-    if (message.type === "Playername") {
-      if (!username) {
-        thisPlayer.username = message.username;
-        username = message.username;
-      }
-      console.log("user name is set to ", thisPlayer.username);
-    }
-    if (message.type === "talker") {
-      setValues(message);
+
+    if (message.type === "Playername" && !username) {
+      thisPlayer.username = message.username;
+      username = message.username;
+      console.log("Username set to", username);
     }
 
-    if (message.type === "welcome")
-      console.log(message)
+    if (message.type === "talker") setValues(message);
+    if (message.type === "welcome") console.log(message);
   };
 
   ws.onerror = (err) => {
+    if (!alive) return;
     console.error("WebSocket error", err);
   };
 
   ws.onclose = () => {
-    // console.log("WebSocket closed");
+    // if (!alive) return;
+    // Optional: console.log("WebSocket closed");
   };
 
-  resetGame();
+  let lastSend = 0;
+  const SEND_INTERVAL = 50; // 20x/sec
 
+  engine.runRenderLoop(() => {
+    if (!alive) return; // stop render loop after unmount
+    scene.render();
 
-  function play() {
-    if (!container.contains(canvas)) container.appendChild(canvas);
+    const now = performance.now();
+    if (ws.readyState === WebSocket.OPEN && username && now - lastSend > SEND_INTERVAL) {
+      lastSend = now;
+      setThisPlayer();
 
-    engine = new Engine(canvas, true);
-    scene = createScene(engine);
+      ws.send(JSON.stringify({
+        type: "wsMessage",
+        player: thisPlayer,
+        newGame: thisNewGame
+      }));
 
-    createMeshes(scene);
-    resetGame(scene);
-    createUI();
-    drawText();
-    let lastSend = 0;
-    const SEND_INTERVAL = 50; // ms = 20 fois/sec
+      if (thisNewGame) thisNewGame = undefined;
+    }
+  });
 
-    engine.runRenderLoop(() => {
-      scene.render();
+  // Optional: handle window resize safely
+  const resizeHandler = () => {
+    if (!alive) return;
+    engine.resize();
+  };
+  window.addEventListener("resize", resizeHandler);
 
-      const now = performance.now();
-      if (
-        ws.readyState === WebSocket.OPEN &&
-        username &&
-        now - lastSend > SEND_INTERVAL
-      ) {
-        lastSend = now;
-
-        setThisPlayer();
-        ws.send(JSON.stringify({
-          type: "wsMessage",
-          player: thisPlayer,
-          newGame: thisNewGame
-        }));
-
-        if (thisNewGame) thisNewGame = undefined;
-      }
-    });
-
-    // Optional: handle window resize
-    // window.addEventListener("resize", () => engine.resize());
-  }
-
-  play();
-  return "";
+  // 🔥 Cleanup function for React useEffect
+  return () => {
+    alive = false;         // invalidate all async callbacks
+    ws.close();            // close WebSocket safely
+    resetBabylonJs();      // destroy Babylon engine
+    canvas.remove();       // remove canvas
+  };
 }

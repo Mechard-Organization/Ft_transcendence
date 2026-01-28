@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/27 16:46:57 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/28 19:42:01 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,7 @@ export function movePaddles(games: Game): Paddles {
   if (games.mode == 0) {
     let playerIndex = findPlayer(undefined, games.gameId);
     if (playerIndex == -1) {
-      console.log("player not found mode = 0, index -1")
+      console.log("player not found mode = 0, gID ", games.gameId)
       if (keys == undefined)
         return (games.paddles);
     }
@@ -316,7 +316,7 @@ export function movePaddles(games: Game): Paddles {
   if (games.mode == 1) {
     let playerIndex = findPlayer(games.playername[0]);
     if (playerIndex == -1 || games.playerIds[1] == 0 || games.playerIds[0] == 0) {
-      console.log("player not found mode = 0, index -1")
+      console.log("player not found mode = 1, gID ", games.gameId)
       isDragging1 = false;
       keys = undefined;
     }
@@ -348,7 +348,7 @@ export function movePaddles(games: Game): Paddles {
 
     let playerIndex = findPlayer(games.playername[1]);
     if (playerIndex == -1 || games.playerIds[1] == 0 || games.playerIds[0] == 0) {
-      console.log("player not found mode = 0, index -1")
+      console.log("player not found mode = 1, gID ", games.gameId);
       isDragging2 = false;
       keys = undefined;
     }
@@ -393,32 +393,35 @@ export function removePlayerByWS(ws: WS) {
   const player: Player | undefined = Object.values(players).find(player => player.ws === ws);
   console.log("removebyws called on ", player?.username)
   if (player) {
-    console.log("removeOldAddNewGame calles player, GID ", player.username, gId)
+
     const gameIndex = games.findIndex(g => g.gameId === player.gameId);
     let talkerindex = talkerTemp.findIndex(g => g.gameId === player.gameId);
     const playerIndex = findPlayer(player.username);
-    if (gameIndex != undefined) {
+    console.log("removeOldAddNewGame calles player, GID ", player.username, gameIndex, games[gameIndex])
+    if (games[gameIndex] != undefined) {
       if (games[gameIndex].mode == 0 || games[gameIndex].playername[0] == player.username)
         games[gameIndex].playerIds[0] = 0;
       if (games[gameIndex].mode == 0 || games[gameIndex].playername[1] == player.username)
         games[gameIndex].playerIds[1] = 0;
     }
-    if (gameIndex != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
+    if (games[gameIndex] != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
       //remove the player from game and see if there are other players on the game
       console.log("removed game", games[gameIndex].gameId);
       games.splice(gameIndex, 1);
       talkerTemp.splice(talkerindex, 1);
 
     }
+    console.log("deleted player ", players[playerIndex].username)
     delete players[playerIndex];
   }
 }
 
 function createNewGame(newGame?: NewGame) {
-  console.log("mode, gameId, playername", newGame?.mode, newGame?.gameId, typeof (newGame?.gameId))
-  if (newGame?.mode == 1 && newGame?.gameId != undefined && games[newGame.gameId]) {
+
+  if (newGame && newGame.mode == 1 && newGame?.gameId != undefined && games[newGame.gameId]) {
     if (games[newGame.gameId].playername[1] == newGame.playername[0])
       games[newGame.gameId].playerIds[1] = 1;
+    console.log("mode: ", newGame?.mode, " gameId: ", newGame?.gameId, "playername: ", games[newGame.gameId].playerIds[1])
     return newGame.gameId;
   }
 
@@ -455,7 +458,7 @@ function createNewGame(newGame?: NewGame) {
     playername: games[gameindex].playername,
     playerCount: games[gameindex].playerCount
   });
-
+  console.log("mode: ", games[gameindex].mode, " gameId: ", games[gameindex].gameId, "playername: ", games[gameindex].playername);
   return gameId;
 }
 
@@ -463,9 +466,9 @@ function createNewGame(newGame?: NewGame) {
 export function removeOldAddNewGame(player: Player, gId: number) {
   const gameIndex = games.findIndex(g => g.gameId === player.gameId);
   let talkerindex = talkerTemp.findIndex(g => g.gameId === player.gameId);
-  console.log("removeOldAddNewGame", gameIndex, talkerindex, "calles player, GID ", player.username, gId)
+  console.log("removeOldAddNewGame", gameIndex, talkerindex, "calles player, oldgame ", player.username, games[gameIndex])
   const playerIndex = findPlayer(player.username);
-  if (gameIndex !== -1) {
+  if (games[gameIndex] != undefined) {
     console.log(games[gameIndex].playername[0], player.username)
     if (games[gameIndex].mode == 0 || games[gameIndex].playername[0] == player.username) {
       console.log("playerid 0 set to 0")
@@ -475,7 +478,7 @@ export function removeOldAddNewGame(player: Player, gId: number) {
       games[gameIndex].playerIds[1] = 0;
     }
   }
-  if (gameIndex !== -1 && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
+  if (games[gameIndex] != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
     console.log("removed game", games[gameIndex].gameId);
     games.splice(gameIndex, 1);
     talkerTemp.splice(talkerindex, 1);
@@ -494,22 +497,21 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
   let newGame: NewGame | undefined = wsMessage.newGame;
   const playerIndex = findPlayer(player.username)
   if (newGame && newGame.type == "newGame") {
-    console.log("game created new game given", gId);
+    
     const gameId = createNewGame(newGame)
+    console.log("game created new game given user ", player.username, gId, games[games.findIndex(g => g.gameId === gameId)]);
     removeOldAddNewGame(player, gameId);
 
     player.ws?.send(JSON.stringify(talkerTemp[talkerTemp.findIndex(g => g.gameId === gameId)]))
     return;
   }
   else if (playerIndex == -1) {
-
-    console.log("game created new user user", playerIndex);
     const gameId = createNewGame()
     if (!player.username)
       player.username = `p${gameId}`
     player.gameId = gameId;
     players[gameId] = player
-    console.log(player.username)
+    console.log("game created new user ", player.username);
     player.ws?.send(JSON.stringify({ type: "Playername", username: player.username }))
     return;
   }
@@ -552,7 +554,7 @@ setInterval(() => {
     if (games[i] && games[i].mode == 0) {
       let playerIndex = findPlayer(undefined, games[i].gameId);
       if (playerIndex == -1) {
-        console.log("player not found mode = 0, index -1")
+        console.log("player not found mode = 0, gID ", games[i].gameId)
         // games.splice(i, 1);
         // continue;
       }
@@ -579,27 +581,27 @@ setInterval(() => {
         continue;
       }
     }
-  // if (games[i] && games[i].mode == 1) {
-  //   let playerIndex = findPlayer(games[i].playername[1]);
-  //   if (playerIndex != -1) {
-  //     players[playerIndex].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
-  //     if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal) {
-  //       removeOldAddNewGame(players[playerIndex], -1);
-  //       continue;
-  //     }
-  //   }
-  // }
+    // if (games[i] && games[i].mode == 1) {
+    //   let playerIndex = findPlayer(games[i].playername[1]);
+    //   if (playerIndex != -1) {
+    //     players[playerIndex].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
+    //     if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal) {
+    //       removeOldAddNewGame(players[playerIndex], -1);
+    //       continue;
+    //     }
+    //   }
+    // }
 
-  // let j = findPlayer(games[i].playername[0])
-  // if (j != -1) {
-  //   players[j].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
-  //   if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal)
-  //     removeOldAddNewGame(players[playerIndex], -1);
-  //   console.log("came in first ifff j counter 0 and 1 = ", j, talkerTemp[talkerindex].counter[0], talkerTemp[talkerindex].counter[1])
-  //   break;
-  // }
-  i++;
-}
+    // let j = findPlayer(games[i].playername[0])
+    // if (j != -1) {
+    //   players[j].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
+    //   if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal)
+    //     removeOldAddNewGame(players[playerIndex], -1);
+    //   console.log("came in first ifff j counter 0 and 1 = ", j, talkerTemp[talkerindex].counter[0], talkerTemp[talkerindex].counter[1])
+    //   break;
+    // }
+    i++;
+  }
   i = 0;
 }, 1000 / 60);
 
