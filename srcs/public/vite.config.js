@@ -22,7 +22,6 @@ export default defineConfig({
   },
   server: {
     host: true,
-<<<<<<< HEAD
     port: 3000,
     allowedHosts: [
       "ft-transcendence-42.app",
@@ -30,12 +29,4 @@ export default defineConfig({
       "localhost"
     ],
   },
-=======
-    port: 3000
-  },
-  build: {
-    outDir: "dist",
-    emptyOutDir: true
-  }
->>>>>>> Graphics
 });
