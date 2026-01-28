@@ -108,7 +108,7 @@ export default function Header() {
               </div>
             </Link>
           ) : (
-            <Link to={userId ? `/profil/${userId}` : "/profil"}>
+            <Link to="/profile">
               <div
                 className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
                   isActive("/profil")
