@@ -25,6 +25,8 @@ db.prepare(`
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     mail TEXT UNIQUE NOT NULL,
+    google_sub TEXT UNIQUE,
+    oauth_enabled INTEGER NOT NULL DEFAULT 0,
     admin BOOL DEFAULT FALSE,
     avatarUrl TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -234,6 +236,20 @@ export function createUser(username: string, password_hash: string, mail: string
   };
 }
 
+export function createOAuthUser(username: string, password_hash: string, mail: string, google_sub: string) {
+  const stmt = db.prepare(`
+    INSERT INTO users (username, password_hash, mail, google_sub, oauth_enabled)
+    VALUES (?, ?, ?, ?, 1)
+  `);
+
+  const info = stmt.run(username, password_hash, mail, google_sub);
+
+  return {
+    id: info.lastInsertRowid,
+    username
+  };
+}
+
 export function getUserById(id: string) {
   const stmt = db.prepare(`
     SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret
@@ -263,6 +279,17 @@ export function getUserByMail(mail: string) {
 
   return stmt.get(mail);
 }
+
+export function getUserByGoogleSub(google_sub: string) {
+  const stmt = db.prepare(`
+    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret, oauth_enabled, google_sub
+    FROM users
+    WHERE google_sub = ?
+  `);
+
+  return stmt.get(google_sub);
+}
+
 
 // --- 2FA in USER FONCTIONS --- //
 
@@ -383,6 +410,7 @@ export type User = {
   password_hash: string;
   mail: string;
   created_at: string;
+  oauth_enabled?: number;
 };
 
 // --- FIREND FUNCTIONS ---
@@ -483,6 +511,24 @@ export function deleteUserFriend(id_user: string) {
   `);
 
   return stmt.run(id_user, id_user);
+}
+
+export function deleteUserBlocks(id_user: string) {
+  const stmt = db.prepare(`
+    DELETE FROM block
+    WHERE id_user = ? OR id_block = ?
+  `);
+
+  return stmt.run(id_user, id_user);
+}
+
+export function deleteUserFromGroups(id_user: string) {
+  const stmt = db.prepare(`
+    DELETE FROM laisonmsg
+    WHERE id_user = ?
+  `);
+
+  return stmt.run(id_user);
 }
 
 // --- BLOCK FUNCTIONS ---

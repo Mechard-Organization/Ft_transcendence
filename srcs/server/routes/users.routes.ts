@@ -93,6 +93,8 @@ export default async function userRoutes(fastify: FastifyInstance) {
     const user = db.getUserById(id);
 
     db.deleteUserFriend(id);
+    db.deleteUserBlocks(id);
+    db.deleteUserFromGroups(id);
     db.MessageAnonym(id);
     db.deleteUser(id);
     reply.clearCookie("access_token", { path: "/" });
