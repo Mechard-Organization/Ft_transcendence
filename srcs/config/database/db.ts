@@ -358,6 +358,16 @@ export function updateUserPp(url: string | null, id: string) {
   return stmt.run(url, id);
 }
 
+export function getUserPp(url: string | null, id: string) {
+  const stmt = db.prepare(`
+    SELECT avatarUrl FROM users
+    WHERE id = ?
+  `);
+
+    const row = stmt.get(id);
+  return row ? row.avatarUrl : null;
+}
+
 export function deleteUser(id: string) {
   const stmt = db.prepare(`
     DELETE FROM users
