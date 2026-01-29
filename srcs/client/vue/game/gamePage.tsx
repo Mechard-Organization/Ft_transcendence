@@ -2,10 +2,23 @@ import { useEffect, useRef } from "react";
 import { pong } from "./Meshes";
 
 export default function GamePage() {
-  const gameContainer = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-      pong();
+    if (!canvasRef.current) return;
+
+    let cleanup: (() => void) | undefined;
+    // const ws = new WebSocket("/ws/");
+
+    pong(canvasRef.current).then(fn => {
+      cleanup = fn;
+    });
+
+  
+    return () => {
+      // ws.close();
+      cleanup?.()
+    };
   }, []);
 
   return (
@@ -14,12 +27,12 @@ export default function GamePage() {
         <h1 className="text-4xl text-[#8B5A3C]">PongpongPurin</h1>
       </div>
 
-      <div
-        ref={gameContainer}
-        className="bg-white rounded-3xl p-6 shadow-xl w-full max-w-4xl"
-      >
-        {}
-      </div>
+      <canvas
+        ref={canvasRef}
+        width={800}
+        height={600}
+        className="mx-auto block rounded-xl"
+      />
     </div>
   );
 }
