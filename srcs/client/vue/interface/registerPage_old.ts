@@ -1,4 +1,4 @@
-import { validatePassword, validateEmail } from "../../../services/validate.service.ts";
+import { validatePassword, validateEmail } from "../../../services/validate.service.js";
 
 // registerPage.ts
 export function registerPage(header: string, footer: string) {

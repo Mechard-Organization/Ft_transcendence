@@ -1,56 +1,105 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trophy, Target, Clock } from 'lucide-react';
 import Footer from '../ts/Footer';
-import { isAuthenticated } from "../interface/authenticator";
+import { isAuthenticated } from "../access/authenticator";
+
+type UserStats = {
+  id: number;
+  username: string;
+  mail: string;
+  avatarUrl?: string | null;
+  winRate: number;
+  gamesPlayed: number;
+  gamesWon: number,
+  highScore: number
+};
 
 export default function ProfilePage() {
   const [profilePic, setProfilePic] = useState(1);
-  const userStats = {
-    name: 'Pompompurin',
-    // gamesPlayed: 42,
-    // gamesWon: 28,
-    // highScore: 15,
-    // totalPlayTime: '12h 34min',
-    // winRate: 67,
-  };
+  const [userStats, setUserStats] = useState<UserStats>({
+    id: 0,
+    username: "",
+    mail: "",
+    avatarUrl: "", 
+    winRate: 0,
+    gamesPlayed: 0,
+    gamesWon: 0,
+    highScore: 0
+  });
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const auth = await isAuthenticated();
+        if (!auth?.id) return;
+
+        const resUser = await fetch("/api/getuser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: auth.id }),
+        });
+        const userData = await resUser.json();
+
+        setUserStats({
+          id: userData.id,
+          username: userData.username,
+          mail: userData.mail,
+          avatarUrl: userData.avatarUrl,
+          winRate: 0,
+          gamesPlayed: 0,
+          gamesWon: 0,
+          highScore: 0
+        });
+        if (!userData.avatarUrl) setProfilePic(1);
+      } catch (err) {
+        console.error("Erreur récupération profil :", err);
+      }
+    }
+    fetchUser();
+  }, []);
 
   const changeProfilePic = async () => {
     const newPic = profilePic < 23 ? profilePic + 1 : 1;
-    const auth = await isAuthenticated();
-    const id = auth ? auth.id : null;
+     const newUrl = `/uploads/profil/${newPic}.jpeg`;
     setProfilePic(newPic);
-    try {
-      await fetch("/api/users.routes/users/me/avatar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: `/shared-assets/pompompurin/profil/${newPic}.jpeg`,
-          id: id
-        }),
-      });
-      console.log("Avatar mis à jour !");
+    console.log(newUrl);
+  try {
+    const res = await fetch("/api/users/me/setavatar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: userStats.id,
+        avatarUrl: newUrl,
+      }),
+    });
+      setUserStats(prev => ({
+        ...prev,
+        avatarUrl: `${newPic}.jpeg`,
+      }));
     } catch (err) {
-      console.error("Erreur lors de la mise à jour de l'avatar :", err);
+      console.error("Erreur mise à jour avatar :", err);
     }
-  }; 
+    const tryprofil = async () => {
+
+    }
+  };
   return (
     <div className="min-h-[calc(100vh-80px)] flex flex-col p-8">
         <div className="mb-8 max-w-4xl w-full mx-auto text-center">
           <button onClick={changeProfilePic} className="inline-block cursor-pointer">
-            
             <img
               src={`/shared-assets/pompompurin/profil/${profilePic}.jpeg`}
               alt="personnage profil"
               className="w-25 h-25 object-cover rounded-full border-4 border-[#FEE96E]"
             />
           </button>
-          <h1 className="text-4xl text-[#8B5A3C] mt-4">{userStats.name}</h1>
+          <h1 className="text-4xl text-[#8B5A3C] mt-4">{userStats.username}</h1>
         </div>
       <div className="max-w-4xl w-full mx-auto">
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-4 border-[#FEE96E] mb-6">
           <div className="flex items-center gap-8 mb-8">
             <div className="flex-1">
-              <h2 className="text-3xl text-[#8B5A3C] mb-2">{userStats.name}</h2>
+              <h2 className="text-3xl text-[#8B5A3C] mb-2">{userStats.username}</h2>
               <div className="flex items-center gap-4">
                 <div className="bg-[#FEE96E] px-6 py-2 rounded-full">
                   <p className="text-[#8B5A3C]">Niveau: Champion</p>
@@ -109,7 +158,6 @@ export default function ProfilePage() {
               </div>
               <h3 className="text-2xl text-[#8B5A3C]">Temps de jeu</h3>
             </div>
-            <p className="text-5xl text-center text-[#8B5A3C]">{userStats.totalPlayTime}</p>
           </div>
         </div>
 

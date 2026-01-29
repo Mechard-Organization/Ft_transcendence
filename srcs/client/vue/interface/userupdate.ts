@@ -1,6 +1,6 @@
-import { validatePassword, validateEmail } from "../../../services/validate.service.ts";
-import { isAuthenticated } from "./authenticator";
-import { handleEnter } from "./adminInterface";
+import { validatePassword, validateEmail } from "../../../services/validate.service.js";
+import { isAuthenticated } from "../access/authenticator.js";
+import { handleEnter } from "./adminInterface.js";
 
 export function userupdate(header: string, footer: string) {
 	const app = document.getElementById("app");
