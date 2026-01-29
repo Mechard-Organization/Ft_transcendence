@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { Trophy, Target, Clock } from 'lucide-react';
 import Footer from '../ts/Footer';
 import { isAuthenticated } from "../access/authenticator";
+import { Link, useLocation } from "react-router-dom";
 
 type UserStats = {
   id: number;
   username: string;
   mail: string;
-  avatarUrl?: string | null;
+  avatarUrl?: string;
   winRate: number;
   gamesPlayed: number;
   gamesWon: number,
@@ -20,7 +21,7 @@ export default function ProfilePage() {
     id: 0,
     username: "",
     mail: "",
-    avatarUrl: "", 
+    avatarUrl: "/uploads/profil/default.jpeg", 
     winRate: 0,
     gamesPlayed: 0,
     gamesWon: 0,
@@ -58,43 +59,68 @@ export default function ProfilePage() {
     fetchUser();
   }, []);
 
-  const changeProfilePic = async () => {
-    const newPic = profilePic < 23 ? profilePic + 1 : 1;
-     const newUrl = `/uploads/profil/${newPic}.jpeg`;
-    setProfilePic(newPic);
-    console.log(newUrl);
-  try {
-    const res = await fetch("/api/users/me/setavatar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: userStats.id,
-        avatarUrl: newUrl,
-      }),
-    });
-      setUserStats(prev => ({
-        ...prev,
-        avatarUrl: `${newPic}.jpeg`,
-      }));
-    } catch (err) {
-      console.error("Erreur mise à jour avatar :", err);
-    }
-    const tryprofil = async () => {
+const handleFile = async (file: File) => {
+  if (file.type !== "image/jpeg") {
+    alert("Uniquement des fichiers .jpeg");
+    return;
+  }
 
-    }
-  };
+  if (file.size > 2 * 1024 * 1024) {
+    alert("Max 2 Mo");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("avatars", file);
+  formData.append("id", String(userStats.id));
+
+  console.log("poulet : ", formData);
+
+  try {
+    const res = await fetch("/api/users/me/avatar", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    setUserStats(prev => ({
+      ...prev,
+      avatarUrl: data.avatarUrl,
+    }));
+
+  } catch (err) {
+    console.error("Erreur upload avatar", err);
+  }
+
+};
+
+
   return (
     <div className="min-h-[calc(100vh-80px)] flex flex-col p-8">
         <div className="mb-8 max-w-4xl w-full mx-auto text-center">
-          <button onClick={changeProfilePic} className="inline-block cursor-pointer">
+          <input type="file" id="fileInput" accept="image/*" hidden onChange={(e) => { if (e.target.files && e.target.files[0]) { handleFile(e.target.files[0]); }}}/>
+          <button onClick={() => document.getElementById("fileInput")?.click()} className="inline-block cursor-pointer">
             <img
-              src={`/shared-assets/pompompurin/profil/${profilePic}.jpeg`}
+              src={userStats.avatarUrl}
               alt="personnage profil"
               className="w-25 h-25 object-cover rounded-full border-4 border-[#FEE96E]"
             />
           </button>
+                    
           <h1 className="text-4xl text-[#8B5A3C] mt-4">{userStats.username}</h1>
         </div>
+      <Link to="/settings">
+        <div>
+
+      <button className="inline-block cursor-pointer">
+        <img
+          src={userStats.avatarUrl}
+          alt="settings"
+          className="w-10 h-10 object-cover rounded-full border-4 border-[#FEE96E]  margin-right:10px"
+        />
+      </button>
+        </div>
+      </Link>
       <div className="max-w-4xl w-full mx-auto">
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-4 border-[#FEE96E] mb-6">
           <div className="flex items-center gap-8 mb-8">

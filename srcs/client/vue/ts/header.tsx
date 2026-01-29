@@ -94,7 +94,6 @@ export default function Header() {
             />
           </Link>
         </div>
-        <p>'coucu [{userStats.avatarUrl}]d'</p>
         {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
           {/* Jouer */}
@@ -158,6 +157,7 @@ export default function Header() {
               </div>
             </Link>
           )}
+          
         </nav>
       </div>
     </header>
