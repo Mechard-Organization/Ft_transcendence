@@ -7,6 +7,15 @@ export default function GamePage() {
   useEffect(() => {
     if (!canvasRef.current) return;
 
+    canvasRef.current.addEventListener("keydown", function (e) {
+      if (["ArrowUp", "ArrowDown"].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+
+    canvasRef.current.tabIndex = 0; // make canvas focusable
+    canvasRef.current.focus();
+
     let cleanup: (() => void) | undefined;
     // const ws = new WebSocket("/ws/");
 
@@ -14,7 +23,7 @@ export default function GamePage() {
       cleanup = fn;
     });
 
-  
+
     return () => {
       // ws.close();
       cleanup?.()
