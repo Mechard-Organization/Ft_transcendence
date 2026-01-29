@@ -16,7 +16,7 @@ type UserStats = {
 export default function Header() {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
-    const [avatarUrl, setAvatarUrl] = useState<avatarUrl>();
+  const [avatarUrl, setAvatarUrl] = useState<avatarUrl>();
   const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
   const [userId, setUserId] = useState<number>(0);
   const [userStats, setUserStats] = useState<UserStats>({
@@ -43,12 +43,12 @@ export default function Header() {
           body: JSON.stringify({ id: auth.id }),
           });
           const userData = await user.json();
-            setUserStats({
-              id: userData.id,
-              username: userData.username,
-              mail: userData.mail,
-              avatarUrl: userData.avatarUrl,
-            });
+          setUserStats({
+            id: userData.id,
+            username: userData.username,
+            mail: userData.mail,
+            avatarUrl: userData.avatarUrl,
+          });
           } else {
             setAuthStatus("anonymous");
           }
@@ -56,13 +56,20 @@ export default function Header() {
           if (!mounted) return;
           setAuthStatus("anonymous");
         }
-        
+
       })();
-      console.log("coucou : ", avatarUrl);
     return () => {
       mounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    console.log("✅ userStats mis à jour :", userStats);
+  }, [userStats]);
+
+  useEffect(() => {
+    console.log("✅ avatarUrl mis à jour :", avatarUrl);
+  }, [avatarUrl]);
 
   return (
     <header
