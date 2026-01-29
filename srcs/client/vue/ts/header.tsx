@@ -10,7 +10,7 @@ type UserStats = {
   id: number;
   username: string;
   mail: string;
-  avatarUrl?: string | null;
+  avatarUrl: string;
 };
 
 export default function Header() {
@@ -23,7 +23,7 @@ export default function Header() {
     id: 0,
     username: "",
     mail: "",
-    avatarUrl: ""
+    avatarUrl: "/uploads/profil/default.jpeg"
   });
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function Header() {
             id: userData.id,
             username: userData.username,
             mail: userData.mail,
-            avatarUrl: userData.avatarUrl,
+            avatarUrl: userData.avatarUrl ?? "/uploads/profil/default.jpeg",
           });
           } else {
             setAuthStatus("anonymous");
@@ -94,7 +94,7 @@ export default function Header() {
             />
           </Link>
         </div>
-        <p>'coucu [{avatarUrl}]d'</p>
+        <p>'coucu [{userStats.avatarUrl}]d'</p>
         {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
           {/* Jouer */}
@@ -151,7 +151,7 @@ export default function Header() {
                 }`}
               >
                 <img
-                  src={avatarUrl}
+                  src={userStats.avatarUrl}
                   alt="personnage profil"
                   className="w-10 h-10 object-cover rounded-full"
                 />
