@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/29 10:46:42 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/29 12:07:39 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,9 @@ export function setNewGame(newGameGiven: NewGame) {
   thisNewGame = newGameGiven;
   // console.log("newgame set with ", thisNewGame.type);
 }
+export function resetCounter() {
+  counter = [0, 0];
+}
 
 async function saveValues(input: Talker, counter: number[]) {
   const resuser = await fetch("/api/match", {
@@ -118,16 +121,16 @@ async function saveValues(input: Talker, counter: number[]) {
 }
 
 export function setValues(input: Talker | undefined) {
-  
+
   if (input == undefined)
     return;
   counter = [...input.counter];
   setPlayerName([...input.playername]);
   drawText();
-  if (input.playerCount > 0 && (counter[0] == finalGoal || counter[1] == finalGoal)) {
+  if (input.playerCount > 0 && (counter[0] == finalGoal || counter[1] == finalGoal || counter[0] == -1)) {
     saveValues(input, counter);
     thisPlayer.gameId = undefined;
-    // console.log(thisPlayer.gameId);
+    console.log("creating disposableui");
     createdisposableUI(0);
     return;
   }
@@ -142,7 +145,7 @@ export function setValues(input: Talker | undefined) {
 
   const ball = scene.getMeshByName("ball");
   ball && (ball.position = new Vector3(input.ballpos.x, input.ballpos.y, input.ballpos.z));
-console.log("setvalues called");
+  console.log("setvalues called");
   thisPlayer.gameId = input.gameId;
 }
 

@@ -6,13 +6,13 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/28 13:38:34 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/29 12:08:24 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { Button, InputText, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
 import { Color3 } from "@babylonjs/core";
-import { thisPlayer, scene, username, setNewGame } from "../game/Meshes";
+import { thisPlayer, scene, username, setNewGame, resetCounter } from "../game/Meshes";
 import { setSelectedMesh, createCutomiseUI, createdisposableUI, createTournamentUI, mainUI, multiUI, tournamentUI, resumeUI, disposableUI, contestants, drawText, disposeDUI, disposeTUI, setPlayerCount, setPlayerName, setPause, customiseUI, resetGame, remoteUI } from "./UI"
 
 function shuffle(array: string[]) {
@@ -70,7 +70,6 @@ function buttonStyler(button: Button, str: string) {
 export function createMainMenuBtn(): Button {
   const mainMenuBtn = Button.CreateSimpleButton("mainMenuBtn");
   buttonStyler(mainMenuBtn, "Main Menu");
-  // mainMenuBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   mainMenuBtn.onPointerUpObservable.add(() => {
     resetGame();
     let newGame: NewGame = {
@@ -81,7 +80,6 @@ export function createMainMenuBtn(): Button {
     }
     thisPlayer.pause = 0;
     setNewGame(newGame);
-    // setValues(movePaddlesAndBalls({type:"wsMessage", player:thisPlayer, newGame:newGame}));
     if (disposableUI) {
       disposeDUI();
     }
@@ -103,6 +101,7 @@ export function createMainMenuBtn(): Button {
 
     const input = remoteUI.getControlByName("remotePanel")?.children.find(c => c.name === "textInput");
     if (input) input.text = '';
+    if(input) input.background = "rgba(255, 255, 255, 1)";
   });
   return (mainMenuBtn);
 }
@@ -110,10 +109,8 @@ export function createMainMenuBtn(): Button {
 export function createSinglePlayerBtn(): Button {
   const singlePlayerBtn = Button.CreateSimpleButton("singlePlayerBtn");
   buttonStyler(singlePlayerBtn, "Single Player");
-  // singlePlayerBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   singlePlayerBtn.onPointerUpObservable.add(() => {
     resetGame();
-    // setPlayerName([username, "Bot"]);
     setPlayerCount(1);
     let newGame: NewGame = {
       type: "newGame",
@@ -122,16 +119,11 @@ export function createSinglePlayerBtn(): Button {
       playername: [username, "Bot"]
     }
     setNewGame(newGame);
-    // setValues(movePaddlesAndBalls({type:"wsMessage", player:thisPlayer, newGame:newGame}));
-    // playBtn = 1;
     drawText();
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
     multiUI.rootContainer.isVisible = false;
     multiUI.isForeground = false;
-
-    // (singlePlayerBtn.metadata.ui as AdvancedDynamicTexture).dispose();
-    // mainUI = null;
   });
   return (singlePlayerBtn);
 }
@@ -139,22 +131,17 @@ export function createSinglePlayerBtn(): Button {
 export function createMultiPlayerBtn(): Button {
   const multiPlayerBtn = Button.CreateSimpleButton("multiPlayerBtn");
   buttonStyler(multiPlayerBtn, "MultiPlayer");
-  // multiPlayerBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   multiPlayerBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
     multiUI.rootContainer.isVisible = true;
     multiUI.isForeground = true;
-
-    // multiPlayerBtn.metadata.panel.dispose();
-    // (multiPlayerBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
   return multiPlayerBtn;
 }
 export function createTwoPlayerBtn(): Button {
   const twoPlayerBtn = Button.CreateSimpleButton("twoPlayerBtn");
   buttonStyler(twoPlayerBtn, "Two Players");
-  // twoPlayerBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   twoPlayerBtn.onPointerUpObservable.add(() => {
     resetGame();
     mainUI.rootContainer.isVisible = false;
@@ -171,10 +158,7 @@ export function createTwoPlayerBtn(): Button {
       playername: [username, "Player2"]
     }
     setNewGame(newGame);
-    // setValues(movePaddlesAndBalls({type:"wsMessage", player:thisPlayer, newGame:newGame}));
     drawText();
-    // twoPlayerBtn.metadata.panel.dispose();
-    // (twoPlayerBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
   return twoPlayerBtn;
 }
@@ -182,7 +166,6 @@ export function createTwoPlayerBtn(): Button {
 export function createTournamentBtn(): Button {
   const tournamentBtn = Button.CreateSimpleButton("tournamentBtn");
   buttonStyler(tournamentBtn, "Tournament");
-  // tournamentBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   tournamentBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
@@ -190,15 +173,12 @@ export function createTournamentBtn(): Button {
     multiUI.isForeground = false;
     resetGame();
     createTournamentUI();
-    // tournamentBtn.metadata.panel.dispose();
-    // (tournamentBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
   return tournamentBtn;
 }
 export function createResumeBtn(): Button {
   const resumetBtn = Button.CreateSimpleButton("resumetBtn");
   buttonStyler(resumetBtn, "Resume");
-  // resumetBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   resumetBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
@@ -209,8 +189,6 @@ export function createResumeBtn(): Button {
     resumeUI.isForeground = false;
     setPause(0);
     thisPlayer.pause = 0;
-    // resumetBtn.metadata.panel.dispose();
-    // (resumetBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
   return resumetBtn;
 }
@@ -224,7 +202,6 @@ export function createTextInput(name: string): InputText {
   input.thickness = 3;
   input.background = "rgba(255, 255, 255, 1)";
   input.color = "rgba(166, 124, 82, 1)";
-  input.promptColor = "rgba(0, 0, 0, 1)";
 
   input.focusedBackground = "rgba(255, 255, 255, 1)";
   input.focusedColor = "rgba(166, 124, 82, 1)";
@@ -239,7 +216,6 @@ export function createTextInput(name: string): InputText {
 export function createAddBtn(input: InputText, aliasPanel: StackPanel): Button {
   const addBtn = Button.CreateSimpleButton("addBtn");
   buttonStyler(addBtn, "Add");
-  // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   addBtn.onPointerUpObservable.add(() => {
     if (input.text === "" || (contestants.indexOf(input.text) + 1))
       input.background = "rgba(255, 110, 110, 1)";
@@ -260,8 +236,6 @@ export function createAddBtn(input: InputText, aliasPanel: StackPanel): Button {
       shuffle(contestants);
       input.text = "";
     }
-    // addBtn.metadata.panel.dispose();
-    // (addBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
   return addBtn;
 }
@@ -269,7 +243,6 @@ export function createAddBtn(input: InputText, aliasPanel: StackPanel): Button {
 export function createStartTournamentBtn(): Button {
   const startTournamentBtn = Button.CreateSimpleButton("startBtn");
   buttonStyler(startTournamentBtn, "Start Tournament");
-  // startBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   startTournamentBtn.onPointerUpObservable.add(() => {
     mainUI.rootContainer.isVisible = false;
     mainUI.isForeground = false;
@@ -277,12 +250,11 @@ export function createStartTournamentBtn(): Button {
     multiUI.isForeground = false;
     resumeUI.rootContainer.isVisible = false;
     resumeUI.isForeground = false;
+    resetCounter();
     createdisposableUI(0);
     if (tournamentUI) {
       disposeTUI();
     }
-    // startBtn.metadata.panel.dispose();
-    // (resumetBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
   return startTournamentBtn;
 }
@@ -298,22 +270,9 @@ export function createStartBtn(): Button {
     resumeUI.rootContainer.isVisible = false;
     resumeUI.isForeground = false;
 
-    // resetGame();
-    // playerCount = 2;
-    // playBtn = 1;
     setPause(0);
     thisPlayer.pause = 0;
-    // let newGame: NewGame = {
-    //   type: "newGame",
-    //   playerCount: playerCount,
-    //   mode: 0,
-    //   playername: playername
-    // }
-    // setNewGame(newGame);
-    // setValues(movePaddlesAndBalls({type:"wsMessage", player:thisPlayer, newGame:newGame}));
-    // playername = [contestants[contestantNumber], contestants[contestantNumber + 1]];
     drawText();
-
     if (disposableUI) {
       disposeDUI();
     }
@@ -385,12 +344,12 @@ export function createRemoteBtn(): Button {
 }
 
 export function createRemotePlayBtn(input: InputText): Button {
-  const addBtn = Button.CreateSimpleButton("addBtn");
+  const addBtn = Button.CreateSimpleButton("createGameBtn");
   buttonStyler(addBtn, "Create New Game");
   // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   addBtn.onPointerUpObservable.add(() => {
-    if (input.text === "" || (contestants.indexOf(input.text) + 1))
-      input.background = "red";
+    if (input.text === "")
+      input.background = "rgba(255, 110, 110, 1)";
     else {
       mainUI.rootContainer.isVisible = false;
       mainUI.isForeground = false;
@@ -415,21 +374,17 @@ export function createRemotePlayBtn(input: InputText): Button {
       if (disposableUI) {
         disposeDUI();
       }
-
     }
-    // addBtn.metadata.panel.dispose();
-    // (addBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
   return addBtn;
 }
 
 export function createRemotePlayPlayBtn(input: InputText): Button {
-  const addBtn = Button.CreateSimpleButton("addBtn");
+  const addBtn = Button.CreateSimpleButton("joinGameBtn");
   buttonStyler(addBtn, "Join Remote Game");
-  // addBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
   addBtn.onPointerUpObservable.add(() => {
-    if (input.text === "" || (contestants.indexOf(input.text) + 1))
-      input.background = "red";
+    if (input.text === "" || Number(input.text) == null)
+      input.background = "rgba(255, 110, 110, 1)";
     else {
       mainUI.rootContainer.isVisible = false;
       mainUI.isForeground = false;
@@ -455,10 +410,7 @@ export function createRemotePlayPlayBtn(input: InputText): Button {
       if (disposableUI) {
         disposeDUI();
       }
-
     }
-    // addBtn.metadata.panel.dispose();
-    // (addBtn.metadata.ui as AdvancedDynamicTexture).dispose();
   });
   return addBtn;
 }

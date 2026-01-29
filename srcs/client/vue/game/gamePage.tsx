@@ -12,8 +12,10 @@ export default function GamePage() {
         e.preventDefault();
       }
     });
-
-    canvasRef.current.tabIndex = 0; // make canvas focusable
+    canvasRef.current.style.border = "3px solid #f7de00ff";
+    canvasRef.current.style.background = "#ffffffff";
+    canvasRef.current.style.outline = "none";
+    canvasRef.current.tabIndex = 0;
     canvasRef.current.focus();
 
     let cleanup: (() => void) | undefined;
