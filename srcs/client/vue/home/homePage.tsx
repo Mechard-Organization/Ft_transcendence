@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Gamepad2, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import Footer from "../ts/Footer";
-import { isAuthenticated } from "../interface/authenticator"; // <-- adapte le chemin si besoin
+import { isAuthenticated } from "../access/authenticator"; // <-- adapte le chemin si besoin
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
 

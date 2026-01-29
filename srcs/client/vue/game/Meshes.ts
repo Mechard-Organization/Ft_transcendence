@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Meshes.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jealefev <jealefev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/29 10:46:42 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/29 12:20:27 by jealefev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { PointerDragBehavior, Texture, Color4, ParticleSystem, KeyboardEventTypes, TrailMesh, Color3, FreeCamera, StandardMaterial, Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, MeshBuilder, Vector3 } from "@babylonjs/core";
 import { createUI, drawText, setPlayerName, createdisposableUI, finalGoal, resetGame, resetBabylonJs } from "../ts/UI";
-import { isAuthenticated } from "../interface/authenticator";
+import { isAuthenticated } from "../access/authenticator";
 let engine: Engine | null = null;
 export let scene: Scene | null = null;
 export let dragPos1 = new Vector3(0, 0, 0);

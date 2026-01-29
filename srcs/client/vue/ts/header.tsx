@@ -1,16 +1,30 @@
 import { Link, useLocation } from "react-router-dom";
 import { Gamepad2, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { isAuthenticated } from "../interface/authenticator"; // adapte le chemin si besoin
+import { isAuthenticated } from "../access/authenticator"; // adapte le chemin si besoin
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
+type avatarUrl = "";
+
+type UserStats = {
+  id: number;
+  username: string;
+  mail: string;
+  avatarUrl?: string | null;
+};
 
 export default function Header() {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
-
+    const [avatarUrl, setAvatarUrl] = useState<avatarUrl>();
   const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
   const [userId, setUserId] = useState<number>(0);
+  const [userStats, setUserStats] = useState<UserStats>({
+    id: 0,
+    username: "",
+    mail: "",
+    avatarUrl: ""
+  });
 
   useEffect(() => {
     let mounted = true;
@@ -23,15 +37,28 @@ export default function Header() {
         if (auth?.authenticated) {
           setAuthStatus("authenticated");
           setUserId(auth.id ?? 0);
-        } else {
+          const user = await fetch("/api/getuser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: auth.id }),
+          });
+          const userData = await user.json();
+            setUserStats({
+              id: userData.id,
+              username: userData.username,
+              mail: userData.mail,
+              avatarUrl: userData.avatarUrl,
+            });
+          } else {
+            setAuthStatus("anonymous");
+          }
+        } catch {
+          if (!mounted) return;
           setAuthStatus("anonymous");
         }
-      } catch {
-        if (!mounted) return;
-        setAuthStatus("anonymous");
-      }
-    })();
-
+        
+      })();
+      console.log("coucou : ", avatarUrl);
     return () => {
       mounted = false;
     };
@@ -60,7 +87,7 @@ export default function Header() {
             />
           </Link>
         </div>
-
+        <p>'coucu [{avatarUrl}]d'</p>
         {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
           {/* Jouer */}
@@ -117,7 +144,7 @@ export default function Header() {
                 }`}
               >
                 <img
-                  src="/shared-assets/pompompurin/profil/13.jpeg"
+                  src={avatarUrl}
                   alt="personnage profil"
                   className="w-10 h-10 object-cover rounded-full"
                 />

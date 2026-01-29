@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Send } from "lucide-react";
 import Footer from "../ts/Footer";
-import { isAuthenticated } from "../interface/authenticator";
+import { isAuthenticated } from "../access/authenticator";
 
 interface Message {
   id: number;

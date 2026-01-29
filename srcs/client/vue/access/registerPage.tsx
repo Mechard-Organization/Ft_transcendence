@@ -1,6 +1,6 @@
 import { useState, FormEvent } from "react";
 import { User } from "lucide-react";
-import { validatePassword, validateEmail } from "../../../services/validate.service.ts";
+import { validatePassword, validateEmail } from "../../../services/validate.service.js";
 
 type RegisterResponse = {
   error?: string;
@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mail, setMail] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("")
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);

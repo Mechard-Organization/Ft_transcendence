@@ -3,9 +3,9 @@ import Header from './client/vue/ts/header';
 import HomePage from './client/vue/home/homePage';
 import GamePage from './client/vue/game/gamePage';
 import ChatPage from './client/vue/messages/messagesPage';
-import ProfilePage from './client/vue/interface/profilPage';
-import LoginPage from './client/vue/interface/loginPage';
-import RegisterPage from './client/vue/interface/registerPage';
+import ProfilePage from './client/vue/profil/profilPage';
+import LoginPage from './client/vue/access/loginPage';
+import RegisterPage from './client/vue/access/registerPage';
 
 export default function App() {
   return (

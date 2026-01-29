@@ -123,6 +123,12 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   //GESTION DE L'AVATAR
 
+  fastify.post("/users/me/setavatar", async (req) => {
+    const { id, avatarUrl } = req.body as any;
+    db.updateUserPp(avatarUrl, id);
+    return { avatarUrl };
+  });
+
   fastify.post("/users/me/avatar", async (req, reply) => {
     let id: string | undefined;
     let buffer: Buffer | undefined;
