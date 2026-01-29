@@ -1,6 +1,9 @@
 import { FastifyInstance } from "fastify";
+import crypto from "crypto";
+import bcrypt from "bcrypt";
 import * as db from "@config/database/db";
 import { verifyPassword, generateAccessToken } from "@services/login.service";
+import { exchangeCodeForTokens, fetchGoogleUserInfo, getGoogleAuthUrl } from "@services/oauth.google";
 import { handleAuthMe, signTwofaPending, verifyTwofaPending, getAccessUserId } from "../auth";
 import { generateSecret, generateURI, verify } from "otplib";
 import * as qrcode from "qrcode";
@@ -26,6 +29,11 @@ interface Enable2faBody {
 
 interface Disable2faBody {
   id: number | string;
+}
+
+interface GoogleCallbackQuery {
+  code?: string;
+  state?: string;
 }
 
 export default async function authRoutes(fastify: FastifyInstance) {
@@ -118,6 +126,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
 
     const user = db.getUserById(String(accessUserId));
     if (!user) return reply.code(404).send({ error: "User not found" });
+    if (user.oauth_enabled === 1) return reply.code(400).send({ error: "2FA not available for OAuth accounts" });
     if (user.twofa_enabled === 1) return reply.code(400).send({ error: "2FA already enabled" });
 
     try {
@@ -176,6 +185,63 @@ export default async function authRoutes(fastify: FastifyInstance) {
     return { ok: true };
   });
 
+  fastify.get("/google", async (_request, reply) => {
+    const state = crypto.randomBytes(16).toString("hex");
+
+    reply.setCookie("oauth_state", state, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 300,
+    });
+
+    return reply.redirect(getGoogleAuthUrl(state));
+  });
+
+  fastify.get("/google/callback", async (request, reply) => {
+    const { code, state } = request.query as GoogleCallbackQuery;
+    const storedState = request.cookies?.oauth_state;
+
+    if (!code || !state || !storedState || state !== storedState) {
+      reply.clearCookie("oauth_state", { path: "/" });
+      return reply.code(400).send({ error: "Invalid OAuth state" });
+    }
+
+    try {
+      const tokens = await exchangeCodeForTokens(code);
+      const profile = await fetchGoogleUserInfo(tokens.access_token);
+      if (!profile?.sub) return reply.code(400).send({ error: "Invalid Google profile" });
+
+      let user = db.getUserByGoogleSub(profile.sub);
+      if (!user) {
+        const username = getUniqueUsername(toBaseUsername(profile.name, profile.email));
+        const mail = profile.email || `${profile.sub}@google.local`;
+        const password_hash = await bcrypt.hash(crypto.randomUUID(), 10);
+        const created = db.createOAuthUser(username, password_hash, mail, profile.sub);
+        user = db.getUserById(String(created.id));
+      }
+
+      if (!user) return reply.code(500).send({ error: "User creation failed" });
+
+      const token = generateAccessToken(user);
+      reply.setCookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 3600,
+      });
+
+      reply.clearCookie("oauth_state", { path: "/" });
+      return reply.redirect(process.env.OAUTH_SUCCESS_REDIRECT || "/#profil");
+    } catch (err) {
+      console.error("Google OAuth error:", err);
+      reply.clearCookie("oauth_state", { path: "/" });
+      return reply.code(500).send({ error: "OAuth failed" });
+    }
+  });
+
   fastify.get("/me", handleAuthMe);
 
   fastify.post("/logout", async (_, reply) => {
@@ -183,4 +249,21 @@ export default async function authRoutes(fastify: FastifyInstance) {
     reply.clearCookie("twofa_pending", { path: "/" });
     return { ok: true };
   });
+}
+
+function toBaseUsername(name?: string, email?: string) {
+  const base = (name || email?.split("@")[0] || "user")
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]/g, "");
+  return base.slice(0, 16) || "user";
+}
+
+function getUniqueUsername(base: string) {
+  let username = base;
+  let i = 0;
+  while (db.getUserByUsername(username)) {
+    i += 1;
+    username = `${base}${i}`;
+  }
+  return username;
 }
