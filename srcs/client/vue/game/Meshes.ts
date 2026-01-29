@@ -6,12 +6,11 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/28 19:50:08 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/29 10:46:42 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { PointerDragBehavior, Texture, Color4, ParticleSystem, KeyboardEventTypes, TrailMesh, Color3, FreeCamera, StandardMaterial, Engine, Scene, ArcRotateCamera, HemisphericLight, PointLight, MeshBuilder, Vector3 } from "@babylonjs/core";
-import { movePaddlesAndBalls } from "../../../server/gameLogic";
 import { createUI, drawText, setPlayerName, createdisposableUI, finalGoal, resetGame, resetBabylonJs } from "../ts/UI";
 import { isAuthenticated } from "../interface/authenticator";
 let engine: Engine | null = null;
@@ -152,13 +151,6 @@ console.log("setvalues called");
 export const keys: { [key: string]: boolean } = {};
 document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => keys[e.key] = false);
-// export const canvas = document.createElement("canvas");
-// canvas.id = "gameCanvas";
-// canvas.width = 800;
-// canvas.height = 600;
-// canvas.style.background = "black";
-// canvas.style.display = "block";
-// canvas.style.margin = "0 auto";
 
 function createMeshes(scene: any, canvas: any) {
   // Mats for Meshes
@@ -354,17 +346,9 @@ async function loadUsernameFromCookie() {
 }
 
 export async function pong(canvas) {
-  let alive = true; // lifecycle flag
+  let alive = true;
 
   await loadUsernameFromCookie();
-
-  // const canvas = document.createElement("canvas");
-  canvas.width = 800;
-  canvas.height = 600;
-  canvas.style.display = "block";
-  canvas.style.margin = "0 auto";
-
-  // if (!container.contains(canvas)) container.appendChild(canvas);
 
   engine = new Engine(canvas, true);
   scene = createScene(engine, canvas);
@@ -377,7 +361,6 @@ export async function pong(canvas) {
 
   const ws = new WebSocket("/ws/");
 
-  // WebSocket lifecycle guarded by `alive`
   ws.onopen = () => {
     if (!alive || ws.readyState !== WebSocket.OPEN) return;
 
@@ -415,15 +398,14 @@ export async function pong(canvas) {
   };
 
   ws.onclose = () => {
-    // if (!alive) return;
-    // Optional: console.log("WebSocket closed");
+
   };
 
   let lastSend = 0;
-  const SEND_INTERVAL = 50; // 20x/sec
+  const SEND_INTERVAL = 50;
 
   engine.runRenderLoop(() => {
-    if (!alive) return; // stop render loop after unmount
+    if (!alive) return;
     scene.render();
 
     const now = performance.now();
@@ -441,18 +423,17 @@ export async function pong(canvas) {
     }
   });
 
-  // Optional: handle window resize safely
-  const resizeHandler = () => {
-    if (!alive) return;
-    engine.resize();
-  };
-  window.addEventListener("resize", resizeHandler);
 
-  // 🔥 Cleanup function for React useEffect
+  // const resizeHandler = () => {
+  //   if (!alive) return;
+  //   engine.resize();
+  // };
+  // window.addEventListener("resize", resizeHandler);
+
   return () => {
-    alive = false;         // invalidate all async callbacks
-    ws.close();            // close WebSocket safely
-    resetBabylonJs();      // destroy Babylon engine
-    canvas.remove();       // remove canvas
+    alive = false;
+    ws.close();
+    resetBabylonJs();
+    canvas.remove();
   };
 }

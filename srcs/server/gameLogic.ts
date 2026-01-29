@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/28 19:42:01 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/29 10:48:10 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,104 +190,6 @@ export function moveBall(games: Game): Vec3 {
   return games.ballPos;
 }
 
-// export function movePaddles(games: Game): Paddles {
-
-
-//   let playerCount = games.playerCount;
-//   let keys = undefined;
-
-//   let isDragging1: boolean = false;
-//   let isDragging2: boolean = false;
-//   let dragPos1: Vec3 = { x: 0, y: 0, z: 0 };
-//   let dragPos2: Vec3 = { x: 0, y: 0, z: 0 };
-
-
-//   if (games.mode == 0) {
-//     let playerIndex = findPlayer(undefined, games.gameId);
-//     if (playerIndex == -1) {
-//       console.log("player not found mode = 0, index -1")
-//       if (keys == undefined)
-//         return (games.paddles);
-//     }
-//     else {
-//       keys = players[playerIndex].keys;
-//       isDragging2 = players[playerIndex].isDragging2;
-//       isDragging1 = players[playerIndex].isDragging1;
-//       dragPos1 = players[playerIndex].dragPos1;
-//       dragPos2 = players[playerIndex].dragPos2;
-
-//     }
-//   }
-
-//   if (games.mode == 1) {
-//     //   // let playerIndex = findPlayer(games.playername[0]);
-//     //   // if (playerIndex == -1) {
-//     //   //   console.log("player not found mode = 0, index -1")
-//     //   //   if (keys == undefined)
-//     //   //     return (games.paddles);
-//     //   // }
-//     //   // else {
-//     //   //   keys = players[playerIndex].keys;
-//     //   //   isDragging2 = players[playerIndex].isDragging2;
-//     //   //   isDragging1 = players[playerIndex].isDragging1;
-//     //   //   dragPos1 = players[playerIndex].dragPos1;
-//     //   //   dragPos2 = players[playerIndex].dragPos2;
-
-//     //   // }
-//     //   // games.paddles.paddle1 = find_game_paddle_for_online_game(player1);
-//     //   // playerIndex = findPlayer(games.playername[1]);
-//     //   // if (playerIndex == -1) {
-//     //   //   console.log("player not found mode = 0, index -1")
-//     //   //   if (keys == undefined)
-//     //   //     return (games.paddles);
-//     //   // }
-//     //   // else {
-//     //   //   keys = players[playerIndex].keys;
-//     //   //   isDragging2 = players[playerIndex].isDragging2;
-//     //   //   isDragging1 = players[playerIndex].isDragging1;
-//     //   //   dragPos1 = players[playerIndex].dragPos1;
-//     //   //   dragPos2 = players[playerIndex].dragPos2;
-//     //   //   games.paddles.paddle2 = find_game_paddle_for_online_game(player2);
-
-//     //   // }
-//     return (games.paddles);
-//   }
-
-//   let Direction = games.aiDirection;
-
-//   if (playerCount > 0) {
-//     if (isDragging1) {
-//       console.log("is dragging 1");
-//       if ((dragPos1.z < games.paddles.paddle1) && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
-//       if ((dragPos1.z > games.paddles.paddle1) && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
-//     }
-//     if (keys["w"] && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
-//     if (keys["s"] && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
-//   }
-//   else {
-//     if ((Direction < games.paddles.paddle1) && games.paddles.paddle1 > -tableHeight / 2 + 50 && games.balld.dx > 0) games.paddles.paddle1 -= paddleSpeed;
-//     if ((Direction > games.paddles.paddle1) && games.paddles.paddle1 < tableHeight / 2 - 50 && games.balld.dx > 0) games.paddles.paddle1 += paddleSpeed;
-//   }
-
-//   if (playerCount > 1) {
-//     if (isDragging2) {
-//       console.log("is gragging 2");
-//       if ((dragPos2.z < games.paddles.paddle2) && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
-//       if ((dragPos2.z > games.paddles.paddle2) && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
-//     }
-//     if (keys["ArrowUp"] && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
-//     if (keys["ArrowDown"] && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
-//   }
-//   else {
-//     if ((Direction < games.paddles.paddle2) && games.paddles.paddle2 > -tableHeight / 2 + 50 && games.balld.dx < 0) games.paddles.paddle2 -= paddleSpeed;
-//     if ((Direction > games.paddles.paddle2) && games.paddles.paddle2 < tableHeight / 2 - 50 && games.balld.dx < 0) games.paddles.paddle2 += paddleSpeed;
-//   }
-//   return games.paddles;
-// }
-
-// function movePaddle1(games: Game, playerCount: number,): Paddles {
-
-// }
 export function movePaddles(games: Game): Paddles {
   let playerCount = games.playerCount;
   let keys = undefined;
@@ -405,7 +307,6 @@ export function removePlayerByWS(ws: WS) {
         games[gameIndex].playerIds[1] = 0;
     }
     if (games[gameIndex] != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
-      //remove the player from game and see if there are other players on the game
       console.log("removed game", games[gameIndex].gameId);
       games.splice(gameIndex, 1);
       talkerTemp.splice(talkerindex, 1);
@@ -484,9 +385,6 @@ export function removeOldAddNewGame(player: Player, gId: number) {
     talkerTemp.splice(talkerindex, 1);
 
   }
-  // if (talkerindex !== -1 && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
-
-  // }
   if (gId >= 0)
     players[playerIndex].gameId = gId;
   console.log("new game is ", gId)
@@ -528,7 +426,6 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
 }
 
 setInterval(() => {
-  // console.log("setinterval 60 called")
   let i = 0;
   while (games.length > i) {
     let talkerindex = talkerTemp.findIndex(g => g.gameId === games[i].gameId)
@@ -555,8 +452,7 @@ setInterval(() => {
       let playerIndex = findPlayer(undefined, games[i].gameId);
       if (playerIndex == -1) {
         console.log("player not found mode = 0, gID ", games[i].gameId)
-        // games.splice(i, 1);
-        // continue;
+
       }
       else {
         players[playerIndex].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
@@ -581,25 +477,6 @@ setInterval(() => {
         continue;
       }
     }
-    // if (games[i] && games[i].mode == 1) {
-    //   let playerIndex = findPlayer(games[i].playername[1]);
-    //   if (playerIndex != -1) {
-    //     players[playerIndex].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
-    //     if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal) {
-    //       removeOldAddNewGame(players[playerIndex], -1);
-    //       continue;
-    //     }
-    //   }
-    // }
-
-    // let j = findPlayer(games[i].playername[0])
-    // if (j != -1) {
-    //   players[j].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
-    //   if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal)
-    //     removeOldAddNewGame(players[playerIndex], -1);
-    //   console.log("came in first ifff j counter 0 and 1 = ", j, talkerTemp[talkerindex].counter[0], talkerTemp[talkerindex].counter[1])
-    //   break;
-    // }
     i++;
   }
   i = 0;
