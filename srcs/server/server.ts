@@ -9,6 +9,7 @@ import staticPlugin from "@fastify/static";
 
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/users.routes";
+import matchRoutes from "./routes/matchs.routes";
 import messageRoutes from "./routes/messages.routes";
 import friendRoutes from "./routes/friends.routes";
 import metricsRoutes from "./routes/metrics.routes";
@@ -41,6 +42,7 @@ async function start() {
   await fastify.register(authRoutes, { prefix: "/api/auth" });
   await fastify.register(friendRoutes, { prefix: "/api/friend" });
   await fastify.register(userRoutes, { prefix: "/api" });
+  await fastify.register(matchRoutes, { prefix: "/api" });
   await fastify.register(messageRoutes, { prefix: "/api" });
   await fastify.register(metricsRoutes);
 
