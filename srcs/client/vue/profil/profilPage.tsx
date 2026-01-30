@@ -12,11 +12,15 @@ type UserStats = {
   winRate: number;
   gamesPlayed: number;
   gamesWon: number,
-  highScore: number
+  highScore: number;
+   twofaEnabled?: boolean;
 };
 
 export default function ProfilePage() {
   const [profilePic, setProfilePic] = useState(1);
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+  
   const [userStats, setUserStats] = useState<UserStats>({
     id: 0,
     username: "",
@@ -123,6 +127,8 @@ const handlelogout = async () => {
         className="inline-block  text-center cursor-pointer w-10 h-10 object-cover rounded-full border-7 border-[#FEE96E] ">
         <p>⚙️</p>
       </button>
+         
+
       <div className="max-w-4xl w-full mx-auto">
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-4 border-[#FEE96E] mb-6">
           <div className="flex items-center gap-8 mb-8">

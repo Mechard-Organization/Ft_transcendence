@@ -97,7 +97,7 @@ export default function LoginPage() {
 
   return (
     <main id="mainContent">
-	  <br/>;<br/>;<br/>
+	  <br/><br/><br/>
 	  <div className="mb-8 max-w-2xl w-full mx-auto text-center">
 		<div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-[#FEE96E] cursor-pointer">
 		  <div className="flex items-center justify-center">

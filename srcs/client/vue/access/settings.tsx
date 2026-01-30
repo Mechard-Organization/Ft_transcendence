@@ -1,16 +1,15 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect } from "react";
 import { validatePassword, validateEmail } from "../../../services/validate.service";
 import { isAuthenticated } from "../access/authenticator";
-import { Link } from "react-router-dom";
-
+import TwoFA from "./2fa";
+import Footer from "../ts/Footer";
 
 type UserStats = {
   id: number;
   username: string;
   mail: string;
-  avatarUrl?: string | null;
-  password?: string;
-  password2?: string;
+  avatarUrl?: string;
+  twofaEnabled?: boolean;
 };
 
 export default function UserSettings() {
@@ -19,18 +18,15 @@ export default function UserSettings() {
     username: "",
     mail: "",
     avatarUrl: "/uploads/profil/default.jpeg",
+    twofaEnabled: false
   });
 
   const [username, setUsername] = useState("");
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-
-  // Erreur / état loading
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  // --- Charger les infos utilisateur au montage ---
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -44,7 +40,6 @@ export default function UserSettings() {
         });
 
         const user = await res.json();
-
         setUserStats(user);
         setUsername(user.username);
         setMail(user.mail);
@@ -55,84 +50,6 @@ export default function UserSettings() {
     fetchUser();
   }, []);
 
-  // --- Modifier username ---
-  const updateUsername = async () => {
-    if (!username || !userStats.id) {
-      alert("Merci de vous connecter et d'entrer un username");
-      return;
-    }
-    try {
-      const res = await fetch("/api/updateUserUsername", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, id: userStats.id }),
-      });
-      const data = await res.json();
-      if (!res.ok) return alert(data.error || "Erreur");
-      setUserStats(prev => ({ ...prev, username }));
-      setUsername("");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // --- Modifier mot de passe ---
-  const updatePassword = async () => {
-    if (!password || !password2 || !userStats.id) {
-      alert("Merci de remplir tous les champs mot de passe");
-      return;
-    }
-    if (password !== password2) {
-      alert("Les mots de passe ne correspondent pas");
-      return;
-    }
-    if (!validatePassword(password, userStats.username).ok) {
-      alert(validatePassword(password, userStats.username).reason);
-      return;
-    }
-
-    try {
-      const res = await fetch("/api/updateUserPassword", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password, id: userStats.id }),
-      });
-      const data = await res.json();
-      if (!res.ok) return alert(data.error || "Erreur");
-      setPassword("");
-      setPassword2("");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // --- Modifier mail ---
-  const updateMail = async () => {
-    if (!mail || !userStats.id) {
-      alert("Merci de remplir le mail");
-      return;
-    }
-    if (!validateEmail(mail).ok) {
-      alert(validateEmail(mail).reason);
-      return;
-    }
-
-    try {
-      const res = await fetch("/api/updateUserMail", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mail, id: userStats.id }),
-      });
-      const data = await res.json();
-      if (!res.ok) return alert(data.error || "Erreur");
-      setUserStats(prev => ({ ...prev, mail }));
-      setMail("");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // --- Upload avatar ---
   const handleFile = async (file: File) => {
     if (file.type !== "image/jpeg") return alert("Uniquement des fichiers .jpeg");
     if (file.size > 2 * 1024 * 1024) return alert("Max 2 Mo");
@@ -153,112 +70,142 @@ export default function UserSettings() {
     }
   };
 
+  const updateUsername = async () => {
+    if (!username || !userStats.id) return alert("Entrez un username valide");
+    try {
+      const res = await fetch("/api/updateUserUsername", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, id: userStats.id }),
+      });
+      if (!res.ok) return alert("Erreur");
+      setUserStats(prev => ({ ...prev, username }));
+      setUsername("");
+    } catch (err) { console.error(err); }
+  };
+
+  const updatePassword = async () => {
+    if (!password || !password2) return alert("Remplir tous les champs mot de passe");
+    if (password !== password2) return alert("Les mots de passe ne correspondent pas");
+    if (!validatePassword(password, userStats.username).ok) {
+      return alert(validatePassword(password, userStats.username).reason);
+    }
+
+    try {
+      const res = await fetch("/api/updateUserPassword", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, id: userStats.id }),
+      });
+      if (!res.ok) return alert("Erreur");
+      setPassword("");
+      setPassword2("");
+    } catch (err) { console.error(err); }
+  };
+
+  const updateMail = async () => {
+    if (!mail) return alert("Remplir le mail");
+    if (!validateEmail(mail).ok) return alert(validateEmail(mail).reason);
+
+    try {
+      const res = await fetch("/api/updateUserMail", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mail, id: userStats.id }),
+      });
+      if (!res.ok) return alert("Erreur");
+      setUserStats(prev => ({ ...prev, mail }));
+      setMail("");
+    } catch (err) { console.error(err); }
+  };
+
   return (
     <main id="mainContent">
-      <br />
-      <br />
-
-      {/* Avatar */}
-
-      <button
-        onClick={() => window.location.href = "/profile"}
-        className="inline-block cursor-pointer"
-      >
-        <p>❌</p>
-      </button>
-
-      <input
-        type="file"
-        id="fileInput"
-        accept="image/*"
-        hidden
-        onChange={(e) => {
-          if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
-        }}
-      />
-        <div className="mb-8 max-w-4xl w-full mx-auto text-center">
-      <button
-        onClick={() => document.getElementById("fileInput")?.click()}
-        className="inline-block cursor-pointer"
-      >
-        <img
-          src={userStats.avatarUrl}
-          alt="personnage profil"
-          className="w-25 h-25 object-cover rounded-full border-4 border-[#FEE96E]"
+      <br></br>
+      <div className="mb-8 max-w-4xl w-full mx-auto text-center">
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+          hidden
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+          }}
         />
-      </button>
-        </div>
+        <button
+          onClick={() => document.getElementById("fileInput")?.click()}
+          className="inline-block cursor-pointer"
+        >
+          <img
+            src={userStats.avatarUrl}
+            alt="Avatar"
+            className="w-25 h-25 object-cover rounded-full border-4 border-[#FEE96E]"
+          />
+        </button>
+      </div>
 
+      {/* Composant 2FA */}
+     
+
+      {/* Username */}
       <div className="form-group w-full text-center mt-4">
-        <label htmlFor="username" className="block mb-1">
-          Modifier Le Nom d'utilisateur
-        </label>
         <input
           type="text"
-          id="username"
           placeholder="Nom d'utilisateur"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="mx-auto block flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+          className="mx-auto block flex-1 px-6 py-3  text-center rounded-full border-2 border-[#FEE96E] bg-white/70"
         />
-        <button
-          onClick={updateUsername}
-          className="flex-1 px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]"
-        >
+        <button onClick={updateUsername} className="px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]">
           Modifier Username
         </button>
       </div>
-        <br />
-        <br />
 
+      {/* Password */}
       <div className="form-group w-full text-center mt-4">
-        <label className="block mb-1">Mot de passe</label>
         <input
           type="password"
           placeholder="Nouveau mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E]"
+          className="flex-1 px-6 py-3  text-center rounded-full border-2 border-[#FEE96E] bg-white/70"
         />
-        <br />
-
         <input
           type="password"
           placeholder="Confirmer mot de passe"
           value={password2}
           onChange={(e) => setPassword2(e.target.value)}
-          className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] mt-2"
+          className="flex-1 px-6 py-3  text-center rounded-full border-2 border-[#FEE96E] mt-2 bg-white/70"
         />
-        <br />
-        <button
-          onClick={updatePassword}
-          className="flex-1 px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]"
-        >
+        <button onClick={updatePassword} className="px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]">
           Modifier Password
         </button>
       </div>
-        <br />
 
+      {/* Mail */}
       <div className="form-group w-full text-center mt-4">
-        <label className="block mb-1">Email</label>
         <input
           type="email"
           placeholder="Nouvelle adresse mail"
           value={mail}
           onChange={(e) => setMail(e.target.value)}
-          className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E]"
+          className="flex-1 px-6 py-3  text-center rounded-full border-2 border-[#FEE96E] bg-white/70"
         />
-
-        <br />
-        <button
-          onClick={updateMail}
-          className="flex-1 px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]"
-        >
+        <button onClick={updateMail} className="px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]">
           Modifier Mail
         </button>
       </div>
 
       {error && <p className="text-red-600 text-center mt-4">{error}</p>}
+
+      <br></br>
+       <TwoFA
+        userId={userStats.id}
+        twofaEnabled={userStats.twofaEnabled ?? false}
+        onEnable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: true }))}
+        onDisable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: false }))}
+      />
+      <Footer />
     </main>
   );
 }

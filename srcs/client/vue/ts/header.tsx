@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { Gamepad2, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { isAuthenticated } from "../access/authenticator"; // adapte le chemin si besoin
-import { handlelogout } from "../profil/profilPage" 
+import { isAuthenticated } from "../access/authenticator";
+import  handlelogout  from "../profil/profilPage" ;
 
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
@@ -179,9 +179,6 @@ const handlelogout = async () => {
             </Link>
           
               ) : null}
-
-
-          
         </nav>
       </div>
     </header>
