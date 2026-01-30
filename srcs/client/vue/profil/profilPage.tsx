@@ -24,7 +24,7 @@ export default function ProfilePage() {
     id: 0,
     username: "",
     mail: "",
-    avatarUrl: "./uploads/profil/1.jpeg", 
+    avatarUrl: "./uploads/profil/default.jpeg", 
     winRate: 0,
     gamesPlayed: 0,
     gamesWon: 0,

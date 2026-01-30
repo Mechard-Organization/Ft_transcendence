@@ -95,6 +95,12 @@ export default function HomePage() {
               </div>
             </Link>
           )}
+        <br />
+          <img
+            src="/uploads/gif/cookie.gif"
+            alt="cookie"
+            className="w-64 h-64 object-cover rounded-xl"
+          />
         </div>
       </main>
 

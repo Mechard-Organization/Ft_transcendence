@@ -133,7 +133,6 @@ const handlelogout = async () => {
               <MessageCircle className="w-6 h-6" />
             </div>
           </Link>
-
           {/* ✅ Login OU Profil */}
           {authStatus === "authenticated" && location.pathname === "/profile" ? (
             <div
@@ -179,8 +178,10 @@ const handlelogout = async () => {
             </Link>
           
               ) : null}
+            
         </nav>
       </div>
     </header>
   );
 }
+
