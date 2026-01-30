@@ -21,7 +21,7 @@ export default function ProfilePage() {
     id: 0,
     username: "",
     mail: "",
-    avatarUrl: "/uploads/profil/default.jpeg", 
+    avatarUrl: "../1.jpeg", 
     winRate: 0,
     gamesPlayed: 0,
     gamesWon: 0,
@@ -45,17 +45,18 @@ export default function ProfilePage() {
           id: userData.id,
           username: userData.username,
           mail: userData.mail,
-          avatarUrl: userData.avatarUrl,
-          winRate: 0,
-          gamesPlayed: 0,
-          gamesWon: 0,
-          highScore: 0
+          avatarUrl: userData.avatarUrl ?? "./upload/profil/1.jpeg",
+          winRate: userData.winRate,
+          gamesPlayed: userData.gamesPlayed,
+          gamesWon: userData.gamesWon,
+          highScore: userData.highScore
         });
         if (!userData.avatarUrl) setProfilePic(1);
       } catch (err) {
         console.error("Erreur récupération profil :", err);
       }
     }
+  console.log("lalalala : ", userStats.avatarUrl)
     fetchUser();
   }, []);
 
@@ -91,7 +92,15 @@ const handleFile = async (file: File) => {
   } catch (err) {
     console.error("Erreur upload avatar", err);
   }
+};
 
+const handlelogout = async () => {
+  await fetch("/api/auth/logout", {
+    method: "POST",
+    credentials: "include", // 🔑 OBLIGATOIRE
+  });
+
+  window.location.href = "/login";
 };
 
 
@@ -109,18 +118,11 @@ const handleFile = async (file: File) => {
                     
           <h1 className="text-4xl text-[#8B5A3C] mt-4">{userStats.username}</h1>
         </div>
-      <Link to="/settings">
-        <div>
-
-      <button className="inline-block cursor-pointer">
-        <img
-          src={userStats.avatarUrl}
-          alt="settings"
-          className="w-10 h-10 object-cover rounded-full border-4 border-[#FEE96E]  margin-right:10px"
-        />
+      <button
+        onClick={() => window.location.href = "/settings"}
+        className="inline-block  text-center cursor-pointer w-10 h-10 object-cover rounded-full border-7 border-[#FEE96E] ">
+        <p>⚙️</p>
       </button>
-        </div>
-      </Link>
       <div className="max-w-4xl w-full mx-auto">
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-4 border-[#FEE96E] mb-6">
           <div className="flex items-center gap-8 mb-8">
@@ -217,11 +219,6 @@ const handleFile = async (file: File) => {
           </div>
         </div>
       </div>
-        <div className="text-center">
-          <div className="inline-block">
-            <img src="../..profil/chat.jpeg" alt="personnage chat" className="w-15 h-15 object-cover cursor-pointer rounded-full" />
-          </div>
-        </div>
         <Footer />
     </div>
   );

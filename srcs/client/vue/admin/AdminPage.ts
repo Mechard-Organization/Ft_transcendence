@@ -1,4 +1,4 @@
-import { isAuthenticated } from "./authenticator";
+import { isAuthenticated } from "../access/authenticator";
 import { handleEnter } from "./adminInterface";
 
 

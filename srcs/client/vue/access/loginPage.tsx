@@ -112,6 +112,7 @@ export default function LoginPage() {
               id="loginForm"
               className="form-container flex flex-col items-center gap-4"
               onSubmit={onSubmitLogin}
+
             >
               <div className="form-group w-full text-center">
                 <label htmlFor="username" className="block mb-1">
@@ -169,32 +170,35 @@ export default function LoginPage() {
 	  </div>
 
       {twofaRequired && (
-        <section id="twofaSection">
-          <h2>2FA</h2>
+  <div className="mt-6 p-6 bg-[#FFFAED] rounded-2xl border-2 border-[#FEE96E]">
+    <h2 className="text-xl text-[#8B5A3C] mb-4">Vérification 2FA</h2>
 
-          <div className="form-group">
-            <label htmlFor="twofaCode">Code de verification</label>
-            <input
-              type="text"
-              id="twofaCode"
-              placeholder="123456"
-              value={twofaCode}
-              onChange={(e) => setTwofaCode(e.target.value)}
-              inputMode="numeric"
-              autoComplete="one-time-code"
-            />
-          </div>
+    <div className="form-group mb-4">
+      <label htmlFor="twofaCode" className="block mb-1">
+        Code de vérification
+      </label>
+      <input
+        type="text"
+        id="twofaCode"
+        placeholder="123456"
+        value={twofaCode}
+        onChange={(e) => setTwofaCode(e.target.value)}
+        inputMode="numeric"
+        autoComplete="one-time-code"
+        className="w-full px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+      />
+    </div>
 
-          <button
-            id="twofaBtn"
-            className="btn-primary"
-            onClick={onVerify2FA}
-            disabled={verifying2fa}
-          >
-            {verifying2fa ? "Vérification..." : "Verifier"}
-          </button>
-        </section>
-      )}
+    <button
+      className="w-full px-6 py-3 rounded-full bg-[#FEE96E] border-2 border-[#FEE96E]"
+      onClick={onVerify2FA}
+      disabled={verifying2fa}
+    >
+      {verifying2fa ? "Vérification..." : "Vérifier"}
+    </button>
+  </div>
+)}
+
     </main>
   );
 }

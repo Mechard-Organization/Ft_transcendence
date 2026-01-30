@@ -6,6 +6,10 @@ import ChatPage from './client/vue/messages/messagesPage';
 import ProfilePage from './client/vue/profil/profilPage';
 import LoginPage from './client/vue/access/loginPage';
 import RegisterPage from './client/vue/access/registerPage';
+import SettingsPage from './client/vue/access/settings';
+
+
+import { Settings } from 'lucide-react';
 
 export default function App() {
   return (
@@ -28,6 +32,7 @@ export default function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Routes>
       </div>
     </Router>

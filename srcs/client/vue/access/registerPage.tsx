@@ -52,24 +52,28 @@ export default function RegisterPage() {
 	console.log("password :", password);
 	console.log("mail :", mail);
     try {
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: u, password: p, mail: m }),
-      });
+          const response = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ username: u, password: p, mail: m }),
+    });
 
-      const data: RegisterResponse = await response.json().catch(() => ({}));
 
+      const data: RegisterResponse = await response.json();
+    console.log(JSON.stringify(data, null, 2))
       if (!response.ok) {
         setError(data.error || data.message || "Erreur lors de la création");
         return;
       }
 
-      setUsername("");
-      setPassword("");
-      setConfirmPassword("");
-      setMail("");
+      setUsername(username);
+      setPassword(password);
+      setConfirmPassword(password);
+      setMail(mail);
 
+      window.location.href = "/login"
+      console.log("data :",  data)
     } catch (err) {
       console.error(err);
       setError("Erreur réseau, réessaie plus tard.");
@@ -77,7 +81,12 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
-
+  const formAction = async (data: FormData) =>{
+      setUsername(data.get("username")?.toString() ?? "");
+      setPassword(data.get("password")?.toString() ?? "");
+      setConfirmPassword(data.get("password")?.toString() ?? "");
+      console.log({username, password, confirmPassword})
+  }
   return (
     <main id="mainContent">
       <div className="mb-8 max-w-2xl w-full mx-auto text-center">
@@ -96,6 +105,7 @@ export default function RegisterPage() {
               id="registerForm"
               className="form-container flex flex-col items-center gap-4"
               onSubmit={onSubmitRegister}
+              /* action={formAction} */
             >
               <div className="form-group w-full text-center">
                 <label htmlFor="username" className="block mb-1">

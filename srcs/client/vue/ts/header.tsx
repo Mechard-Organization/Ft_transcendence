@@ -2,6 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Gamepad2, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../access/authenticator"; // adapte le chemin si besoin
+import { handlelogout } from "../profil/profilPage" 
+
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
 type avatarUrl = "";
@@ -47,7 +49,7 @@ export default function Header() {
             id: userData.id,
             username: userData.username,
             mail: userData.mail,
-            avatarUrl: userData.avatarUrl ?? "/uploads/profil/default.jpeg",
+            avatarUrl: userData.avatarUrl,
           });
           } else {
             setAuthStatus("anonymous");
@@ -70,6 +72,16 @@ export default function Header() {
   useEffect(() => {
     console.log("✅ avatarUrl mis à jour :", avatarUrl);
   }, [avatarUrl]);
+
+
+const handlelogout = async () => {
+  await fetch("/api/auth/logout", {
+    method: "POST",
+    credentials: "include", // 🔑 OBLIGATOIRE
+  });
+
+  window.location.href = "/login";
+};
 
   return (
     <header
@@ -123,7 +135,36 @@ export default function Header() {
           </Link>
 
           {/* ✅ Login OU Profil */}
-          {authStatus !== "authenticated" ? (
+          {authStatus === "authenticated" && location.pathname === "/profile" ? (
+            <div
+              className="flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer bg-[#FEE96E] transition-all hover:scale-105"
+            >
+              {/* Logout Button */}
+              <button
+                onClick={handlelogout}
+                className="px-3 py-1 rounded-full bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100 transition-colors"
+              >
+                Logout
+              </button>
+
+              {/* Avatar */}
+              <Link to="/profile">
+                <img
+                  src={userStats.avatarUrl}
+                  alt="Avatar"
+                  className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E]"
+                />
+              </Link>
+            </div>
+          ) : authStatus == "authenticated" && location.pathname !== "/profile"  ? (
+            <Link to="/profile">
+                <img
+                  src={userStats.avatarUrl}
+                  alt="Avatar"
+                  className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E]"
+                />
+              </Link>
+          ) : authStatus !== "authenticated"  ? (
             <Link to="/login">
               <div
                 className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
@@ -131,32 +172,15 @@ export default function Header() {
                     ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
                     : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                 }`}
-                title={
-                  authStatus === "loading"
-                    ? "Vérification..."
-                    : "Se connecter"
-                }
+                title={authStatus === "loading" ? "Vérification..." : "Se connecter"}
               >
                 <User className="w-6 h-6" />
               </div>
             </Link>
-          ) : (
-            <Link to="/profile">
-              <div
-                className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                  isActive("/profil")
-                    ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
-                    : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
-                }`}
-              >
-                <img
-                  src={userStats.avatarUrl}
-                  alt="personnage profil"
-                  className="w-10 h-10 object-cover rounded-full"
-                />
-              </div>
-            </Link>
-          )}
+          
+              ) : null}
+
+
           
         </nav>
       </div>

@@ -1,5 +1,5 @@
-import { isAuthenticated } from "./authenticator";
-import { handleEnter } from "./adminInterface";
+import { isAuthenticated } from "../access/authenticator";
+import { handleEnter } from "../admin/adminInterface";
 
 async function loadRequestFriends() {
   const tbody = document.getElementById("requestTableBody");
