@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mail, setMail] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("")
+  const [avatarUrl, setAvatarUrl] = useState("./uploads/profil/default.jpeg")
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -71,6 +71,7 @@ export default function RegisterPage() {
       setPassword(password);
       setConfirmPassword(password);
       setMail(mail);
+      setAvatarUrl("./uploads/profil/default.jpeg")
 
       window.location.href = "/login"
       console.log("data :",  data)
@@ -81,12 +82,6 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
-  const formAction = async (data: FormData) =>{
-      setUsername(data.get("username")?.toString() ?? "");
-      setPassword(data.get("password")?.toString() ?? "");
-      setConfirmPassword(data.get("password")?.toString() ?? "");
-      console.log({username, password, confirmPassword})
-  }
   return (
     <main id="mainContent">
       <div className="mb-8 max-w-2xl w-full mx-auto text-center">

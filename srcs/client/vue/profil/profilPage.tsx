@@ -17,7 +17,6 @@ type UserStats = {
 };
 
 export default function ProfilePage() {
-  const [profilePic, setProfilePic] = useState(1);
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   
@@ -25,7 +24,7 @@ export default function ProfilePage() {
     id: 0,
     username: "",
     mail: "",
-    avatarUrl: "../1.jpeg", 
+    avatarUrl: "./uploads/profil/1.jpeg", 
     winRate: 0,
     gamesPlayed: 0,
     gamesWon: 0,
@@ -49,18 +48,16 @@ export default function ProfilePage() {
           id: userData.id,
           username: userData.username,
           mail: userData.mail,
-          avatarUrl: userData.avatarUrl ?? "./upload/profil/1.jpeg",
+          avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
           winRate: userData.winRate,
           gamesPlayed: userData.gamesPlayed,
           gamesWon: userData.gamesWon,
           highScore: userData.highScore
         });
-        if (!userData.avatarUrl) setProfilePic(1);
       } catch (err) {
         console.error("Erreur récupération profil :", err);
       }
     }
-  console.log("lalalala : ", userStats.avatarUrl)
     fetchUser();
   }, []);
 

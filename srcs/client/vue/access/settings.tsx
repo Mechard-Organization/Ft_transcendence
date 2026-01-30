@@ -40,9 +40,14 @@ export default function UserSettings() {
         });
 
         const user = await res.json();
-        setUserStats(user);
+        setUserStats(prev => ({
+          ...prev,
+          ...user,
+          avatarUrl: user.avatarUrl || "/uploads/profil/default.jpeg"
+        }));
         setUsername(user.username);
         setMail(user.mail);
+        
       } catch (err) {
         console.error("Erreur récupération profil :", err);
       }

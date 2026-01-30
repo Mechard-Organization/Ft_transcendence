@@ -49,7 +49,7 @@ export default function Header() {
             id: userData.id,
             username: userData.username,
             mail: userData.mail,
-            avatarUrl: userData.avatarUrl,
+            avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
           });
           } else {
             setAuthStatus("anonymous");
