@@ -69,55 +69,68 @@ export default function ChatPage() {
 
   }, []);
 
-  
+
   useEffect(() => {
     async function fetchMessages() {
-    if (!selectedConversation) return;
-    
-    const res = await fetch("/api/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id_friend: selectedConversation,
-      }),
-    });
-    console.log("id: ", selectedConversation)
-    setMessages(await res.json());
-  }
-  fetchMessages();
-}, [selectedConversation]);
+      let res;
+      if (!selectedConversation)
+      {
+          res = await fetch("/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_group: undefined,
+          }),
+        });
+      }
+      else
+      {
+        res = await fetch("/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_group: selectedConversation,
+          }),
+        });
+      }
+      console.log("id: ", selectedConversation)
+      setMessages(await res.json());
+    }
+    fetchMessages();
+  }, [selectedConversation]);
 
 
 /* ---------------- SEND MESSAGE ---------------- */
 const sendMessage = async () => {
   if (!newMessage.trim()) return;
-  
+
   const auth = await isAuthenticated();
   const id = auth?.id ?? null;
-  
+
 
 
   try {
+    const id_group = selectedConversation === 0 ? undefined : selectedConversation;
     const res = await fetch("/api/hello", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         content: newMessage,
         id,
-        id_friend: selectedConversation,})
+        id_group,})
       });
       setNewMessage("");
     } catch (err) {
       console.error("Erreur envoi message:", err);
     }
   };
-  
+
 
   useEffect(() => {
     async function getGroups() {
       const auth = await isAuthenticated();
       if (!auth?.id) return;
-      
+
         const res = await fetch("/api/getAllUserGroup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -125,15 +138,19 @@ const sendMessage = async () => {
         });
 
         const data = await res.json();
-        
-        setConversations(
-          data.map((f: any) => ({
+        setConversations([
+          { id: 0 },
+          ...data.map((f: any) => ({
             id: f.id_group,
-          }))
-        );
+          })),
+        ]);
       }
       getGroups();
     }, []);
+
+  useEffect(() => {
+    console.log("✅ conversations mis à jour :", conversations);
+  }, [conversations]);
 
 
   return (
