@@ -18,12 +18,18 @@ interface Group {
   name: string;
 }
 
+interface Conversation {
+  id: number;
+  username: string;
+}
+
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const isActive = (path: string) => location.pathname === path;
-  const [groups, setGroups] = useState<Group[]>([
-    { id: 1, name: "Discussion générale" },
-  ]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
+
   const [selectedGroup, setSelectedGroup] = useState<number | null>(1);
   const [newMessage, setNewMessage] = useState("");
 
@@ -37,8 +43,7 @@ export default function ChatPage() {
 
   /* ---------------- WEBSOCKET ---------------- */
   useEffect(() => {
-    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-    const ws = new WebSocket(`${protocol}://${window.location.host}/ws`);
+    const ws = new WebSocket(`/ws/`);
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -48,7 +53,7 @@ export default function ChatPage() {
     ws.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-        if (msg.type === "new_message") {
+        if (msg.type === "new_message" && msg.data.id_friend === sele) {
           console.log("msg : ", msg)
           setMessages((prev) => [...prev, msg.data]);
         }
@@ -66,23 +71,23 @@ export default function ChatPage() {
   }, []);
 
   /* ---------------- FETCH MESSAGES ---------------- */
-  useEffect(() => {
-    async function fetchMessages() {
-      try {
-        const res = await fetch("/api/messages", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id_group: selectedGroup }),
-        });
-        const data: Message[] = await res.json();
-        setMessages(data);
-      } catch (err) {
-        console.error("Erreur fetch messages:", err);
-      }
-    }
+useEffect(() => {
+  async function fetchMessages() {
+    if (!selectedConversation) return;
 
-    if (selectedGroup) fetchMessages();
-  }, [selectedGroup]);
+    const res = await fetch("/api/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id_friend: selectedConversation,
+      }),
+    });
+    setMessages(await res.json());
+  }
+
+  fetchMessages();
+}, [selectedConversation]);
+
 
   /* ---------------- SEND MESSAGE ---------------- */
   const sendMessage = async () => {
@@ -92,20 +97,44 @@ export default function ChatPage() {
     const id = auth?.id ?? null;
 
     try {
-      await fetch("/api/hello", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const res = await fetch("/api/hello", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
           content: newMessage,
           id,
-          id_group: selectedGroup,
-        }),
-      });
+          id_friend: selectedConversation,})
+          });
       setNewMessage("");
     } catch (err) {
       console.error("Erreur envoi message:", err);
     }
   };
+
+    useEffect(() => {
+      async function fetchFriends() {
+        const auth = await isAuthenticated();
+        if (!auth?.id) return;
+
+        const res = await fetch("/api/friend/getFriendV", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: auth.id }),
+        });
+
+        const data = await res.json();
+
+        setConversations(
+          data.map((f: any) => ({
+            id: f.id,
+            username: f.username,
+          }))
+        );
+      }
+
+      fetchFriends();
+    }, []);
+
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
@@ -128,20 +157,21 @@ export default function ChatPage() {
             </div>
           </Link>
               </h2>
-          {groups.map((group) => (
-            <div
-              key={group.id}
-              onClick={() => setSelectedGroup(group.id)}
-              className={`p-3 rounded-xl cursor-pointer transition-all mb-2
-                ${
-                  selectedGroup === group.id
-                    ? "bg-[#FEE96E]"
-                    : "hover:bg-yellow-200"
-                }`}
-            >
-              {group.name}
-            </div>
-          ))}
+                      {conversations.map((conv) => (
+              <div
+                key={conv.id}
+                onClick={() => setSelectedConversation(conv.id)}
+                className={`p-3 rounded-xl cursor-pointer transition-all mb-2 flex items-center gap-3
+                  ${
+                    selectedConversation === conv.id
+                      ? "bg-[#FEE96E]"
+                      : "hover:bg-yellow-200"
+                  }`}
+              >
+                <User className="w-5 h-5 text-[#8B5A3C]" />
+                <span className="font-medium">{conv.username}</span>
+              </div>
+            ))}
         </div>
 
         {/* ---------------- RIGHT PANEL ---------------- */}
@@ -149,8 +179,10 @@ export default function ChatPage() {
           {/* HEADER CHAT */}
           <div className="bg-[#FEE96E] p-4">
             <h2 className="text-xl font-bold text-[#8B5A3C]">
-              {groups.find((g) => g.id === selectedGroup)?.name}
+              {conversations.find(c => c.id === selectedConversation)?.username
+                || "Sélectionne une discussion"}
             </h2>
+
           </div>
 
           {/* MESSAGES */}
