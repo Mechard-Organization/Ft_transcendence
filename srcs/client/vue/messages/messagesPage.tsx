@@ -49,6 +49,7 @@ export default function ChatPage() {
       try {
         const msg = JSON.parse(event.data);
         if (msg.type === "new_message") {
+          console.log("msg : ", msg)
           setMessages((prev) => [...prev, msg.data]);
         }
       } catch (err) {

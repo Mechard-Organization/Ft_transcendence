@@ -5,13 +5,36 @@ import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator"; // <-- adapte le chemin si besoin
 
 type AuthStatus = "loading" | "authenticated" | "anonymous";
+type UserStats = {
+  id: number;
+  username: string;
+  mail: string;
+  avatarUrl?: string;
+  winRate: number;
+  gamesPlayed: number;
+  gamesWon: number,
+  highScore: number;
+   twofaEnabled?: boolean;
+};
+
 
 export default function HomePage() {
   const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
   const [userId, setUserId] = useState<number>(0);
+  const [userStats, setUserStats] = useState<UserStats>({
+    id: 0,
+    username: "",
+    mail: "",
+    avatarUrl: "./uploads/profil/default.jpeg", 
+    winRate: 0,
+    gamesPlayed: 0,
+    gamesWon: 0,
+    highScore: 0
+  });
 
   useEffect(() => {
     let mounted = true;
+
 
     (async () => {
       try {
@@ -21,6 +44,23 @@ export default function HomePage() {
         if (auth?.authenticated) {
           setAuthStatus("authenticated");
           setUserId(auth.id ?? 0);
+          const resUser = await fetch("/api/getuser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: auth.id }),
+        });
+        const userData = await resUser.json();
+
+        setUserStats({
+          id: userData.id,
+          username: userData.username,
+          mail: userData.mail,
+          avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
+          winRate: userData.winRate,
+          gamesPlayed: userData.gamesPlayed,
+          gamesWon: userData.gamesWon,
+          highScore: userData.highScore
+        })
         } else {
           setAuthStatus("anonymous");
         }
@@ -71,8 +111,7 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* ✅ Ici : Login OU Profil selon l'auth */}
-          {authStatus !== "authenticated" ? (
+          {authStatus != "authenticated" || userStats.username == "" ? (
             <Link to="/login">
               <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-[#FEE96E] cursor-pointer">
                 <div className="bg-[#FEE96E] rounded-full p-6 w-20 h-20 flex items-center justify-center mb-4 mx-auto">

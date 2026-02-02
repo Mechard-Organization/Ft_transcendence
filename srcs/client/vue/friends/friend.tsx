@@ -139,8 +139,14 @@ export default function FriendsPage() {
         <div key={r.id} className="flex justify-between p-2 border rounded mb-2">
           <span>{r.username}</span>
           <div className="flex gap-2">
-            <button onClick={() => acceptFriend(r.id)}>✅</button>
+          {r.id_sender !== userId ? (
+            <>
+              <button onClick={() => acceptFriend(r.id)}>✅</button>
+              <button onClick={() => rejectFriend(r.id)}>❌</button>
+            </>
+          ) : (
             <button onClick={() => rejectFriend(r.id)}>❌</button>
+          )}
           </div>
         </div>
       ))}
