@@ -47,11 +47,12 @@ export default function ChatPage() {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const selectedConversationRef = useRef<number | null>(null);
     const [userStats, setUserStats] = useState<UserStats>({
       id: 0,
       username: "",
       mail: "",
-      avatarUrl: "./uploads/profil/default.jpeg", 
+      avatarUrl: "./uploads/profil/default.jpeg",
       winRate: 0,
       gamesPlayed: 0,
       gamesWon: 0,
@@ -73,9 +74,14 @@ export default function ChatPage() {
     ws.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-        if (msg.type === "new_message" && msg.data.id_friend === selectedConversation) {
-          console.log("msg : ", msg)
-          setMessages((prev) => [...prev, msg.data]);
+        if (msg.data)
+        {
+          const idGroup = msg.data.id_group ?? null;
+          console.log("mm", idGroup, selectedConversationRef.current)
+          if (msg.type === "new_message" && idGroup === selectedConversationRef.current) {
+            console.log("msg : ", msg)
+            setMessages((prev) => [...prev, msg.data.saved]);
+          }
         }
       } catch (err) {
         console.error("Erreur WS:", err);
@@ -115,6 +121,8 @@ export default function ChatPage() {
         });
       }
       console.log("id: ", selectedConversation)
+      selectedConversationRef.current =
+        selectedConversation === 0 ? null : selectedConversation;
       setMessages(await res.json());
     }
     fetchMessages();
