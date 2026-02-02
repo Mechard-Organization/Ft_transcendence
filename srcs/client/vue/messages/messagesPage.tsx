@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { Send, Users } from "lucide-react";
 import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
 import { Link, useLocation } from "react-router-dom";
@@ -23,6 +23,18 @@ interface Conversation {
   username: string;
 }
 
+type UserStats = {
+  id: number;
+  username: string;
+  mail: string;
+  avatarUrl?: string;
+  winRate: number;
+  gamesPlayed: number;
+  gamesWon: number,
+  highScore: number;
+   twofaEnabled?: boolean;
+};
+
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -35,13 +47,22 @@ export default function ChatPage() {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const selectedConversationRef = useRef<number | null>(null);
+    const [userStats, setUserStats] = useState<UserStats>({
+      id: 0,
+      username: "",
+      mail: "",
+      avatarUrl: "./uploads/profil/default.jpeg",
+      winRate: 0,
+      gamesPlayed: 0,
+      gamesWon: 0,
+      highScore: 0
+    });
 
-  /* ---------------- AUTO SCROLL ---------------- */
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  /* ---------------- WEBSOCKET ---------------- */
   useEffect(() => {
     const ws = new WebSocket(`/ws/`);
     wsRef.current = ws;
@@ -53,9 +74,14 @@ export default function ChatPage() {
     ws.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-        if (msg.type === "new_message" && msg.data.id_friend === sele) {
-          console.log("msg : ", msg)
-          setMessages((prev) => [...prev, msg.data]);
+        if (msg.data)
+        {
+          const idGroup = msg.data.id_group ?? null;
+          console.log("mm", idGroup, selectedConversationRef.current)
+          if (msg.type === "new_message" && idGroup === selectedConversationRef.current) {
+            console.log("msg : ", msg)
+            setMessages((prev) => [...prev, msg.data.saved]);
+          }
         }
       } catch (err) {
         console.error("Erreur WS:", err);
@@ -70,71 +96,121 @@ export default function ChatPage() {
 
   }, []);
 
-  /* ---------------- FETCH MESSAGES ---------------- */
-useEffect(() => {
-  async function fetchMessages() {
-    if (!selectedConversation) return;
 
-    const res = await fetch("/api/messages", {
+  useEffect(() => {
+    async function fetchMessages() {
+      let res;
+      if (!selectedConversation)
+      {
+          res = await fetch("/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_group: undefined,
+          }),
+        });
+      }
+      else
+      {
+        res = await fetch("/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_group: selectedConversation,
+          }),
+        });
+      }
+      console.log("id: ", selectedConversation)
+      selectedConversationRef.current =
+        selectedConversation === 0 ? null : selectedConversation;
+      setMessages(await res.json());
+    }
+    fetchMessages();
+  }, [selectedConversation]);
+
+
+/* ---------------- SEND MESSAGE ---------------- */
+const sendMessage = async () => {
+  if (!newMessage.trim()) return;
+
+  const auth = await isAuthenticated();
+  const id = auth?.id ?? null;
+
+
+
+  try {
+    const id_group = selectedConversation === 0 ? undefined : selectedConversation;
+    const res = await fetch("/api/hello", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id_friend: selectedConversation,
-      }),
-    });
-    setMessages(await res.json());
-  }
-
-  fetchMessages();
-}, [selectedConversation]);
-
-
-  /* ---------------- SEND MESSAGE ---------------- */
-  const sendMessage = async () => {
-    if (!newMessage.trim()) return;
-
-    const auth = await isAuthenticated();
-    const id = auth?.id ?? null;
-
-    try {
-      const res = await fetch("/api/hello", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-          content: newMessage,
-          id,
-          id_friend: selectedConversation,})
-          });
+        content: newMessage,
+        id,
+        id_group,})
+      });
       setNewMessage("");
     } catch (err) {
       console.error("Erreur envoi message:", err);
     }
   };
 
-    useEffect(() => {
-      async function fetchFriends() {
-        const auth = await isAuthenticated();
-        if (!auth?.id) return;
 
-        const res = await fetch("/api/friend/getFriendV", {
+  useEffect(() => {
+    async function getGroups() {
+      const auth = await isAuthenticated();
+      if (!auth?.id) return;
+
+        const res = await fetch("/api/getAllUserGroup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: auth.id }),
         });
 
         const data = await res.json();
-
-        setConversations(
-          data.map((f: any) => ({
-            id: f.id,
-            username: f.username,
-          }))
-        );
+        setConversations([
+          { id: 0 },
+          ...data.map((f: any) => ({
+            id: f.id_group,
+          })),
+        ]);
       }
-
-      fetchFriends();
+      getGroups();
     }, []);
 
+  useEffect(() => {
+    console.log("✅ conversations mis à jour :", conversations);
+  }, [conversations]);
+
+
+    useEffect(() => {
+    async function fetchUser() {
+      try {
+        const auth = await isAuthenticated();
+        if (!auth?.id) return;
+
+        const resUser = await fetch("/api/getuser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: auth.id }),
+        });
+        const userData = await resUser.json();
+
+        setUserStats({
+          id: userData.id,
+          username: userData.username,
+          mail: userData.mail,
+          avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
+          winRate: userData.winRate,
+          gamesPlayed: userData.gamesPlayed,
+          gamesWon: userData.gamesWon,
+          highScore: userData.highScore
+        });
+      } catch (err) {
+        console.error("Erreur récupération profil :", err);
+      }
+    }
+    fetchUser();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
@@ -191,16 +267,16 @@ useEffect(() => {
               <div
                 key={msg.id}
                 className={`flex ${
-                  msg.username === "user"
-                    ? "justify-start"
-                    : "justify-end"
+                  msg.username === userStats.username
+                  ? "justify-end"
+                  : "justify-start"
                 }`}
               >
                 <div
                   className={`max-w-md px-5 py-3 rounded-3xl ${
-                    msg.username === "user"
-                      ? "bg-[#FEE96E] text-[#8B5A3C]"
-                      : "bg-gray-200 text-gray-800"
+                    msg.username === userStats.username
+                    ? "bg-gray-200 text-gray-800"
+                    : "bg-[#FEE96E] text-[#8B5A3C]"
                   }`}
                 >
                   <p>{msg.content}</p>
