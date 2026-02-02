@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { Send, Users } from "lucide-react";
 import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
 import { Link, useLocation } from "react-router-dom";
@@ -23,6 +23,17 @@ interface Conversation {
   username: string;
 }
 
+type UserStats = {
+  id: number;
+  username: string;
+  mail: string;
+  avatarUrl?: string;
+  winRate: number;
+  gamesPlayed: number;
+  gamesWon: number,
+  highScore: number;
+   twofaEnabled?: boolean;
+};
 
 
 export default function ChatPage() {
@@ -36,6 +47,16 @@ export default function ChatPage() {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
+    const [userStats, setUserStats] = useState<UserStats>({
+      id: 0,
+      username: "",
+      mail: "",
+      avatarUrl: "./uploads/profil/default.jpeg", 
+      winRate: 0,
+      gamesPlayed: 0,
+      gamesWon: 0,
+      highScore: 0
+    });
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -153,6 +174,36 @@ const sendMessage = async () => {
   }, [conversations]);
 
 
+    useEffect(() => {
+    async function fetchUser() {
+      try {
+        const auth = await isAuthenticated();
+        if (!auth?.id) return;
+
+        const resUser = await fetch("/api/getuser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: auth.id }),
+        });
+        const userData = await resUser.json();
+
+        setUserStats({
+          id: userData.id,
+          username: userData.username,
+          mail: userData.mail,
+          avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
+          winRate: userData.winRate,
+          gamesPlayed: userData.gamesPlayed,
+          gamesWon: userData.gamesWon,
+          highScore: userData.highScore
+        });
+      } catch (err) {
+        console.error("Erreur récupération profil :", err);
+      }
+    }
+    fetchUser();
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
       {/* CONTENU */}
@@ -208,16 +259,16 @@ const sendMessage = async () => {
               <div
                 key={msg.id}
                 className={`flex ${
-                  msg.username === "user"
-                    ? "justify-start"
-                    : "justify-end"
+                  msg.username === userStats.username
+                  ? "justify-end"
+                  : "justify-start"
                 }`}
               >
                 <div
                   className={`max-w-md px-5 py-3 rounded-3xl ${
-                    msg.username === "user"
-                      ? "bg-[#FEE96E] text-[#8B5A3C]"
-                      : "bg-gray-200 text-gray-800"
+                    msg.username === userStats.username
+                    ? "bg-gray-200 text-gray-800"
+                    : "bg-[#FEE96E] text-[#8B5A3C]"
                   }`}
                 >
                   <p>{msg.content}</p>
