@@ -1,6 +1,6 @@
-import { isAuthenticated } from "./authenticator";
-import { userupdate } from "./userupdate";
-import { friendPage } from "./friend";
+import { isAuthenticated } from "../access/authenticator";
+import { userupdate } from "../interface/userupdate";
+import { friendPage } from "../friends/friend";
 import { adminOnlyPage } from "./AdminPage";
 
 export function handleEnter(button: HTMLButtonElement) {

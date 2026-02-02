@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/29 10:48:10 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/29 12:01:42 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,6 +360,9 @@ function createNewGame(newGame?: NewGame) {
     playerCount: games[gameindex].playerCount
   });
   console.log("mode: ", games[gameindex].mode, " gameId: ", games[gameindex].gameId, "playername: ", games[gameindex].playername);
+  if (newGame && newGame.mode == 1 && newGame?.gameId != undefined && !games[newGame.gameId]){
+    talkerTemp[talkerTemp.length - 1].counter = games[gameindex].counter = [-1,-1]
+  }
   return gameId;
 }
 

@@ -6,12 +6,12 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:17:53 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/28 13:32:54 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/01/29 12:11:00 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { Rectangle, ColorPicker, AdvancedDynamicTexture, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
-import { counter, scene, nullifySceneEngine, thisPlayer, setNewGame } from "../game/Meshes";
+import { counter, scene, nullifySceneEngine, thisPlayer, setNewGame, resetCounter } from "../game/Meshes";
 import { createRemotePlayPlayBtn, createRemoteBtn, createRemotePlayBtn, createCustomiseBtn, createStartBtn, createStartTournamentBtn, createMainMenuBtn, createSinglePlayerBtn, createMultiPlayerBtn, createTwoPlayerBtn, createTournamentBtn, createResumeBtn, createTextInput, createAddBtn, createWallsBtn, createBallBtn, createPaddlesBtn, createTableBtn, createCyberBtn, createNaturalBtn, colorType, createDefaultBtn } from "./Buttons";
 
 
@@ -76,6 +76,7 @@ export function resetGame(type?: number) {
     contestantNumber = 0;
   }
   setPause(0);
+  resetCounter();
   // playBtn = 0;
   playerCount = 0;
   playername[0] = "player1";
@@ -214,7 +215,7 @@ export function createUI() {
     remoteUI = AdvancedDynamicTexture.CreateFullscreenUI("remoteUI");
     remoteUI.background = "rgba(255, 255, 255, 0.5)";
     const remotePanel = new StackPanel("remotePanel");
-    const text = createTextBlock("Please Enter Id of the second player");
+    const text = createTextBlock("Enter username to create or game ID to join");
     remotePanel.width = "220px";
     remotePanel.isVertical = true;
 
@@ -223,12 +224,12 @@ export function createUI() {
 
     const textInput = createTextInput("textInput");
     const mainMenuBtn = createMainMenuBtn();
-    const addBtn = createRemotePlayBtn(textInput);
-    const addBtn2 = createRemotePlayPlayBtn(textInput);
+    const createGameBtn = createRemotePlayBtn(textInput);
+    const joinGameBtn = createRemotePlayPlayBtn(textInput);
 
     remotePanel.addControl(textInput);
-    remotePanel.addControl(addBtn);
-    remotePanel.addControl(addBtn2);
+    remotePanel.addControl(createGameBtn);
+    remotePanel.addControl(joinGameBtn);
     remotePanel.addControl(mainMenuBtn);
     remoteUI.rootContainer.isVisible = false;
     remoteUI.isForeground = false;
@@ -339,6 +340,8 @@ export function createdisposableUI(type: number) {
       contestantNumber++;
     }
   }
+  else if (counter[0] == -1 || counter[1] == -1)
+    text = createTextBlock("The game ID you have entered is invalid")
 
   statsPanel.width = "300px";
   statsPanel.isVertical = true;

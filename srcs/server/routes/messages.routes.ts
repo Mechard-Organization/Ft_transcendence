@@ -42,12 +42,10 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     if (!id_group)
     {
       const old_group = db.oldGroup(id, user.id);
-      console.log(old_group);
       if (old_group)
           return {group: old_group.id_group};
       group = db.createGroup().id;
       db.addUserGroup(group, id);
-      console.log(group, id);
     }
     db.addUserGroup(group, user.id);
     const saved = db.addMessage( user.username + " has join the group", id, group);
@@ -59,6 +57,16 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     });
 
     return {group};
+  });
+
+
+  fastify.post("/getAllUserGroup", async (request) => {
+    const { id } = request.body as any;
+
+    if (!id) {
+      throw fastify.httpErrors.badRequest("Invalid user");
+    }
+    return db.getAllUserGroup(id);
   });
 
   fastify.post("/UserInGroup", async (request) => {
@@ -77,4 +85,5 @@ export default async function messageRoutes(fastify: FastifyInstance) {
 
     return {saved};
   });
+
 }
