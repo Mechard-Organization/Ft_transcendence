@@ -24,6 +24,7 @@ interface Conversation {
 }
 
 
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const isActive = (path: string) => location.pathname === path;
@@ -36,12 +37,10 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
-  /* ---------------- AUTO SCROLL ---------------- */
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  /* ---------------- WEBSOCKET ---------------- */
   useEffect(() => {
     const ws = new WebSocket(`/ws/`);
     wsRef.current = ws;
@@ -53,7 +52,7 @@ export default function ChatPage() {
     ws.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-        if (msg.type === "new_message" && msg.data.id_friend === sele) {
+        if (msg.type === "new_message" && msg.data.id_friend === selectedConversation) {
           console.log("msg : ", msg)
           setMessages((prev) => [...prev, msg.data]);
         }
@@ -70,11 +69,11 @@ export default function ChatPage() {
 
   }, []);
 
-  /* ---------------- FETCH MESSAGES ---------------- */
-useEffect(() => {
-  async function fetchMessages() {
+  
+  useEffect(() => {
+    async function fetchMessages() {
     if (!selectedConversation) return;
-
+    
     const res = await fetch("/api/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -82,57 +81,58 @@ useEffect(() => {
         id_friend: selectedConversation,
       }),
     });
+    console.log("id: ", selectedConversation)
     setMessages(await res.json());
   }
-
   fetchMessages();
 }, [selectedConversation]);
 
 
-  /* ---------------- SEND MESSAGE ---------------- */
-  const sendMessage = async () => {
-    if (!newMessage.trim()) return;
+/* ---------------- SEND MESSAGE ---------------- */
+const sendMessage = async () => {
+  if (!newMessage.trim()) return;
+  
+  const auth = await isAuthenticated();
+  const id = auth?.id ?? null;
+  
 
-    const auth = await isAuthenticated();
-    const id = auth?.id ?? null;
 
-    try {
-      const res = await fetch("/api/hello", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-          content: newMessage,
-          id,
-          id_friend: selectedConversation,})
-          });
+  try {
+    const res = await fetch("/api/hello", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: newMessage,
+        id,
+        id_friend: selectedConversation,})
+      });
       setNewMessage("");
     } catch (err) {
       console.error("Erreur envoi message:", err);
     }
   };
+  
 
-    useEffect(() => {
-      async function fetchFriends() {
-        const auth = await isAuthenticated();
-        if (!auth?.id) return;
-
-        const res = await fetch("/api/friend/getFriendV", {
+  useEffect(() => {
+    async function getGroups() {
+      const auth = await isAuthenticated();
+      if (!auth?.id) return;
+      
+        const res = await fetch("/api/getAllUserGroup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: auth.id }),
         });
 
         const data = await res.json();
-
+        
         setConversations(
           data.map((f: any) => ({
-            id: f.id,
-            username: f.username,
+            id: f.id_group,
           }))
         );
       }
-
-      fetchFriends();
+      getGroups();
     }, []);
 
 
