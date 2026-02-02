@@ -1,6 +1,6 @@
 import { useState, FormEvent } from "react";
 import { User } from "lucide-react";
-import { validatePassword, validateEmail } from "../../../services/validate.service.ts";
+import { validatePassword, validateEmail } from "../../../services/validate.service.js";
 
 type RegisterResponse = {
   error?: string;
@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mail, setMail] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("./uploads/profil/default.jpeg")
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -51,24 +52,29 @@ export default function RegisterPage() {
 	console.log("password :", password);
 	console.log("mail :", mail);
     try {
-      const response = await fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: u, password: p, mail: m }),
-      });
+          const response = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ username: u, password: p, mail: m }),
+    });
 
-      const data: RegisterResponse = await response.json().catch(() => ({}));
 
+      const data: RegisterResponse = await response.json();
+    console.log(JSON.stringify(data, null, 2))
       if (!response.ok) {
         setError(data.error || data.message || "Erreur lors de la création");
         return;
       }
 
-      setUsername("");
-      setPassword("");
-      setConfirmPassword("");
-      setMail("");
+      setUsername(username);
+      setPassword(password);
+      setConfirmPassword(password);
+      setMail(mail);
+      setAvatarUrl("./uploads/profil/default.jpeg")
 
+      window.location.href = "/login"
+      console.log("data :",  data)
     } catch (err) {
       console.error(err);
       setError("Erreur réseau, réessaie plus tard.");
@@ -76,7 +82,6 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
-
   return (
     <main id="mainContent">
       <div className="mb-8 max-w-2xl w-full mx-auto text-center">
@@ -95,6 +100,7 @@ export default function RegisterPage() {
               id="registerForm"
               className="form-container flex flex-col items-center gap-4"
               onSubmit={onSubmitRegister}
+              /* action={formAction} */
             >
               <div className="form-group w-full text-center">
                 <label htmlFor="username" className="block mb-1">

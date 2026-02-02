@@ -1,56 +1,136 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Trophy, Target, Clock } from 'lucide-react';
 import Footer from '../ts/Footer';
-import { isAuthenticated } from "../interface/authenticator";
+import { isAuthenticated } from "../access/authenticator";
+import { Link, useLocation } from "react-router-dom";
+
+type UserStats = {
+  id: number;
+  username: string;
+  mail: string;
+  avatarUrl?: string;
+  winRate: number;
+  gamesPlayed: number;
+  gamesWon: number,
+  highScore: number;
+   twofaEnabled?: boolean;
+};
 
 export default function ProfilePage() {
-  const [profilePic, setProfilePic] = useState(1);
-  const userStats = {
-    name: 'Pompompurin',
-    // gamesPlayed: 42,
-    // gamesWon: 28,
-    // highScore: 15,
-    // totalPlayTime: '12h 34min',
-    // winRate: 67,
-  };
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
-  const changeProfilePic = async () => {
-    const newPic = profilePic < 23 ? profilePic + 1 : 1;
-    const auth = await isAuthenticated();
-    const id = auth ? auth.id : null;
-    setProfilePic(newPic);
-    try {
-      await fetch("/api/users.routes/users/me/avatar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: `/shared-assets/pompompurin/profil/${newPic}.jpeg`,
-          id: id
-        }),
-      });
-      console.log("Avatar mis à jour !");
-    } catch (err) {
-      console.error("Erreur lors de la mise à jour de l'avatar :", err);
+  
+  const [userStats, setUserStats] = useState<UserStats>({
+    id: 0,
+    username: "",
+    mail: "",
+    avatarUrl: "./uploads/profil/default.jpeg", 
+    winRate: 0,
+    gamesPlayed: 0,
+    gamesWon: 0,
+    highScore: 0
+  });
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const auth = await isAuthenticated();
+        if (!auth?.id) return;
+
+        const resUser = await fetch("/api/getuser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: auth.id }),
+        });
+        const userData = await resUser.json();
+
+        setUserStats({
+          id: userData.id,
+          username: userData.username,
+          mail: userData.mail,
+          avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
+          winRate: userData.winRate,
+          gamesPlayed: userData.gamesPlayed,
+          gamesWon: userData.gamesWon,
+          highScore: userData.highScore
+        });
+      } catch (err) {
+        console.error("Erreur récupération profil :", err);
+      }
     }
-  }; 
+    fetchUser();
+  }, []);
+
+const handleFile = async (file: File) => {
+  if (file.type !== "image/jpeg") {
+    alert("Uniquement des fichiers .jpeg");
+    return;
+  }
+
+  if (file.size > 2 * 1024 * 1024) {
+    alert("Max 2 Mo");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("avatars", file);
+  formData.append("id", String(userStats.id));
+
+  console.log("poulet : ", formData);
+
+  try {
+    const res = await fetch("/api/users/me/avatar", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+
+    setUserStats(prev => ({
+      ...prev,
+      avatarUrl: data.avatarUrl,
+    }));
+
+  } catch (err) {
+    console.error("Erreur upload avatar", err);
+  }
+};
+
+const handlelogout = async () => {
+  await fetch("/api/auth/logout", {
+    method: "POST",
+    credentials: "include", // 🔑 OBLIGATOIRE
+  });
+
+  window.location.href = "/login";
+};
+
+
   return (
     <div className="min-h-[calc(100vh-80px)] flex flex-col p-8">
         <div className="mb-8 max-w-4xl w-full mx-auto text-center">
-          <button onClick={changeProfilePic} className="inline-block cursor-pointer">
-            
+          <input type="file" id="fileInput" accept="image/*" hidden onChange={(e) => { if (e.target.files && e.target.files[0]) { handleFile(e.target.files[0]); }}}/>
+          <button onClick={() => document.getElementById("fileInput")?.click()} className="inline-block cursor-pointer">
             <img
-              src={`/shared-assets/pompompurin/profil/${profilePic}.jpeg`}
+              src={userStats.avatarUrl}
               alt="personnage profil"
               className="w-25 h-25 object-cover rounded-full border-4 border-[#FEE96E]"
             />
           </button>
-          <h1 className="text-4xl text-[#8B5A3C] mt-4">{userStats.name}</h1>
+                    
+          <h1 className="text-4xl text-[#8B5A3C] mt-4">{userStats.username}</h1>
         </div>
+      <button
+        onClick={() => window.location.href = "/settings"}
+        className="inline-block  text-center cursor-pointer w-10 h-10 object-cover rounded-full border-7 border-[#FEE96E] ">
+        <p>⚙️</p>
+      </button>
+         
+
       <div className="max-w-4xl w-full mx-auto">
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-4 border-[#FEE96E] mb-6">
           <div className="flex items-center gap-8 mb-8">
             <div className="flex-1">
-              <h2 className="text-3xl text-[#8B5A3C] mb-2">{userStats.name}</h2>
+              <h2 className="text-3xl text-[#8B5A3C] mb-2">{userStats.username}</h2>
               <div className="flex items-center gap-4">
                 <div className="bg-[#FEE96E] px-6 py-2 rounded-full">
                   <p className="text-[#8B5A3C]">Niveau: Champion</p>
@@ -109,7 +189,6 @@ export default function ProfilePage() {
               </div>
               <h3 className="text-2xl text-[#8B5A3C]">Temps de jeu</h3>
             </div>
-            <p className="text-5xl text-center text-[#8B5A3C]">{userStats.totalPlayTime}</p>
           </div>
         </div>
 
@@ -143,11 +222,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-        <div className="text-center">
-          <div className="inline-block">
-            <img src="../..profil/chat.jpeg" alt="personnage chat" className="w-15 h-15 object-cover cursor-pointer rounded-full" />
-          </div>
-        </div>
         <Footer />
     </div>
   );

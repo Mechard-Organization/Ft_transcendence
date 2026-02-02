@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jealefev <jealefev@student.42.fr>          +#+  +:+       +#+         #
+#    By: abutet <abutet@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2026/01/27 10:49:14 by jealefev         ###   ########.fr        #
+#    Updated: 2026/01/29 13:46:00 by abutet           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,14 +85,14 @@ help:
 
 
 prepare:
-	
+
 	@chmod 777 ./srcs/config/database
 	@mkdir -p ./srcs/config/database/data
 	@chmod 777 ./srcs/config/database/data
 	@mkdir -p ./srcs/config/database/data
 	@chmod 777 ./srcs/config/database/data
-	@mkdir -p srcs/server/uploads/avatars
-	@chmod 777 ./uploads/avatars
+# 	@mkdir -p srcs/server/uploads/avatars
+# 	@chmod 777 ./uploads/avatars
 
 up: prepare
 	@$(COMPOSE) up -d
@@ -165,7 +165,7 @@ fclean: clean
 	@rm -rf srcs/public/server
 	@rm -rf srcs/server/config
 	@rm -rf srcs/server/node_modules
-	@find ./uploads/avatars -type f ! -name "default.png" -delete
+# 	@find ./uploads/avatars -type f ! -name "default.png" -delete
 	@$(COMPOSE) rm -fsv || true
 
 prune: down clean

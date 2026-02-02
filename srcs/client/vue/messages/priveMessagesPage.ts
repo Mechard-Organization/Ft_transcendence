@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   priveMessagesPage.ts                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jealefev <jealefev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 12:50:17 by abutet            #+#    #+#             */
-/*   Updated: 2026/01/26 15:10:17 by abutet           ###   ########.fr       */
+/*   Updated: 2026/01/29 12:20:27 by jealefev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import { isAuthenticated } from "../interface/authenticator";
+import { isAuthenticated } from "../access/authenticator";
 
 /// messagesPage.ts
 

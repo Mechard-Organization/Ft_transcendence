@@ -90,8 +90,8 @@ db.prepare(`
 db.prepare(`
   CREATE TABLE IF NOT EXISTS match (
     id_match INTEGER PRIMARY KEY AUTOINCREMENT,
-    name_player1 INTEGER NULL,
-    name_player2 INTEGER NULL,
+    name_player1 TEXT NULL,
+    name_player2 TEXT NULL,
     score1 TEXT,
     score2 TEXT,
     date TEXT DEFAULT (datetime('now'))
@@ -206,6 +206,18 @@ export function userInGroup(id_group: string, id_user: string) {
   return stmt.get(id_group, id_user);
 }
 
+export function getAllUserGroup(id_user: string) {
+  const stmt = db.prepare(`
+    SELECT *
+    FROM laisonmsg
+    LEFT JOIN groupmsg
+      ON laisonmsg.id_group = groupmsg.id
+    WHERE id_user = ?
+  `);
+
+  return stmt.all(id_user);
+}
+
 export function oldGroup(id1: string, id2: string) {
   const stmt = db.prepare(`
     SELECT id_group
@@ -217,7 +229,7 @@ export function oldGroup(id1: string, id2: string) {
     LIMIT 1
   `);
 
-  return stmt.get(id1, id2); // renvoie le groupe si trouvé, sinon undefined
+  return stmt.get(id1, id2);
 }
 
 // --- USERS FUNCTIONS ---
@@ -607,6 +619,38 @@ export function getMatch(name_player: string) {
   return stmt.all(name_player, name_player);
 }
 
+export function numWinMatch(name_player: string) {
+  const stmt = db.prepare(`
+    SELECT COUNT(*)
+    FROM match
+    WHERE (name_player1 = ? AND CAST(score1 AS INTEGER) > CAST(score2 AS INTEGER))
+      OR (name_player2 = ? AND CAST(score2 AS INTEGER) > CAST(score1 AS INTEGER))
+  `);
+
+  return stmt.get(name_player, name_player);
+}
+
+export function numMatch(name_player: string) {
+  const stmt = db.prepare(`
+    SELECT COUNT(*)
+    FROM match
+    WHERE name_player1 = ? OR name_player2 = ?
+  `);
+
+  return stmt.get(name_player, name_player);
+}
+
+export function highScoreMatch(name_player: string) {
+  const stmt = db.prepare(`
+    SELECT MAX(GREATEST(
+      CASE WHEN name_player1 = ? THEN CAST(score1 AS INTEGER) ELSE 0 END,
+      CASE WHEN name_player2 = ? THEN CAST(score2 AS INTEGER) ELSE 0 END
+    )) AS max_score
+    FROM match;
+  `);
+
+  return stmt.get(name_player, name_player);
+}
 
 export function deleteMatch(name_user: string) {
   const stmt = db.prepare(`

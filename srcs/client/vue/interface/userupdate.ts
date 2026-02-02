@@ -1,184 +1,174 @@
-import { validatePassword, validateEmail } from "../../../services/validate.service.ts";
-import { isAuthenticated } from "./authenticator";
-import { handleEnter } from "./adminInterface";
+import { useState } from "react";
+import { validatePassword, validateEmail } from "../../../services/validate.service";
+import { isAuthenticated } from "../access/authenticator";
 
-export function userupdate(header: string, footer: string) {
-	const app = document.getElementById("app");
+export default function UserUpdate() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [mail, setMail] = useState("");
 
-	if (!app) return;
-
-	app.innerHTML = `
-      ${header}
-      <main id="mainContent">
-        <div class="form-container">
-          <h2 class="title">modifier votre nom d'utilisateur</h2>
-          <div class="form-group">
-            <label for="username">Nouveau nom d'utilisateur</label>
-            <input type="text" id="username" placeholder="Nouveau nom d'utilisateur" />
-          </div>
-          <button id="updateUserUsername" class="btn-primary">Modifier</button>
-        </div>
-        <div class="form-container">
-          <h2 class="title">modifier votre nom mot de passe</h2>
-          <div class="form-group">
-            <label for="password">Nouveau mot de passe</label>
-            <input type="password" id="password" placeholder="Nouveau mot de passe" />
-            <input type="password" id="password2" placeholder="Nouveau mot de passe encore" />
-          </div>
-          <button id="updateUserPassword" class="btn-primary">Modifier</button>
-        </div>
-        <div class="form-container">
-          <h2 class="title">modifier votre e-mail</h2>
-          <div class="form-group">
-            <label for="mail">Nouveau e-mail</label>
-            <input type="email" id="mail" placeholder="Nouveau e-mail" />
-          </div>
-          <button id="updateUserMail" class="btn-primary">Modifier</button>
-        </div>
-      </main>
-      ${footer}
-    `;
-
-    const usernameInput = document.getElementById("username") as HTMLInputElement;
-    const updateUserUsernameBtn = document.getElementById("updateUserUsername") as HTMLButtonElement;
-    const passwordInput = document.getElementById("password") as HTMLInputElement;
-    const passwordInput2 = document.getElementById("password2") as HTMLInputElement;
-    const updateUserPasswordBtn = document.getElementById("updateUserPassword") as HTMLButtonElement;
-    const mailInput = document.getElementById("mail") as HTMLInputElement;
-    const updateUserMailBtn = document.getElementById("updateUserMail") as HTMLButtonElement;
-
-    usernameInput.addEventListener("keydown", handleEnter(updateUserUsernameBtn));
-    updateUserUsernameBtn.addEventListener("keydown", handleEnter(updateUserUsernameBtn));
-    passwordInput.addEventListener("keydown", handleEnter(updateUserPasswordBtn));
-    passwordInput2.addEventListener("keydown", handleEnter(updateUserPasswordBtn));
-    updateUserPasswordBtn.addEventListener("keydown", handleEnter(updateUserPasswordBtn));
-    mailInput.addEventListener("keydown", handleEnter(updateUserMailBtn));
-    updateUserMailBtn.addEventListener("keydown", handleEnter(updateUserMailBtn));
-
-    // --- Modifie l'utilisateur username ---
-    updateUserUsernameBtn.onclick = async () => {
-      const username = usernameInput.value.trim();
-      const auth = await isAuthenticated();
-      const id = auth ? auth.id : 0;
-
-      if (!username || !id) {
-        alert("Merci de vous connecter et d'entrer un username");
-        return;
-      }
-
-      try {
-        const res = await fetch("/api/updateUserUsername", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, id })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          alert(data.error || "Erreur lors de la création");
-          return;
-        }
-
-        usernameInput.value = "";
-
-      } catch (err) {
-        console.error(err);
-      }
+  const handleEnter =
+    (fn: () => void) =>
+    (e: React.KeyboardEvent<HTMLInputElement | HTMLButtonElement>) => {
+      if (e.key === "Enter") fn();
     };
 
-    // --- Modifie l'utilisateur password ---
-    updateUserPasswordBtn.onclick = async () => {
-      const password = passwordInput.value.trim();
-      const password2 = passwordInput2.value.trim();
-      const auth = await isAuthenticated();
-      const id = auth ? auth.id : 0;
+  // --- USERNAME ---
+  const updateUsername = async () => {
+    const auth = await isAuthenticated();
+    if (!username || !auth?.id) {
+      alert("Merci de vous connecter et d'entrer un username");
+      return;
+    }
 
-      if (!password || !password || !id) {
-        alert("Merci de vous connecter et d'entrer un password");
-        return;
-      }
+    const res = await fetch("/api/updateUserUsername", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, id: auth.id }),
+    });
 
-      if (password != password2)
-      {
-        alert("taper 2 fois le même mpd svp");
-        return;
-      }
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || "Erreur lors de la création");
+      return;
+    }
 
-      try {
-        const resuser = await fetch("/api/getuser", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id })
-        });
+    setUsername("");
+  };
 
-        const datausername = await resuser.json();
+  // --- PASSWORD ---
+  const updatePassword = async () => {
+    const auth = await isAuthenticated();
+    if (!password || !password2 || !auth?.id) {
+      alert("Merci de vous connecter et d'entrer un password");
+      return;
+    }
 
-        if (!resuser.ok) {
-          alert(datausername.error || "Erreur lors de la création");
-          return;
-        }
-        const username = datausername.username;
-        if (!(validatePassword(password, username).ok)) {
-          alert(validatePassword(password, username).reason);
-          return;
-        }
+    if (password !== password2) {
+      alert("taper 2 fois le même mpd svp");
+      return;
+    }
 
-        const res = await fetch("/api/updateUserPassword", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ password, id })
-        });
+    const resuser = await fetch("/api/getuser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: auth.id }),
+    });
 
-        const data = await res.json();
+    const datausername = await resuser.json();
+    if (!resuser.ok) {
+      alert(datausername.error || "Erreur lors de la création");
+      return;
+    }
 
-        if (!res.ok) {
-          alert(data.error || "Erreur lors de la création");
-          return;
-        }
+    if (!validatePassword(password, datausername.username).ok) {
+      alert(validatePassword(password, datausername.username).reason);
+      return;
+    }
 
-        passwordInput.value = "";
-        passwordInput2.value = "";
+    const res = await fetch("/api/updateUserPassword", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password, id: auth.id }),
+    });
 
-      } catch (err) {
-        console.error(err);
-      }
-    };
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || "Erreur lors de la création");
+      return;
+    }
 
-      // --- Modifie l'utilisateur mail ---
-    updateUserMailBtn.onclick = async () => {
-      const mail = mailInput.value.trim();
-      const auth = await isAuthenticated();
-      const id = auth ? auth.id : 0;
+    setPassword("");
+    setPassword2("");
+  };
 
-      if (!mail || !id) {
-        alert("Merci de vous connecter et d'entrer un mail");
-        return;
-      }
+  // --- MAIL ---
+  const updateMail = async () => {
+    const auth = await isAuthenticated();
+    if (!mail || !auth?.id) {
+      alert("Merci de vous connecter et d'entrer un mail");
+      return;
+    }
 
-      try {
-        if (!(validateEmail(mail).ok)) {
-          alert(validateEmail(mail).reason);
-          return;
-        }
+    if (!validateEmail(mail).ok) {
+      alert(validateEmail(mail).reason);
+      return;
+    }
 
-        const res = await fetch("/api/updateUserMail", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mail, id })
-        });
+    const res = await fetch("/api/updateUserMail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mail, id: auth.id }),
+    });
 
-        const data = await res.json();
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || "Erreur lors de la création");
+      return;
+    }
 
-        if (!res.ok) {
-          alert(data.error || "Erreur lors de la création");
-          return;
-        }
+    setMail("");
+  };
 
-        mailInput.value = "";
+  return (
+      <div className="form-container">
+        <h2 className="title">modifier votre nom d'utilisateur</h2>
+        <div className="form-group">
+          <label>Nouveau nom d'utilisateur</label>
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={handleEnter(updateUsername)}
+            placeholder="Nouveau nom d'utilisateur"
+          />
+        </div>
+        <button className="btn-primary" onClick={updateUsername}>
+          Modifier
+        </button>
+      </div>
 
-      } catch (err) {
-        console.error(err);
-      }
-    };
+      {/* PASSWORD */}
+      <div className="form-container">
+        <h2 className="title">modifier votre mot de passe</h2>
+        <div className="form-group">
+          <label>Nouveau mot de passe</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handleEnter(updatePassword)}
+            placeholder="Nouveau mot de passe"
+          />
+          <input
+            type="password"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+            onKeyDown={handleEnter(updatePassword)}
+            placeholder="Nouveau mot de passe encore"
+          />
+        </div>
+        <button className="btn-primary" onClick={updatePassword}>
+          Modifier
+        </button>
+      </div>
+
+      {/* MAIL */}
+      <div className="form-container">
+        <h2 className="title">modifier votre e-mail</h2>
+        <div className="form-group">
+          <label>Nouveau e-mail</label>
+          <input
+            type="email"
+            value={mail}
+            onChange={(e) => setMail(e.target.value)}
+            onKeyDown={handleEnter(updateMail)}
+            placeholder="Nouveau e-mail"
+          />
+        </div>
+        <button className="btn-primary" onClick={updateMail}>
+          Modifier
+        </button>
+      </div>
+  );
 }
