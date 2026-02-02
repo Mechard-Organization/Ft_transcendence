@@ -206,6 +206,18 @@ export function userInGroup(id_group: string, id_user: string) {
   return stmt.get(id_group, id_user);
 }
 
+export function getAllUserGroup(id_user: string) {
+  const stmt = db.prepare(`
+    SELECT *
+    FROM laisonmsg
+    LEFT JOIN groupmsg
+      ON laisonmsg.id_group = groupmsg.id
+    WHERE id_user = ?
+  `);
+
+  return stmt.all(id_user);
+}
+
 export function oldGroup(id1: string, id2: string) {
   const stmt = db.prepare(`
     SELECT id_group

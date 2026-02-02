@@ -32,7 +32,11 @@ export default async function friendRoutes(fastify: FastifyInstance) {
 
   fastify.post("/acceptFriend", async (request) => {
     const { id_user, id_friend } = request.body as any;
-    return db.valideFriend(id_user, id_friend);
+    const info = db.valideFriend(id_user, id_friend);
+    let group = db.createGroup().id;
+    db.addUserGroup(group, id_user);
+    db.addUserGroup(group, id_friend);
+    return info;
   });
 
   fastify.post("/delFriend", async (request) => {
