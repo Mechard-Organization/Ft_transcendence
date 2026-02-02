@@ -112,14 +112,14 @@ export default function FriendsPage() {
 
   return (
     <main className="max-w-5xl mx-auto p-6">
-      <h1 className="text-3xl mb-6">👥 Amis</h1>
+      <h1 className="text-[#8B5A3C] text-3xl mb-6">👥 Amis</h1>
 
       <form
         className="form-container flex flex-col items-center gap-4 mb-8"
         onSubmit={addFriend}
       >
-        <div className="form-group w-full text-center">
-          <label className="block mb-1">Nom d'utilisateur</label>
+        <div className="text-[#8B5A3C] bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-[#FEE96E] mb-6 flex justify-between p-2 border rounded-full mb-2">
+          <label className="block mb-1"></label>
           <input
             type="text"
             placeholder="Nom d'utilisateur"
@@ -128,15 +128,15 @@ export default function FriendsPage() {
             className="mx-auto block px-6 py-3 rounded-full border-2 border-[#FEE96E]"
           />
         </div>
-        <button type="submit" className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]">
+        <button type="submit" className="text-[#8B5A3C] flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]">
           Ajouter
         </button>
       </form>
 
-      <h2 className="text-xl mb-2">Requêtes d’amis</h2>
+      <h2 className="text-[#8B5A3C]  mb-2 ">Requêtes d’amis</h2>
       {requests.length === 0 && <p>Aucune requête</p>}
       {requests.map((r) => (
-        <div key={r.id} className="flex justify-between p-2 border rounded mb-2">
+        <div key={r.id} className="text-[#8B5A3C] bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-[#FEE96E] mb-6 flex justify-between p-2 border rounded-full mb-2">
           <span>{r.username}</span>
           <div className="flex gap-2">
           {r.id_sender !== userId ? (
@@ -151,10 +151,10 @@ export default function FriendsPage() {
         </div>
       ))}
 
-      <h2 className="text-xl mt-6 mb-2">Liste d’amis</h2>
+      <h2 className="text-[#8B5A3C] mt-6 mb-2">Liste d’amis</h2>
       {friends.length === 0 && <p>Aucun ami</p>}
       {friends.map((f) => (
-        <div key={f.id} className="flex justify-between p-2 border rounded mb-2">
+        <div key={f.id} className="text-[#8B5A3C] bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-[#FEE96E] mb-6 flex justify-between p-2 border rounded-full mb-2">
           <span>{f.username}</span>
           <button onClick={() => rejectFriend(f.id)}>❌</button>
         </div>

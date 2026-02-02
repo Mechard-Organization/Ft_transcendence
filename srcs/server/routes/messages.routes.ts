@@ -24,7 +24,7 @@ export default async function messageRoutes(fastify: FastifyInstance) {
 
     fastify.websocketServer.clients.forEach(client => {
       if (client.readyState === 1) {
-        client.send(JSON.stringify({ type: "new_message", data: saved }));
+        client.send(JSON.stringify({ type: "new_message", data: {saved, id_group} }));
       }
     });
 
