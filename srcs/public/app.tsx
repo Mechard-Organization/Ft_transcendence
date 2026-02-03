@@ -8,6 +8,7 @@ import LoginPage from './client/vue/access/loginPage';
 import RegisterPage from './client/vue/access/registerPage';
 import SettingsPage from './client/vue/access/settings';
 import FriendsPage from './client/vue/friends/friend';
+import FriendProfil from './client/vue/friends/friendsProfile'
 
 
 
@@ -36,7 +37,7 @@ export default function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/friends" element={<FriendsPage />} />
-
+          <Route path="/friendsProfil/:id" element={<FriendProfil />} />
         </Routes>
       </div>
     </Router>
