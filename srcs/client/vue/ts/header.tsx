@@ -108,62 +108,53 @@ const handlelogout = async () => {
         </div>
         {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
-          {/* Jouer */}
-          <Link to="/game">
-            <div
-              className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                isActive("/game")
-                  ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
-                  : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
-              }`}
-            >
-              <Gamepad2 className="w-6 h-6" />
-            </div>
-          </Link>
-
-          {/* Chat */}
-          <Link to="/chat">
-            <div
-              className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                isActive("/chat")
-                  ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
-                  : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
-              }`}
-            >
-              <MessageCircle className="w-6 h-6" />
-            </div>
-          </Link>
-          {/* ✅ Login OU Profil */}
-          {authStatus === "authenticated" && location.pathname === "/profile" ? (
-            <div
-              className="flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer bg-[#FEE96E] transition-all hover:scale-105"
-            >
-              {/* Logout Button */}
-              <button
-                onClick={handlelogout}
-                className="px-3 py-1 rounded-full bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100 transition-colors"
-              >
-                Logout
-              </button>
-
-              {/* Avatar */}
-              <Link to="/profile">
-                <img
-                  src={userStats.avatarUrl}
-                  alt="Avatar"
-                  className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E]"
-                />
+          {authStatus === "authenticated" ? (
+            <>
+              {/* Jouer */}
+              <Link to="/game">
+                <div
+                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
+                    isActive("/game")
+                      ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
+                      : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
+                  }`}
+                >
+                  <Gamepad2 className="w-6 h-6" />
+                </div>
               </Link>
-            </div>
-          ) : authStatus == "authenticated" && location.pathname !== "/profile"  ? (
-            <Link to="/profile">
-                <img
-                  src={userStats.avatarUrl}
-                  alt="Avatar"
-                  className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E]"
-                />
+
+              {/* Chat */}
+              <Link to="/chat">
+                <div
+                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
+                    isActive("/chat")
+                      ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
+                      : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
+                  }`}
+                >
+                  <MessageCircle className="w-6 h-6" />
+                </div>
               </Link>
-          ) : authStatus !== "authenticated"  ? (
+
+              {/* Avatar + Logout */}
+              <div className="flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer bg-[#FEE96E] transition-all hover:scale-105">
+                <button
+                  onClick={handlelogout}
+                  className="px-3 py-1 rounded-full bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100 transition-colors"
+                >
+                  Logout
+                </button>
+                <Link to="/profile">
+                  <img
+                    src={userStats.avatarUrl}
+                    alt="Avatar"
+                    className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E]"
+                  />
+                </Link>
+              </div>
+            </>
+          ) : (
+            // Si utilisateur non connecté → un seul bouton Login
             <Link to="/login">
               <div
                 className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
@@ -176,10 +167,9 @@ const handlelogout = async () => {
                 <User className="w-6 h-6" />
               </div>
             </Link>
-          
-              ) : null}
-            
+          )}
         </nav>
+
       </div>
     </header>
   );

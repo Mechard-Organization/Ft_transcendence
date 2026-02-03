@@ -159,7 +159,7 @@ export default function FriendsPage() {
       {friends.map((f) => (
         <div key={f.id}>
           <span>{f.username}</span>
-          <button onClick={() => requestGame(r.id)}>🕹️</button>
+          <button onClick={() => blockfriends(r.id)}> [bloquer]</button>
           <button onClick={() => rejectFriend(f.id)}>❌</button>
         </div>
       ))}

@@ -151,7 +151,7 @@ const sendMessage = async () => {
 
 
   try {
-    const id_group = selectedConversation.id === 0 ? undefined : selectedConversation.id;
+    const id_group = selectedConversation?.id === 0 ? undefined : selectedConversation?.id;
     const res = await fetch("/api/hello", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -206,6 +206,7 @@ const sendMessage = async () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: auth.id }),
         });
+        
         const userData = await resUser.json();
 
         setUserStats({
@@ -275,8 +276,6 @@ const sendMessage = async () => {
             </h2>
             </Link>
           </div>
-
-
 
           {/* MESSAGES */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
