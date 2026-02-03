@@ -175,7 +175,7 @@ export function MessageAnonym(id_author: string) {
 
 export function createGroup(groupname: string) {
   const stmt = db.prepare(`
-    INSERT INTO groupmsg groupname VALUES ?
+    INSERT INTO groupmsg (groupname) VALUES (?)
   `);
 
   const info = stmt.run(groupname);
