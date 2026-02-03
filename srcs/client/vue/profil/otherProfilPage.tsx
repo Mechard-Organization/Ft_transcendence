@@ -110,7 +110,7 @@ export default function OtherProfilPage({ header, footer }: Props) {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: me.id, user }),
+        body: JSON.stringify({ me, user }),
       });
 
       if (!res.ok) throw new Error("Chat creation failed");
