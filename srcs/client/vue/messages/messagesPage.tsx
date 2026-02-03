@@ -272,7 +272,7 @@ const sendMessage = async () => {
                 ? "Sélectionne une discussion"
                 : selectedConversation?.id === 0
                   ? "Discussion générale"
-                  : selectedConversation?.username || "Chargement..."}
+                  : selectedConversation?.username || "Discussion générale"}
             </h2>
             </Link>
           </div>
