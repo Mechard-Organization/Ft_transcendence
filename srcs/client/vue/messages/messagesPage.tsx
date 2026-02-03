@@ -19,11 +19,9 @@ interface Group {
 }
 
 interface Conversation {
-  id: number;    
-  userId: number;    // id de l'autre user
+  id: number;
   username: string;
 }
-
 
 type UserStats = {
   id: number;
@@ -54,17 +52,7 @@ export default function ChatPage() {
       id: 0,
       username: "",
       mail: "",
-      avatarUrl: "./uploads/profil/default.jpeg", 
-      winRate: 0,
-      gamesPlayed: 0,
-      gamesWon: 0,
-      highScore: 0
-    });
-    const [otherStats, setOtherStats] = useState<UserStats>({
-      id: 0,
-      username: "",
-      mail: "",
-      avatarUrl: "./uploads/profil/default.jpeg", 
+      avatarUrl: "./uploads/profil/default.jpeg",
       winRate: 0,
       gamesPlayed: 0,
       gamesWon: 0,
@@ -194,7 +182,6 @@ const sendMessage = async () => {
   }, [conversations]);
 
 
-    
     useEffect(() => {
     async function fetchUser() {
       try {
@@ -225,44 +212,12 @@ const sendMessage = async () => {
     fetchUser();
   }, []);
 
-async function getOtherUser(userId: number) {
-  try {
-    const resUser = await fetch("/api/getuser", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: userId }),
-    });
-
-    const userData = await resUser.json();
-
-    setOtherStats({
-      id: userData.id,
-      username: userData.username,
-      mail: userData.mail,
-      avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
-      winRate: userData.winRate,
-      gamesPlayed: userData.gamesPlayed,
-      gamesWon: userData.gamesWon,
-      highScore: userData.highScore,
-    });
-  } catch (err) {
-    console.error("Erreur récupération profil :", err);
-  }
-}
-
-useEffect(() => {
-  if (selectedConversation === null || selectedConversation === 0) return;
-
-  getOtherUser(selectedConversation);
-}, [selectedConversation]);
-
-
-
   return (
     <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
+      {/* CONTENU */}
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
-        <div className="w-1/3 h-200 bg-white/80 rounded-2xl p-4 shadow-md">
-        <div className="w-1/3 h-200 bg-white/80 rounded-2xl p-4 shadow-md">
+        {/* ---------------- LEFT PANEL ---------------- */}
+        <div className="w-1/3 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
             Discussions
 
@@ -288,38 +243,22 @@ useEffect(() => {
                       ? "bg-[#FEE96E]"
                       : "hover:bg-yellow-200"
                   }`}
-                  >
-                  >
+              >
                 <User className="w-5 h-5 text-[#8B5A3C]" />
                 <span className="font-medium">{conv.username}</span>
-                <p>{conv.username}</p>
-                <p>{conv.username}</p>
               </div>
             ))}
         </div>
 
         {/* ---------------- RIGHT PANEL ---------------- */}
-        <div className="w-2/3 h-200 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
-        <div className="w-2/3 h-200 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
+        <div className="w-2/3 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
           {/* HEADER CHAT */}
           <div className="bg-[#FEE96E] p-4">
-            <Link to={`/friendsProfil/${otherStats.id}`}>
-             <h2 className="text-xl font-bold text-[#8B5A3C]">
-              {selectedConversation === null
-                ? "Sélectionne une discussion"
-                : selectedConversation === 0
-                  ? "Discussion générale"
-                  : otherStats.username || "Chargement..."}
-            <Link to={`/friendsProfil/${otherStats.id}`}>
-             <h2 className="text-xl font-bold text-[#8B5A3C]">
-              {selectedConversation === null
-                ? "Sélectionne une discussion"
-                : selectedConversation === 0
-                  ? "Discussion générale"
-                  : otherStats.username || "Chargement..."}
+            <h2 className="text-xl font-bold text-[#8B5A3C]">
+              {conversations.find(c => c.id === selectedConversation)?.username
+                || "Sélectionne une discussion"}
             </h2>
-            </Link>
-            </Link>
+
           </div>
 
           {/* MESSAGES */}
