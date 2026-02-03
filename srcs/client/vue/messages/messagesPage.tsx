@@ -49,6 +49,7 @@ export default function ChatPage() {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const selectedConversationRef = useRef<number | null>(null);
     const [userStats, setUserStats] = useState<UserStats>({
       id: 0,
       username: "",
@@ -85,9 +86,14 @@ export default function ChatPage() {
     ws.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-        if (msg.type === "new_message" && msg.data.id_friend === selectedConversation) {
-          console.log("msg : ", msg)
-          setMessages((prev) => [...prev, msg.data]);
+        if (msg.data)
+        {
+          const idGroup = msg.data.id_group ?? null;
+          console.log("mm", idGroup, selectedConversationRef.current)
+          if (msg.type === "new_message" && idGroup === selectedConversationRef.current) {
+            console.log("msg : ", msg)
+            setMessages((prev) => [...prev, msg.data.saved]);
+          }
         }
       } catch (err) {
         console.error("Erreur WS:", err);
@@ -127,6 +133,8 @@ export default function ChatPage() {
         });
       }
       console.log("id: ", selectedConversation)
+      selectedConversationRef.current =
+        selectedConversation === 0 ? null : selectedConversation;
       setMessages(await res.json());
     }
     fetchMessages();
@@ -254,6 +262,7 @@ useEffect(() => {
     <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
         <div className="w-1/3 h-200 bg-white/80 rounded-2xl p-4 shadow-md">
+        <div className="w-1/3 h-200 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
             Discussions
 
@@ -280,14 +289,17 @@ useEffect(() => {
                       : "hover:bg-yellow-200"
                   }`}
                   >
+                  >
                 <User className="w-5 h-5 text-[#8B5A3C]" />
                 <span className="font-medium">{conv.username}</span>
+                <p>{conv.username}</p>
                 <p>{conv.username}</p>
               </div>
             ))}
         </div>
 
         {/* ---------------- RIGHT PANEL ---------------- */}
+        <div className="w-2/3 h-200 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
         <div className="w-2/3 h-200 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
           {/* HEADER CHAT */}
           <div className="bg-[#FEE96E] p-4">
@@ -298,7 +310,15 @@ useEffect(() => {
                 : selectedConversation === 0
                   ? "Discussion générale"
                   : otherStats.username || "Chargement..."}
+            <Link to={`/friendsProfil/${otherStats.id}`}>
+             <h2 className="text-xl font-bold text-[#8B5A3C]">
+              {selectedConversation === null
+                ? "Sélectionne une discussion"
+                : selectedConversation === 0
+                  ? "Discussion générale"
+                  : otherStats.username || "Chargement..."}
             </h2>
+            </Link>
             </Link>
           </div>
 
