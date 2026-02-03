@@ -134,9 +134,10 @@ export default function FriendsPage() {
       </form>
 
       <h2 className="text-[#8B5A3C]  mb-2 ">Requêtes d’amis</h2>
+      <div  className="text-[#8B5A3C] bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-[#FEE96E] mb-6 flex justify-between p-2 border rounded-full mb-2">
       {requests.length === 0 && <p>Aucune requête</p>}
       {requests.map((r) => (
-        <div key={r.id} className="text-[#8B5A3C] bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-[#FEE96E] mb-6 flex justify-between p-2 border rounded-full mb-2">
+        <div key={r.id}>
           <span>{r.username}</span>
           <div className="flex gap-2">
           {r.id_sender !== userId ? (
@@ -146,19 +147,23 @@ export default function FriendsPage() {
             </>
           ) : (
             <button onClick={() => rejectFriend(r.id)}>❌</button>
+
           )}
           </div>
         </div>
       ))}
-
+      </div>
       <h2 className="text-[#8B5A3C] mt-6 mb-2">Liste d’amis</h2>
+      <div  className="text-[#8B5A3C] bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-[#FEE96E] mb-6 flex justify-between p-2 border rounded-full mb-2">
       {friends.length === 0 && <p>Aucun ami</p>}
       {friends.map((f) => (
-        <div key={f.id} className="text-[#8B5A3C] bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-[#FEE96E] mb-6 flex justify-between p-2 border rounded-full mb-2">
+        <div key={f.id}>
           <span>{f.username}</span>
+          <button onClick={() => requestGame(r.id)}>🕹️</button>
           <button onClick={() => rejectFriend(f.id)}>❌</button>
         </div>
       ))}
+      </div>
     </main>
   );
 }
