@@ -4,6 +4,7 @@ import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
 import { Link, useLocation } from "react-router-dom";
 import { Gamepad2, MessageCircle, User } from "lucide-react";
+import { username } from "../game/Meshes";
 
 
 interface Message {
@@ -40,7 +41,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const isActive = (path: string) => location.pathname === path;
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation>();
 
   const [selectedGroup, setSelectedGroup] = useState<number | null>(1);
   const [newMessage, setNewMessage] = useState("");
@@ -53,6 +54,16 @@ export default function ChatPage() {
       username: "",
       mail: "",
       avatarUrl: "./uploads/profil/default.jpeg",
+      winRate: 0,
+      gamesPlayed: 0,
+      gamesWon: 0,
+      highScore: 0
+    });
+    const [otherStats, setOtherStats] = useState<UserStats>({
+      id: 0,
+      username: "",
+      mail: "",
+      avatarUrl: "./uploads/profil/default.jpeg", 
       winRate: 0,
       gamesPlayed: 0,
       gamesWon: 0,
@@ -116,19 +127,20 @@ export default function ChatPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            id_group: selectedConversation,
+            id_group: selectedConversation.id,
           }),
         });
       }
-      console.log("id: ", selectedConversation)
       selectedConversationRef.current =
-        selectedConversation === 0 ? null : selectedConversation;
+        selectedConversation.id === 0 ? null : selectedConversation.id;
       setMessages(await res.json());
     }
     fetchMessages();
   }, [selectedConversation]);
 
-
+  useEffect((): void =>{
+    console.log("aaaaaa:", messages)
+}, [messages])  
 /* ---------------- SEND MESSAGE ---------------- */
 const sendMessage = async () => {
   if (!newMessage.trim()) return;
@@ -139,7 +151,7 @@ const sendMessage = async () => {
 
 
   try {
-    const id_group = selectedConversation === 0 ? undefined : selectedConversation;
+    const id_group = selectedConversation.id === 0 ? undefined : selectedConversation.id;
     const res = await fetch("/api/hello", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -168,9 +180,10 @@ const sendMessage = async () => {
 
         const data = await res.json();
         setConversations([
-          { id: 0 },
+          { id: 0, username:"general" },
           ...data.map((f: any) => ({
             id: f.id_group,
+            username: f.groupname
           })),
         ]);
       }
@@ -214,10 +227,8 @@ const sendMessage = async () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
-      {/* CONTENU */}
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
-        {/* ---------------- LEFT PANEL ---------------- */}
-        <div className="w-1/3 bg-white/80 rounded-2xl p-4 shadow-md">
+        <div className="w-1/3 h-200 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
             Discussions
 
@@ -236,30 +247,36 @@ const sendMessage = async () => {
                       {conversations.map((conv) => (
               <div
                 key={conv.id}
-                onClick={() => setSelectedConversation(conv.id)}
+                onClick={() => setSelectedConversation(conv)}
                 className={`p-3 rounded-xl cursor-pointer transition-all mb-2 flex items-center gap-3
                   ${
-                    selectedConversation === conv.id
+                    selectedConversation === conv
                       ? "bg-[#FEE96E]"
                       : "hover:bg-yellow-200"
                   }`}
-              >
+                  >
                 <User className="w-5 h-5 text-[#8B5A3C]" />
-                <span className="font-medium">{conv.username}</span>
+                <span className="font-medium ">{conv.username}</span>
               </div>
             ))}
         </div>
 
         {/* ---------------- RIGHT PANEL ---------------- */}
-        <div className="w-2/3 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
+        <div className="w-2/3 h-200 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
           {/* HEADER CHAT */}
           <div className="bg-[#FEE96E] p-4">
-            <h2 className="text-xl font-bold text-[#8B5A3C]">
-              {conversations.find(c => c.id === selectedConversation)?.username
-                || "Sélectionne une discussion"}
+            <Link to={`/friendsProfil/${otherStats.id}`}>
+             <h2 className="text-xl font-bold text-[#8B5A3C]">
+              {selectedConversation === null
+                ? "Sélectionne une discussion"
+                : selectedConversation?.id === 0
+                  ? "Discussion générale"
+                  : selectedConversation?.username || "Chargement..."}
             </h2>
-
+            </Link>
           </div>
+
+    
 
           {/* MESSAGES */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -279,6 +296,9 @@ const sendMessage = async () => {
                     : "bg-[#FEE96E] text-[#8B5A3C]"
                   }`}
                 >
+                <div className="flex-1 overflow-y-auto justify-end [#FEE96E]">
+                  <Link to={`/friendsProfil/${msg.id}`}>{msg.username}</Link>
+                  </div>
                   <p>{msg.content}</p>
                   <p className="text-xs opacity-60 mt-1">
                     {new Date(msg.timestamp).toLocaleTimeString("fr-FR", {

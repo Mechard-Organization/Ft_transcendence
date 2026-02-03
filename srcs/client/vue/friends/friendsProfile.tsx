@@ -30,6 +30,8 @@ const ProfilePage: React.FC = () => {
     return <p>Utilisateur invalide</p>;
   }
 
+
+
   useEffect((): void => {
     const fetchUser = async (): Promise<void> => {
       try {
@@ -57,7 +59,6 @@ const ProfilePage: React.FC = () => {
         console.error("Erreur récupération profil :", error);
       }
     };
-
     fetchUser();
   }, [userId]);
 
