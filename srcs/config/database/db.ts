@@ -43,6 +43,7 @@ db.prepare(`
     content TEXT,
     id_author INTEGER NULL,
     id_group INTEGER NULL,
+    timestamp TEXT DEFAULT (datetime('now')),
     FOREIGN KEY(id_author) REFERENCES users(id),
     FOREIGN KEY(id_group) REFERENCES groupmsg(id)
   )
