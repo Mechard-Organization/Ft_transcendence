@@ -63,7 +63,7 @@ export default function ChatPage() {
       id: 0,
       username: "",
       mail: "",
-      avatarUrl: "./uploads/profil/default.jpeg", 
+      avatarUrl: "./uploads/profil/default.jpeg",
       winRate: 0,
       gamesPlayed: 0,
       gamesWon: 0,
@@ -132,7 +132,7 @@ export default function ChatPage() {
         });
       }
       selectedConversationRef.current =
-        selectedConversation.id === 0 ? null : selectedConversation.id;
+        !selectedConversation || selectedConversation?.id === 0 ? null : selectedConversation?.id;
       setMessages(await res.json());
     }
     fetchMessages();
@@ -140,7 +140,7 @@ export default function ChatPage() {
 
   useEffect((): void =>{
     console.log("aaaaaa:", messages)
-}, [messages])  
+}, [messages])
 /* ---------------- SEND MESSAGE ---------------- */
 const sendMessage = async () => {
   if (!newMessage.trim()) return;
@@ -276,7 +276,7 @@ const sendMessage = async () => {
             </Link>
           </div>
 
-    
+
 
           {/* MESSAGES */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
