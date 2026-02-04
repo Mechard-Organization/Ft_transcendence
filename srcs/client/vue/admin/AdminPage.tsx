@@ -137,7 +137,7 @@ export default function AdminPage() {
               value={addUsername}
               onChange={(e) => setAddUsername(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && updateAdminStatus(addUsername, true)}
-              className="w-full px-5 py-3 rounded-full border-2 border-[#FEE96E] mb-4"
+              className="w-full text-[#8B5A3C] px-5 py-3 rounded-full border-2 border-[#FEE96E] mb-4"
             />
 
             <button

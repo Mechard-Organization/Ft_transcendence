@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, PlusCircle, Send, Users, UserPlus } from "lucide-react";
+import { Plus, PlusCircle, Send, Users, UserPlus, Group } from "lucide-react";
 import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
 import { Link, useLocation } from "react-router-dom";
-import { Gamepad2, MessageCircle, User } from "lucide-react";
+import { Gamepad2, MessagesSquare, User } from "lucide-react";
 import { username } from "../game/Meshes";
 
 
@@ -36,6 +36,10 @@ type UserStats = {
    twofaEnabled?: boolean;
 };
 
+type UserGroup = {
+  id: number;
+  username: string;
+};
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -49,6 +53,13 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const selectedConversationRef = useRef<number | null>(null);
+  const [showAddUser, setShowAddUser] = useState(false); // afficher/masquer la recherche
+  const [searchUsername, setSearchUsername] = useState(""); // nom tapé
+  const [userAddGroup, setUserAddGroup] = useState<UserGroup>({
+    id: 0, 
+    username: ""
+  })
+
     const [userStats, setUserStats] = useState<UserStats>({
       id: 0,
       username: "",
@@ -166,6 +177,9 @@ const sendMessage = async () => {
     }
   };
 
+  useEffect(() => {
+    console.log("group : ", selectedConversation)
+  }, [selectedConversation])
 
   useEffect(() => {
     async function getGroups() {
@@ -226,6 +240,47 @@ const sendMessage = async () => {
     fetchUser();
   }, []);
 
+  const addUsertoGroup = async (userid: number, target: number) => {
+    try {
+      const res = await fetch("/api/addUserGroup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userid, target }),
+      });
+      console.log("essai d'ajouter : ", userid, target)
+      if (!res.ok) throw new Error("Impossible d'ajouter l'utilisateur au groupe");
+
+      console.log("Utilisateur ajouté au groupe !");
+    } catch (err) {
+      console.error("Erreur addUsertoGroup:", err);
+    }
+  };
+
+const handleInviteUser = async () => {
+  if (!searchUsername.trim() || !selectedConversation) return;
+
+  try {
+    const resUser = await fetch("/api/getuserbyname", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: searchUsername.trim() }),
+    });
+
+    if (!resUser.ok) throw new Error("Utilisateur introuvable");
+    const userToAdd = await resUser.json();
+
+    await addUsertoGroup(userToAdd.id, selectedConversation.id);
+
+    console.log(`Utilisateur ${userToAdd.username} ajouté au groupe ${selectedConversation.username}`);
+
+    setSearchUsername("");
+    setShowAddUser(false);
+  } catch (err) {
+    console.error("Erreur invitation :", err);
+  }
+};
+
+
   return (
     <div className="flex flex-col min-h-215 bg-[#FFF9E5]">
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
@@ -233,7 +288,7 @@ const sendMessage = async () => {
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
             Discussions
 
-          <Link to="/friends">
+          <Link to="/Friends">
                       <div
               className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
                 isActive("/chat")
@@ -257,7 +312,7 @@ const sendMessage = async () => {
                   }`}
                   >
                 <Users className="w-5 h-5 text-[#8B5A3C]" />
-                <span className="font-medium ">{conv.username}</span>
+                <span className="font-medium text-[#8B5A3C]">{conv.username}</span>
               </div>
             ))}
         </div>
@@ -265,24 +320,63 @@ const sendMessage = async () => {
         {/* ---------------- RIGHT PANEL ---------------- */}
         <div className="w-2/3 h-191 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
           {/* HEADER CHAT */}
-          <div className="bg-[#FEE96E] p-4">
-            <button
-              onClick={() => addUsertoGroup()}
-              className="ml-auto p-2 rounded-full hover:bg-yellow-200 transition"
-              title="ajouter une personne au groupe"
-              >
-                <PlusCircle className="w-6 h-6 text-[#8B5A3C] margin-box"/>
-            </button>
-            <Link to={`/friendsProfil/${otherStats.id}`}>
-             <h2 className="text-xl font-bold text-[#8B5A3C]">
-              {selectedConversation === null
-                ? "Sélectionne une discussion"
-                : selectedConversation?.id === 0
-                  ? "Discussion générale"
-                  : selectedConversation?.username || "Discussion générale"}
-              </h2>
-            </Link>
-          </div>
+          <div className="bg-[#FEE96E] p-4 flex items-center justify-between">
+        {/* Left: Titre */}
+        <h2 className="text-xl font-bold text-[#8B5A3C]">
+          {selectedConversation === null
+            ? "Sélectionne une discussion"
+            : selectedConversation?.id === 0
+              ? "Discussion générale"
+              : selectedConversation?.username || "Discussion générale"}
+        </h2>
+
+        {/* Right: Boutons */}
+        <div className="flex gap-2 items-center">
+  {/* Bouton pour afficher la barre de recherche */}
+  {selectedConversation && selectedConversation.id !== 0 && (
+    <button
+      onClick={() => setShowAddUser((prev) => !prev)}
+      className="p-2 rounded-full hover:bg-yellow-200 transition"
+      title="Ajouter un utilisateur"
+    >
+      <PlusCircle className="w-6 h-6 text-[#8B5A3C]" />
+    </button>
+  )}
+
+  {/* Barre de recherche */}
+  {showAddUser && (
+    <div className="flex items-center gap-2">
+      <input
+        type="text"
+        placeholder="Nom de l'utilisateur..."
+        value={searchUsername}
+        onChange={(e) => setSearchUsername(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleInviteUser();
+        }}
+        className="px-3 py-1 rounded-full border-2 border-[#FEE96E]"
+      />
+      <button
+        onClick={handleInviteUser}
+        className="px-3 py-1 rounded-full bg-[#FEE96E] border-2 border-[#FEE96E] hover:scale-105 transition"
+      >
+        Inviter
+      </button>
+    </div>
+  )}
+
+  {/* Bouton voir profil */}
+  {selectedConversation && selectedConversation.id !== 0 && (
+    <Link to={`/FriendsProfil/${otherStats.id}`}>
+      <button className="p-2 rounded-full hover:bg-yellow-200 transition" title="Voir profil">
+        <User className="w-6 h-6 text-[#8B5A3C]" />
+      </button>
+    </Link>
+  )}
+</div>
+
+      </div>
+
 
           {/* MESSAGES */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -303,7 +397,7 @@ const sendMessage = async () => {
                   }`}
                 >
                 <div className="flex-1 overflow-y-auto justify-end [#FEE96E]">
-                  <Link to={`/friendsProfil/${msg.id}`}>{msg.username}</Link>
+                  <Link to={`/FriendsProfil/${msg.id}`}>{msg.username}</Link>
                   </div>
                   <p>{msg.content}</p>
                   <p className="text-xs opacity-60 mt-1">
@@ -325,13 +419,13 @@ const sendMessage = async () => {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               placeholder="Tape ton message..."
-              className="flex-1 px-4 py-2 rounded-full border-2 border-[#FEE96E]"
+              className="flex-1 px-4 py-2 rounded-full text-[#8B5A3C] border-2 border-[#FEE96E]"
             />
             <button
               onClick={sendMessage}
               className="px-5 py-2 rounded-full bg-[#FEE96E] border-2 border-[#FEE96E] hover:scale-105 transition"
             >
-              <Send size={18} />
+              <Send className="text-[#8B5A3C]" size={18} />
             </button>
           </div>
         </div>

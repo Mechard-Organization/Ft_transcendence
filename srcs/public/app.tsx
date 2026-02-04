@@ -10,9 +10,8 @@ import SettingsPage from './client/vue/access/settings';
 import FriendsPage from './client/vue/friends/friend';
 import FriendProfil from './client/vue/friends/friendsProfile'
 import AdminPage from './client/vue/admin/AdminPage';
-
-
-import { Settings } from 'lucide-react';
+import AboutPage from './client/vue/access/about';
+import RankPage from './client/vue/game/rangGame';
 
 export default function App() {
   return (
@@ -30,15 +29,18 @@ export default function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/game" element={<GamePage />} />
-          <Route path="/chat" element={<ChatPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/Game" element={<GamePage />} />
+          <Route path="/Chat" element={<ChatPage />} />
+          <Route path="/Profile" element={<ProfilePage />} />
+          <Route path="/Login" element={<LoginPage />} />
+          <Route path="/Register" element={<RegisterPage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/friends" element={<FriendsPage />} />
-          <Route path="/friendsProfil/:id" element={<FriendProfil />} />
+          <Route path="/Friends" element={<FriendsPage />} />
+          <Route path="/FriendsProfil/:id" element={<FriendProfil />} />
           <Route path="/Admin" element={<AdminPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/Rank" element={<RankPage />} />
+
         </Routes>
       </div>
     </Router>

@@ -280,12 +280,21 @@
   margin: 0px;
   padding: 0px;
   margin-left: auto;
+  margin-top: 5px;
   margin-right: auto;
 
 }
 
 .margin-bot {
-  margin: 120px;
+  margin: 0px;
+  padding: 0px;
+  margin-left: auto;
+  margin-top: 92px;
+  margin-right: auto;
+}
+
+.margin-title {
+  margin: 0px;
 }
 
 .footer {

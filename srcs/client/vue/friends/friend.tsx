@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../access/authenticator";
-import { X, Check, UserRoundMinus, UserSearch, UserRoundPlus, UserRoundCheck, MailMinus  } from "lucide-react";
+import { X, Check, UserMinus2, UserSearch, UserPlus, UserCheck, MailMinus, UserMinus, UserX, MailPlus  } from "lucide-react";
 
 type Friend = {
   id: number;
@@ -114,7 +114,7 @@ export default function FriendsPage() {
   return (
     <div className="flex flex-col min-h-215 relative">
 <main className="flex-grow w-full max-w-6xl mx-auto px-6 py-10">
-  <h1 className="text-[#8B5A3C] text-3xl mb-10 flex items-center justify-center gap-2"><UserRoundCheck/> Amis</h1>
+  <h1 className="text-[#8B5A3C] text-3xl mb-10 flex items-center justify-center gap-2"><UserCheck/> Amis</h1>
 
   {/* Ajouter un ami */}
   <form
@@ -127,14 +127,14 @@ export default function FriendsPage() {
       placeholder="Nom d'utilisateur"
       value={usernameInput}
       onChange={(e) => setUsernameInput(e.target.value)}
-      className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E]"
+      className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] text-[#8B5A3C]"
       />
     <button
       type="submit"
       className="px-7 py-4 rounded-full bg-[#FEE96E] text-[#8B5A3C] font-medium hover:scale-100 transitiontext-[#8B5A3C] text-1xl flex items-center justify-center gap-2"
     >
       Ajouter
-      <UserRoundPlus className="w-6 h-6"/>
+      <UserPlus className="w-6 h-6"/>
     </button>
   </form>
 
@@ -155,7 +155,7 @@ export default function FriendsPage() {
             className="flex items-center justify-between bg-[#FFF9E5]
                        px-4 py-3 rounded-xl"
           >
-            <span className="font-medium">{r.username}</span>
+            <span className="font-medium text-[#8B5A3C]">{r.username}</span>
 
             <div className="flex gap-2">
               {r.id_sender !== userId && (
@@ -163,14 +163,14 @@ export default function FriendsPage() {
                   onClick={() => acceptFriend(r.id)}
                   className="p-2 rounded-full hover:bg-green-200"
                 >
-                  <UserRoundCheck className="w-5 h-5" />
+                  <MailPlus className="w-5 h-5 text-[#8B5A3C]" />
                 </button>
               )}
               <button
                 onClick={() => rejectFriend(r.id)}
                 className="p-2 rounded-full hover:bg-red-200"
               >
-                <MailMinus className="w-5 h-5" />
+                <MailMinus className="w-5 h-5 text-[#8B5A3C]" />
               </button>
             </div>
           </li>
@@ -196,8 +196,8 @@ export default function FriendsPage() {
             <span className="font-medium">{f.username}</span>
 
             <div className="flex gap-2">
-              <button onClick={() => rejectFriend(f.id)} className="p-2 rounded-full hover:bg-red-200"><UserRoundMinus className="w-5 h-5" /> </button>
-              <button onClick={() => blockFriend(f.id)} className="p-2 rounded-full hover:bg-red-200"><UserRoundMinus className="w-5 h-5" /> </button>
+              <button onClick={() => rejectFriend(f.id)} className="p-2 rounded-full hover:bg-red-200"><UserX className="w-5 h-5" /> </button>
+              <button onClick={() => blockFriend(f.id)} className="p-2 rounded-full hover:bg-red-200"><UserMinus className="w-5 h-5" /> </button>
             </div>
           </li>
         ))}

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Gamepad2, MessageCircle, User } from "lucide-react";
+import { Gamepad2, Joystick, User, Crown, MessagesSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
@@ -98,7 +98,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-215 relative">
-      <main className="flex-grow flex flex-col items-center mt-10">
+      <main className="flex-grow flex flex-col items-center mt-8">
         {/* Header / Welcome */}
         <div className="text-center">
                   <img
@@ -112,24 +112,30 @@ export default function HomePage() {
 
         {/* Actions */}
         {authStatus === "authenticated" ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mt-10">
             <ActionCard
               title="Jouer"
               description="Jouer une partie de Pong"
-              icon={<Gamepad2 className="w-10 h-10 text-[#8B5A3C]" />}
-              link="/game"
+              icon={<Joystick className="w-10 h-10 text-[#8B5A3C]" />}
+              link="/Game"
             />
             <ActionCard
               title="Chat"
               description="Discuter avec vos amis"
-              icon={<MessageCircle className="w-10 h-10 text-[#8B5A3C]" />}
-              link="/chat"
+              icon={<MessagesSquare className="w-10 h-10 text-[#8B5A3C]" />}
+              link="/Chat"
             />
+              <ActionCard
+                title="Rank"
+                description="Consultez le classement"
+                icon={<Crown className="w-10 h-10 text-[#8B5A3C]" />}
+                link="/Rank"
+              />
             <ActionCard
               title="Profil"
-              description="Voir votre profil"
+              description="Accedez a votre profil"
               icon={<User className="w-10 h-10 text-[#8B5A3C]" />}
-              link="/profile"
+              link="/Profile"
             />
           </div>
         ) : (
@@ -138,7 +144,7 @@ export default function HomePage() {
               title="Login"
               description={authStatus === "loading" ? "Vérification..." : "Connectez-vous"}
               icon={<User className="w-10 h-10 text-[#8B5A3C]" />}
-              link="/login"
+              link="/Login"
             />
           </div>
         )}

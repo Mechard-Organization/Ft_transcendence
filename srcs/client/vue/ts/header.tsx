@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Brain, Gamepad2, MessageCircle, User } from "lucide-react";
+import { Brain, Gamepad2, Joystick, MessagesSquare, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../access/authenticator";
 import  handlelogout  from "../profil/profilPage" ;
@@ -80,7 +80,7 @@ const handlelogout = async () => {
     credentials: "include", // 🔑 OBLIGATOIRE
   });
 
-  window.location.href = "/login";
+  window.location.href = "/Login";
 };
 
   return (
@@ -111,7 +111,7 @@ const handlelogout = async () => {
           <Link to="/about">
             <div
               className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                isActive("/game")
+                isActive("/Game")
                   ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
                   : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
               }`}
@@ -122,15 +122,15 @@ const handlelogout = async () => {
           {authStatus === "authenticated" ? (
             <>
               {/* Jouer */}
-              <Link to="/game">
+              <Link to="/Game">
                 <div
                   className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                    isActive("/game")
+                    isActive("/Game")
                       ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
                       : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                   }`}
                 >
-                  <Gamepad2 className="w-6 h-6" />
+                  <Joystick className="w-6 h-6" />
                 </div>
               </Link>
 
@@ -143,13 +143,13 @@ const handlelogout = async () => {
                       : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                   }`}
                 >
-                  <MessageCircle className="w-6 h-6" />
+                  <MessagesSquare className="w-6 h-6" />
                 </div>
               </Link>
 
               {/* Avatar + Logout */}
-              {/* Avatar (+ Logout uniquement sur /profile) */}
-              {location.pathname === "/profile" ? (
+              {/* Avatar (+ Logout uniquement sur /Profile) */}
+              {location.pathname === "/Profile" ? (
                 <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-[#FEE96E] transition-all hover:scale-105">
                   <button
                     onClick={handlelogout}
@@ -165,7 +165,7 @@ const handlelogout = async () => {
                   />
                 </div>
               ) : (
-                <Link to="/profile">
+                <Link to="/Profile">
                   <img
                     src={userStats.avatarUrl}
                     alt="Avatar"
@@ -176,10 +176,10 @@ const handlelogout = async () => {
             </>
           ) : (
             // Si utilisateur non connecté → un seul bouton Login
-            <Link to="/login">
+            <Link to="/Login">
               <div
                 className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                  isActive("/login")
+                  isActive("/Login")
                     ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
                     : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                 }`}
