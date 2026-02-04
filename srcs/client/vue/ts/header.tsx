@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Gamepad2, MessageCircle, User } from "lucide-react";
+import { Brain, Gamepad2, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../access/authenticator";
 import  handlelogout  from "../profil/profilPage" ;
@@ -108,6 +108,17 @@ const handlelogout = async () => {
         </div>
         {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
+          <Link to="/about">
+            <div
+              className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
+                isActive("/game")
+                  ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
+                  : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
+              }`}
+            >
+              <Brain className="w-6 h-6" />
+            </div>
+          </Link>
           {authStatus === "authenticated" ? (
             <>
               {/* Jouer */}

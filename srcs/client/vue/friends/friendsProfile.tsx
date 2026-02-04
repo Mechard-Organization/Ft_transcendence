@@ -109,7 +109,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col p-8">
+    <div className="flex flex-col min-h-215 relative">
       <div className=" mb-8 max-w-4xl w-full mx-auto text-center">
         {isMe && (
           <input

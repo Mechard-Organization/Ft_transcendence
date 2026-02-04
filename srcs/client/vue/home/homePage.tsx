@@ -97,15 +97,15 @@ export default function HomePage() {
   );
 
   return (
-    <div className="flex flex-col min-h-screen relative">
-      <main className="flex-grow flex flex-col items-center mt-20">
+    <div className="flex flex-col min-h-215 relative">
+      <main className="flex-grow flex flex-col items-center mt-10">
         {/* Header / Welcome */}
         <div className="text-center">
-          <img
-            src="./shared-assets/pompompurin/profil/main.jpeg"
-            alt="personnage Home image"
-            className="w-25 h-25 object-cover rounded-full mx-auto mb-6"
-          />
+                  <img
+          src="/uploads/gif/cookie.gif"
+          alt="cookie"
+          className="w-54 h-54 object-cover rounded-xl mt-10 margin-box"
+        />
           <h1 className="text-6xl mb-4 text-[#8B5A3C]">Bienvenue !</h1>
           <p className="text-2xl text-[#A67C52]">Jouez, chattez et amusez-vous !</p>
         </div>
@@ -115,7 +115,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mt-10">
             <ActionCard
               title="Jouer"
-              description="Commencer une partie de Pong"
+              description="Jouer une partie de Pong"
               icon={<Gamepad2 className="w-10 h-10 text-[#8B5A3C]" />}
               link="/game"
             />
@@ -144,11 +144,7 @@ export default function HomePage() {
         )}
 
         {/* GIF */}
-        <img
-          src="/uploads/gif/cookie.gif"
-          alt="cookie"
-          className="w-64 h-64 object-cover rounded-xl mt-10"
-        />
+
       </main>
 
       <footer className="w-full">

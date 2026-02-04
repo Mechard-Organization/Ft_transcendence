@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Send, Users } from "lucide-react";
+import { Plus, PlusCircle, Send, Users, UserPlus } from "lucide-react";
 import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
 import { Link, useLocation } from "react-router-dom";
@@ -227,9 +227,9 @@ const sendMessage = async () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
+    <div className="flex flex-col min-h-215 bg-[#FFF9E5]">
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
-        <div className="w-1/3 h-200 bg-white/80 rounded-2xl p-4 shadow-md">
+        <div className="w-1/3 h-191 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
             Discussions
 
@@ -241,7 +241,7 @@ const sendMessage = async () => {
                 : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
               }`}
               >
-              <MessageCircle className="w-6 h-6" />
+              <UserPlus className="w-6 h-6" />
             </div>
           </Link>
               </h2>
@@ -256,16 +256,23 @@ const sendMessage = async () => {
                       : "hover:bg-yellow-200"
                   }`}
                   >
-                <User className="w-5 h-5 text-[#8B5A3C]" />
+                <Users className="w-5 h-5 text-[#8B5A3C]" />
                 <span className="font-medium ">{conv.username}</span>
               </div>
             ))}
         </div>
 
         {/* ---------------- RIGHT PANEL ---------------- */}
-        <div className="w-2/3 h-200 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
+        <div className="w-2/3 h-191 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
           {/* HEADER CHAT */}
           <div className="bg-[#FEE96E] p-4">
+            <button
+              onClick={() => addUsertoGroup()}
+              className="ml-auto p-2 rounded-full hover:bg-yellow-200 transition"
+              title="ajouter une personne au groupe"
+              >
+                <PlusCircle className="w-6 h-6 text-[#8B5A3C] margin-box"/>
+            </button>
             <Link to={`/friendsProfil/${otherStats.id}`}>
              <h2 className="text-xl font-bold text-[#8B5A3C]">
               {selectedConversation === null
@@ -273,7 +280,7 @@ const sendMessage = async () => {
                 : selectedConversation?.id === 0
                   ? "Discussion générale"
                   : selectedConversation?.username || "Discussion générale"}
-            </h2>
+              </h2>
             </Link>
           </div>
 
@@ -329,9 +336,9 @@ const sendMessage = async () => {
           </div>
         </div>
       </div>
-
-      {/* FOOTER */}
-      <Footer />
+      <footer className="w-full">
+        <Footer />
+      </footer>
     </div>
   );
 }

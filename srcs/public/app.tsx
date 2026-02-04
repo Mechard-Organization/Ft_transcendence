@@ -9,7 +9,7 @@ import RegisterPage from './client/vue/access/registerPage';
 import SettingsPage from './client/vue/access/settings';
 import FriendsPage from './client/vue/friends/friend';
 import FriendProfil from './client/vue/friends/friendsProfile'
-
+import AdminPage from './client/vue/admin/AdminPage';
 
 
 import { Settings } from 'lucide-react';
@@ -38,6 +38,7 @@ export default function App() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/friends" element={<FriendsPage />} />
           <Route path="/friendsProfil/:id" element={<FriendProfil />} />
+          <Route path="/Admin" element={<AdminPage />} />
         </Routes>
       </div>
     </Router>

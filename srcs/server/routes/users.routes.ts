@@ -88,6 +88,11 @@ export default async function userRoutes(fastify: FastifyInstance) {
     return { ok: true };
   });
 
+  fastify.get("/users/admins", async () => {
+    const users = db.getAllUsers();
+    return users.filter(u => u.admin);
+  });
+
   fastify.post("/delUser", async (request, reply) => {
     const { id } = request.body as any;
     const user = db.getUserById(id);
