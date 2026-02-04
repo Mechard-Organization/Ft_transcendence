@@ -101,8 +101,14 @@ export default function AboutPage() {
             </div>
         ))}
         </div>
-
-
+        <br/>
+        <div className="text-center">
+                  <img
+          src="/uploads/gif/thanks.gif"
+          alt="thanks"
+          className="w-60 h-75 rounded-xl margin-box"
+        />
+        </div>
       </main>
 
       <footer className="w-full">

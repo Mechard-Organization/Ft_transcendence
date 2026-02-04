@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Brain, Gamepad2, Joystick, MessagesSquare, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { isAuthenticated } from "../access/authenticator";
 import  handlelogout  from "../profil/profilPage" ;
 
@@ -21,6 +21,9 @@ export default function Header() {
   const [avatarUrl, setAvatarUrl] = useState<avatarUrl>();
   const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
   const [userId, setUserId] = useState<number>(0);
+  const wsRef = useRef<WebSocket | null>(null);
+  const [hasProfileNotif, setHasProfileNotif] = useState(false);
+
   const [userStats, setUserStats] = useState<UserStats>({
     id: 0,
     username: "",
@@ -65,6 +68,7 @@ export default function Header() {
     };
   }, []);
 
+  
   useEffect(() => {
     console.log("✅ userStats mis à jour :", userStats);
   }, [userStats]);

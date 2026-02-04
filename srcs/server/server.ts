@@ -11,7 +11,7 @@ import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/users.routes";
 import matchRoutes from "./routes/matchs.routes";
 import messageRoutes from "./routes/messages.routes";
-import friendRoutes from "./routes/friends.routes";
+import friendRoutes from "routes/friends.routes";
 import metricsRoutes from "./routes/metrics.routes";
 import websocketPlugin from "./plugin/websocket";
 
