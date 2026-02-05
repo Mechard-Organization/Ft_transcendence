@@ -47,7 +47,7 @@ export default function UserSettings() {
         }));
         setUsername(user.username);
         setMail(user.mail);
-        
+
       } catch (err) {
         console.error("Erreur récupération profil :", err);
       }
@@ -64,6 +64,7 @@ export default function UserSettings() {
     formData.append("id", String(userStats.id));
 
     try {
+      console.log("avatar ", formData);
       const res = await fetch("/api/users/me/avatar", {
         method: "POST",
         body: formData,
@@ -150,7 +151,7 @@ export default function UserSettings() {
       </div>
 
       {/* Composant 2FA */}
-     
+
 
       {/* Username */}
       <div className="form-group w-full text-center mt-4">

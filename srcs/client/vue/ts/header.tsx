@@ -52,7 +52,7 @@ export default function Header() {
             id: userData.id,
             username: userData.username,
             mail: userData.mail,
-            avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
+            avatarUrl: userData.avatarUrl ?? "/uploads/profil/default.jpeg",
           });
           } else {
             setAuthStatus("anonymous");
@@ -68,7 +68,7 @@ export default function Header() {
     };
   }, []);
 
-  
+
   useEffect(() => {
     console.log("✅ userStats mis à jour :", userStats);
   }, [userStats]);

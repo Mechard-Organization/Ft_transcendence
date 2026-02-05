@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mail, setMail] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("./uploads/profil/default.jpeg")
+  const [avatarUrl, setAvatarUrl] = useState("/uploads/profil/default.jpeg")
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -71,7 +71,7 @@ export default function RegisterPage() {
       setPassword(password);
       setConfirmPassword(password);
       setMail(mail);
-      setAvatarUrl("./uploads/profil/default.jpeg")
+      setAvatarUrl("/uploads/profil/default.jpeg")
 
       window.location.href = "/Login"
       console.log("data :",  data)

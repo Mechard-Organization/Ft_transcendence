@@ -29,6 +29,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   fastify.post("/getuser", async (request) => {
     const { id } = request.body as any;
+    console.log(id);
     return id > 0 ? db.getUserById(id) : { username: "Invité.e"};
   });
 
@@ -154,9 +155,9 @@ export default async function userRoutes(fastify: FastifyInstance) {
     }
 
     // 🔹 Sauvegarde DB
-    db.updateUserPp(`/uploads/avatars/${filename}`, id);
+    db.updateUserPp(`/uploads/profil/${filename}`, id);
 
-    return { avatarUrl: `/uploads/avatars/${filename}` };
+    return { avatarUrl: `/uploads/profil/${filename}` };
   });
 
   fastify.post("/users/me/delavatar", async (req, reply) => {

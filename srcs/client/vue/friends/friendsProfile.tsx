@@ -21,7 +21,7 @@ type UserStats = {
 
 const ProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const userId: number = Number(3);
+  const userId: number = Number(id);
 
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isMe, setIsMe] = useState<boolean>(false);
@@ -35,6 +35,7 @@ const ProfilePage: React.FC = () => {
   useEffect((): void => {
     const fetchUser = async (): Promise<void> => {
       try {
+        console.log("userid ",userId);
         const res: Response = await fetch("/api/getuser", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -49,7 +50,7 @@ const ProfilePage: React.FC = () => {
           id: data.id,
           username: data.username,
           mail: data.mail,
-          avatarUrl: data.avatarUrl ?? "./uploads/profil/default.jpeg",
+          avatarUrl: data.avatarUrl ?? "/uploads/profil/default.jpeg",
           winRate: data.winRate ?? 0,
           gamesPlayed: data.gamesPlayed ?? 0,
           gamesWon: data.gamesWon ?? 0,

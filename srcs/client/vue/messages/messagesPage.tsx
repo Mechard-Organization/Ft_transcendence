@@ -56,7 +56,7 @@ export default function ChatPage() {
   const [showAddUser, setShowAddUser] = useState(false); // afficher/masquer la recherche
   const [searchUsername, setSearchUsername] = useState(""); // nom tapé
   const [userAddGroup, setUserAddGroup] = useState<UserGroup>({
-    id: 0, 
+    id: 0,
     username: ""
   })
 
@@ -64,7 +64,7 @@ export default function ChatPage() {
       id: 0,
       username: "",
       mail: "",
-      avatarUrl: "./uploads/profil/default.jpeg",
+      avatarUrl: "/uploads/profil/default.jpeg",
       winRate: 0,
       gamesPlayed: 0,
       gamesWon: 0,
@@ -74,7 +74,7 @@ export default function ChatPage() {
       id: 0,
       username: "",
       mail: "",
-      avatarUrl: "./uploads/profil/default.jpeg",
+      avatarUrl: "/uploads/profil/default.jpeg",
       winRate: 0,
       gamesPlayed: 0,
       gamesWon: 0,
@@ -220,14 +220,14 @@ const sendMessage = async () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: auth.id }),
         });
-        
+
         const userData = await resUser.json();
 
         setUserStats({
           id: userData.id,
           username: userData.username,
           mail: userData.mail,
-          avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
+          avatarUrl: userData.avatarUrl ?? "/uploads/profil/default.jpeg",
           winRate: userData.winRate,
           gamesPlayed: userData.gamesPlayed,
           gamesWon: userData.gamesWon,
