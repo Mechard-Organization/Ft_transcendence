@@ -118,6 +118,21 @@ creatAdmin();
 
 // --- MESSAGES FUNCTIONS ---
 
+export function getMessagesById(id: string) {
+  const stmt = db.prepare(`
+    SELECT
+      messages.*,
+      COALESCE(users.username, 'Anonyme') AS username
+    FROM messages
+    LEFT JOIN users
+      ON messages.id_author = users.id
+    WHERE messages.id IS ?
+    ORDER BY messages.id ASC
+  `);
+
+  return stmt.get(id);
+}
+
 export function getAllMessages() {
   const stmt = db.prepare(`
     SELECT

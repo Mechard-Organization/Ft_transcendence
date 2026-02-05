@@ -20,7 +20,9 @@ export default async function messageRoutes(fastify: FastifyInstance) {
       throw fastify.httpErrors.badRequest("Invalid content");
     }
 
-    const saved = db.addMessage(content, id, id_group);
+    const info = db.addMessage(content, id, id_group);
+    const saved = db.getMessagesById(info.id);
+    console.log("hello saved: ", saved);
 
     fastify.websocketServer.clients.forEach(client => {
       if (client.readyState === 1) {
