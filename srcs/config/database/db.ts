@@ -43,6 +43,7 @@ db.prepare(`
     content TEXT,
     id_author INTEGER NULL,
     id_group INTEGER NULL,
+    timestamp TEXT DEFAULT (datetime('now')),
     FOREIGN KEY(id_author) REFERENCES users(id),
     FOREIGN KEY(id_group) REFERENCES groupmsg(id)
   )
@@ -50,7 +51,8 @@ db.prepare(`
 
 db.prepare(`
   CREATE TABLE IF NOT EXISTS groupmsg (
-    id INTEGER PRIMARY KEY AUTOINCREMENT
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    groupname TEXT
   )
 `).run();
 
@@ -172,12 +174,12 @@ export function MessageAnonym(id_author: string) {
   return stmt.run(id_author);
 }
 
-export function createGroup() {
+export function createGroup(groupname: string) {
   const stmt = db.prepare(`
-    INSERT INTO groupmsg DEFAULT VALUES
+    INSERT INTO groupmsg (groupname) VALUES (?)
   `);
 
-  const info = stmt.run();
+  const info = stmt.run(groupname);
 
   return {
     id: info.lastInsertRowid
