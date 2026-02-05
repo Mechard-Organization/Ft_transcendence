@@ -1,7 +1,7 @@
 import { useState, FormEvent } from "react";
 import { User } from "lucide-react";
 import { validatePassword, validateEmail } from "../../../services/validate.service.js";
-
+import Footer from "../ts/Footer.js";
 type RegisterResponse = {
   error?: string;
   message?: string;
@@ -73,7 +73,7 @@ export default function RegisterPage() {
       setMail(mail);
       setAvatarUrl("./uploads/profil/default.jpeg")
 
-      window.location.href = "/login"
+      window.location.href = "/Login"
       console.log("data :",  data)
     } catch (err) {
       console.error(err);
@@ -83,10 +83,13 @@ export default function RegisterPage() {
     }
   };
   return (
+    <div>
     <main id="mainContent">
       <div className="mb-8 max-w-2xl w-full mx-auto text-center">
+              <br/><br/>
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-[#FEE96E] cursor-pointer">
           <div className="flex items-center justify-center">
+
             <div className="w-12 h-12 rounded-full bg-[#FEE96E] flex items-center justify-center">
               <User className="w-6 h-6 text-[#8B5A3C]" />
             </div>
@@ -179,9 +182,13 @@ export default function RegisterPage() {
             </form>
           </div>
           </div>
-		  <div className="mt-4"> Vous avez déjà un compte ?{" "}<a className="text-[#A67C52] hover:text-[#8B5A3C]" href="/login">Cliquez ici</a>
+		  <div className="mt-4"> Vous avez déjà un compte ?{" "}<a className="text-[#A67C52] hover:text-[#8B5A3C]" href="/Login">Cliquez ici</a>
         </div>
       </div>
+    <div className="margin-bot w-full">
+      <Footer/>
+    </div>
     </main>
+    </div>
   );
 }

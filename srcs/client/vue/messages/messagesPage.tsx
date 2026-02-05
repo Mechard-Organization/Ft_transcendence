@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Send, Users } from "lucide-react";
+import { Plus, PlusCircle, Send, Users, UserPlus, Group } from "lucide-react";
 import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
 import { Link, useLocation } from "react-router-dom";
-import { Gamepad2, MessageCircle, User } from "lucide-react";
+import { Gamepad2, MessagesSquare, User } from "lucide-react";
+import { username } from "../game/Meshes";
 
 
 interface Message {
@@ -35,12 +36,16 @@ type UserStats = {
    twofaEnabled?: boolean;
 };
 
+type UserGroup = {
+  id: number;
+  username: string;
+};
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const isActive = (path: string) => location.pathname === path;
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation>();
 
   const [selectedGroup, setSelectedGroup] = useState<number | null>(1);
   const [newMessage, setNewMessage] = useState("");
@@ -48,7 +53,24 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const selectedConversationRef = useRef<number | null>(null);
+  const [showAddUser, setShowAddUser] = useState(false); // afficher/masquer la recherche
+  const [searchUsername, setSearchUsername] = useState(""); // nom tapé
+  const [userAddGroup, setUserAddGroup] = useState<UserGroup>({
+    id: 0, 
+    username: ""
+  })
+
     const [userStats, setUserStats] = useState<UserStats>({
+      id: 0,
+      username: "",
+      mail: "",
+      avatarUrl: "./uploads/profil/default.jpeg",
+      winRate: 0,
+      gamesPlayed: 0,
+      gamesWon: 0,
+      highScore: 0
+    });
+    const [otherStats, setOtherStats] = useState<UserStats>({
       id: 0,
       username: "",
       mail: "",
@@ -116,19 +138,20 @@ export default function ChatPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            id_group: selectedConversation,
+            id_group: selectedConversation.id,
           }),
         });
       }
-      console.log("id: ", selectedConversation)
       selectedConversationRef.current =
-        selectedConversation === 0 ? null : selectedConversation;
+        !selectedConversation || selectedConversation?.id === 0 ? null : selectedConversation?.id;
       setMessages(await res.json());
     }
     fetchMessages();
   }, [selectedConversation]);
 
-
+  useEffect((): void =>{
+    console.log("aaaaaa:", messages)
+}, [messages])
 /* ---------------- SEND MESSAGE ---------------- */
 const sendMessage = async () => {
   if (!newMessage.trim()) return;
@@ -139,7 +162,7 @@ const sendMessage = async () => {
 
 
   try {
-    const id_group = selectedConversation === 0 ? undefined : selectedConversation;
+    const id_group = selectedConversation?.id === 0 ? undefined : selectedConversation?.id;
     const res = await fetch("/api/hello", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -154,6 +177,9 @@ const sendMessage = async () => {
     }
   };
 
+  useEffect(() => {
+    console.log("group : ", selectedConversation)
+  }, [selectedConversation])
 
   useEffect(() => {
     async function getGroups() {
@@ -168,9 +194,10 @@ const sendMessage = async () => {
 
         const data = await res.json();
         setConversations([
-          { id: 0 },
+          { id: 0, username:"general" },
           ...data.map((f: any) => ({
             id: f.id_group,
+            username: f.groupname
           })),
         ]);
       }
@@ -193,6 +220,7 @@ const sendMessage = async () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: auth.id }),
         });
+        
         const userData = await resUser.json();
 
         setUserStats({
@@ -212,16 +240,55 @@ const sendMessage = async () => {
     fetchUser();
   }, []);
 
+  const addUsertoGroup = async (userid: number, target: number) => {
+    try {
+      const res = await fetch("/api/addUserGroup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userid, target }),
+      });
+      console.log("essai d'ajouter : ", userid, target)
+      if (!res.ok) throw new Error("Impossible d'ajouter l'utilisateur au groupe");
+
+      console.log("Utilisateur ajouté au groupe !");
+    } catch (err) {
+      console.error("Erreur addUsertoGroup:", err);
+    }
+  };
+
+const handleInviteUser = async () => {
+  if (!searchUsername.trim() || !selectedConversation) return;
+
+  try {
+    const resUser = await fetch("/api/getuserbyname", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: searchUsername.trim() }),
+    });
+
+    if (!resUser.ok) throw new Error("Utilisateur introuvable");
+    const userToAdd = await resUser.json();
+
+    await addUsertoGroup(userToAdd.id, selectedConversation.id);
+
+    console.log(`Utilisateur ${userToAdd.username} ajouté au groupe ${selectedConversation.username}`);
+
+    setSearchUsername("");
+    setShowAddUser(false);
+  } catch (err) {
+    console.error("Erreur invitation :", err);
+  }
+};
+
+
   return (
-    <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
-      {/* CONTENU */}
+    <div className="flex flex-col min-h-215 bg-[#FFF9E5]">
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
-        {/* ---------------- LEFT PANEL ---------------- */}
-        <div className="w-1/3 bg-white/80 rounded-2xl p-4 shadow-md">
+        <div className="w-1/3 h-191 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
             Discussions
 
-          <Link to="/friends">
+          <Link to="/Friends">
                       <div
               className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
                 isActive("/chat")
@@ -229,37 +296,87 @@ const sendMessage = async () => {
                 : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
               }`}
               >
-              <MessageCircle className="w-6 h-6" />
+              <UserPlus className="w-6 h-6" />
             </div>
           </Link>
               </h2>
                       {conversations.map((conv) => (
               <div
                 key={conv.id}
-                onClick={() => setSelectedConversation(conv.id)}
+                onClick={() => setSelectedConversation(conv)}
                 className={`p-3 rounded-xl cursor-pointer transition-all mb-2 flex items-center gap-3
                   ${
-                    selectedConversation === conv.id
+                    selectedConversation === conv
                       ? "bg-[#FEE96E]"
                       : "hover:bg-yellow-200"
                   }`}
-              >
-                <User className="w-5 h-5 text-[#8B5A3C]" />
-                <span className="font-medium">{conv.username}</span>
+                  >
+                <Users className="w-5 h-5 text-[#8B5A3C]" />
+                <span className="font-medium text-[#8B5A3C]">{conv.username}</span>
               </div>
             ))}
         </div>
 
         {/* ---------------- RIGHT PANEL ---------------- */}
-        <div className="w-2/3 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
+        <div className="w-2/3 h-191 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
           {/* HEADER CHAT */}
-          <div className="bg-[#FEE96E] p-4">
-            <h2 className="text-xl font-bold text-[#8B5A3C]">
-              {conversations.find(c => c.id === selectedConversation)?.username
-                || "Sélectionne une discussion"}
-            </h2>
+          <div className="bg-[#FEE96E] p-4 flex items-center justify-between">
+        {/* Left: Titre */}
+        <h2 className="text-xl font-bold text-[#8B5A3C]">
+          {selectedConversation === null
+            ? "Sélectionne une discussion"
+            : selectedConversation?.id === 0
+              ? "Discussion générale"
+              : selectedConversation?.username || "Discussion générale"}
+        </h2>
 
-          </div>
+        {/* Right: Boutons */}
+        <div className="flex gap-2 items-center">
+  {/* Bouton pour afficher la barre de recherche */}
+  {selectedConversation && selectedConversation.id !== 0 && (
+    <button
+      onClick={() => setShowAddUser((prev) => !prev)}
+      className="p-2 rounded-full hover:bg-yellow-200 transition"
+      title="Ajouter un utilisateur"
+    >
+      <PlusCircle className="w-6 h-6 text-[#8B5A3C]" />
+    </button>
+  )}
+
+  {/* Barre de recherche */}
+  {showAddUser && (
+    <div className="flex items-center gap-2">
+      <input
+        type="text"
+        placeholder="Nom de l'utilisateur..."
+        value={searchUsername}
+        onChange={(e) => setSearchUsername(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleInviteUser();
+        }}
+        className="px-3 py-1 rounded-full border-2 border-[#FEE96E]"
+      />
+      <button
+        onClick={handleInviteUser}
+        className="px-3 py-1 rounded-full bg-[#FEE96E] border-2 border-[#FEE96E] hover:scale-105 transition"
+      >
+        Inviter
+      </button>
+    </div>
+  )}
+
+  {/* Bouton voir profil */}
+  {selectedConversation && selectedConversation.id !== 0 && (
+    <Link to={`/FriendsProfil/${otherStats.id}`}>
+      <button className="p-2 rounded-full hover:bg-yellow-200 transition" title="Voir profil">
+        <User className="w-6 h-6 text-[#8B5A3C]" />
+      </button>
+    </Link>
+  )}
+</div>
+
+      </div>
+
 
           {/* MESSAGES */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -279,6 +396,9 @@ const sendMessage = async () => {
                     : "bg-[#FEE96E] text-[#8B5A3C]"
                   }`}
                 >
+                <div className="flex-1 overflow-y-auto justify-end [#FEE96E]">
+                  <Link to={`/FriendsProfil/${msg.id}`}>{msg.username}</Link>
+                  </div>
                   <p>{msg.content}</p>
                   <p className="text-xs opacity-60 mt-1">
                     {new Date(msg.timestamp).toLocaleTimeString("fr-FR", {
@@ -299,20 +419,20 @@ const sendMessage = async () => {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               placeholder="Tape ton message..."
-              className="flex-1 px-4 py-2 rounded-full border-2 border-[#FEE96E]"
+              className="flex-1 px-4 py-2 rounded-full text-[#8B5A3C] border-2 border-[#FEE96E]"
             />
             <button
               onClick={sendMessage}
               className="px-5 py-2 rounded-full bg-[#FEE96E] border-2 border-[#FEE96E] hover:scale-105 transition"
             >
-              <Send size={18} />
+              <Send className="text-[#8B5A3C]" size={18} />
             </button>
           </div>
         </div>
       </div>
-
-      {/* FOOTER */}
-      <Footer />
+      <footer className="w-full">
+        <Footer />
+      </footer>
     </div>
   );
 }

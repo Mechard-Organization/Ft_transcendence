@@ -52,7 +52,7 @@ export default function LoginPage() {
         return;
       }
 
-      window.location.href = "/profile";
+      window.location.href = "/Profile";
     } catch (err) {
       console.error(err);
       setError("Erreur réseau, réessaie plus tard.");
@@ -86,7 +86,7 @@ export default function LoginPage() {
         return;
       }
 
-      window.location.href = "/profile";
+      window.location.href = "/Profile";
     } catch (err) {
       console.error(err);
       setError("Erreur réseau, réessaie plus tard.");
@@ -166,7 +166,7 @@ export default function LoginPage() {
           </div>
 	    </div>
       <br/>
-      <div>Vous n'avez pas encore de compte ? <a className="text-[#A67C52] hover:text-[#8B5A3C]" href = "/register">Cliquez ici</a></div>
+      <div>Vous n'avez pas encore de compte ? <a className="text-[#A67C52] hover:text-[#8B5A3C]" href = "/Register">Cliquez ici</a></div>
 	  </div>
 
       {twofaRequired && (

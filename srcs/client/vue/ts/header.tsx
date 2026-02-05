@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { Gamepad2, MessageCircle, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Brain, Gamepad2, Joystick, MessagesSquare, User } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 import { isAuthenticated } from "../access/authenticator";
 import  handlelogout  from "../profil/profilPage" ;
 
@@ -21,6 +21,9 @@ export default function Header() {
   const [avatarUrl, setAvatarUrl] = useState<avatarUrl>();
   const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
   const [userId, setUserId] = useState<number>(0);
+  const wsRef = useRef<WebSocket | null>(null);
+  const [hasProfileNotif, setHasProfileNotif] = useState(false);
+
   const [userStats, setUserStats] = useState<UserStats>({
     id: 0,
     username: "",
@@ -65,6 +68,7 @@ export default function Header() {
     };
   }, []);
 
+  
   useEffect(() => {
     console.log("✅ userStats mis à jour :", userStats);
   }, [userStats]);
@@ -80,7 +84,7 @@ const handlelogout = async () => {
     credentials: "include", // 🔑 OBLIGATOIRE
   });
 
-  window.location.href = "/login";
+  window.location.href = "/Login";
 };
 
   return (
@@ -108,66 +112,78 @@ const handlelogout = async () => {
         </div>
         {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
-          {/* Jouer */}
-          <Link to="/game">
+          <Link to="/about">
             <div
               className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                isActive("/game")
+                isActive("/Game")
                   ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
                   : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
               }`}
             >
-              <Gamepad2 className="w-6 h-6" />
+              <Brain className="w-6 h-6" />
             </div>
           </Link>
-
-          {/* Chat */}
-          <Link to="/chat">
-            <div
-              className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                isActive("/chat")
-                  ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
-                  : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
-              }`}
-            >
-              <MessageCircle className="w-6 h-6" />
-            </div>
-          </Link>
-          {/* ✅ Login OU Profil */}
-          {authStatus === "authenticated" && location.pathname === "/profile" ? (
-            <div
-              className="flex items-center gap-2 px-2 py-1 rounded-full cursor-pointer bg-[#FEE96E] transition-all hover:scale-105"
-            >
-              {/* Logout Button */}
-              <button
-                onClick={handlelogout}
-                className="px-3 py-1 rounded-full bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100 transition-colors"
-              >
-                Logout
-              </button>
-
-              {/* Avatar */}
-              <Link to="/profile">
-                <img
-                  src={userStats.avatarUrl}
-                  alt="Avatar"
-                  className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E]"
-                />
+          {authStatus === "authenticated" ? (
+            <>
+              {/* Jouer */}
+              <Link to="/Game">
+                <div
+                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
+                    isActive("/Game")
+                      ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
+                      : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
+                  }`}
+                >
+                  <Joystick className="w-6 h-6" />
+                </div>
               </Link>
-            </div>
-          ) : authStatus == "authenticated" && location.pathname !== "/profile"  ? (
-            <Link to="/profile">
-                <img
-                  src={userStats.avatarUrl}
-                  alt="Avatar"
-                  className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E]"
-                />
+
+              {/* Chat */}
+              <Link to="/chat">
+                <div
+                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
+                    isActive("/chat")
+                      ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
+                      : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
+                  }`}
+                >
+                  <MessagesSquare className="w-6 h-6" />
+                </div>
               </Link>
-          ) : authStatus !== "authenticated"  ? (
-            <Link to="/login">
+
+              {/* Avatar + Logout */}
+              {/* Avatar (+ Logout uniquement sur /Profile) */}
+              {location.pathname === "/Profile" ? (
+                <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-[#FEE96E] transition-all hover:scale-105">
+                  <button
+                    onClick={handlelogout}
+                    className="px-3 py-1 rounded-full bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100 transition-colors"
+                  >
+                    Logout
+                  </button>
+
+                  <img
+                    src={userStats.avatarUrl}
+                    alt="Avatar"
+                    className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E]"
+                  />
+                </div>
+              ) : (
+                <Link to="/Profile">
+                  <img
+                    src={userStats.avatarUrl}
+                    alt="Avatar"
+                    className="w-10 h-10 object-cover rounded-full border-2 border-[#FEE96E] hover:scale-105 transition-transform"
+                  />
+                </Link>
+              )}
+            </>
+          ) : (
+            // Si utilisateur non connecté → un seul bouton Login
+            <Link to="/Login">
               <div
                 className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
-                  isActive("/login")
+                  isActive("/Login")
                     ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
                     : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                 }`}
@@ -176,10 +192,9 @@ const handlelogout = async () => {
                 <User className="w-6 h-6" />
               </div>
             </Link>
-          
-              ) : null}
-            
+          )}
         </nav>
+
       </div>
     </header>
   );
