@@ -138,7 +138,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
     }
 
     const filename = `${crypto.randomUUID()}.jpg`;
-    const filepath = path.join("uploads/avatars", filename);
+    const filepath = path.join("uploads/profil", filename);
 
     // 🔹 Resize + optimisation
     await sharp(buffer)
