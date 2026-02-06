@@ -12,6 +12,7 @@ interface Message {
   content: string;
   username: string;
   timestamp: string;
+  id_author: string;
 }
 
 interface Group {
@@ -99,7 +100,7 @@ export default function ChatPage() {
         if (msg.data)
         {
           const idGroup = msg.data.id_group ?? null;
-          console.log("mm", idGroup, selectedConversationRef.current)
+          console.log("mm", msg.data.saved);
           if (msg.type === "new_message" && idGroup === selectedConversationRef.current) {
             console.log("msg : ", msg)
             setMessages((prev) => [...prev, msg.data.saved]);
@@ -397,7 +398,7 @@ const handleInviteUser = async () => {
                   }`}
                 >
                 <div className="flex-1 overflow-y-auto justify-end [#FEE96E]">
-                  <Link to={`/FriendsProfil/${msg.id}`}>{msg.username}</Link>
+                  <Link to={`/FriendsProfil/${msg.id_author}`}>{msg.username}</Link>
                   </div>
                   <p>{msg.content}</p>
                   <p className="text-xs opacity-60 mt-1">
