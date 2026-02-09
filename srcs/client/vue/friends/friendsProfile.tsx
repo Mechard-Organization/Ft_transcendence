@@ -46,16 +46,37 @@ const ProfilePage: React.FC = () => {
 
         const data: UserStats = await res.json();
 
-        setUserStats({
-          id: data.id,
-          username: data.username,
-          mail: data.mail,
-          avatarUrl: data.avatarUrl ?? "/uploads/profil/default.jpeg",
-          winRate: data.winRate ?? 0,
-          gamesPlayed: data.gamesPlayed ?? 0,
-          gamesWon: data.gamesWon ?? 0,
-          highScore: data.highScore ?? 0,
-        });
+        const resNum = await fetch("/api/numMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataNum = await resNum.json();
+
+      const resWin = await fetch("/api/numWinMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataWin = await resWin.json();
+
+      const resHight = await fetch("/api/highScoreMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataHight = await resHight.json();
+
+      setUserStats({
+        id: data.id,
+        username: data.username,
+        mail: data.mail,
+        avatarUrl: data.avatarUrl ?? "/uploads/profil/default.jpeg",
+        winRate: dataWin.Win / dataNum.Match,
+        gamesPlayed: dataNum.Match,
+        gamesWon: dataWin.Win,
+        highScore: dataHight.max_score
+      });
       } catch (error) {
         console.error("Erreur récupération profil :", error);
       }
