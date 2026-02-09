@@ -17,16 +17,22 @@ export default function RankPage() {
     useEffect(() => {
     async function fetchPlayers() {
         try {
-        const res = await fetch("/api/getAllUsers"); // ton endpoint
+        const res = await fetch("/api/ranking"); // ton endpoint
         const json = await res.json();
 
         // ⚡ Vérifier que json est bien un tableau
         const data: PlayerStats[] = Array.isArray(json) ? json : [];
+        console.log(data);
 
-        // Trier par highScore décroissant
-        data.sort((a, b) => b.highScore - a.highScore);
-
-        setPlayers(data);
+        setPlayers(data.map((user: any) => ({
+          id: user.id,
+          username: user.username,
+          avatarUrl: user.avatarUrl ?? "/uploads/profil/default.jpeg",
+          highScore: user.highScore,
+          gamesPlayed: user.gamesPlayed,
+          gamesWon: user.gamesWon,
+          winRate: user.gamesWon / user.gamesPlayed * 100
+        })));
         } catch (err) {
         console.error("Erreur fetch players:", err);
         }

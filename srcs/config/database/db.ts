@@ -319,6 +319,34 @@ export function getUserByGoogleSub(google_sub: string) {
   return stmt.get(google_sub);
 }
 
+export function ranking() {
+  const stmt = db.prepare(`
+    SELECT id, username, avatarUrl,(
+      SELECT COUNT(*)
+      FROM match
+      WHERE (name_player1 = username AND CAST(score1 AS INTEGER) > CAST(score2 AS INTEGER))
+        OR (name_player2 = username AND CAST(score2 AS INTEGER) > CAST(score1 AS INTEGER))
+    ) AS gamesWon, (
+      SELECT COUNT(*)
+      FROM match
+      WHERE name_player1 = username OR name_player2 = username
+    ) AS gamesPlayed, (
+      SELECT MAX(
+        CASE
+          WHEN name_player1 = username THEN CAST(score1 AS INTEGER)
+          WHEN name_player2 = username THEN CAST(score2 AS INTEGER)
+          ELSE 0
+        END
+      )
+      FROM match
+    ) AS highScore
+    FROM users
+    ORDER BY gamesWon DESC
+  `);
+
+  return stmt.all();
+}
+
 
 // --- 2FA in USER FONCTIONS --- //
 

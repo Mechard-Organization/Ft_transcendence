@@ -179,4 +179,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
   return { avatarUrl: user.avatarUrl || null };
   });
 
+  //RANKING
+  fastify.get("/ranking", async () => db.ranking());
 }
