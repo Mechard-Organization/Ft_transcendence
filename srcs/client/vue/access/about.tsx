@@ -14,7 +14,7 @@ const team: TeamMember[] = [
   {
     name: "Lylou",
     role: "Développeuse Backend",
-    avatarUrl: "/uploads/profil/1.jpeg",
+    avatarUrl: "/assets/imgs/abutet_round.png",
     bio: "Abutet",
     linkedin: "https://linkedin.com/in/lylou",
     github: "https://github.com/LylouGavmild"
@@ -22,7 +22,7 @@ const team: TeamMember[] = [
   {
     name: "Mehdi",
     role: "Developper",
-    avatarUrl: "/uploads/profil/2.jpeg",
+    avatarUrl: "/assets/imgs/mel-yand_round.png",
     bio: "Mel-yand",
     linkedin: "https://linkedin.com/in/mehdi",
     github: "https://github.com/Shepardinio"
@@ -30,7 +30,7 @@ const team: TeamMember[] = [
   {
     name: "Maxime",
     role: "Developper",
-    avatarUrl: "/uploads/profil/3.jpeg",
+    avatarUrl: "/assets/imgs/mechard_round.png",
     bio: "Mechard",
     linkedin: "https://www.linkedin.com/in/maxime-echard/",
     github: "https://github.com/M2000"
@@ -38,7 +38,7 @@ const team: TeamMember[] = [
   {
     name: "Abdul",
     role: "Developper",
-    avatarUrl: "/uploads/profil/7.jpeg",
+    avatarUrl: "/assets/imgs/ajamshid_round.png",
     bio: "Ajamshid",
     linkedin: "https://linkedin.com/in/tonLinkedin",
     github: "https://github.com/ajamshid2000"
@@ -46,7 +46,7 @@ const team: TeamMember[] = [
   {
     name: "Jeanne",
     role: "Développeuse Front-end",
-    avatarUrl: "/uploads/profil/5.jpeg",
+    avatarUrl: "/assets/imgs/jealefev_round.png",
     bio: "Jealefev",
     linkedin: "https://linkedin.com/in/tonLinkedin",
     github: "https://github.com/namoule"
