@@ -638,7 +638,7 @@ export function getMatch(name_player: string) {
 
 export function numWinMatch(name_player: string) {
   const stmt = db.prepare(`
-    SELECT COUNT(*)
+    SELECT COUNT(*) AS Win
     FROM match
     WHERE (name_player1 = ? AND CAST(score1 AS INTEGER) > CAST(score2 AS INTEGER))
       OR (name_player2 = ? AND CAST(score2 AS INTEGER) > CAST(score1 AS INTEGER))
@@ -649,7 +649,7 @@ export function numWinMatch(name_player: string) {
 
 export function numMatch(name_player: string) {
   const stmt = db.prepare(`
-    SELECT COUNT(*)
+    SELECT COUNT(*) AS Match
     FROM match
     WHERE name_player1 = ? OR name_player2 = ?
   `);
@@ -659,10 +659,13 @@ export function numMatch(name_player: string) {
 
 export function highScoreMatch(name_player: string) {
   const stmt = db.prepare(`
-    SELECT MAX(GREATEST(
-      CASE WHEN name_player1 = ? THEN CAST(score1 AS INTEGER) ELSE 0 END,
-      CASE WHEN name_player2 = ? THEN CAST(score2 AS INTEGER) ELSE 0 END
-    )) AS max_score
+    SELECT MAX(
+      CASE
+        WHEN name_player1 = ? THEN CAST(score1 AS INTEGER)
+        WHEN name_player2 = ? THEN CAST(score2 AS INTEGER)
+        ELSE 0
+      END
+    ) AS max_score
     FROM match;
   `);
 
