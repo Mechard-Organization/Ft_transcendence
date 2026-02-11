@@ -245,6 +245,18 @@ export function getAllUserGroup(id_user: string) {
   return stmt.all(id_user);
 }
 
+export function getGroup(id_group: string) {
+  const stmt = db.prepare(`
+    SELECT *
+    FROM laisonmsg
+    LEFT JOIN groupmsg
+      ON laisonmsg.id_group = groupmsg.id
+    WHERE id_group = ?
+  `);
+
+  return stmt.all(id_group);
+}
+
 export function oldGroup(id1: string, id2: string) {
   const stmt = db.prepare(`
     SELECT id_group
@@ -560,6 +572,15 @@ export function alreadyFriend(id_user: string, id_friend: string) {
   `);
 
   return stmt.all(id_user, id_friend);
+}
+
+export function YRFriend(id_user: string, id_friend: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM friends
+    WHERE id_user = ? AND id_friend = ? AND accept = TRUE
+  `);
+
+  return stmt.get(id_user, id_friend);
 }
 
 export function deleteFriend(id_user: string, id_friend: string) {

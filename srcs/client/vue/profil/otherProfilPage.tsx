@@ -106,7 +106,7 @@ export default function OtherProfilPage({ header, footer }: Props) {
     if (!me || !user) return;
 
     try {
-      const res = await fetch("/api/addUserToGroup", {
+      const res = await fetch("/api/creatGroup", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

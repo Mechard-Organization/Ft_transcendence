@@ -241,17 +241,39 @@ const sendMessage = async () => {
     fetchUser();
   }, []);
 
-  const addUsertoGroup = async (userid: number, target: number) => {
+  const addUsertoGroup = async (user: any, id_group: number) => {
     try {
-      const res = await fetch("/api/addUserGroup", {
+      const auth = await isAuthenticated();
+      const id = auth?.id ?? null;
+
+      const resUser = await fetch("/api/getuser", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userid, target }),
+        body: JSON.stringify({ id: auth.id }),
       });
-      console.log("essai d'ajouter : ", userid, target)
+
+      const userData = await resUser.json();
+
+      console.log(id_group);
+
+      const res = await fetch("/api/addUserToGroup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user, id_group, me: userData }),
+      });
+      console.log("essai d'ajouter : ", user, id_group);
       if (!res.ok) throw new Error("Impossible d'ajouter l'utilisateur au groupe");
 
       console.log("Utilisateur ajouté au groupe !");
+      const dataGroup = await res.json();
+
+      if (dataGroup.newg)
+      {
+        setConversations((prev) => [...prev, {
+          id: dataGroup.group.id_group,
+          username: dataGroup.group.groupname
+        }]);
+      }
     } catch (err) {
       console.error("Erreur addUsertoGroup:", err);
     }
@@ -261,6 +283,7 @@ const handleInviteUser = async () => {
   if (!searchUsername.trim() || !selectedConversation) return;
 
   try {
+
     const resUser = await fetch("/api/getuserbyname", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -270,9 +293,7 @@ const handleInviteUser = async () => {
     if (!resUser.ok) throw new Error("Utilisateur introuvable");
     const userToAdd = await resUser.json();
 
-    await addUsertoGroup(userToAdd.id, selectedConversation.id);
-
-    console.log(`Utilisateur ${userToAdd.username} ajouté au groupe ${selectedConversation.username}`);
+    await addUsertoGroup(userToAdd, selectedConversation.id);
 
     setSearchUsername("");
     setShowAddUser(false);

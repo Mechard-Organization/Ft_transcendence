@@ -33,14 +33,13 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     return saved;
   });
 
-  fastify.post("/addUserToGroup", async (request) => {
+  fastify.post("/creatGroup", async (request) => {
     const { user, me, id_group } = request.body as any;
     let group = id_group;
 
     if (!user || !me) {
       throw fastify.httpErrors.badRequest("Invalid user");
     }
-    console.log(user, me.id, id_group);
 
     if (!id_group)
     {
@@ -56,11 +55,65 @@ export default async function messageRoutes(fastify: FastifyInstance) {
 
     fastify.websocketServer.clients.forEach(client => {
       if (client.readyState === 1) {
-        client.send(JSON.stringify({ type: "new_message", data: { saved } }));
+        client.send(JSON.stringify({ type: "new_message", data: {saved, id_group: group} }));
       }
     });
 
     return {group};
+  });
+
+  fastify.post("/addUserToGroup", async (request) => {
+    const { user, me, id_group } = request.body as any;
+    let group: any;
+
+    if (!user || !me) {
+      throw fastify.httpErrors.badRequest("Invalid user");
+    }
+
+    if (!id_group)
+    {
+      throw fastify.httpErrors.badRequest("Invalid group");
+    }
+
+    if (db.userInGroup(id_group, user.id))
+    {
+      throw fastify.httpErrors.badRequest("alredy in the group");
+    }
+
+    if (db.YRFriend(me.id, user.id))
+    {
+      throw fastify.httpErrors.badRequest("alredy in the group");
+    }
+
+
+    let lgroup = db.getGroup(id_group);
+    let newg: boolean;
+
+    if (lgroup.length === 2)
+    {
+      group = db.createGroup(me.username + "'s team");
+      lgroup.map((g: any) => {
+        db.addUserGroup(group.id, g.id_user);
+        db.addMessage( me.username + " has join the group", g.id_user, group.id);
+      })
+      group = db.getGroup(group.id)[0]
+      newg = true;
+    }
+    else
+    {
+      group = lgroup[0];
+      newg = false;
+    }
+
+    db.addUserGroup(group.id, user.id);
+    const saved = db.addMessage( user.username + " has join the group", me.id, group.id);
+
+    fastify.websocketServer.clients.forEach(client => {
+      if (client.readyState === 1) {
+        client.send(JSON.stringify({ type: "new_message", data: {saved, id_group: group.id} }));
+      }
+    });
+    return {group, newg};
   });
 
 
