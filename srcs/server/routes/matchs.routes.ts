@@ -58,4 +58,13 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
 		return db.highScoreMatch(name_player);
   	});
+
+	fastify.post("/updateGroupName", async (request) => {
+		const { name, id_group } = request.body as any;
+
+		if (!name || !id_group)
+		throw fastify.httpErrors.badRequest("Missing fields");
+
+		return db.updateGroupName(name, id_group);
+  	});
 }

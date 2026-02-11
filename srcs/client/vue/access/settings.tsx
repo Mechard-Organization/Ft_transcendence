@@ -80,7 +80,7 @@ export default function UserSettings() {
     if (!username || !userStats.id) return alert("Entrez un username valide");
     try {
       const res = await fetch("/api/updateUserUsername", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, id: userStats.id }),
       });
@@ -99,7 +99,7 @@ export default function UserSettings() {
 
     try {
       const res = await fetch("/api/updateUserPassword", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password, id: userStats.id }),
       });
@@ -115,7 +115,7 @@ export default function UserSettings() {
 
     try {
       const res = await fetch("/api/updateUserMail", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mail, id: userStats.id }),
       });

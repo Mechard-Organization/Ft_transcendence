@@ -55,7 +55,7 @@ export default function AdminPage() {
       }
 
       const res = await fetch("/api/updateUserAdmin", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: user.id, status }),
       });

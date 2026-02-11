@@ -15,6 +15,15 @@ type UserStats = {
   admin?: boolean;
 };
 
+type MatchStats = {
+  id: number;
+  date: number;
+  my_username: string;
+  my_score: number;
+  adv_username: string;
+  adv_score: number;
+};
+
 type AdminUser = {
   id: number;
   username: string;
@@ -35,6 +44,7 @@ export default function ProfilePage() {
   });
 
   const [admins, setAdmins] = useState<AdminUser[]>([]);
+  const [matchs, setMatchs] = useState<MatchStats[]>([]);
   const [newAdminName, setNewAdminName] = useState("");
 
   useEffect(() => {
@@ -83,6 +93,40 @@ export default function ProfilePage() {
       });
 
       if (data.admin) loadAdmins();
+
+      const resmatchs = await fetch("/api/getMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataMatchs = await resmatchs.json();
+      console.log(dataMatchs);
+      setMatchs(
+        dataMatchs.map((match:any) => {
+          if (match.name_player1 === data.username)
+          {
+            return {
+              id: match.id_match,
+              date: match.date,
+              my_username: match.name_player1,
+              adv_username: match.name_player2,
+              my_score: match.score1,
+              adv_score: match.score2
+            };
+          }
+          else
+          {
+            return {
+              id: match.id_match,
+              date: match.date,
+              my_username: match.name_player2,
+              adv_username: match.name_player1,
+              my_score: match.score2,
+              adv_score: match.score1
+            };
+          }
+        }),
+      );
     }
     fetchUser();
   }, []);
@@ -91,6 +135,10 @@ export default function ProfilePage() {
   useEffect(() => {
     console.log("userStats mis à jour :", userStats);
   }, [userStats]);
+
+  useEffect(() => {
+    console.log("matchs mis à jour :", matchs);
+  }, [matchs]);
 
   async function loadAdmins() {
     try {
@@ -141,7 +189,7 @@ export default function ProfilePage() {
       if (!user?.id) return alert("Utilisateur introuvable");
 
       await fetch("/api/updateUserAdmin", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: user.id, status: true })
       });
@@ -156,7 +204,7 @@ export default function ProfilePage() {
   const removeAdmin = async (id: number) => {
     if (id === userStats.id) return alert("Vous ne pouvez pas vous supprimer vous-même");
     await fetch("/api/updateUserAdmin", {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, status: false })
     });

@@ -201,6 +201,16 @@ export function createGroup(groupname: string) {
   };
 }
 
+export function updateGroupName(groupname: string, id: string) {
+  const stmt = db.prepare(`
+    UPdATE groupmsg
+    SET groupname = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(groupname, id);
+}
+
 export function addUserGroup(id_group: string, id_user: string) {
   const stmt = db.prepare(`
     INSERT INTO laisonmsg (id_group, id_user) VALUES (?,?)
@@ -707,4 +717,26 @@ export function deleteMatch(name_user: string) {
   `);
 
   return stmt.run(name_user, name_user);
+}
+
+export function updateMatch(old_name: string, new_name: string) {
+  const stmt = db.prepare(`
+    UPDATE match
+    SET
+      name_player1 = CASE
+        WHEN name_player1 = ? THEN ?
+        ELSE name_player1
+      END,
+      name_player2 = CASE
+        WHEN name_player2 = ? THEN ?
+        ELSE name_player2
+      END
+    WHERE name_player1 = ? OR name_player2 = ?
+  `);
+
+  return stmt.run(
+    old_name, new_name,
+    old_name, new_name,
+    old_name, old_name
+  );
 }
