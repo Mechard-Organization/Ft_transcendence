@@ -10,6 +10,7 @@ type UserStats = {
   mail: string;
   avatarUrl?: string;
   twofaEnabled?: boolean;
+  oauth_enabled?: number;
 };
 
 export default function UserSettings() {
@@ -18,7 +19,8 @@ export default function UserSettings() {
     username: "",
     mail: "",
     avatarUrl: "/uploads/profil/default.jpeg",
-    twofaEnabled: false
+    twofaEnabled: false,
+    oauth_enabled: 0
   });
 
   const [username, setUsername] = useState("");
@@ -204,12 +206,14 @@ export default function UserSettings() {
       {error && <p className="text-red-600 text-center mt-4">{error}</p>}
 
       <br></br>
-       <TwoFA
-        userId={userStats.id}
-        twofaEnabled={userStats.twofaEnabled ?? false}
-        onEnable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: true }))}
-        onDisable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: false }))}
-      />
+      {userStats.oauth_enabled !== 1 && (
+        <TwoFA
+          userId={userStats.id}
+          twofaEnabled={userStats.twofaEnabled ?? false}
+          onEnable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: true }))}
+          onDisable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: false }))}
+        />
+      )}
       <Footer />
     </main>
   );
