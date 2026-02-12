@@ -106,12 +106,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   //GESTION DE L'AVATAR
 
-  fastify.post("/users/me/setavatar", async (req) => {
-    const { id, avatarUrl } = req.body as any;
-    db.updateUserPp(avatarUrl, id);
-    return { avatarUrl };
-  });
-
   fastify.post("/users/me/avatar", async (req, reply) => {
     let id: string | undefined;
     let buffer: Buffer | undefined;
@@ -158,6 +152,11 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
     // 🔹 Sauvegarde DB
     db.updateUserPp(`/uploads/profil/${filename}`, id);
+    fastify.websocketServer.clients.forEach(client => {
+      if (client.readyState === 1) {
+        client.send(JSON.stringify({ type: "new_avatar", data: {avatarUrl: `/uploads/profil/${filename}`} }));
+      }
+    });
 
     return { avatarUrl: `/uploads/profil/${filename}` };
   });

@@ -37,8 +37,6 @@ export default function FriendsPage() {
       loadFriends(userId);
       loadRequests(userId);
     };
-
-    return () => ws.close();
   }, [userId]);
 
   const loadFriends = async (id: number) => {

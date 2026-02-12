@@ -115,8 +115,6 @@ export default function ChatPage() {
       console.log("❌ WebSocket fermé");
     };
 
-    return () => ws.close();
-
   }, []);
 
 

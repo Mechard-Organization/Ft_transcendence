@@ -70,6 +70,37 @@ export default function Header() {
 
 
   useEffect(() => {
+    const ws = new WebSocket(`/ws/`);
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      console.log("✅ WebSocket connecté");
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const avatar = JSON.parse(event.data);
+        if (avatar.data)
+        {
+          const idGroup = avatar.data.id_group ?? null;
+          console.log("mm", avatar.data.avatarUrl);
+          if (avatar.type === "new_avatar") {
+            setUserStats(prev => ({ ...prev, avatarUrl: avatar.data.avatarUrl }));
+          }
+        }
+      } catch (err) {
+        console.error("Erreur WS:", err);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log("❌ WebSocket fermé");
+    };
+
+  }, []);
+
+
+  useEffect(() => {
     console.log("✅ userStats mis à jour :", userStats);
   }, [userStats]);
 
