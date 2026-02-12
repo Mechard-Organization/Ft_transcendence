@@ -77,12 +77,12 @@ export default async function messageRoutes(fastify: FastifyInstance) {
 
     if (db.userInGroup(id_group, user.id))
     {
-      throw fastify.httpErrors.badRequest("alredy in the group");
+      throw fastify.httpErrors.badRequest("already in the group");
     }
 
-    if (db.YRFriend(me.id, user.id))
+    if (!db.YRFriend(me.id, user.id))
     {
-      throw fastify.httpErrors.badRequest("alredy in the group");
+      throw fastify.httpErrors.badRequest("it's not your friend");
     }
 
 
