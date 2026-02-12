@@ -130,7 +130,7 @@ export default function OtherProfilPage({ header, footer }: Props) {
     <>
       {header}
 
-      <main id="mainContent">
+      <main id="mainContent" className="flex-1 min-h-[calc(100dvh-60px-64px)]">
         <h1>Profil</h1>
 
         <section style={{ marginBottom: 20 }}>

@@ -131,7 +131,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-215 relative">
+    <div className="flex flex-col min-h-screen relative">
       <div className=" mb-8 max-w-4xl w-full mx-auto text-center">
         {isMe && (
           <input

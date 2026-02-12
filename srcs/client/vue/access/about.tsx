@@ -55,11 +55,11 @@ const team: TeamMember[] = [
 
 export default function AboutPage() {
   return (
-    <div className="flex flex-col min-h-215 bg-[#FFF9E5]">
-      <main className="flex-1 max-w-6xl mx-auto px-5 py-8">
-        <h1 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
+    <div className="">
+      <main className="flex-1 min-h-[calc(100dvh-60px-64px)] max-w-6xl mx-auto px-5 py-8">
+        <h2 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
           À propos de notre équipe
-        </h1>
+        </h2>
 
         <div className="flex justify-center gap-6 flex-wrap">
         {team.map((member, idx) => (

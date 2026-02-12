@@ -6,7 +6,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Gamepad2, MessagesSquare, User } from "lucide-react";
 import { username } from "../game/Meshes";
 
-
 interface Message {
   id: number;
   content: string;
@@ -47,6 +46,8 @@ export default function ChatPage() {
   const isActive = (path: string) => location.pathname === path;
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation>();
+  const [showMembers, setShowMembers] = useState(false);
+  const [groupMembers, setGroupMembers] = useState<UserGroup[]>([]);
 
   const [selectedGroup, setSelectedGroup] = useState<number | null>(1);
   const [newMessage, setNewMessage] = useState("");
@@ -302,9 +303,30 @@ const handleInviteUser = async () => {
   }
 };
 
+const fetchGroupMembers = async () => {
+  if (!selectedConversation || selectedConversation.id === 0) return;
+
+  try {
+    const res = await fetch("/api/getGroupMembers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_group: selectedConversation.id }),
+    });
+
+    if (!res.ok) throw new Error("Erreur récupération membres");
+
+    const data = await res.json();
+    setGroupMembers(data);
+    setShowMembers(true);
+
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   return (
-    <div className="flex flex-col min-h-215 bg-[#FFF9E5]">
+    <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
         <div className="w-1/3 h-191 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
@@ -387,13 +409,16 @@ const handleInviteUser = async () => {
     </div>
   )}
 
-  {/* Bouton voir profil */}
+  {/* Bouton voir les profil */}
   {selectedConversation && selectedConversation.id !== 0 && (
-    <Link to={`/FriendsProfil/${otherStats.id}`}>
-      <button className="p-2 rounded-full hover:bg-yellow-200 transition" title="Voir profil">
-        <User className="w-6 h-6 text-[#8B5A3C]" />
-      </button>
-    </Link>
+   <button
+  onClick={fetchGroupMembers}
+  className="p-2 rounded-full hover:bg-yellow-200 transition"
+  title="Voir membres"
+>
+  <User className="w-6 h-6 text-[#8B5A3C]" />
+</button>
+
   )}
 </div>
 
@@ -452,6 +477,40 @@ const handleInviteUser = async () => {
           </div>
         </div>
       </div>
+      {showMembers && (
+  <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
+    
+    <div className="w-80 h-full bg-white shadow-xl p-6 relative animate-slide-in">
+      
+      <button
+        onClick={() => setShowMembers(false)}
+        className="absolute top-4 right-4 text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
+            <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
+              Membres du groupe
+            </h2>
+            <div className="space-y-3">
+              {groupMembers.map(member => (
+                <div
+                  key={member.id}
+                  className="p-3 bg-[#FFF9E5] rounded-xl flex justify-between items-center"
+                >
+                  <Link
+                    to={`/FriendsProfil/${member.id}`}
+                    className="text-[#8B5A3C] font-medium hover:underline"
+                  >
+                    {member.username}
+                  </Link>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      )}
+
       <footer className="w-full">
         <Footer />
       </footer>

@@ -40,7 +40,7 @@ export default function RankPage() {
     }, []);
 
   return (
-    <div className="flex flex-col min-h-212 bg-[#FFF9E5]">
+    <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
       <main className="flex-1 max-w-6xl mx-auto px-5 py-8">
         <h1 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
           Classement des joueurs

@@ -110,7 +110,7 @@ export default function FriendsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-215 relative">
+    <div className="flex flex-col min-h-screen relative">
 <main className="flex-grow w-full max-w-6xl mx-auto px-6 py-10">
   <h1 className="text-[#8B5A3C] text-3xl mb-10 flex items-center justify-center gap-2"><UserCheck/> Amis</h1>
 

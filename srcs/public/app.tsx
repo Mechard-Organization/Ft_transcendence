@@ -17,7 +17,7 @@ export default function App() {
   return (
     <Router>
       <div 
-        className="min-h-screen bg-[#FFFAED]"
+        className="fflex flex-col min-h-[100dvh] bg-[#FFFAED]"
         style={{
           backgroundImage: `
             radial-gradient(circle at 20% 50%, rgba(254, 233, 110, 0.15) 0%, transparent 50%),

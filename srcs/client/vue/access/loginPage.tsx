@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { User } from "lucide-react";
+import Footer from "../ts/Footer";
 
 type LoginResponse = {
   twofa_required?: boolean;
@@ -96,8 +97,8 @@ export default function LoginPage() {
   };
 
   return (
-    <main id="mainContent">
-	  <br/><br/><br/>
+    <div>
+    <main id="mainContent" className="flex-1 min-h-[calc(100dvh-60px-64px)]">
 	  <div className="mb-8 max-w-2xl w-full mx-auto text-center">
 		<div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-[#FEE96E] cursor-pointer">
 		  <div className="flex items-center justify-center">
@@ -200,5 +201,7 @@ export default function LoginPage() {
 )}
 
     </main>
+<Footer/>
+    </div>
   );
 }

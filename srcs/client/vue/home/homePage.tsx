@@ -97,7 +97,7 @@ export default function HomePage() {
   );
 
   return (
-    <div className="flex flex-col min-h-215 relative">
+    <div className="flex-1 min-h-[calc(100dvh-60px-64px)]">
       <main className="flex-grow flex flex-col items-center mt-8">
         {/* Header / Welcome */}
         <div className="text-center">
