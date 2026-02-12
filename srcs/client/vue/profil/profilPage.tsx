@@ -211,10 +211,12 @@ export default function ProfilePage() {
     loadAdmins();
   };
 
+
+
   return (
     <div className="flex flex-col min-h-215 bg-[#FFF9E5] relative">
       <main className="flex-grow">
-        <div className="max-w-4xl mx-auto px-6 pt-14 pb-12">
+        <div className="max-w-4xl mx-auto px-6 pt-8 pb-5">
 
           {/* Profil */}
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6 flex flex-col sm:flex-row items-center gap-8">
@@ -240,7 +242,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-6 mt-6">
             <div className="bg-white/90 rounded-3xl p-4 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
               <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
                 <Target className="w-6 h-6 text-[#8B5A3C]" />
@@ -262,6 +264,45 @@ export default function ProfilePage() {
               <h3 className="text-xl text-[#8B5A3C] mb-2">Meilleur score</h3>
               <p className="text-5xl font-bold text-[#8B5A3C]">{userStats.highScore}</p>
             </div>
+          </div>
+
+          <div className="mt-10 bg-white/95 rounded-3xl shadow-lg border-4 border-[#FEE96E] overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-[#FEE96E]">
+                <tr>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Date</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Moi</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Adversaire</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Score</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Résultat</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 text-[#8B5A3C]">
+                {matchs.map(match => {
+                  const isWin = match.my_score > match.adv_score;
+                  return (
+                    <tr key={match.id} className={isWin ? "bg-[#D7F09C]" : "bg-[#fce2e7]"}>
+                      <td className="px-6 -py-4">
+                        {new Date(match.date).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 font-medium">
+                        {match.my_username}
+                      </td>
+                      <td className="px-6 py-4">
+                        {match.adv_username}
+                      </td>
+                      <td className="px-6 py-4">
+                        {match.my_score} - {match.adv_score}
+                      </td>
+
+                      <td className="px-6 py-4 font-bold">
+                        {isWin ? "Victoire" : "Defaite"}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+          </table>
           </div>
 
           {/* Admin Panel */}

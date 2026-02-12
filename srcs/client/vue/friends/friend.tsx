@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../access/authenticator";
-import { X, Check, UserMinus2, UserSearch, UserPlus, UserCheck, MailMinus, UserMinus, UserX, MailPlus  } from "lucide-react";
+import { X, Check, UserMinus2, UserSearch, UserPlus, UserCheck, MailMinus, UserMinus, UserX, MailPlus, BellPlus } from "lucide-react";
 
 type Friend = {
   id: number;
@@ -127,7 +127,7 @@ export default function FriendsPage() {
       placeholder="Nom d'utilisateur"
       value={usernameInput}
       onChange={(e) => setUsernameInput(e.target.value)}
-      className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] text-[#8B5A3C]"
+      className="flex-1 px-6 py-3 bg-[#FFF9E5] sfs rounded-xl border-2 border-[#FEE96E] text-[#8B5A3C]"
       />
     <button
       type="submit"
@@ -142,10 +142,17 @@ export default function FriendsPage() {
   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
     {/* Requêtes */}
     <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
-      <h2 className="text-[#8B5A3C] text-xl mb-4">⏳ Requêtes</h2>
+      <h2 className="text-[#8B5A3C] text-xl mb-4">
+         <BellPlus className="text-[#8B5A3C] text-xl mb-4">
+          </BellPlus>
+         </h2>
 
       {requests.length === 0 && (
-        <p className="text-[#A67C52]">Aucune requête</p>
+        <p className="flex items-center justify-between bg-[#FFF9E5] px-4 py-3 rounded-xl">
+          <h4 className="text-[#8B5A3C]">
+            Aucune requête
+          </h4>
+        </p>
       )}
 
       <ul className="space-y-3">
@@ -180,10 +187,14 @@ export default function FriendsPage() {
 
     {/* Amis */}
     <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
-      <h2 className="text-[#8B5A3C] text-xl mb-4"> Amis</h2>
+      <h2 className="text-[#8B5A3C] text-xl mb-4"> <UserCheck/></h2>
 
       {friends.length === 0 && (
-        <p className="text-[#A67C52]">Aucun ami</p>
+        <p className="flex items-center justify-between bg-[#FFF9E5] px-4 py-3 rounded-xl">
+          <h4 className="text-[#8B5A3C]">
+            Aucun ami
+          </h4>
+        </p>
       )}
 
       <ul className="space-y-3">
@@ -193,11 +204,11 @@ export default function FriendsPage() {
             className="flex items-center justify-between bg-[#FFF9E5]
                        px-4 py-3 rounded-xl"
           >
-            <span className="font-medium">{f.username}</span>
+            <span className="font-medium text-[#8B5A3C]">{f.username}</span>
 
             <div className="flex gap-2">
-              <button onClick={() => rejectFriend(f.id)} className="p-2 rounded-full hover:bg-red-200"><UserX className="w-5 h-5" /> </button>
-              <button onClick={() => blockFriend(f.id)} className="p-2 rounded-full hover:bg-red-200"><UserMinus className="w-5 h-5" /> </button>
+              <button onClick={() => rejectFriend(f.id)} className="p-2 rounded-full hover:bg-red-200 text-[#8B5A3C]"><UserMinus className="w-5 h-5" /> </button>
+              <button onClick={() => blockFriend(f.id)} className="p-2 rounded-full hover:bg-red-200 text-[#8B5A3C]"><UserX className="w-5 h-5" /> </button>
             </div>
           </li>
         ))}

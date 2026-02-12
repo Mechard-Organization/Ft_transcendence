@@ -125,93 +125,119 @@ export default function UserSettings() {
     } catch (err) { console.error(err); }
   };
 
+  const eraseUser = async () => {
+    //logout
+    //changer la page
+    //supprimer le user
+    console.log("erase user clicked")
+  }
+
   return (
-    <main id="mainContent">
-      <br></br>
-      <div className="mb-8 max-w-4xl w-full mx-auto text-center">
+  <div className="min-h-screen bg-[#FFF9E5] flex flex-col">
+    <main className="flex-grow max-w-3xl mx-auto px-6 py-12 space-y-8">
+
+      <div className="bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6 text-center">
+        <h1 className="text-3xl font-bold text-[#8B5A3C] mb-6">
+          Paramètres du profil
+        </h1>
+
         <input
           type="file"
           id="fileInput"
           accept="image/*"
           hidden
           onChange={(e) => {
-            if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+            if (e.target.files?.[0]) handleFile(e.target.files[0]);
           }}
         />
+
         <button
           onClick={() => document.getElementById("fileInput")?.click()}
-          className="inline-block cursor-pointer"
+          className="relative group"
         >
           <img
             src={userStats.avatarUrl}
             alt="Avatar"
-            className="w-25 h-25 object-cover rounded-full border-4 border-[#FEE96E]"
+            className="w-32 h-32 object-cover rounded-full border-4 border-[#FEE96E] mx-auto"
           />
+          <div className="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-sm">
+            Modifier
+          </div>
         </button>
       </div>
+<div className="bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6">
+  <h2 className="text-xl font-bold text-[#8B5A3C] mb-4 text-center">
+    Nom d'utilisateur
+  </h2>
 
-      {/* Composant 2FA */}
+  <div className="flex gap-3">
+    <input
+      type="text"
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
+      className="flex-1 px-4 py-2 rounded-full border-2 border-[#FEE96E] bg-white"
+    />
+    <button
+      onClick={updateUsername}
+      className="px-6 py-2 rounded-full bg-[#FEE96E] text-[#8B5A3C] font-semibold hover:scale-105 transition"
+    >
+      Modifier
+    </button>
+  </div>
+</div>
+    <div className="">
+<div className=" bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6">
+  <h2 className="text-xl font-bold text-[#8B5A3C] mb-4 text-center">
+    Mot de passe
+  </h2>
 
+  <div className="space-y-3">
+    <input
+      type="password"
+      placeholder="Nouveau mot de passe"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      className="w-full px-4 py-2 rounded-full border-2 border-[#FEE96E]"
+    />
+    <input
+      type="password"
+      placeholder="Confirmer"
+      value={password2}
+      onChange={(e) => setPassword2(e.target.value)}
+      className="w-full px-4 py-2 rounded-full border-2 border-[#FEE96E]"
+    />
+      <div className="flex items-center justify-center">
+    <button
+      onClick={updatePassword}
+      className=" px-6 py-2 rounded-full bg-[#FEE96E] text-[#8B5A3C] font-semibold hover:scale-105 transition"
+    >
+      Modifier le mot de passe
+    </button>
+    </div>
+    </div>
+  </div>
+</div>
+<div className="bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6">
+  <h2 className="text-xl font-bold text-[#8B5A3C] mb-4 text-center">
+    Sécurité (2FA)
+  </h2>
 
-      {/* Username */}
-      <div className="form-group w-full text-center mt-4">
-        <input
-          type="text"
-          placeholder="Nom d'utilisateur"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="mx-auto block flex-1 px-6 py-3  text-center rounded-full border-2 border-[#FEE96E] bg-white/70"
-        />
-        <button onClick={updateUsername} className="px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]">
-          Modifier Username
-        </button>
-      </div>
-
-      {/* Password */}
-      <div className="form-group w-full text-center mt-4">
-        <input
-          type="password"
-          placeholder="Nouveau mot de passe"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="flex-1 px-6 py-3  text-center rounded-full border-2 border-[#FEE96E] bg-white/70"
-        />
-        <input
-          type="password"
-          placeholder="Confirmer mot de passe"
-          value={password2}
-          onChange={(e) => setPassword2(e.target.value)}
-          className="flex-1 px-6 py-3  text-center rounded-full border-2 border-[#FEE96E] mt-2 bg-white/70"
-        />
-        <button onClick={updatePassword} className="px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]">
-          Modifier Password
-        </button>
-      </div>
-
-      {/* Mail */}
-      <div className="form-group w-full text-center mt-4">
-        <input
-          type="email"
-          placeholder="Nouvelle adresse mail"
-          value={mail}
-          onChange={(e) => setMail(e.target.value)}
-          className="flex-1 px-6 py-3  text-center rounded-full border-2 border-[#FEE96E] bg-white/70"
-        />
-        <button onClick={updateMail} className="px-6 py-3 mt-2 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E]">
-          Modifier Mail
-        </button>
-      </div>
-
-      {error && <p className="text-red-600 text-center mt-4">{error}</p>}
-
-      <br></br>
-       <TwoFA
-        userId={userStats.id}
-        twofaEnabled={userStats.twofaEnabled ?? false}
-        onEnable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: true }))}
-        onDisable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: false }))}
-      />
-      <Footer />
-    </main>
+  <TwoFA
+    userId={userStats.id}
+    twofaEnabled={userStats.twofaEnabled ?? false}
+    onEnable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: true }))}
+    onDisable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: false }))}
+  />
+</div>
+  <div className="flex items-center justify-center">
+  <button onClick={eraseUser}
+    className=" px-6 py-2 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition"
+  >
+    Supprimer le profil
+  </button>
+</div>
+</main>
+<Footer/>
+</div>
   );
 }
