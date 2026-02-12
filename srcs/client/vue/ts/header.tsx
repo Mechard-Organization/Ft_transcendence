@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Brain, Gamepad2, Joystick, MessagesSquare, User } from "lucide-react";
+import { Brain, Crown, Gamepad2, Joystick, MessagesSquare, User } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { isAuthenticated } from "../access/authenticator";
 import  handlelogout  from "../profil/profilPage" ;
@@ -166,6 +166,17 @@ const handlelogout = async () => {
                   }`}
                 >
                   <Joystick className="w-6 h-6" />
+                </div>
+              </Link>
+              <Link to="/rank">
+                <div
+                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
+                    isActive("/rank")
+                      ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
+                      : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
+                  }`}
+                >
+                  <Crown className="w-6 h-6" />
                 </div>
               </Link>
 

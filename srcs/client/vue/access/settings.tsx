@@ -3,6 +3,7 @@ import { validatePassword, validateEmail } from "../../../services/validate.serv
 import { isAuthenticated } from "../access/authenticator";
 import TwoFA from "./2fa";
 import Footer from "../ts/Footer";
+import { UserPlus, UserCheck, UserMinus } from "lucide-react";
 
 type UserStats = {
   id: number;
@@ -10,6 +11,12 @@ type UserStats = {
   mail: string;
   avatarUrl?: string;
   twofaEnabled?: boolean;
+  admin?: boolean;
+};
+
+type AdminUser = {
+  id: number;
+  username: string;
 };
 
 export default function UserSettings() {
@@ -26,9 +33,13 @@ export default function UserSettings() {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [error, setError] = useState("");
+  const [newAdminName, setNewAdminName] = useState("");
+  const [admins, setAdmins] = useState<AdminUser[]>([]);
+
 
   useEffect(() => {
     async function fetchUser() {
+
       try {
         const auth = await isAuthenticated();
         if (!auth?.id) return;
@@ -43,10 +54,13 @@ export default function UserSettings() {
         setUserStats(prev => ({
           ...prev,
           ...user,
-          avatarUrl: user.avatarUrl || "/uploads/profil/default.jpeg"
+          avatarUrl: user.avatarUrl || "/uploads/profil/default.jpeg",
+          ...admins
         }));
         setUsername(user.username);
         setMail(user.mail);
+      if (user.admin)
+        loadAdmins();
 
       } catch (err) {
         console.error("Erreur récupération profil :", err);
@@ -109,6 +123,18 @@ export default function UserSettings() {
     } catch (err) { console.error(err); }
   };
 
+    async function loadAdmins() {
+    try {
+      const res = await fetch("/api/users");
+      if (!res.ok) return;
+      const allUsers = await res.json();
+      const admins = allUsers.filter((u: any) => u.admin);
+      setAdmins(admins);
+    } catch (err) {
+      console.error("Erreur récupération admins:", err);
+    }
+  }
+
   const updateMail = async () => {
     if (!mail) return alert("Remplir le mail");
     if (!validateEmail(mail).ok) return alert(validateEmail(mail).reason);
@@ -131,6 +157,67 @@ export default function UserSettings() {
     //supprimer le user
     console.log("erase user clicked")
   }
+
+
+    const addAdmin = async () => {
+    if (!newAdminName.trim()) return;
+
+    try {
+      const resUser = await fetch("/api/getuserbyname", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: newAdminName })
+      });
+      const user = await resUser.json();
+      if (!user?.id) return alert("Utilisateur introuvable");
+
+      await fetch("/api/updateUserAdmin", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: user.id, status: true })
+      });
+
+      setNewAdminName("");
+      loadAdmins();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const removeAdmin = async (id: number) => {
+    if (id === userStats.id) return alert("Vous ne pouvez pas vous supprimer vous-même");
+    await fetch("/api/updateUserAdmin", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status: false })
+    });
+    loadAdmins();
+  };
+
+  const delUser = async () => {
+     try {
+        const auth = await isAuthenticated();
+        if (!auth?.id) return;
+      const resUser = await fetch("/api/delUser", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id : auth.id })
+      });
+      if(!resUser.ok)
+      {
+        throw new Error("erreur lors de la suppression");
+      }
+      const data = await resUser.json();
+      if(data.ok)
+      {
+        console.log("utilisateur supp ok");
+        window.location.href = "/login"
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   return (
   <div className="min-h-screen bg-[#FFF9E5] flex flex-col">
@@ -165,6 +252,41 @@ export default function UserSettings() {
           </div>
         </button>
       </div>
+      {/* Admin Panel */}
+          {userStats.admin == true && (
+            <div className="mt-12 bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-4">
+              <h3 className="text-2xl text-[#8B5A3C] mb-4 flex items-center gap-2">
+                <UserCheck className="w-6 h-6" />
+                Admin Panel
+              </h3>
+
+              {/* Ajouter un admin */}
+              <div className="flex gap-2 mb-4">
+                <input
+                  type="text"
+                  placeholder="Nom d'utilisateur"
+                  value={newAdminName}
+                  onChange={e => setNewAdminName(e.target.value)}
+                  className="flex-1 px-4 py-2 rounded-full border-2 border-[#FEE96E]"
+                />
+                <button onClick={addAdmin} className="px-4 py-2 bg-[#FEE96E] text-[#8B5A3C] rounded-full hover:scale-105 transition flex items-center gap-2">
+                  <UserPlus className="w-5 h-5" /> Ajouter
+                </button>
+              </div>
+
+              {/* Liste des admins */}
+              <ul className="space-y-2 text-[#8B5A3C]">
+                {admins.map(a => (
+                  <li key={a.id} className="flex justify-between items-center bg-[#FFF9E5] px-4 py-2 rounded-full">
+                    {a.username}
+                    <button onClick={() => removeAdmin(a.id)} className="p-1 rounded-full hover:bg-red-200">
+                      <UserMinus className="w-4 h-4" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 <div className="bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6">
   <h2 className="text-xl font-bold text-[#8B5A3C] mb-4 text-center">
     Nom d'utilisateur
@@ -230,7 +352,7 @@ export default function UserSettings() {
   />
 </div>
   <div className="flex items-center justify-center">
-  <button onClick={eraseUser}
+  <button onClick={delUser}
     className=" px-6 py-2 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition"
   >
     Supprimer le profil

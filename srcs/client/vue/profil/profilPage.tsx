@@ -43,9 +43,7 @@ export default function ProfilePage() {
     admin: false
   });
 
-  const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [matchs, setMatchs] = useState<MatchStats[]>([]);
-  const [newAdminName, setNewAdminName] = useState("");
 
   useEffect(() => {
     async function fetchUser() {
@@ -92,7 +90,6 @@ export default function ProfilePage() {
         admin: data.admin ?? false
       });
 
-      if (data.admin) loadAdmins();
 
       const resmatchs = await fetch("/api/getMatch", {
         method: "POST",
@@ -140,18 +137,6 @@ export default function ProfilePage() {
     console.log("matchs mis à jour :", matchs);
   }, [matchs]);
 
-  async function loadAdmins() {
-    try {
-      const res = await fetch("/api/users");
-      if (!res.ok) return;
-      const allUsers = await res.json();
-      const admins = allUsers.filter((u: any) => u.admin);
-      setAdmins(admins);
-    } catch (err) {
-      console.error("Erreur récupération admins:", err);
-    }
-  }
-
   const handleFile = async (file: File) => {
     if (file.type !== "image/jpeg") {
       alert("Uniquement des fichiers .jpeg");
@@ -169,46 +154,6 @@ export default function ProfilePage() {
     const data = await res.json();
 
     setUserStats(prev => ({ ...prev, avatarUrl: data.avatarUrl }));
-  };
-
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    window.location.href = "/Login";
-  };
-
-  const addAdmin = async () => {
-    if (!newAdminName.trim()) return;
-
-    try {
-      const resUser = await fetch("/api/getuserbyname", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: newAdminName })
-      });
-      const user = await resUser.json();
-      if (!user?.id) return alert("Utilisateur introuvable");
-
-      await fetch("/api/updateUserAdmin", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: user.id, status: true })
-      });
-
-      setNewAdminName("");
-      loadAdmins();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const removeAdmin = async (id: number) => {
-    if (id === userStats.id) return alert("Vous ne pouvez pas vous supprimer vous-même");
-    await fetch("/api/updateUserAdmin", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, status: false })
-    });
-    loadAdmins();
   };
 
 
@@ -271,7 +216,6 @@ export default function ProfilePage() {
               <thead className="bg-[#FEE96E]">
                 <tr>
                   <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Date</th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Moi</th>
                   <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Adversaire</th>
                   <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Score</th>
                   <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Résultat</th>
@@ -284,9 +228,6 @@ export default function ProfilePage() {
                     <tr key={match.id} className={isWin ? "bg-[#D7F09C]" : "bg-[#fce2e7]"}>
                       <td className="px-6 -py-4">
                         {new Date(match.date).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 font-medium">
-                        {match.my_username}
                       </td>
                       <td className="px-6 py-4">
                         {match.adv_username}
@@ -305,41 +246,7 @@ export default function ProfilePage() {
           </table>
           </div>
 
-          {/* Admin Panel */}
-          {userStats.admin == true && (
-            <div className="mt-12 bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-4">
-              <h3 className="text-2xl text-[#8B5A3C] mb-4 flex items-center gap-2">
-                <UserRoundCheck className="w-6 h-6" />
-                Admin Panel
-              </h3>
-
-              {/* Ajouter un admin */}
-              <div className="flex gap-2 mb-4">
-                <input
-                  type="text"
-                  placeholder="Nom d'utilisateur"
-                  value={newAdminName}
-                  onChange={e => setNewAdminName(e.target.value)}
-                  className="flex-1 px-4 py-2 rounded-full border-2 border-[#FEE96E]"
-                />
-                <button onClick={addAdmin} className="px-4 py-2 bg-[#FEE96E] text-[#8B5A3C] rounded-full hover:scale-105 transition flex items-center gap-2">
-                  <UserRoundPlus className="w-5 h-5" /> Ajouter
-                </button>
-              </div>
-
-              {/* Liste des admins */}
-              <ul className="space-y-2 text-[#8B5A3C]">
-                {admins.map(a => (
-                  <li key={a.id} className="flex justify-between items-center bg-[#FFF9E5] px-4 py-2 rounded-full">
-                    {a.username}
-                    <button onClick={() => removeAdmin(a.id)} className="p-1 rounded-full hover:bg-red-200">
-                      <UserRoundMinus className="w-4 h-4" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          
         </div>
       </main>
 
