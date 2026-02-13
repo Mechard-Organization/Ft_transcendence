@@ -12,6 +12,7 @@ type Friend = {
 export default function FriendsPage() {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [requests, setRequests] = useState<Friend[]>([]);
+  const [blocked, setBlocked] = useState<Friend[]>([]);
   const [usernameInput, setUsernameInput] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
 
@@ -23,6 +24,7 @@ export default function FriendsPage() {
       setUserId(auth.id);
       loadFriends(auth.id);
       loadRequests(auth.id);
+      loadBlocked(auth.id);
     })();
   }, []);
 
@@ -47,6 +49,41 @@ export default function FriendsPage() {
     });
     setFriends(await res.json());
   };
+
+  const getBlockedUsers = async (id: number) => {
+  try {
+    const res = await fetch("/api/getBlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_user: id }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Erreur récupération blocks");
+    }
+
+    const data = await res.json();
+    console.log("Blocked users:", data);
+
+    setBlocked(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+const loadBlocked = async (id: number) => {
+  const res = await fetch("/api/getBlock", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_user: id }),
+  });
+
+  const data = await res.json();
+  console.log("Blocked loaded:", data);
+  setBlocked(data);
+};
+
 
   const loadRequests = async (id: number) => {
     const res = await fetch("/api/friend/getFriendNV", {
@@ -87,8 +124,22 @@ export default function FriendsPage() {
       body: JSON.stringify({ id_user: userId, id_block: id_friend }),
     });
     loadFriends(userId);
+    loadBlocked(userId);
     loadRequests(userId);
   };
+
+  const unblockFriend = async (id_friend: number) => {
+    if (!userId) return;
+    await fetch("/api/deleteBlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_user: userId, id_block: id_friend }),
+    });
+    loadFriends(userId);
+    loadBlocked(userId);
+    loadRequests(userId);
+  };
+
 
   const addFriend = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -148,7 +199,7 @@ export default function FriendsPage() {
   </form>
 
   {/* Listes */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+  <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
     {/* Requêtes */}
     <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
       <h2 className="text-[#8B5A3C] text-xl mb-4">
@@ -191,7 +242,6 @@ export default function FriendsPage() {
         ))}
       </ul>
     </section>
-
     {/* Amis */}
     <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
       <h2 className="text-[#8B5A3C] text-xl mb-4"> <UserCheck/></h2>
@@ -219,6 +269,39 @@ export default function FriendsPage() {
         ))}
       </ul>
     </section>
+    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
+      <h2 className="text-[#8B5A3C] text-xl mb-4">
+        <UserX />
+      </h2>
+
+      {blocked.length === 0 && (
+        <p className="flex items-center text-[#8B5A3C] justify-between bg-[#FFF9E5] px-4 py-3 rounded-xl">
+          Aucun bloque
+        </p>
+      )}
+
+      <ul className="space-y-3">
+        {blocked.map((f) => (
+          <li
+            key={f.id}
+            className="flex items-center justify-between bg-[#FFF9E5]
+                      px-4 py-3 rounded-xl"
+          >
+            <span className="font-medium text-[#8B5A3C]">{f.username}</span>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => unblockFriend(f.id)}
+                className="p-2 rounded-full hover:bg-red-200 text-[#8B5A3C]"
+              >
+                <UserX className="w-5 h-5" />
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
   </div>
 </main>
 

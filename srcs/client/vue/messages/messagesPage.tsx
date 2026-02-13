@@ -366,7 +366,7 @@ const fetchGroupMembers = async () => {
         </div>
 
         {/* ---------------- RIGHT PANEL ---------------- */}
-        <div className="w-2/3 h-191 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden">
+        <div className="w-2/3 h-191 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden relative">
           {/* HEADER CHAT */}
           <div className="bg-[#FEE96E] p-4 flex items-center justify-between">
         {/* Left: Titre */}
@@ -479,42 +479,38 @@ const fetchGroupMembers = async () => {
               <Send className="text-[#8B5A3C]" size={18} />
             </button>
           </div>
-        </div>
-      </div>
-      {showMembers && (
-  <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
-
-    <div className="w-80 h-full bg-white shadow-xl p-6 relative animate-slide-in">
-
+          {showMembers && (
+    <div className="absolute top-0 right-0 w-80 h-full bg-white shadow-xl p-6 rounded-l-2xl z-50 animate-slide-in">
       <button
         onClick={() => setShowMembers(false)}
         className="absolute top-4 right-4 text-gray-500 hover:text-[#8B5A3C]"
+      >
+        <X className="text-[#8B5A3C]" />
+      </button>
+
+      <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
+        Membres du groupe
+      </h2>
+
+      <div className="bg-[#FEE96E]/30 h-165 rounded-2xl space-y-3 overflow-y-auto p-2">
+        {groupMembers.map((member) => (
+          <div
+            key={member.id}
+            className="p-3 bg-white rounded-xl flex justify-between items-center shadow-sm"
+          >
+            <Link
+              to={`/FriendsProfil/${member.id}`}
+              className="text-[#8B5A3C] font-medium hover:underline"
             >
-              <X className="text-[#8B5A3C]"/>
-            </button>
-            <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
-              Membres du groupe
-            </h2>
-            <div className="space-y-3">
-              {groupMembers.map(member => (
-                <div
-                  key={member.id}
-                  className="p-3 bg-[#FFF9E5] rounded-xl flex justify-between items-center"
-                >
-                  <Link
-                    to={`/FriendsProfil/${member.id}`}
-                    className="text-[#8B5A3C] font-medium hover:underline"
-                  >
-                    {member.username}
-                  </Link>
-                </div>
-              ))}
-            </div>
-
+              {member.username}
+            </Link>
           </div>
+        ))}
+      </div>
+    </div>
+  )}
         </div>
-      )}
-
+      </div>
     </div>
   );
 }

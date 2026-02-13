@@ -655,7 +655,7 @@ export function ItIsBlock(id_user: string, id_block: string) {
 
 export function deleteBlock(id_user: string, id_block: string) {
   const stmt = db.prepare(`
-    DELETE FROM friends
+    DELETE FROM block
     WHERE id_user = ? AND id_block = ?
   `);
 

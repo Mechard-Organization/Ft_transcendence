@@ -187,7 +187,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-6 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <div className="bg-white/90 rounded-3xl p-4 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
               <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
                 <Target className="w-6 h-6 text-[#8B5A3C]" />
@@ -201,13 +201,6 @@ export default function ProfilePage() {
               </div>
               <h3 className="text-xl text-[#8B5A3C] mb-2">Victoires</h3>
               <p className="text-5xl font-bold text-[#8B5A3C]">{userStats.gamesWon}</p>
-            </div>
-            <div className="bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
-              <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
-                <Trophy className="w-6 h-6 text-[#8B5A3C]" />
-              </div>
-              <h3 className="text-xl text-[#8B5A3C] mb-2">Meilleur score</h3>
-              <p className="text-5xl font-bold text-[#8B5A3C]">{userStats.highScore}</p>
             </div>
           </div>
 
