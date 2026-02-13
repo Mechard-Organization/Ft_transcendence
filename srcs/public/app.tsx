@@ -12,6 +12,7 @@ import FriendProfil from './client/vue/friends/friendsProfile'
 import AdminPage from './client/vue/admin/AdminPage';
 import AboutPage from './client/vue/access/about';
 import RankPage from './client/vue/game/rangGame';
+import Footer from './client/vue/ts/Footer';
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/Rank" element={<RankPage />} />
 
         </Routes>
+        <Footer/>
       </div>
     </Router>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, PlusCircle, Send, Users, UserPlus, Group } from "lucide-react";
+import { Plus, PlusCircle, Send, Users, UserPlus, Group, Cross, X } from "lucide-react";
 import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
 import { Link, useLocation } from "react-router-dom";
@@ -313,11 +313,11 @@ const fetchGroupMembers = async () => {
       body: JSON.stringify({ id_group: selectedConversation.id }),
     });
 
+    setShowMembers(true);
     if (!res.ok) throw new Error("Erreur récupération membres");
 
     const data = await res.json();
     setGroupMembers(data);
-    setShowMembers(true);
 
   } catch (err) {
     console.error(err);
@@ -326,7 +326,7 @@ const fetchGroupMembers = async () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
+    <div className="flex flex-col bg-[#FFF9E5]">
       <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
         <div className="w-1/3 h-191 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
@@ -478,15 +478,15 @@ const fetchGroupMembers = async () => {
         </div>
       </div>
       {showMembers && (
-  <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
+  <div className="fixed inset-0 bg-black/30 flex justify-end text-[#8B5A3C] z-50">
     
     <div className="w-80 h-full bg-white shadow-xl p-6 relative animate-slide-in">
       
       <button
         onClick={() => setShowMembers(false)}
-        className="absolute top-4 right-4 text-gray-500 hover:text-black"
+        className="absolute top-4 right-4 text-gray-500 hover:text-[#8B5A3C]"
             >
-              ✕
+              <X className="text-[#8B5A3C]"/>
             </button>
             <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
               Membres du groupe
@@ -511,9 +511,6 @@ const fetchGroupMembers = async () => {
         </div>
       )}
 
-      <footer className="w-full">
-        <Footer />
-      </footer>
     </div>
   );
 }

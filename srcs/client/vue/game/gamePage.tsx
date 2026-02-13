@@ -23,8 +23,8 @@ export default function GamePage() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-1 flex items-center justify-center p-8">
+    <div className="flex flex-col">
+      <main className="flex-1 flex items-center justify-center">
         <canvas
           ref={canvasRef}
           width={800}
@@ -33,9 +33,6 @@ export default function GamePage() {
         />
       </main>
 
-      <footer className="w-full">
-        <Footer />
-      </footer>
     </div>
   );
 }

@@ -186,7 +186,6 @@ export default function RegisterPage() {
         </div>
       </div>
     <div className="margin-bot w-full">
-      <Footer/>
     </div>
     </main>
     </div>

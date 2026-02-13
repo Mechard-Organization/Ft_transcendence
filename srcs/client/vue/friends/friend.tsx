@@ -110,7 +110,7 @@ export default function FriendsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen relative">
+    <div className="flex flex-col relative">
 <main className="flex-grow w-full max-w-6xl mx-auto px-6 py-10">
   <h1 className="text-[#8B5A3C] text-3xl mb-10 flex items-center justify-center gap-2"><UserCheck/> Amis</h1>
 
@@ -146,10 +146,8 @@ export default function FriendsPage() {
          </h2>
 
       {requests.length === 0 && (
-        <p className="flex items-center justify-between bg-[#FFF9E5] px-4 py-3 rounded-xl">
-          <h4 className="text-[#8B5A3C]">
+        <p className="flex items-center justify-between text-[#8B5A3C] bg-[#FFF9E5] px-4 py-3 rounded-xl">
             Aucune requête
-          </h4>
         </p>
       )}
 
@@ -188,10 +186,8 @@ export default function FriendsPage() {
       <h2 className="text-[#8B5A3C] text-xl mb-4"> <UserCheck/></h2>
 
       {friends.length === 0 && (
-        <p className="flex items-center justify-between bg-[#FFF9E5] px-4 py-3 rounded-xl">
-          <h4 className="text-[#8B5A3C]">
+        <p className="flex items-center text-[#8B5A3C] justify-between bg-[#FFF9E5] px-4 py-3 rounded-xl">
             Aucun ami
-          </h4>
         </p>
       )}
 

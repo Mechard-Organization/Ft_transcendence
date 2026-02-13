@@ -104,9 +104,9 @@ export default function HomePage() {
                   <img
           src="/uploads/gif/cookie.gif"
           alt="cookie"
-          className="w-54 h-54 object-cover rounded-xl mt-10 margin-box"
+          className="w-44 h-44 object-cover rounded-xl mt-10 margin-box"
         />
-          <h1 className="text-6xl mb-4 text-[#8B5A3C]">Bienvenue !</h1>
+          <h2 className="text-6xl mb-4 text-[#8B5A3C]">Bienvenue !</h2>
           <p className="text-2xl text-[#A67C52]">Jouez, chattez et amusez-vous !</p>
         </div>
 
@@ -149,13 +149,8 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* GIF */}
-
       </main>
 
-      <footer className="w-full">
-        <Footer />
-      </footer>
     </div>
   );
 }

@@ -250,9 +250,6 @@ export default function ProfilePage() {
         </div>
       </main>
 
-      <footer className="w-full">
-        <Footer />
-      </footer>
     </div>
   );
 }

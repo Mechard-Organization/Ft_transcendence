@@ -78,7 +78,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF9E5] flex items-center justify-center px-6 py-10">
+    <div className="bg-[#FFF9E5] flex items-center justify-center px-6 py-10">
       <div className="w-full max-w-4xl bg-white/90 backdrop-blur-sm
                       rounded-3xl shadow-2xl border-4 border-[#FEE96E] p-10">
 

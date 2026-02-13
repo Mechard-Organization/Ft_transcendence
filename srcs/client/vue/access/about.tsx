@@ -111,9 +111,7 @@ export default function AboutPage() {
         </div>
       </main>
 
-      <footer className="w-full">
-        <Footer />
-      </footer>
+
     </div>
   );
 }

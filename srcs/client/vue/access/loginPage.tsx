@@ -220,7 +220,6 @@ export default function LoginPage() {
 )}
 
     </main>
-<Footer/>
     </div>
   );
 }

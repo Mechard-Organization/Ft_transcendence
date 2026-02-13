@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Buttons.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jealefev <jealefev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/29 12:08:24 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/13 14:50:08 by jealefev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ import { setSelectedMesh, createCutomiseUI, createdisposableUI, createTournament
 
 function shuffle(array: string[]) {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1)); // pick random index 0 ≤ j ≤ i
-    [array[i], array[j]] = [array[j], array[i]];   // swap elements
+    const j = Math.floor(Math.random() * (i + 1)); 
+    [array[i], array[j]] = [array[j], array[i]];  
   }
   return array;
 }
