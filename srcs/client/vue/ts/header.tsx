@@ -130,7 +130,7 @@ const handlelogout = async () => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/20"></div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-8 flex items-center justify-between py-5">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 flex items-center justify-between py-3">
         {/* Logo Home */}
         <div className="rounded-2xl transition-all transform hover:scale-150 cursor-pointer">
           <Link to="/">

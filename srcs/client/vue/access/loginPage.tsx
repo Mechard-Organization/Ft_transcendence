@@ -102,9 +102,9 @@ export default function LoginPage() {
 
   return (
     <div>
-    <main id="mainContent" className="flex-1 min-h-[calc(100dvh-60px-64px)]">
+    <main id="mainContent" className="margin-bot">
 	  <div className="mb-8 max-w-2xl w-full mx-auto text-center">
-		<div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-[#FEE96E] cursor-pointer">
+		<div className="bg-white/90 backdrop-blur-sm rounded-3xl p-4 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-[#FEE96E] cursor-pointer">
 		  <div className="flex items-center justify-center">
   		    <div className="w-12 h-12 rounded-full bg-[#FEE96E] flex items-center justify-center">
     		  <User className="w-6 h-6 text-[#8B5A3C]" />
@@ -147,7 +147,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   disabled={loading || twofaRequired}
-                  className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+                  className="flex-1 px-6 py-2 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
                 />
               </div>
 
@@ -155,7 +155,7 @@ export default function LoginPage() {
 
               <button
                 id="loginBtn"
-                className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+                className="flex-1 px-6 py-2 rounded-full border-1 border-[#FEE96E] bg-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
                 type="submit"
                 disabled={loading || twofaRequired}
               >
@@ -218,7 +218,6 @@ export default function LoginPage() {
     </button>
   </div>
 )}
-
     </main>
     </div>
   );

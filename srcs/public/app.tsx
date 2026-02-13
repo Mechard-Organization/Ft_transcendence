@@ -18,7 +18,7 @@ export default function App() {
   return (
     <Router>
       <div 
-        className="fflex flex-col min-h-[100dvh] bg-[#FFFAED]"
+        className="flex flex-col bg-[#FFFAED]"
         style={{
           backgroundImage: `
             radial-gradient(circle at 20% 50%, rgba(254, 233, 110, 0.15) 0%, transparent 50%),
@@ -28,6 +28,7 @@ export default function App() {
         }}
       >
         <Header />
+        <main className= "flex-1 min-h-[calc(100dvh-60px-64px)]">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/Game" element={<GamePage />} />
@@ -41,8 +42,8 @@ export default function App() {
           <Route path="/Admin" element={<AdminPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/Rank" element={<RankPage />} />
-
         </Routes>
+        </main>
         <Footer/>
       </div>
     </Router>

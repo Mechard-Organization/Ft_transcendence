@@ -6,7 +6,7 @@ export default function Footer() {
       className="w-full relative bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url('../../../shared-assets/pompompurin/background/vm2.jpeg')" }}
     >
-      <div className="relative max-w-7xl mx-auto px-8 py-6 flex flex-col md:flex-row items-center justify-between text-white">
+      <div className="relative max-w-7xl mx-auto px-8 py-5 flex flex-col md:flex-row items-center justify-between text-white">
       </div>
     </footer>
   );

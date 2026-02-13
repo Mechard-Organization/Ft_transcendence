@@ -333,14 +333,14 @@
 }
 
 .google-btn {
-  width: 100%;
+  width: 70%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 10px 12px;
   border: 1px solid #dadce0;
-  border-radius: 6px;
+  border-radius: 100px;
   background: #ffffff;
   color: #3c4043;
   font-size: 14px;

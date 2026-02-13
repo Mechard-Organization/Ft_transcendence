@@ -331,7 +331,7 @@ const fetchGroupMembers = async () => {
 
   return (
     <div className="flex flex-col bg-[#FFF9E5]">
-      <div className="flex flex-1 w-full max-w-7xl mx-auto gap-6 p-6">
+      <div className="flex w-full max-w-7xl mx-auto gap-6 p-6">
         <div className="w-1/3 h-191 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
             Discussions

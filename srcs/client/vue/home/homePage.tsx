@@ -73,7 +73,6 @@ export default function HomePage() {
     };
   }, []);
 
-  // Composant pour un bloc cliquable
   const ActionCard = ({
     title,
     description,
@@ -97,7 +96,6 @@ export default function HomePage() {
   );
 
   return (
-    <div className="flex-1 min-h-[calc(100dvh-60px-64px)]">
       <main className="flex-grow flex flex-col items-center mt-8">
         {/* Header / Welcome */}
         <div className="text-center">
@@ -150,7 +148,5 @@ export default function HomePage() {
         )}
 
       </main>
-
-    </div>
   );
 }

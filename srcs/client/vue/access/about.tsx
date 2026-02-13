@@ -56,7 +56,7 @@ const team: TeamMember[] = [
 export default function AboutPage() {
   return (
     <div className="">
-      <main className="flex-1 min-h-[calc(100dvh-60px-64px)] max-w-6xl mx-auto px-5 py-8">
+      <main className="max-w-6xl mx-auto px-5 py-8">
         <h2 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
           À propos de notre équipe
         </h2>

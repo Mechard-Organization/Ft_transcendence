@@ -159,7 +159,7 @@ export default function ProfilePage() {
 
 
   return (
-    <div className="flex-1 min-h-[calc(100dvh-60px-64px)]">
+    <div className="">
       <main className="flex-grow">
         <div className="max-w-4xl mx-auto px-6 pt-8 pb-5">
 
