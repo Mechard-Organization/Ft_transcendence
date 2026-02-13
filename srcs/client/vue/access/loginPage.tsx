@@ -96,6 +96,10 @@ export default function LoginPage() {
     }
   };
 
+  const onGoogleLogin = () => {
+    window.location.href = "/api/auth/google";
+  };
+
   return (
     <div>
     <main id="mainContent" className="flex-1 min-h-[calc(100dvh-60px-64px)]">
@@ -163,6 +167,21 @@ export default function LoginPage() {
                   {error}
                 </p>
               )}
+              <div className="oauth-divider"><span>ou</span></div>
+              <button
+                type="button"
+                onClick={onGoogleLogin}
+                className="google-btn"
+                aria-label="Sign in with Google"
+              >
+                <svg className="google-icon" width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.05 1.53 7.44 2.81l5.44-5.44C33.54 3.86 29.1 2 24 2 14.82 2 6.73 7.14 3.02 14.65l6.36 4.94C11.01 13.14 17.02 9.5 24 9.5z"/>
+                  <path fill="#4285F4" d="M46.5 24.5c0-1.64-.15-3.21-.43-4.73H24v8.95h12.7c-.55 2.96-2.22 5.47-4.72 7.14l7.28 5.64C43.52 37.36 46.5 31.43 46.5 24.5z"/>
+                  <path fill="#FBBC05" d="M9.38 28.59a14.94 14.94 0 0 1 0-9.18l-6.36-4.94a23.97 23.97 0 0 0 0 19.06l6.36-4.94z"/>
+                  <path fill="#34A853" d="M24 46c6.48 0 11.92-2.14 15.9-5.82l-7.28-5.64c-2.02 1.36-4.62 2.16-8.62 2.16-6.98 0-12.99-3.64-15.12-9.09l-6.36 4.94C6.73 40.86 14.82 46 24 46z"/>
+                </svg>
+                <span>Sign in with Google</span>
+              </button>
             </form>
           </div>
 	    </div>

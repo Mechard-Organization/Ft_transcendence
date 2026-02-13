@@ -11,6 +11,7 @@ type UserStats = {
   mail: string;
   avatarUrl?: string;
   twofaEnabled?: boolean;
+  oauth_enabled?: number;
   admin?: boolean;
 };
 
@@ -25,7 +26,8 @@ export default function UserSettings() {
     username: "",
     mail: "",
     avatarUrl: "/uploads/profil/default.jpeg",
-    twofaEnabled: false
+    twofaEnabled: false,
+    oauth_enabled: 0
   });
 
   const [username, setUsername] = useState("");
@@ -344,12 +346,14 @@ export default function UserSettings() {
     Sécurité (2FA)
   </h2>
 
-  <TwoFA
-    userId={userStats.id}
-    twofaEnabled={userStats.twofaEnabled ?? false}
-    onEnable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: true }))}
-    onDisable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: false }))}
-  />
+      {userStats.oauth_enabled !== 1 && (
+   <TwoFA
+      userId={userStats.id}
+      twofaEnabled={userStats.twofaEnabled ?? false}
+      onEnable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: true }))}
+      onDisable2FA={() => setUserStats(prev => ({ ...prev, twofaEnabled: false }))}
+    />
+      )}
 </div>
   <div className="flex items-center justify-center">
   <button onClick={delUser}
