@@ -79,6 +79,17 @@ export default function FriendsPage() {
     loadRequests(userId);
   };
 
+  const blockFriend = async (id_friend: number) => {
+    if (!userId) return;
+    await fetch("/api/creatBlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_user: userId, id_block: id_friend }),
+    });
+    loadFriends(userId);
+    loadRequests(userId);
+  };
+
   const addFriend = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!usernameInput || !userId) return;

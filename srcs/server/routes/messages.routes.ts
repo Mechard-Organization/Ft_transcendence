@@ -4,12 +4,15 @@ import * as db from "@config/database/db";
 export default async function messageRoutes(fastify: FastifyInstance) {
 
   fastify.post("/messages", async (request) => {
-    const { id_group } = request.body as any;
+    const { id_group, id } = request.body as any;
     let saved: any;
+    if (!id) {
+      throw fastify.httpErrors.badRequest("Invalid content");
+    }
     if (id_group)
-      saved = db.getMessagesInGroup(id_group);
+      saved = db.getMessagesInGroup(id_group, id);
     else
-      saved = db.getAllMessages();
+      saved = db.getAllMessages(id);
     return saved;
   });
 

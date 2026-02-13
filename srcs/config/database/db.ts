@@ -133,7 +133,7 @@ export function getMessagesById(id: string) {
   return stmt.get(id);
 }
 
-export function getAllMessages() {
+export function getAllMessages(id: number) {
   const stmt = db.prepare(`
     SELECT
       messages.*,
@@ -142,14 +142,17 @@ export function getAllMessages() {
     LEFT JOIN users
       ON messages.id_author = users.id
     WHERE id_group IS NULL
+      AND NOT EXISTS (
+        SELECT 1 FROM block
+        WHERE block.id_user = ? AND block.id_block = messages.id_author
+      )
     ORDER BY messages.id ASC
   `);
 
-  return stmt.all();
+  return stmt.all(id);
 }
 
-
-export function getMessagesInGroup(id_group: string) {
+export function getMessagesInGroup(id_group: string, id: number) {
   const stmt = db.prepare(`
     SELECT
       messages.*,
@@ -157,11 +160,15 @@ export function getMessagesInGroup(id_group: string) {
     FROM messages
     LEFT JOIN users
       ON messages.id_author = users.id
-    WHERE id_group = ?
+    WHERE messages.id_group = ?
+      AND NOT EXISTS (
+        SELECT 1 FROM block
+        WHERE block.id_user = ? AND block.id_block = messages.id_author
+      )
     ORDER BY messages.id ASC
   `);
 
-  return stmt.all(id_group);
+  return stmt.all(id_group, id);
 }
 
 export function addMessage(content: string, id: any, id_group: string) {
@@ -601,15 +608,6 @@ export function deleteUserFriend(id_user: string) {
   return stmt.run(id_user, id_user);
 }
 
-export function deleteUserBlocks(id_user: string) {
-  const stmt = db.prepare(`
-    DELETE FROM block
-    WHERE id_user = ? OR id_block = ?
-  `);
-
-  return stmt.run(id_user, id_user);
-}
-
 export function deleteUserFromGroups(id_user: string) {
   const stmt = db.prepare(`
     DELETE FROM laisonmsg
@@ -662,13 +660,13 @@ export function deleteBlock(id_user: string, id_block: string) {
   return stmt.run(id_user, id_block);
 }
 
-export function deleteAllBlock(id_user: string) {
+export function deleteUserBlocks(id_user: string) {
   const stmt = db.prepare(`
-    DELETE FROM friends
-    WHERE id_user = ?
+    DELETE FROM block
+    WHERE id_user = ? OR id_block = ?
   `);
 
-  return stmt.run(id_user);
+  return stmt.run(id_user, id_user);
 }
 
 // --- MATCH FUNCTIONS ---

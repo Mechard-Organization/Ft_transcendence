@@ -123,6 +123,8 @@ export default function ChatPage() {
 
   useEffect(() => {
     async function fetchMessages() {
+      const auth = await isAuthenticated();
+      const id = auth?.id ?? null;
       let res;
       if (!selectedConversation)
       {
@@ -131,6 +133,7 @@ export default function ChatPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             id_group: undefined,
+            id
           }),
         });
       }
@@ -141,6 +144,7 @@ export default function ChatPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             id_group: selectedConversation.id,
+            id
           }),
         });
       }
@@ -478,10 +482,10 @@ const fetchGroupMembers = async () => {
         </div>
       </div>
       {showMembers && (
-  <div className="fixed inset-0 bg-black/30 flex justify-end text-[#8B5A3C] z-50">
-    
+  <div className="fixed inset-0 bg-black/30 flex justify-end z-50">
+
     <div className="w-80 h-full bg-white shadow-xl p-6 relative animate-slide-in">
-      
+
       <button
         onClick={() => setShowMembers(false)}
         className="absolute top-4 right-4 text-gray-500 hover:text-[#8B5A3C]"
