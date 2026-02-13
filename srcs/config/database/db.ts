@@ -634,6 +634,8 @@ export function createBlock(id_user: string, id_block: string) {
 export function getBlock(id_user: string) {
   const stmt = db.prepare(`
     SELECT * FROM block
+    LEFT JOIN users
+      ON block.id_block = users.id
     WHERE id_user = ?
     ORDER BY id_block ASC
   `);
