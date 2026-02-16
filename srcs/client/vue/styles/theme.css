@@ -131,11 +131,15 @@
   body {
     @apply bg-background text-foreground;
   }
-
   /**
   * Default typography styles for HTML elements (h1-h4, p, label, button, input).
   * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
   */
+
+  html, body, #root {
+    height: 100%;
+  }
+
 
   html {
     font-size: var(--font-size);
@@ -166,8 +170,8 @@
   }
 
 .page-layout {
+  flex: 1;
   display: flex;
-  height: calc(100vh - 70px);
   padding: 2rem;
   gap: 2rem;
 }
@@ -293,13 +297,16 @@
   margin-right: auto;
 }
 
-.margin-title {
+.margin-top {
   margin: 0px;
+  padding: 0px;
+  margin-left: auto;
+  margin-bottom: 60px;
+  margin-right: auto;
 }
 
-.footer {
-  position: sticky;
-  bottom: 0;
+.margin-title {
+  margin: 0px;
 }
 
 @keyframes slideIn {

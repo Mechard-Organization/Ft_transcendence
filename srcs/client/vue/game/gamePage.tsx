@@ -23,8 +23,9 @@ export default function GamePage() {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col margin-bot">
       <main className="flex items-center justify-center">
+
         <canvas
           ref={canvasRef}
           width={800}

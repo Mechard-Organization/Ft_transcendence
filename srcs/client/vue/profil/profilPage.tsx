@@ -158,8 +158,8 @@ export default function ProfilePage() {
 
 
 
-  return (
-    <div className="">
+return (
+    <div className="flex flex-col">
       <main className="flex-grow">
         <div className="max-w-4xl mx-auto px-6 pt-8 pb-5">
 
@@ -182,67 +182,74 @@ export default function ProfilePage() {
               <p className="text-[#A67C52] mt-1">{userStats.mail}</p>
             </div>
             <div className="flex flex-col gap-2">
-              <button onClick={() => window.location.href = "/settings"} className="p-4 rounded-full bg-[#FEE96E] hover:scale-105 transition"><Settings className="w-6 h-6 text-[#8B5A3C]"/></button>
+              <button onClick={() => window.location.href = "/settings"} className="p-4 rounded-full bg-[#FEE96E] hover:scale-105 transition">
+                <Settings className="w-6 h-6 text-[#8B5A3C]"/>
+              </button>
             </div>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
             <div className="bg-white/90 rounded-3xl p-4 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
               <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
                 <Target className="w-6 h-6 text-[#8B5A3C]" />
               </div>
               <h3 className="text-xl text-[#8B5A3C] mb-2">Parties jouées</h3>
-              <p className="text-5xl font-bold text-[#8B5A3C]">{userStats.gamesPlayed}</p>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.gamesPlayed)}</p>
             </div>
             <div className="bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
               <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
                 <Trophy className="w-6 h-6 text-[#8B5A3C]" />
               </div>
               <h3 className="text-xl text-[#8B5A3C] mb-2">Victoires</h3>
-              <p className="text-5xl font-bold text-[#8B5A3C]">{userStats.gamesWon}</p>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.gamesWon)}</p>
+            </div>
+            <div className="bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
+              <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
+                <Trophy className="w-6 h-6 text-[#8B5A3C]" />
+              </div>
+              <h3 className="text-xl text-[#8B5A3C] mb-2">Meilleur Score</h3>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.highScore)}</p>
             </div>
           </div>
 
-          <div className="mt-10 bg-white/95 rounded-3xl shadow-lg border-4 border-[#FEE96E] overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-[#FEE96E]">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Date</th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Adversaire</th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Score</th>
-                  <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Résultat</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 text-[#8B5A3C]">
-                {matchs.map(match => {
-                  const isWin = match.my_score > match.adv_score;
-                  return (
-                    <tr key={match.id} className={isWin ? "bg-[#D7F09C]" : "bg-[#fce2e7]"}>
-                      <td className="px-6 -py-4">
-                        {new Date(match.date).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4">
-                        {match.adv_username}
-                      </td>
-                      <td className="px-6 py-4">
-                        {match.my_score} - {match.adv_score}
-                      </td>
-
-                      <td className="px-6 py-4 font-bold">
-                        {isWin ? "Victoire" : "Defaite"}
-                      </td>
+          {/* Tableau scrollable */}
+          <div className="mt-10 bg-white/95 rounded-3xl shadow-lg border-4 border-[#FEE96E] h-70 flex flex-col overflow-hidden">
+            <div className="overflow-y-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-[#FEE96E] sticky top-0 z-10">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Date</th>
+                    <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Adversaire</th>
+                    <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Score</th>
+                    <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Résultat</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 text-[#8B5A3C]">
+                  {matchs.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-4 text-center font-medium">Aucune partie jouée</td>
                     </tr>
-                  )
-                })}
-              </tbody>
-          </table>
+                  ) : (
+                    matchs.map(match => {
+                      const isWin = match.my_score > match.adv_score;
+                      return (
+                        <tr key={match.id} className={isWin ? "bg-[#C3F99A]" : "bg-[#F9D09A]"}>
+                          <td className="px-6 py-4">{new Date(match.date).toLocaleDateString()}</td>
+                          <td className="px-6 py-4">{match.adv_username}</td>
+                          <td className="px-6 py-4">{Math.round(match.my_score)} - {Math.round(match.adv_score)}</td>
+                          <td className="px-6 py-4 font-bold">{isWin ? "Victoire" : "Défaite"}</td>
+                        </tr>
+                      )
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          
         </div>
       </main>
-
     </div>
   );
 }

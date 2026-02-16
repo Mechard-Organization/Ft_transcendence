@@ -18,7 +18,7 @@ export default function App() {
   return (
     <Router>
       <div 
-        className="flex flex-col bg-[#FFFAED]"
+        className="min-h-screen flex flex-col bg-[#FFFAED]"
         style={{
           backgroundImage: `
             radial-gradient(circle at 20% 50%, rgba(254, 233, 110, 0.15) 0%, transparent 50%),
@@ -28,7 +28,7 @@ export default function App() {
         }}
       >
         <Header />
-        <main className= "flex-1 min-h-[calc(100dvh-60px-64px)]">
+        <main className= "flex-1">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/Chat" element={
