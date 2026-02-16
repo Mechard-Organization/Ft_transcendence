@@ -41,7 +41,7 @@ type UserGroup = {
   username: string;
 };
 
-
+type AuthStatus = "loading" | "authenticated" | "anonymous";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -63,6 +63,25 @@ export default function ChatPage() {
     id: 0,
     username: ""
   })
+  const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
+  (async () => {
+      try {
+        const auth = await isAuthenticated();
+        
+        if (!(auth?.authenticated)) {
+          setAuthStatus("anonymous")
+          console.log("utilisateur non identifie")
+        }
+        else {
+          setAuthStatus("authenticated")
+          console.log("utilisateur bien enregistre");
+        }
+      } catch {
+        setAuthStatus("anonymous");
+        console.log("AAAAAAAAAAAAAAAAa")
+      }
+}
+)
 
     const [userStats, setUserStats] = useState<UserStats>({
       id: 0,

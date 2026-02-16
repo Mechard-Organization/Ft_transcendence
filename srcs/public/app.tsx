@@ -13,7 +13,7 @@ import AdminPage from './client/vue/admin/AdminPage';
 import AboutPage from './client/vue/access/about';
 import RankPage from './client/vue/game/rangGame';
 import Footer from './client/vue/ts/Footer';
-
+import ProtectedRoute from './client/vue/access/accessRoutes';
 export default function App() {
   return (
     <Router>
@@ -31,17 +31,42 @@ export default function App() {
         <main className= "flex-1 min-h-[calc(100dvh-60px-64px)]">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/Game" element={<GamePage />} />
-          <Route path="/Chat" element={<ChatPage />} />
-          <Route path="/Profile" element={<ProfilePage />} />
+          <Route path="/Chat" element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/Friends" element={
+            <ProtectedRoute>
+              <FriendsPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/FriendsProfil/:id" element={
+            <ProtectedRoute>
+              <FriendProfil />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/Profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+            <SettingsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/Rank" element={
+            <ProtectedRoute>
+            <RankPage />
+            </ProtectedRoute>
+          } />
           <Route path="/Login" element={<LoginPage />} />
           <Route path="/Register" element={<RegisterPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/Friends" element={<FriendsPage />} />
-          <Route path="/FriendsProfil/:id" element={<FriendProfil />} />
-          <Route path="/Admin" element={<AdminPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/Rank" element={<RankPage />} />
         </Routes>
         </main>
         <Footer/>

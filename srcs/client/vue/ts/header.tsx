@@ -193,8 +193,6 @@ const handlelogout = async () => {
                 </div>
               </Link>
 
-              {/* Avatar + Logout */}
-              {/* Avatar (+ Logout uniquement sur /Profile) */}
               {location.pathname === "/Profile" ? (
                 <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-[#FEE96E] transition-all hover:scale-105">
                   <button
@@ -221,7 +219,6 @@ const handlelogout = async () => {
               )}
             </>
           ) : (
-            // Si utilisateur non connecté → un seul bouton Login
             <Link to="/Login">
               <div
                 className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
