@@ -64,6 +64,12 @@ export default function App() {
             <RankPage />
             </ProtectedRoute>
           } />
+
+          <Route path="/Game" element={
+            <ProtectedRoute>
+            <GamePage />
+            </ProtectedRoute>
+          } />
           <Route path="/Login" element={<LoginPage />} />
           <Route path="/Register" element={<RegisterPage />} />
           <Route path="/about" element={<AboutPage />} />
