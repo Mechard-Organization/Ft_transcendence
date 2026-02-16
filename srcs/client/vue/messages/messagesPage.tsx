@@ -63,6 +63,7 @@ export default function ChatPage() {
     id: 0,
     username: ""
   })
+  const slideRef = useRef<HTMLDivElement | null>(null);
   const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
   (async () => {
       try {
@@ -135,6 +136,23 @@ export default function ChatPage() {
     setMessages(await res.json());
   }
 
+useEffect(() => {
+  function handleClick(event: MouseEvent) {
+    if (
+      showMembers &&
+      slideRef.current &&
+      !slideRef.current.contains(event.target as Node)
+    ) {
+      setShowMembers(false);
+    }
+  }
+  document.addEventListener("mousedown", handleClick);
+  return () => {
+    document.removeEventListener("mousedown", handleClick);
+  };
+}, [showMembers]);
+
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -186,8 +204,6 @@ const sendMessage = async () => {
 
   const auth = await isAuthenticated();
   const id = auth?.id ?? null;
-
-
 
   try {
     const id_group = selectedConversation?.id === 0 ? undefined : selectedConversation?.id;
@@ -502,7 +518,7 @@ const fetchGroupMembers = async () => {
             </button>
           </div>
           {showMembers && (
-    <div className="absolute top-0 right-0 w-80 h-full bg-white shadow-xl p-6 rounded-l-2xl z-50 animate-slide-in">
+    <div ref={slideRef} className="absolute top-0 right-0 w-80 h-full bg-white shadow-xl p-6 rounded-l-2xl z-50 animate-slide-in">
       <button
         onClick={() => setShowMembers(false)}
         className="absolute top-4 right-4 text-gray-500 hover:text-[#8B5A3C]"
