@@ -199,21 +199,21 @@ const loadBlocked = async (id: number) => {
   </form>
 
   {/* Listes */}
-  <div className="grid grid-cols-1 md:grid-cols-1 gap-8">
+  <div className="grid grid-cols-1 md:grid-cols-1 gap-8 items-stretch">
     {/* Requêtes */}
-    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
-      <h2 className="text-[#8B5A3C] text-xl mb-4">
+    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] flex flex-col h-[150px]">
+      <h2 className="text-[#8B5A3C] text-xl flex-shrink-0">
          <BellPlus className="text-[#8B5A3C] text-xl mb-4">
           </BellPlus>
          </h2>
 
       {requests.length === 0 && (
-        <p className="flex items-center justify-between text-[#8B5A3C] bg-[#FFF9E5] px-4 py-3 rounded-xl">
+        <p className="text-[#8B5A3C] bg-[#FFF9E5] px-4 py-3 rounded-xl">
             Aucune requête
         </p>
       )}
 
-      <ul className="space-y-3">
+      <ul className="space-y-3 flex-1 overflow-y-auto pr-2">
         {requests.map((r) => (
           <li
             key={r.id}
@@ -243,16 +243,17 @@ const loadBlocked = async (id: number) => {
       </ul>
     </section>
     {/* Amis */}
-    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
-      <h2 className="text-[#8B5A3C] text-xl mb-4"> <UserCheck/></h2>
+      <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] 
+                    flex flex-col h-[150px]">
+      <h2 className="text-[#8B5A3C] text-xl mb-4 flex-shrink-0"> <UserCheck/></h2>
 
       {friends.length === 0 && (
-        <p className="flex items-center text-[#8B5A3C] justify-between bg-[#FFF9E5] px-4 py-3 rounded-xl">
+        <p className="text-[#8B5A3C] bg-[#FFF9E5] px-4 py-3 rounded-xl">
             Aucun ami
         </p>
       )}
 
-      <ul className="space-y-3">
+      <ul className="space-y-3 flex-1 overflow-y-auto pr-2">
         {friends.map((f) => (
           <li
             key={f.id}
@@ -269,8 +270,9 @@ const loadBlocked = async (id: number) => {
         ))}
       </ul>
     </section>
-    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
-      <h2 className="text-[#8B5A3C] text-xl mb-4">
+    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] 
+                    flex flex-col h-[150px]">
+      <h2 className="text-[#8B5A3C] text-xl mb-4 flex-shrink-0">
         <UserX />
       </h2>
 
@@ -280,7 +282,7 @@ const loadBlocked = async (id: number) => {
         </p>
       )}
 
-      <ul className="space-y-3">
+      <ul className="space-y-3 flex-1 overflow-y-auto pr-2">
         {blocked.map((f) => (
           <li
             key={f.id}
