@@ -252,6 +252,18 @@ export function getAllUserGroup(id_user: string) {
   return stmt.all(id_user);
 }
 
+export function getGroupMembers(id_group: string) {
+  const stmt = db.prepare(`
+    SELECT *
+    FROM laisonmsg
+    LEFT JOIN users
+      ON laisonmsg.id_user = users.id
+    WHERE id_group = ?
+  `);
+
+  return stmt.all(id_group);
+}
+
 export function getGroup(id_group: string) {
   const stmt = db.prepare(`
     SELECT *

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   UI.ts                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jealefev <jealefev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:17:53 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/13 17:04:39 by jealefev         ###   ########.fr       */
+/*   Updated: 2026/02/16 09:28:18 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ interface NewGame {
 
 export let contestants: string[] = [];
 export let contestantNumber = 0;
-export let finalGoal: number = 1;
+export let finalGoal: number = 3;
 export let playername = ["player1", "player2"];
 export let pause = 0;
 export let playerCount = 0;

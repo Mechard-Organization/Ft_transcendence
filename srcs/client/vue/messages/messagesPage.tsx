@@ -41,6 +41,8 @@ type UserGroup = {
   username: string;
 };
 
+
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const isActive = (path: string) => location.pathname === path;
@@ -83,6 +85,37 @@ export default function ChatPage() {
       highScore: 0
     });
 
+  async function fetchMessages() {
+    const auth = await isAuthenticated();
+    const id = auth?.id ?? null;
+    let res;
+    if (!selectedConversation)
+    {
+        res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_group: undefined,
+          id
+        }),
+      });
+    }
+    else
+    {
+      res = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_group: selectedConversation.id,
+          id
+        }),
+      });
+    }
+    selectedConversationRef.current =
+      !selectedConversation || selectedConversation?.id === 0 ? null : selectedConversation?.id;
+    setMessages(await res.json());
+  }
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -103,8 +136,7 @@ export default function ChatPage() {
           const idGroup = msg.data.id_group ?? null;
           console.log("mm", msg.data.saved);
           if (msg.type === "new_message" && idGroup === selectedConversationRef.current) {
-            console.log("msg : ", msg)
-            setMessages((prev) => [...prev, msg.data.saved]);
+            fetchMessages();
           }
         }
       } catch (err) {
@@ -122,36 +154,7 @@ export default function ChatPage() {
 
 
   useEffect(() => {
-    async function fetchMessages() {
-      const auth = await isAuthenticated();
-      const id = auth?.id ?? null;
-      let res;
-      if (!selectedConversation)
-      {
-          res = await fetch("/api/messages", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id_group: undefined,
-            id
-          }),
-        });
-      }
-      else
-      {
-        res = await fetch("/api/messages", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id_group: selectedConversation.id,
-            id
-          }),
-        });
-      }
-      selectedConversationRef.current =
-        !selectedConversation || selectedConversation?.id === 0 ? null : selectedConversation?.id;
-      setMessages(await res.json());
-    }
+
     fetchMessages();
   }, [selectedConversation]);
 

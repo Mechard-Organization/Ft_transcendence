@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   gameLogic.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/29 12:01:42 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/16 09:30:17 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import type { WebSocket as WS } from "ws";
 
-let finalGoal = 1
+let finalGoal = 3
 const paddleHeight = 100, paddleSpeed = 6;
 let gId = 0;
 
@@ -398,7 +398,7 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
   let newGame: NewGame | undefined = wsMessage.newGame;
   const playerIndex = findPlayer(player.username)
   if (newGame && newGame.type == "newGame") {
-    
+
     const gameId = createNewGame(newGame)
     console.log("game created new game given user ", player.username, gId, games[games.findIndex(g => g.gameId === gameId)]);
     removeOldAddNewGame(player, gameId);

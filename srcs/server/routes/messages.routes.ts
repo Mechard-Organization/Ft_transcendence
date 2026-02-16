@@ -129,6 +129,15 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     return db.getAllUserGroup(id);
   });
 
+  fastify.post("/getGroupMembers", async (request) => {
+    const { id_group } = request.body as any;
+
+    if (!id_group) {
+      throw fastify.httpErrors.badRequest("Invalid user");
+    }
+    return db.getGroupMembers(id_group);
+  });
+
   fastify.post("/UserInGroup", async (request) => {
     const { id, id_group } = request.body as any;
     let group;
