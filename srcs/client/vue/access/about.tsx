@@ -13,31 +13,31 @@ type TeamMember = {
 const team: TeamMember[] = [
   {
     name: "Lylou",
-    role: "Développeuse Backend",
+    role: "Technical Lead Developers",
     avatarUrl: "/assets/imgs/abutet_round.png",
     bio: "Abutet",
-    linkedin: "https://linkedin.com/in/lylou",
+    linkedin: "https://www.linkedin.com/in/aymeric-butet-33402522b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
     github: "https://github.com/LylouGavmild"
   },
   {
     name: "Mehdi",
-    role: "Developper",
+    role: "Developers cyber",
     avatarUrl: "/assets/imgs/mel-yand_round.png",
     bio: "Mel-yand",
-    linkedin: "https://linkedin.com/in/mehdi",
+    linkedin: "https://www.service-public.gouv.fr/particuliers/vosdroits/N19775 ",
     github: "https://github.com/Shepardinio"
   },
   {
     name: "Maxime",
-    role: "Developper",
+    role: "Project Manager  Developers",
     avatarUrl: "/assets/imgs/mechard_round.png",
     bio: "Mechard",
     linkedin: "https://www.linkedin.com/in/maxime-echard/",
-    github: "https://github.com/M2000"
+    github: "https://github.com/M2000-fr"
   },
   {
     name: "Abdul",
-    role: "Developper",
+    role: "Developers Game logic",
     avatarUrl: "/assets/imgs/ajamshid_round.png",
     bio: "Ajamshid",
     linkedin: "https://linkedin.com/in/tonLinkedin",
@@ -45,10 +45,10 @@ const team: TeamMember[] = [
   },
   {
     name: "Jeanne",
-    role: "Développeuse Front-end",
+    role: "Product Owner Developers Front-end",
     avatarUrl: "/assets/imgs/jealefev_round.png",
     bio: "Jealefev",
-    linkedin: "https://linkedin.com/in/tonLinkedin",
+    linkedin: "https://linkedin.com/in/jeanne-lefèvre-27180738a",
     github: "https://github.com/namoule"
   }
 ];
@@ -56,7 +56,7 @@ const team: TeamMember[] = [
 export default function AboutPage() {
   return (
     <div className="">
-      <main className="max-w-6xl mx-auto px-5 py-8">
+      <main className="min-h-[calc(100vh-8rem)] max-w-6xl mx-auto px-5 py-8">
         <h2 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
           À propos de notre équipe
         </h2>

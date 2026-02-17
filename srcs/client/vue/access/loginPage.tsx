@@ -103,7 +103,7 @@ export default function LoginPage() {
   return (
     <div>
     <main id="mainContent" className="margin-bot">
-	  <div className="mb-8 max-w-2xl w-full mx-auto text-center">
+	  <div className="min-h-[calc(100vh-8rem)] mb-8 max-w-2xl w-full mx-auto text-center">
 		<div className="bg-white/90 backdrop-blur-sm rounded-3xl p-4 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 border-4 border-[#FEE96E] cursor-pointer">
 		  <div className="flex items-center justify-center">
   		    <div className="w-12 h-12 rounded-full bg-[#FEE96E] flex items-center justify-center">
