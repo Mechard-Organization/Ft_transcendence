@@ -118,7 +118,22 @@ creatAdmin();
 
 // --- MESSAGES FUNCTIONS ---
 
-export function getAllMessages() {
+export function getMessagesById(id: string) {
+  const stmt = db.prepare(`
+    SELECT
+      messages.*,
+      COALESCE(users.username, 'Anonyme') AS username
+    FROM messages
+    LEFT JOIN users
+      ON messages.id_author = users.id
+    WHERE messages.id IS ?
+    ORDER BY messages.id ASC
+  `);
+
+  return stmt.get(id);
+}
+
+export function getAllMessages(id: number) {
   const stmt = db.prepare(`
     SELECT
       messages.*,
@@ -127,14 +142,17 @@ export function getAllMessages() {
     LEFT JOIN users
       ON messages.id_author = users.id
     WHERE id_group IS NULL
+      AND NOT EXISTS (
+        SELECT 1 FROM block
+        WHERE block.id_user = ? AND block.id_block = messages.id_author
+      )
     ORDER BY messages.id ASC
   `);
 
-  return stmt.all();
+  return stmt.all(id);
 }
 
-
-export function getMessagesInGroup(id_group: string) {
+export function getMessagesInGroup(id_group: string, id: number) {
   const stmt = db.prepare(`
     SELECT
       messages.*,
@@ -142,11 +160,15 @@ export function getMessagesInGroup(id_group: string) {
     FROM messages
     LEFT JOIN users
       ON messages.id_author = users.id
-    WHERE id_group = ?
+    WHERE messages.id_group = ?
+      AND NOT EXISTS (
+        SELECT 1 FROM block
+        WHERE block.id_user = ? AND block.id_block = messages.id_author
+      )
     ORDER BY messages.id ASC
   `);
 
-  return stmt.all(id_group);
+  return stmt.all(id_group, id);
 }
 
 export function addMessage(content: string, id: any, id_group: string) {
@@ -186,6 +208,16 @@ export function createGroup(groupname: string) {
   };
 }
 
+export function updateGroupName(groupname: string, id: string) {
+  const stmt = db.prepare(`
+    UPdATE groupmsg
+    SET groupname = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(groupname, id);
+}
+
 export function addUserGroup(id_group: string, id_user: string) {
   const stmt = db.prepare(`
     INSERT INTO laisonmsg (id_group, id_user) VALUES (?,?)
@@ -218,6 +250,30 @@ export function getAllUserGroup(id_user: string) {
   `);
 
   return stmt.all(id_user);
+}
+
+export function getGroupMembers(id_group: string) {
+  const stmt = db.prepare(`
+    SELECT *
+    FROM laisonmsg
+    LEFT JOIN users
+      ON laisonmsg.id_user = users.id
+    WHERE id_group = ?
+  `);
+
+  return stmt.all(id_group);
+}
+
+export function getGroup(id_group: string) {
+  const stmt = db.prepare(`
+    SELECT *
+    FROM laisonmsg
+    LEFT JOIN groupmsg
+      ON laisonmsg.id_group = groupmsg.id
+    WHERE id_group = ?
+  `);
+
+  return stmt.all(id_group);
 }
 
 export function oldGroup(id1: string, id2: string) {
@@ -302,6 +358,34 @@ export function getUserByGoogleSub(google_sub: string) {
   `);
 
   return stmt.get(google_sub);
+}
+
+export function ranking() {
+  const stmt = db.prepare(`
+    SELECT id, username, avatarUrl,(
+      SELECT COUNT(*)
+      FROM match
+      WHERE (name_player1 = username AND CAST(score1 AS INTEGER) > CAST(score2 AS INTEGER))
+        OR (name_player2 = username AND CAST(score2 AS INTEGER) > CAST(score1 AS INTEGER))
+    ) AS gamesWon, (
+      SELECT COUNT(*)
+      FROM match
+      WHERE name_player1 = username OR name_player2 = username
+    ) AS gamesPlayed, (
+      SELECT MAX(
+        CASE
+          WHEN name_player1 = username THEN CAST(score1 AS INTEGER)
+          WHEN name_player2 = username THEN CAST(score2 AS INTEGER)
+          ELSE 0
+        END
+      )
+      FROM match
+    ) AS highScore
+    FROM users
+    ORDER BY gamesWon DESC
+  `);
+
+  return stmt.all();
 }
 
 
@@ -509,6 +593,15 @@ export function alreadyFriend(id_user: string, id_friend: string) {
   return stmt.all(id_user, id_friend);
 }
 
+export function YRFriend(id_user: string, id_friend: string) {
+  const stmt = db.prepare(`
+    SELECT * FROM friends
+    WHERE id_user = ? AND id_friend = ? AND accept = TRUE
+  `);
+
+  return stmt.get(id_user, id_friend);
+}
+
 export function deleteFriend(id_user: string, id_friend: string) {
   const stmt = db.prepare(`
     DELETE FROM friends
@@ -522,15 +615,6 @@ export function deleteUserFriend(id_user: string) {
   const stmt = db.prepare(`
     DELETE FROM friends
     WHERE id_user = ? OR id_friend = ?
-  `);
-
-  return stmt.run(id_user, id_user);
-}
-
-export function deleteUserBlocks(id_user: string) {
-  const stmt = db.prepare(`
-    DELETE FROM block
-    WHERE id_user = ? OR id_block = ?
   `);
 
   return stmt.run(id_user, id_user);
@@ -562,6 +646,8 @@ export function createBlock(id_user: string, id_block: string) {
 export function getBlock(id_user: string) {
   const stmt = db.prepare(`
     SELECT * FROM block
+    LEFT JOIN users
+      ON block.id_block = users.id
     WHERE id_user = ?
     ORDER BY id_block ASC
   `);
@@ -581,20 +667,20 @@ export function ItIsBlock(id_user: string, id_block: string) {
 
 export function deleteBlock(id_user: string, id_block: string) {
   const stmt = db.prepare(`
-    DELETE FROM friends
+    DELETE FROM block
     WHERE id_user = ? AND id_block = ?
   `);
 
   return stmt.run(id_user, id_block);
 }
 
-export function deleteAllBlock(id_user: string) {
+export function deleteUserBlocks(id_user: string) {
   const stmt = db.prepare(`
-    DELETE FROM friends
-    WHERE id_user = ?
+    DELETE FROM block
+    WHERE id_user = ? OR id_block = ?
   `);
 
-  return stmt.run(id_user);
+  return stmt.run(id_user, id_user);
 }
 
 // --- MATCH FUNCTIONS ---
@@ -623,7 +709,7 @@ export function getMatch(name_player: string) {
 
 export function numWinMatch(name_player: string) {
   const stmt = db.prepare(`
-    SELECT COUNT(*)
+    SELECT COUNT(*) AS Win
     FROM match
     WHERE (name_player1 = ? AND CAST(score1 AS INTEGER) > CAST(score2 AS INTEGER))
       OR (name_player2 = ? AND CAST(score2 AS INTEGER) > CAST(score1 AS INTEGER))
@@ -634,7 +720,7 @@ export function numWinMatch(name_player: string) {
 
 export function numMatch(name_player: string) {
   const stmt = db.prepare(`
-    SELECT COUNT(*)
+    SELECT COUNT(*) AS Match
     FROM match
     WHERE name_player1 = ? OR name_player2 = ?
   `);
@@ -644,10 +730,13 @@ export function numMatch(name_player: string) {
 
 export function highScoreMatch(name_player: string) {
   const stmt = db.prepare(`
-    SELECT MAX(GREATEST(
-      CASE WHEN name_player1 = ? THEN CAST(score1 AS INTEGER) ELSE 0 END,
-      CASE WHEN name_player2 = ? THEN CAST(score2 AS INTEGER) ELSE 0 END
-    )) AS max_score
+    SELECT MAX(
+      CASE
+        WHEN name_player1 = ? THEN CAST(score1 AS INTEGER)
+        WHEN name_player2 = ? THEN CAST(score2 AS INTEGER)
+        ELSE 0
+      END
+    ) AS max_score
     FROM match;
   `);
 
@@ -661,4 +750,26 @@ export function deleteMatch(name_user: string) {
   `);
 
   return stmt.run(name_user, name_user);
+}
+
+export function updateMatch(old_name: string, new_name: string) {
+  const stmt = db.prepare(`
+    UPDATE match
+    SET
+      name_player1 = CASE
+        WHEN name_player1 = ? THEN ?
+        ELSE name_player1
+      END,
+      name_player2 = CASE
+        WHEN name_player2 = ? THEN ?
+        ELSE name_player2
+      END
+    WHERE name_player1 = ? OR name_player2 = ?
+  `);
+
+  return stmt.run(
+    old_name, new_name,
+    old_name, new_name,
+    old_name, old_name
+  );
 }

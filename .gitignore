@@ -4,6 +4,7 @@
 .script_merging
 .script_main_merging
 srcs/public/.vite
+uploads/*
 out
 
 # Database

@@ -29,6 +29,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   fastify.post("/getuser", async (request) => {
     const { id } = request.body as any;
+    console.log(id);
     return id > 0 ? db.getUserById(id) : { username: "Invité.e"};
   });
 
@@ -39,7 +40,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
     return user;
   });
 
-  fastify.post("/updateUserPassword", async (request) => {
+  fastify.put("/updateUserPassword", async (request) => {
     const { id, password } = request.body as any;
     const user = db.getUserById(id);
 
@@ -51,10 +52,11 @@ export default async function userRoutes(fastify: FastifyInstance) {
     return { ok: true };
   });
 
-  fastify.post("/updateUserUsername", async (request) => {
+  fastify.put("/updateUserUsername", async (request) => {
     const { id , username } = request.body as any;
 
-    if (username == db.getUserById(id).username)
+    const user = db.getUserById(id);
+    if (username == user.username)
     {
       throw fastify.httpErrors.badRequest("already yours username");
     }
@@ -63,10 +65,11 @@ export default async function userRoutes(fastify: FastifyInstance) {
       throw fastify.httpErrors.badRequest("already taken username");
     }
     db.updateUserUsername(username, id);
+    db.updateMatch(user.username, username)
     return { ok: true };
   });
 
-  fastify.post("/updateUserMail", async (request) => {
+  fastify.put("/updateUserMail", async (request) => {
     const { id , mail } = request.body as any;
 
     if (mail == db.getUserById(id).mail)
@@ -81,14 +84,14 @@ export default async function userRoutes(fastify: FastifyInstance) {
     return { ok: true };
   });
 
-  fastify.post("/updateUserAdmin", async (request) => {
+  fastify.put("/updateUserAdmin", async (request) => {
     const { id , status } = request.body as any;
 
     db.updateUserAdmin(status, id);
     return { ok: true };
   });
 
-  fastify.post("/delUser", async (request, reply) => {
+  fastify.delete("/delUser", async (request, reply) => {
     const { id } = request.body as any;
     const user = db.getUserById(id);
 
@@ -102,12 +105,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
   });
 
   //GESTION DE L'AVATAR
-
-  fastify.post("/users/me/setavatar", async (req) => {
-    const { id, avatarUrl } = req.body as any;
-    db.updateUserPp(avatarUrl, id);
-    return { avatarUrl };
-  });
 
   fastify.post("/users/me/avatar", async (req, reply) => {
     let id: string | undefined;
@@ -137,7 +134,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
     }
 
     const filename = `${crypto.randomUUID()}.jpg`;
-    const filepath = path.join("uploads/avatars", filename);
+    const filepath = path.join("uploads/profil", filename);
 
     // 🔹 Resize + optimisation
     await sharp(buffer)
@@ -154,9 +151,14 @@ export default async function userRoutes(fastify: FastifyInstance) {
     }
 
     // 🔹 Sauvegarde DB
-    db.updateUserPp(`/uploads/avatars/${filename}`, id);
+    db.updateUserPp(`/uploads/profil/${filename}`, id);
+    fastify.websocketServer.clients.forEach(client => {
+      if (client.readyState === 1) {
+        client.send(JSON.stringify({ type: "new_avatar", data: {avatarUrl: `/uploads/profil/${filename}`} }));
+      }
+    });
 
-    return { avatarUrl: `/uploads/avatars/${filename}` };
+    return { avatarUrl: `/uploads/profil/${filename}` };
   });
 
   fastify.post("/users/me/delavatar", async (req, reply) => {
@@ -178,4 +180,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
   return { avatarUrl: user.avatarUrl || null };
   });
 
+  //RANKING
+  fastify.get("/ranking", async () => db.ranking());
 }

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Brain, Gamepad2, Joystick, MessagesSquare, User } from "lucide-react";
+import { Brain, Crown, Gamepad2, Joystick, MessagesSquare, User } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { isAuthenticated } from "../access/authenticator";
 import  handlelogout  from "../profil/profilPage" ;
@@ -52,7 +52,7 @@ export default function Header() {
             id: userData.id,
             username: userData.username,
             mail: userData.mail,
-            avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
+            avatarUrl: userData.avatarUrl ?? "/uploads/profil/default.jpeg",
           });
           } else {
             setAuthStatus("anonymous");
@@ -68,7 +68,38 @@ export default function Header() {
     };
   }, []);
 
-  
+
+  useEffect(() => {
+    const ws = new WebSocket(`/ws/`);
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      console.log("✅ WebSocket connecté");
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const avatar = JSON.parse(event.data);
+        if (avatar.data)
+        {
+          const idGroup = avatar.data.id_group ?? null;
+          console.log("mm", avatar.data.avatarUrl);
+          if (avatar.type === "new_avatar") {
+            setUserStats(prev => ({ ...prev, avatarUrl: avatar.data.avatarUrl }));
+          }
+        }
+      } catch (err) {
+        console.error("Erreur WS:", err);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log("❌ WebSocket fermé");
+    };
+
+  }, []);
+
+
   useEffect(() => {
     console.log("✅ userStats mis à jour :", userStats);
   }, [userStats]);
@@ -99,7 +130,7 @@ const handlelogout = async () => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/20"></div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-8 flex items-center justify-between py-5">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 flex items-center justify-between py-3">
         {/* Logo Home */}
         <div className="rounded-2xl transition-all transform hover:scale-150 cursor-pointer">
           <Link to="/">
@@ -137,6 +168,17 @@ const handlelogout = async () => {
                   <Joystick className="w-6 h-6" />
                 </div>
               </Link>
+              <Link to="/rank">
+                <div
+                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
+                    isActive("/rank")
+                      ? "bg-[#FEE96E] text-[#8B5A3C] shadow-lg"
+                      : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
+                  }`}
+                >
+                  <Crown className="w-6 h-6" />
+                </div>
+              </Link>
 
               {/* Chat */}
               <Link to="/chat">
@@ -151,8 +193,6 @@ const handlelogout = async () => {
                 </div>
               </Link>
 
-              {/* Avatar + Logout */}
-              {/* Avatar (+ Logout uniquement sur /Profile) */}
               {location.pathname === "/Profile" ? (
                 <div className="flex items-center gap-2 px-2 py-1 rounded-full bg-[#FEE96E] transition-all hover:scale-105">
                   <button
@@ -179,7 +219,6 @@ const handlelogout = async () => {
               )}
             </>
           ) : (
-            // Si utilisateur non connecté → un seul bouton Login
             <Link to="/Login">
               <div
                 className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${

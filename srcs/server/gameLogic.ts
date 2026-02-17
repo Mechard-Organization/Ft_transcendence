@@ -6,13 +6,13 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/29 12:01:42 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/16 15:59:47 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import type { WebSocket as WS } from "ws";
 
-let finalGoal = 1
+let finalGoal = 3
 const paddleHeight = 100, paddleSpeed = 6;
 let gId = 0;
 
@@ -189,7 +189,39 @@ export function moveBall(games: Game): Vec3 {
   }
   return games.ballPos;
 }
-
+function moveSiglePaddle(paddle:any, keys:any, dragPos1:any, dragPos2:any, playerCount:any,games:any, isDragging1:any, isDragging2:any, aiN:number){
+  // paddle movign 1
+    let Direction = games.aiDirection;
+  if (playerCount > 0) {
+    if (isDragging1) {
+      // console.log("is dragging 1");
+      if ((dragPos1.z < paddle) && paddle > -tableHeight / 2 + 50) paddle -= paddleSpeed;
+      if ((dragPos1.z > paddle) && paddle < tableHeight / 2 - 50) paddle += paddleSpeed;
+    }
+    if (keys && keys["w"] && paddle > -tableHeight / 2 + 50) paddle -= paddleSpeed;
+    if (keys && keys["s"] && paddle < tableHeight / 2 - 50) paddle += paddleSpeed;
+  }
+  else if(aiN == 1){
+    if ((Direction < paddle) && paddle > -tableHeight / 2 + 50 && games.balld.dx > 0) paddle -= paddleSpeed;
+    if ((Direction > paddle) && paddle < tableHeight / 2 - 50 && games.balld.dx > 0) paddle += paddleSpeed;
+  }
+  // paddle moving 1 end
+  // paddle moving 2
+    if (playerCount > 1) {
+    if (isDragging2) {
+      // console.log("is gragging 2");
+      if ((dragPos2.z < paddle) && paddle > -tableHeight / 2 + 50) paddle -= paddleSpeed;
+      if ((dragPos2.z > paddle) && paddle < tableHeight / 2 - 50) paddle += paddleSpeed;
+    }
+    if (keys && keys["ArrowUp"] && paddle > -tableHeight / 2 + 50) paddle -= paddleSpeed;
+    if (keys && keys["ArrowDown"] && paddle < tableHeight / 2 - 50) paddle += paddleSpeed;
+  }
+  else if(aiN == 2){
+    if ((Direction < paddle) && paddle > -tableHeight / 2 + 50 && games.balld.dx < 0) paddle -= paddleSpeed;
+    if ((Direction > paddle) && paddle < tableHeight / 2 - 50 && games.balld.dx < 0) paddle += paddleSpeed;
+  }
+  return paddle;
+}
 export function movePaddles(games: Game): Paddles {
   let playerCount = games.playerCount;
   let keys = undefined;
@@ -201,7 +233,7 @@ export function movePaddles(games: Game): Paddles {
   if (games.mode == 0) {
     let playerIndex = findPlayer(undefined, games.gameId);
     if (playerIndex == -1) {
-      console.log("player not found mode = 0, gID ", games.gameId)
+      // console.log("player not found mode = 0, gID ", games.gameId)
       if (keys == undefined)
         return (games.paddles);
     }
@@ -218,7 +250,7 @@ export function movePaddles(games: Game): Paddles {
   if (games.mode == 1) {
     let playerIndex = findPlayer(games.playername[0]);
     if (playerIndex == -1 || games.playerIds[1] == 0 || games.playerIds[0] == 0) {
-      console.log("player not found mode = 1, gID ", games.gameId)
+      // console.log("player not found mode = 1, gID ", games.gameId)
       isDragging1 = false;
       keys = undefined;
     }
@@ -231,26 +263,13 @@ export function movePaddles(games: Game): Paddles {
     }
   }
 
-  let Direction = games.aiDirection;
-  if (playerCount > 0) {
-    if (isDragging1) {
-      console.log("is dragging 1");
-      if ((dragPos1.z < games.paddles.paddle1) && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
-      if ((dragPos1.z > games.paddles.paddle1) && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
-    }
-    if (keys && keys["w"] && games.paddles.paddle1 > -tableHeight / 2 + 50) games.paddles.paddle1 -= paddleSpeed;
-    if (keys && keys["s"] && games.paddles.paddle1 < tableHeight / 2 - 50) games.paddles.paddle1 += paddleSpeed;
-  }
-  else {
-    if ((Direction < games.paddles.paddle1) && games.paddles.paddle1 > -tableHeight / 2 + 50 && games.balld.dx > 0) games.paddles.paddle1 -= paddleSpeed;
-    if ((Direction > games.paddles.paddle1) && games.paddles.paddle1 < tableHeight / 2 - 50 && games.balld.dx > 0) games.paddles.paddle1 += paddleSpeed;
-  }
-
+// paddle moving 1
+  games.paddles.paddle1 = moveSiglePaddle(games.paddles.paddle1, keys, dragPos1,dragPos2, playerCount,games, isDragging1, isDragging2, 1)
   if (games.mode == 1) {
 
     let playerIndex = findPlayer(games.playername[1]);
     if (playerIndex == -1 || games.playerIds[1] == 0 || games.playerIds[0] == 0) {
-      console.log("player not found mode = 1, gID ", games.gameId);
+      // console.log("player not found mode = 1, gID ", games.gameId);
       isDragging2 = false;
       keys = undefined;
     }
@@ -263,19 +282,8 @@ export function movePaddles(games: Game): Paddles {
     }
   }
 
-  if (playerCount > 1) {
-    if (isDragging2) {
-      console.log("is gragging 2");
-      if ((dragPos2.z < games.paddles.paddle2) && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
-      if ((dragPos2.z > games.paddles.paddle2) && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
-    }
-    if (keys && keys["ArrowUp"] && games.paddles.paddle2 > -tableHeight / 2 + 50) games.paddles.paddle2 -= paddleSpeed;
-    if (keys && keys["ArrowDown"] && games.paddles.paddle2 < tableHeight / 2 - 50) games.paddles.paddle2 += paddleSpeed;
-  }
-  else {
-    if ((Direction < games.paddles.paddle2) && games.paddles.paddle2 > -tableHeight / 2 + 50 && games.balld.dx < 0) games.paddles.paddle2 -= paddleSpeed;
-    if ((Direction > games.paddles.paddle2) && games.paddles.paddle2 < tableHeight / 2 - 50 && games.balld.dx < 0) games.paddles.paddle2 += paddleSpeed;
-  }
+// paddle moving two 
+games.paddles.paddle2 = moveSiglePaddle(games.paddles.paddle2, keys, dragPos1,dragPos2, playerCount,games, isDragging1, isDragging2, 2)
   return games.paddles;
 }
 
@@ -291,15 +299,15 @@ function findPlayer(username?: string, gId?: number): number {
 }
 
 export function removePlayerByWS(ws: WS) {
-  console.log("removebyws called on ")
+  // console.log("removebyws called on ")
   const player: Player | undefined = Object.values(players).find(player => player.ws === ws);
-  console.log("removebyws called on ", player?.username)
+  // console.log("removebyws called on ", player?.username)
   if (player) {
 
     const gameIndex = games.findIndex(g => g.gameId === player.gameId);
     let talkerindex = talkerTemp.findIndex(g => g.gameId === player.gameId);
     const playerIndex = findPlayer(player.username);
-    console.log("removeOldAddNewGame calles player, GID ", player.username, gameIndex, games[gameIndex])
+    // console.log("removeOldAddNewGame calles player, GID ", player.username, gameIndex, games[gameIndex])
     if (games[gameIndex] != undefined) {
       if (games[gameIndex].mode == 0 || games[gameIndex].playername[0] == player.username)
         games[gameIndex].playerIds[0] = 0;
@@ -307,23 +315,27 @@ export function removePlayerByWS(ws: WS) {
         games[gameIndex].playerIds[1] = 0;
     }
     if (games[gameIndex] != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
-      console.log("removed game", games[gameIndex].gameId);
+      // console.log("removed game", games[gameIndex].gameId);
       games.splice(gameIndex, 1);
       talkerTemp.splice(talkerindex, 1);
 
     }
-    console.log("deleted player ", players[playerIndex].username)
+    // console.log("deleted player ", players[playerIndex].username)
     delete players[playerIndex];
   }
 }
 
 function createNewGame(newGame?: NewGame) {
-
-  if (newGame && newGame.mode == 1 && newGame?.gameId != undefined && games[newGame.gameId]) {
-    if (games[newGame.gameId].playername[1] == newGame.playername[0])
-      games[newGame.gameId].playerIds[1] = 1;
-    console.log("mode: ", newGame?.mode, " gameId: ", newGame?.gameId, "playername: ", games[newGame.gameId].playerIds[1])
-    return newGame.gameId;
+  // console.log("===========create newGmae is called ===============")
+  if (newGame && newGame.mode == 1 && newGame?.gameId != undefined) {
+    const gameIndex = games.findIndex(g => g.gameId == newGame.gameId);
+    // console.log(`============= find index is ${gameIndex} ===============`)
+    if (gameIndex != -1 && games[gameIndex].playername[1] == newGame.playername[0]) {
+      games[gameIndex].playerIds[1] = 1;
+      // console.log("mode: ", newGame?.mode, " gameId: ", newGame?.gameId, "playername: ", games[gameIndex].playername)
+      // console.log(newGame.gameId);
+      return newGame.gameId;
+    }
   }
 
   const gameId = gId++;
@@ -359,8 +371,9 @@ function createNewGame(newGame?: NewGame) {
     playername: games[gameindex].playername,
     playerCount: games[gameindex].playerCount
   });
-  console.log("mode: ", games[gameindex].mode, " gameId: ", games[gameindex].gameId, "playername: ", games[gameindex].playername);
-  if (newGame && newGame.mode == 1 && newGame?.gameId != undefined && !games[newGame.gameId]){
+  // console.log("mode: ", games[gameindex].mode, " gameId: ", games[gameindex].gameId, "playername: ", games[gameindex].playername);
+  console.log("********** other player can join the game on ", gameId)
+  if (newGame && newGame.mode == 1 && newGame?.gameId != undefined){
     talkerTemp[talkerTemp.length - 1].counter = games[gameindex].counter = [-1,-1]
   }
   return gameId;
@@ -370,12 +383,12 @@ function createNewGame(newGame?: NewGame) {
 export function removeOldAddNewGame(player: Player, gId: number) {
   const gameIndex = games.findIndex(g => g.gameId === player.gameId);
   let talkerindex = talkerTemp.findIndex(g => g.gameId === player.gameId);
-  console.log("removeOldAddNewGame", gameIndex, talkerindex, "calles player, oldgame ", player.username, games[gameIndex])
+  // console.log("removeOldAddNewGame", gameIndex, talkerindex, "calles player, oldgame ", player.username, games[gameIndex])
   const playerIndex = findPlayer(player.username);
   if (games[gameIndex] != undefined) {
-    console.log(games[gameIndex].playername[0], player.username)
+    // console.log(games[gameIndex].playername[0], player.username)
     if (games[gameIndex].mode == 0 || games[gameIndex].playername[0] == player.username) {
-      console.log("playerid 0 set to 0")
+      // console.log("playerid 0 set to 0")
       games[gameIndex].playerIds[0] = 0;
     }
     if (games[gameIndex].mode == 0 || games[gameIndex].playername[1] == player.username) {
@@ -383,14 +396,14 @@ export function removeOldAddNewGame(player: Player, gId: number) {
     }
   }
   if (games[gameIndex] != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
-    console.log("removed game", games[gameIndex].gameId);
+    // console.log("removed game", games[gameIndex].gameId);
     games.splice(gameIndex, 1);
     talkerTemp.splice(talkerindex, 1);
 
   }
   if (gId >= 0)
     players[playerIndex].gameId = gId;
-  console.log("new game is ", gId)
+  // console.log("new game is ", gId)
 }
 
 export function movePaddlesAndBalls(wsMessage: WSMessage) {
@@ -398,9 +411,9 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
   let newGame: NewGame | undefined = wsMessage.newGame;
   const playerIndex = findPlayer(player.username)
   if (newGame && newGame.type == "newGame") {
-    
+
     const gameId = createNewGame(newGame)
-    console.log("game created new game given user ", player.username, gId, games[games.findIndex(g => g.gameId === gameId)]);
+    // console.log("game created new game given user ", player.username, gId, games[games.findIndex(g => g.gameId === gameId)]);
     removeOldAddNewGame(player, gameId);
 
     player.ws?.send(JSON.stringify(talkerTemp[talkerTemp.findIndex(g => g.gameId === gameId)]))
@@ -412,7 +425,7 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
       player.username = `p${gameId}`
     player.gameId = gameId;
     players[gameId] = player
-    console.log("game created new user ", player.username);
+    // console.log("game created new user ", player.username);
     player.ws?.send(JSON.stringify({ type: "Playername", username: player.username }))
     return;
   }
@@ -434,12 +447,12 @@ setInterval(() => {
     let talkerindex = talkerTemp.findIndex(g => g.gameId === games[i].gameId)
     let playerIndex = findPlayer(undefined, games[i].gameId)
     if (playerIndex != -1 && players[playerIndex].pause == 1 && games[i].mode == 0) {
-      // console.log("game paused", i, "  ", talkerindex);
+      // // console.log("game paused", i, "  ", talkerindex);
       i++;
       continue;
     }
     if (games[i].mode == 1 && (games[i].playerIds[0] == 0 || games[i].playerIds[1] == 0)) {
-      // console.log("game paused", i, "  ", talkerindex);
+      // // console.log("game paused", i, "  ", talkerindex);
 
       i++;
       continue;
@@ -454,7 +467,7 @@ setInterval(() => {
     if (games[i] && games[i].mode == 0) {
       let playerIndex = findPlayer(undefined, games[i].gameId);
       if (playerIndex == -1) {
-        console.log("player not found mode = 0, gID ", games[i].gameId)
+        // console.log("player not found mode = 0, gID ", games[i].gameId)
 
       }
       else {

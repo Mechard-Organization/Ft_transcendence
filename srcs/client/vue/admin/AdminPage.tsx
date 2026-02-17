@@ -55,7 +55,7 @@ export default function AdminPage() {
       }
 
       const res = await fetch("/api/updateUserAdmin", {
-        method: "POST",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: user.id, status }),
       });
@@ -67,11 +67,9 @@ export default function AdminPage() {
         return;
       }
 
-      // reset input
       status ? setAddUsername("") : setRemoveUsername("");
       alert("Action réussie ✅");
 
-      // refresh list
       fetchAdmins();
 
     } catch (err) {
@@ -80,11 +78,10 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF9E5] flex items-center justify-center px-6 py-10">
+    <div className="bg-[#FFF9E5] flex items-center justify-center px-6 py-10">
       <div className="w-full max-w-4xl bg-white/90 backdrop-blur-sm
                       rounded-3xl shadow-2xl border-4 border-[#FEE96E] p-10">
 
-        {/* Header */}
         <h1 className="text-4xl font-bold text-center text-[#8B5A3C] mb-10 flex items-center justify-center gap-3">
           <ShieldPlus className="w-9 h-9" />
           Administration
@@ -92,7 +89,6 @@ export default function AdminPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {/* Liste des admins */}
           <section className="bg-[#FFF9E5] rounded-3xl p-6 border-2 border-[#FEE96E]">
             <h2 className="text-2xl text-[#8B5A3C] mb-4 flex items-center gap-2">
               <Users className="w-6 h-6" />
@@ -124,7 +120,6 @@ export default function AdminPage() {
             )}
           </section>
 
-          {/* Ajouter admin */}
           <section className="bg-[#FFF9E5] rounded-3xl p-6 border-2 border-[#FEE96E]">
             <h2 className="text-2xl text-[#8B5A3C] mb-4 flex items-center gap-2">
               <ShieldPlus className="w-6 h-6" />

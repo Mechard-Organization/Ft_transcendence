@@ -17,16 +17,21 @@ export default function RankPage() {
     useEffect(() => {
     async function fetchPlayers() {
         try {
-        const res = await fetch("/api/getAllUsers"); // ton endpoint
+        const res = await fetch("/api/ranking");
         const json = await res.json();
 
-        // ⚡ Vérifier que json est bien un tableau
         const data: PlayerStats[] = Array.isArray(json) ? json : [];
+        console.log(data);
 
-        // Trier par highScore décroissant
-        data.sort((a, b) => b.highScore - a.highScore);
-
-        setPlayers(data);
+        setPlayers(data.map((user: any) => ({
+          id: user.id,
+          username: user.username,
+          avatarUrl: user.avatarUrl ?? "/uploads/profil/default.jpeg",
+          highScore: user.highScore,
+          gamesPlayed: user.gamesPlayed,
+          gamesWon: user.gamesWon,
+          winRate: user.gamesWon / user.gamesPlayed * 100
+        })));
         } catch (err) {
         console.error("Erreur fetch players:", err);
         }
@@ -35,8 +40,8 @@ export default function RankPage() {
     }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FFF9E5]">
-      <main className="flex-1 max-w-6xl mx-auto px-5 py-8">
+    <div className="flex flex-col bg-[#FFF9E5]">
+      <main className="max-w-6xl mx-auto px-5 py-8">
         <h1 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
           Classement des joueurs
         </h1>
@@ -88,9 +93,6 @@ export default function RankPage() {
         </div>
       </main>
 
-      <footer className="w-full">
-        <Footer />
-      </footer>
     </div>
   );
 }

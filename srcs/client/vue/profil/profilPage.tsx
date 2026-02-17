@@ -15,6 +15,15 @@ type UserStats = {
   admin?: boolean;
 };
 
+type MatchStats = {
+  id: number;
+  date: number;
+  my_username: string;
+  my_score: number;
+  adv_username: string;
+  adv_score: number;
+};
+
 type AdminUser = {
   id: number;
   username: string;
@@ -26,7 +35,7 @@ export default function ProfilePage() {
     id: 0,
     username: "",
     mail: "",
-    avatarUrl: "./uploads/profil/default.jpeg",
+    avatarUrl: "/uploads/profil/default.jpeg",
     winRate: 0,
     gamesPlayed: 0,
     gamesWon: 0,
@@ -34,8 +43,7 @@ export default function ProfilePage() {
     admin: false
   });
 
-  const [admins, setAdmins] = useState<AdminUser[]>([]);
-  const [newAdminName, setNewAdminName] = useState("");
+  const [matchs, setMatchs] = useState<MatchStats[]>([]);
 
   useEffect(() => {
     async function fetchUser() {
@@ -49,34 +57,85 @@ export default function ProfilePage() {
       });
       const data = await resUser.json();
 
+      const resNum = await fetch("/api/numMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataNum = await resNum.json();
+
+      const resWin = await fetch("/api/numWinMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataWin = await resWin.json();
+
+      const resHight = await fetch("/api/highScoreMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataHight = await resHight.json();
+
       setUserStats({
         id: data.id,
         username: data.username,
         mail: data.mail,
-        avatarUrl: data.avatarUrl ?? "./uploads/profil/default.jpeg",
-        winRate: data.winRate ?? 0,
-        gamesPlayed: data.gamesPlayed ?? 0,
-        gamesWon: data.gamesWon ?? 0,
-        highScore: data.highScore ?? 0,
+        avatarUrl: data.avatarUrl ?? "/uploads/profil/default.jpeg",
+        winRate: dataWin.Win / dataNum.Match,
+        gamesPlayed: dataNum.Match,
+        gamesWon: dataWin.Win,
+        highScore: dataHight.max_score,
         admin: data.admin ?? false
       });
 
-      if (data.admin) loadAdmins();
+
+      const resmatchs = await fetch("/api/getMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataMatchs = await resmatchs.json();
+      console.log(dataMatchs);
+      setMatchs(
+        dataMatchs.map((match:any) => {
+          if (match.name_player1 === data.username)
+          {
+            return {
+              id: match.id_match,
+              date: match.date,
+              my_username: match.name_player1,
+              adv_username: match.name_player2,
+              my_score: match.score1,
+              adv_score: match.score2
+            };
+          }
+          else
+          {
+            return {
+              id: match.id_match,
+              date: match.date,
+              my_username: match.name_player2,
+              adv_username: match.name_player1,
+              my_score: match.score2,
+              adv_score: match.score1
+            };
+          }
+        }),
+      );
     }
     fetchUser();
   }, []);
 
-  async function loadAdmins() {
-    try {
-      const res = await fetch("/api/users");
-      if (!res.ok) return;
-      const allUsers = await res.json();
-      const admins = allUsers.filter((u: any) => u.admin);
-      setAdmins(admins);
-    } catch (err) {
-      console.error("Erreur récupération admins:", err);
-    }
-  }
+
+  useEffect(() => {
+    console.log("userStats mis à jour :", userStats);
+  }, [userStats]);
+
+  useEffect(() => {
+    console.log("matchs mis à jour :", matchs);
+  }, [matchs]);
 
   const handleFile = async (file: File) => {
     if (file.type !== "image/jpeg") {
@@ -97,50 +156,12 @@ export default function ProfilePage() {
     setUserStats(prev => ({ ...prev, avatarUrl: data.avatarUrl }));
   };
 
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    window.location.href = "/Login";
-  };
 
-  const addAdmin = async () => {
-    if (!newAdminName.trim()) return;
 
-    try {
-      const resUser = await fetch("/api/getuserbyname", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: newAdminName })
-      });
-      const user = await resUser.json();
-      if (!user?.id) return alert("Utilisateur introuvable");
-
-      await fetch("/api/updateUserAdmin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: user.id, status: true })
-      });
-
-      setNewAdminName("");
-      loadAdmins();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const removeAdmin = async (id: number) => {
-    if (id === userStats.id) return alert("Vous ne pouvez pas vous supprimer vous-même");
-    await fetch("/api/updateUserAdmin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, status: false })
-    });
-    loadAdmins();
-  };
-
-  return (
-    <div className="flex flex-col min-h-215 bg-[#FFF9E5] relative">
+return (
+    <div className="flex flex-col">
       <main className="flex-grow">
-        <div className="max-w-4xl mx-auto px-6 pt-14 pb-12">
+        <div className="max-w-4xl mx-auto px-6 pt-8 pb-5">
 
           {/* Profil */}
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6 flex flex-col sm:flex-row items-center gap-8">
@@ -161,76 +182,74 @@ export default function ProfilePage() {
               <p className="text-[#A67C52] mt-1">{userStats.mail}</p>
             </div>
             <div className="flex flex-col gap-2">
-              <button onClick={() => window.location.href = "/settings"} className="p-4 rounded-full bg-[#FEE96E] hover:scale-105 transition"><Settings className="w-6 h-6 text-[#8B5A3C]"/></button>
+              <button onClick={() => window.location.href = "/settings"} className="p-4 rounded-full bg-[#FEE96E] hover:scale-105 transition">
+                <Settings className="w-6 h-6 text-[#8B5A3C]"/>
+              </button>
             </div>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
             <div className="bg-white/90 rounded-3xl p-4 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
               <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
                 <Target className="w-6 h-6 text-[#8B5A3C]" />
               </div>
               <h3 className="text-xl text-[#8B5A3C] mb-2">Parties jouées</h3>
-              <p className="text-5xl font-bold text-[#8B5A3C]">{userStats.gamesPlayed}</p>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.gamesPlayed)}</p>
             </div>
             <div className="bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
               <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
                 <Trophy className="w-6 h-6 text-[#8B5A3C]" />
               </div>
               <h3 className="text-xl text-[#8B5A3C] mb-2">Victoires</h3>
-              <p className="text-5xl font-bold text-[#8B5A3C]">{userStats.gamesWon}</p>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.gamesWon)}</p>
             </div>
             <div className="bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
               <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
                 <Trophy className="w-6 h-6 text-[#8B5A3C]" />
               </div>
-              <h3 className="text-xl text-[#8B5A3C] mb-2">Meilleur score</h3>
-              <p className="text-5xl font-bold text-[#8B5A3C]">{userStats.highScore}</p>
+              <h3 className="text-xl text-[#8B5A3C] mb-2">Meilleur Score</h3>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.highScore)}</p>
             </div>
           </div>
 
-          {/* Admin Panel */}
-          {userStats.admin == true && (
-            <div className="mt-12 bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-4">
-              <h3 className="text-2xl text-[#8B5A3C] mb-4 flex items-center gap-2">
-                <UserRoundCheck className="w-6 h-6" />
-                Admin Panel
-              </h3>
-
-              {/* Ajouter un admin */}
-              <div className="flex gap-2 mb-4">
-                <input
-                  type="text"
-                  placeholder="Nom d'utilisateur"
-                  value={newAdminName}
-                  onChange={e => setNewAdminName(e.target.value)}
-                  className="flex-1 px-4 py-2 rounded-full border-2 border-[#FEE96E]"
-                />
-                <button onClick={addAdmin} className="px-4 py-2 bg-[#FEE96E] text-[#8B5A3C] rounded-full hover:scale-105 transition flex items-center gap-2">
-                  <UserRoundPlus className="w-5 h-5" /> Ajouter
-                </button>
-              </div>
-
-              {/* Liste des admins */}
-              <ul className="space-y-2 text-[#8B5A3C]">
-                {admins.map(a => (
-                  <li key={a.id} className="flex justify-between items-center bg-[#FFF9E5] px-4 py-2 rounded-full">
-                    {a.username}
-                    <button onClick={() => removeAdmin(a.id)} className="p-1 rounded-full hover:bg-red-200">
-                      <UserRoundMinus className="w-4 h-4" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+          {/* Tableau scrollable */}
+          <div className="mt-10 bg-white/95 rounded-3xl shadow-lg border-4 border-[#FEE96E] h-70 flex flex-col overflow-hidden">
+            <div className="overflow-y-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-[#FEE96E] sticky top-0 z-10">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Date</th>
+                    <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Adversaire</th>
+                    <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Score</th>
+                    <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">Résultat</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 text-[#8B5A3C]">
+                  {matchs.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-4 text-center font-medium">Aucune partie jouée</td>
+                    </tr>
+                  ) : (
+                    matchs.map(match => {
+                      const isWin = match.my_score > match.adv_score;
+                      return (
+                        <tr key={match.id} className={isWin ? "bg-[#C3F99A]" : "bg-[#F9D09A]"}>
+                          <td className="px-6 py-4">{new Date(match.date).toLocaleDateString()}</td>
+                          <td className="px-6 py-4">{match.adv_username}</td>
+                          <td className="px-6 py-4">{Math.round(match.my_score)} - {Math.round(match.adv_score)}</td>
+                          <td className="px-6 py-4 font-bold">{isWin ? "Victoire" : "Défaite"}</td>
+                        </tr>
+                      )
+                    })
+                  )}
+                </tbody>
+              </table>
             </div>
-          )}
+          </div>
+
         </div>
       </main>
-
-      <footer className="w-full">
-        <Footer />
-      </footer>
     </div>
   );
 }

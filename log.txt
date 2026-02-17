@@ -1,0 +1,18 @@
+type AuthStatus = "loading" | "authenticated" | "anonymous";
+
+const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
+
+(async () => {
+      try {
+        const auth = await isAuthenticated();
+        
+        if (auth?.authenticated) { }
+        else {
+          
+        }
+      } catch {
+        if (!mounted) return;
+        setAuthStatus("anonymous");
+      }
+}
+)

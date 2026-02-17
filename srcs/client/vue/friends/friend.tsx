@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../access/authenticator";
-import { X, Check, UserMinus2, UserSearch, UserPlus, UserCheck, MailMinus, UserMinus, UserX, MailPlus  } from "lucide-react";
+import { X, Check, UserMinus2, UserSearch, UserPlus, UserCheck, MailMinus, UserMinus, UserX, MailPlus, BellPlus } from "lucide-react";
 
 type Friend = {
   id: number;
@@ -12,6 +12,7 @@ type Friend = {
 export default function FriendsPage() {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [requests, setRequests] = useState<Friend[]>([]);
+  const [blocked, setBlocked] = useState<Friend[]>([]);
   const [usernameInput, setUsernameInput] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
 
@@ -23,6 +24,7 @@ export default function FriendsPage() {
       setUserId(auth.id);
       loadFriends(auth.id);
       loadRequests(auth.id);
+      loadBlocked(auth.id);
     })();
   }, []);
 
@@ -37,8 +39,6 @@ export default function FriendsPage() {
       loadFriends(userId);
       loadRequests(userId);
     };
-
-    return () => ws.close();
   }, [userId]);
 
   const loadFriends = async (id: number) => {
@@ -49,6 +49,41 @@ export default function FriendsPage() {
     });
     setFriends(await res.json());
   };
+
+  const getBlockedUsers = async (id: number) => {
+  try {
+    const res = await fetch("/api/getBlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_user: id }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Erreur récupération blocks");
+    }
+
+    const data = await res.json();
+    console.log("Blocked users:", data);
+
+    setBlocked(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+const loadBlocked = async (id: number) => {
+  const res = await fetch("/api/getBlock", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_user: id }),
+  });
+
+  const data = await res.json();
+  console.log("Blocked loaded:", data);
+  setBlocked(data);
+};
+
 
   const loadRequests = async (id: number) => {
     const res = await fetch("/api/friend/getFriendNV", {
@@ -81,6 +116,31 @@ export default function FriendsPage() {
     loadRequests(userId);
   };
 
+  const blockFriend = async (id_friend: number) => {
+    if (!userId) return;
+    await fetch("/api/creatBlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_user: userId, id_block: id_friend }),
+    });
+    loadFriends(userId);
+    loadBlocked(userId);
+    loadRequests(userId);
+  };
+
+  const unblockFriend = async (id_friend: number) => {
+    if (!userId) return;
+    await fetch("/api/deleteBlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_user: userId, id_block: id_friend }),
+    });
+    loadFriends(userId);
+    loadBlocked(userId);
+    loadRequests(userId);
+  };
+
+
   const addFriend = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!usernameInput || !userId) return;
@@ -112,7 +172,7 @@ export default function FriendsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-215 relative">
+    <div className="flex flex-col relative">
 <main className="flex-grow w-full max-w-6xl mx-auto px-6 py-10">
   <h1 className="text-[#8B5A3C] text-3xl mb-10 flex items-center justify-center gap-2"><UserCheck/> Amis</h1>
 
@@ -127,7 +187,7 @@ export default function FriendsPage() {
       placeholder="Nom d'utilisateur"
       value={usernameInput}
       onChange={(e) => setUsernameInput(e.target.value)}
-      className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] text-[#8B5A3C]"
+      className="flex-1 px-6 py-3 bg-[#FFF9E5] sfs rounded-xl border-2 border-[#FEE96E] text-[#8B5A3C]"
       />
     <button
       type="submit"
@@ -139,16 +199,21 @@ export default function FriendsPage() {
   </form>
 
   {/* Listes */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+  <div className="grid grid-cols-1 md:grid-cols-1 gap-8 items-stretch">
     {/* Requêtes */}
-    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
-      <h2 className="text-[#8B5A3C] text-xl mb-4">⏳ Requêtes</h2>
+    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] flex flex-col h-[150px]">
+      <h2 className="text-[#8B5A3C] text-xl flex-shrink-0">
+         <BellPlus className="text-[#8B5A3C] text-xl mb-4">
+          </BellPlus>
+         </h2>
 
       {requests.length === 0 && (
-        <p className="text-[#A67C52]">Aucune requête</p>
+        <p className="text-[#8B5A3C] bg-[#FFF9E5] px-4 py-3 rounded-xl">
+            Aucune requête
+        </p>
       )}
 
-      <ul className="space-y-3">
+      <ul className="space-y-3 flex-1 overflow-y-auto pr-2">
         {requests.map((r) => (
           <li
             key={r.id}
@@ -177,32 +242,68 @@ export default function FriendsPage() {
         ))}
       </ul>
     </section>
-
     {/* Amis */}
-    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]">
-      <h2 className="text-[#8B5A3C] text-xl mb-4"> Amis</h2>
+      <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] 
+                    flex flex-col h-[150px]">
+      <h2 className="text-[#8B5A3C] text-xl mb-4 flex-shrink-0"> <UserCheck/></h2>
 
       {friends.length === 0 && (
-        <p className="text-[#A67C52]">Aucun ami</p>
+        <p className="text-[#8B5A3C] bg-[#FFF9E5] px-4 py-3 rounded-xl">
+            Aucun ami
+        </p>
       )}
 
-      <ul className="space-y-3">
+      <ul className="space-y-3 flex-1 overflow-y-auto pr-2">
         {friends.map((f) => (
           <li
             key={f.id}
             className="flex items-center justify-between bg-[#FFF9E5]
                        px-4 py-3 rounded-xl"
           >
-            <span className="font-medium">{f.username}</span>
+            <span className="font-medium text-[#8B5A3C]">{f.username}</span>
 
             <div className="flex gap-2">
-              <button onClick={() => rejectFriend(f.id)} className="p-2 rounded-full hover:bg-red-200"><UserX className="w-5 h-5" /> </button>
-              <button onClick={() => blockFriend(f.id)} className="p-2 rounded-full hover:bg-red-200"><UserMinus className="w-5 h-5" /> </button>
+              <button onClick={() => rejectFriend(f.id)} className="p-2 rounded-full hover:bg-red-200 text-[#8B5A3C]"><UserMinus className="w-5 h-5" /> </button>
+              <button onClick={() => blockFriend(f.id)} className="p-2 rounded-full hover:bg-red-200 text-[#8B5A3C]"><UserX className="w-5 h-5" /> </button>
             </div>
           </li>
         ))}
       </ul>
     </section>
+    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] 
+                    flex flex-col h-[150px]">
+      <h2 className="text-[#8B5A3C] text-xl mb-4 flex-shrink-0">
+        <UserX />
+      </h2>
+
+      {blocked.length === 0 && (
+        <p className="flex items-center text-[#8B5A3C] justify-between bg-[#FFF9E5] px-4 py-3 rounded-xl">
+          Aucun bloque
+        </p>
+      )}
+
+      <ul className="space-y-3 flex-1 overflow-y-auto pr-2">
+        {blocked.map((f) => (
+          <li
+            key={f.id}
+            className="flex items-center justify-between bg-[#FFF9E5]
+                      px-4 py-3 rounded-xl"
+          >
+            <span className="font-medium text-[#8B5A3C]">{f.username}</span>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => unblockFriend(f.id)}
+                className="p-2 rounded-full hover:bg-red-200 text-[#8B5A3C]"
+              >
+                <UserX className="w-5 h-5" />
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
   </div>
 </main>
 
