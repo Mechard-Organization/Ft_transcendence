@@ -14,7 +14,7 @@ const team: TeamMember[] = [
   {
     name: "Lylou",
     role: "Développeuse Backend",
-    avatarUrl: "/uploads/profil/1.jpeg",
+    avatarUrl: "/assets/imgs/abutet_round.png",
     bio: "Abutet",
     linkedin: "https://linkedin.com/in/lylou",
     github: "https://github.com/LylouGavmild"
@@ -22,7 +22,7 @@ const team: TeamMember[] = [
   {
     name: "Mehdi",
     role: "Developper",
-    avatarUrl: "/uploads/profil/2.jpeg",
+    avatarUrl: "/assets/imgs/mel-yand_round.png",
     bio: "Mel-yand",
     linkedin: "https://linkedin.com/in/mehdi",
     github: "https://github.com/Shepardinio"
@@ -30,7 +30,7 @@ const team: TeamMember[] = [
   {
     name: "Maxime",
     role: "Developper",
-    avatarUrl: "/uploads/profil/3.jpeg",
+    avatarUrl: "/assets/imgs/mechard_round.png",
     bio: "Mechard",
     linkedin: "https://www.linkedin.com/in/maxime-echard/",
     github: "https://github.com/M2000"
@@ -38,7 +38,7 @@ const team: TeamMember[] = [
   {
     name: "Abdul",
     role: "Developper",
-    avatarUrl: "/uploads/profil/7.jpeg",
+    avatarUrl: "/assets/imgs/ajamshid_round.png",
     bio: "Ajamshid",
     linkedin: "https://linkedin.com/in/tonLinkedin",
     github: "https://github.com/ajamshid2000"
@@ -46,7 +46,7 @@ const team: TeamMember[] = [
   {
     name: "Jeanne",
     role: "Développeuse Front-end",
-    avatarUrl: "/uploads/profil/5.jpeg",
+    avatarUrl: "/assets/imgs/jealefev_round.png",
     bio: "Jealefev",
     linkedin: "https://linkedin.com/in/tonLinkedin",
     github: "https://github.com/namoule"
@@ -55,11 +55,11 @@ const team: TeamMember[] = [
 
 export default function AboutPage() {
   return (
-    <div className="flex flex-col min-h-215 bg-[#FFF9E5]">
-      <main className="flex-1 max-w-6xl mx-auto px-5 py-8">
-        <h1 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
+    <div className="">
+      <main className="max-w-6xl mx-auto px-5 py-8">
+        <h2 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
           À propos de notre équipe
-        </h1>
+        </h2>
 
         <div className="flex justify-center gap-6 flex-wrap">
         {team.map((member, idx) => (
@@ -111,9 +111,7 @@ export default function AboutPage() {
         </div>
       </main>
 
-      <footer className="w-full">
-        <Footer />
-      </footer>
+
     </div>
   );
 }

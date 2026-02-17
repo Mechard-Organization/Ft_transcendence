@@ -24,7 +24,7 @@ export default function HomePage() {
     id: 0,
     username: "",
     mail: "",
-    avatarUrl: "./uploads/profil/default.jpeg",
+    avatarUrl: "/uploads/profil/default.jpeg",
     winRate: 0,
     gamesPlayed: 0,
     gamesWon: 0,
@@ -53,7 +53,7 @@ export default function HomePage() {
             id: userData.id,
             username: userData.username,
             mail: userData.mail,
-            avatarUrl: userData.avatarUrl ?? "./uploads/profil/default.jpeg",
+            avatarUrl: userData.avatarUrl ?? "/uploads/profil/default.jpeg",
             winRate: userData.winRate,
             gamesPlayed: userData.gamesPlayed,
             gamesWon: userData.gamesWon,
@@ -73,7 +73,6 @@ export default function HomePage() {
     };
   }, []);
 
-  // Composant pour un bloc cliquable
   const ActionCard = ({
     title,
     description,
@@ -97,16 +96,15 @@ export default function HomePage() {
   );
 
   return (
-    <div className="flex flex-col min-h-215 relative">
       <main className="flex-grow flex flex-col items-center mt-8">
         {/* Header / Welcome */}
         <div className="text-center">
                   <img
           src="/uploads/gif/cookie.gif"
           alt="cookie"
-          className="w-54 h-54 object-cover rounded-xl mt-10 margin-box"
+          className="w-44 h-44 object-cover rounded-xl mt-10 margin-box"
         />
-          <h1 className="text-6xl mb-4 text-[#8B5A3C]">Bienvenue !</h1>
+          <h2 className="text-6xl mb-4 text-[#8B5A3C]">Bienvenue !</h2>
           <p className="text-2xl text-[#A67C52]">Jouez, chattez et amusez-vous !</p>
         </div>
 
@@ -149,13 +147,6 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* GIF */}
-
       </main>
-
-      <footer className="w-full">
-        <Footer />
-      </footer>
-    </div>
   );
 }

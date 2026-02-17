@@ -37,6 +37,7 @@ services:
       - ./srcs/server:/app/server   # app.ts (le router du front)
       - ./srcs/services:/app/services
       - ./uploads:/app/uploads
+      - ./.assets:/app/assets
       - /app/node_modules
     env_file: .env
     networks:

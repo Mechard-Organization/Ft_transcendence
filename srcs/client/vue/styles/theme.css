@@ -131,11 +131,15 @@
   body {
     @apply bg-background text-foreground;
   }
-
   /**
   * Default typography styles for HTML elements (h1-h4, p, label, button, input).
   * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
   */
+
+  html, body, #root {
+    height: 100%;
+  }
+
 
   html {
     font-size: var(--font-size);
@@ -166,8 +170,8 @@
   }
 
 .page-layout {
+  flex: 1;
   display: flex;
-  height: calc(100vh - 120px);
   padding: 2rem;
   gap: 2rem;
 }
@@ -293,12 +297,70 @@
   margin-right: auto;
 }
 
+.margin-top {
+  margin: 0px;
+  padding: 0px;
+  margin-left: auto;
+  margin-bottom: 60px;
+  margin-right: auto;
+}
+
 .margin-title {
   margin: 0px;
 }
 
-.footer {
-  position: sticky;
-  bottom: 0;
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+.oauth-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  color: #c9c5b5;
+  font-size: 12px;
+}
+
+.oauth-divider::before,
+.oauth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #c9c5b5;
+  opacity: 0.4;
+}
+
+.google-btn {
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #dadce0;
+  border-radius: 100px;
+  background: #ffffff;
+  color: #3c4043;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.google-btn:hover {
+  background: #f8f9fa;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.google-icon {
+  display: inline-block;
+}

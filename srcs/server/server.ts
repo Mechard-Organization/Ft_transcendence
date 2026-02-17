@@ -12,6 +12,7 @@ import userRoutes from "./routes/users.routes";
 import matchRoutes from "./routes/matchs.routes";
 import messageRoutes from "./routes/messages.routes";
 import friendRoutes from "routes/friends.routes";
+import blockRoutes from "routes/block.routes";
 import metricsRoutes from "./routes/metrics.routes";
 import websocketPlugin from "./plugin/websocket";
 
@@ -41,6 +42,7 @@ async function start() {
   // Routes
   await fastify.register(authRoutes, { prefix: "/api/auth" });
   await fastify.register(friendRoutes, { prefix: "/api/friend" });
+  await fastify.register(blockRoutes, { prefix: "/api" });
   await fastify.register(userRoutes, { prefix: "/api" });
   await fastify.register(matchRoutes, { prefix: "/api" });
   await fastify.register(messageRoutes, { prefix: "/api" });

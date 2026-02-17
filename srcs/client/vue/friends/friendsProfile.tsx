@@ -21,7 +21,7 @@ type UserStats = {
 
 const ProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const userId: number = Number(3);
+  const userId: number = Number(id);
 
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isMe, setIsMe] = useState<boolean>(false);
@@ -35,6 +35,7 @@ const ProfilePage: React.FC = () => {
   useEffect((): void => {
     const fetchUser = async (): Promise<void> => {
       try {
+        console.log("userid ",userId);
         const res: Response = await fetch("/api/getuser", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -45,16 +46,37 @@ const ProfilePage: React.FC = () => {
 
         const data: UserStats = await res.json();
 
-        setUserStats({
-          id: data.id,
-          username: data.username,
-          mail: data.mail,
-          avatarUrl: data.avatarUrl ?? "./uploads/profil/default.jpeg",
-          winRate: data.winRate ?? 0,
-          gamesPlayed: data.gamesPlayed ?? 0,
-          gamesWon: data.gamesWon ?? 0,
-          highScore: data.highScore ?? 0,
-        });
+        const resNum = await fetch("/api/numMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataNum = await resNum.json();
+
+      const resWin = await fetch("/api/numWinMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataWin = await resWin.json();
+
+      const resHight = await fetch("/api/highScoreMatch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name_player: data.username })
+      });
+      const dataHight = await resHight.json();
+
+      setUserStats({
+        id: data.id,
+        username: data.username,
+        mail: data.mail,
+        avatarUrl: data.avatarUrl ?? "/uploads/profil/default.jpeg",
+        winRate: dataWin.Win / dataNum.Match,
+        gamesPlayed: dataNum.Match,
+        gamesWon: dataWin.Win,
+        highScore: dataHight.max_score
+      });
       } catch (error) {
         console.error("Erreur récupération profil :", error);
       }
@@ -109,7 +131,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-215 relative">
+    <div className="flex flex-col relative">
       <div className=" mb-8 max-w-4xl w-full mx-auto text-center">
         {isMe && (
           <input
@@ -161,7 +183,6 @@ const ProfilePage: React.FC = () => {
         />
       </div>
 
-      <Footer />
     </div>
   );
 };

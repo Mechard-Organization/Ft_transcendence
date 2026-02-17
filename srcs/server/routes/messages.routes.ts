@@ -4,12 +4,15 @@ import * as db from "@config/database/db";
 export default async function messageRoutes(fastify: FastifyInstance) {
 
   fastify.post("/messages", async (request) => {
-    const { id_group } = request.body as any;
+    const { id_group, id } = request.body as any;
     let saved: any;
+    if (!id) {
+      throw fastify.httpErrors.badRequest("Invalid content");
+    }
     if (id_group)
-      saved = db.getMessagesInGroup(id_group);
+      saved = db.getMessagesInGroup(id_group, id);
     else
-      saved = db.getAllMessages();
+      saved = db.getAllMessages(id);
     return saved;
   });
 
@@ -20,7 +23,9 @@ export default async function messageRoutes(fastify: FastifyInstance) {
       throw fastify.httpErrors.badRequest("Invalid content");
     }
 
-    const saved = db.addMessage(content, id, id_group);
+    const info = db.addMessage(content, id, id_group);
+    const saved = db.getMessagesById(info.id);
+    console.log("hello saved: ", saved);
 
     fastify.websocketServer.clients.forEach(client => {
       if (client.readyState === 1) {
@@ -31,14 +36,13 @@ export default async function messageRoutes(fastify: FastifyInstance) {
     return saved;
   });
 
-  fastify.post("/addUserToGroup", async (request) => {
+  fastify.post("/creatGroup", async (request) => {
     const { user, me, id_group } = request.body as any;
     let group = id_group;
 
     if (!user || !me) {
       throw fastify.httpErrors.badRequest("Invalid user");
     }
-    console.log(user, me.id, id_group);
 
     if (!id_group)
     {
@@ -54,11 +58,65 @@ export default async function messageRoutes(fastify: FastifyInstance) {
 
     fastify.websocketServer.clients.forEach(client => {
       if (client.readyState === 1) {
-        client.send(JSON.stringify({ type: "new_message", data: { saved } }));
+        client.send(JSON.stringify({ type: "new_message", data: {saved, id_group: group} }));
       }
     });
 
     return {group};
+  });
+
+  fastify.post("/addUserToGroup", async (request) => {
+    const { user, me, id_group } = request.body as any;
+    let group: any;
+
+    if (!user || !me) {
+      throw fastify.httpErrors.badRequest("Invalid user");
+    }
+
+    if (!id_group)
+    {
+      throw fastify.httpErrors.badRequest("Invalid group");
+    }
+
+    if (db.userInGroup(id_group, user.id))
+    {
+      throw fastify.httpErrors.badRequest("already in the group");
+    }
+
+    if (!db.YRFriend(me.id, user.id))
+    {
+      throw fastify.httpErrors.badRequest("it's not your friend");
+    }
+
+
+    let lgroup = db.getGroup(id_group);
+    let newg: boolean;
+
+    if (lgroup.length === 2)
+    {
+      group = db.createGroup(me.username + "'s team");
+      lgroup.map((g: any) => {
+        db.addUserGroup(group.id, g.id_user);
+        db.addMessage( me.username + " has join the group", g.id_user, group.id);
+      })
+      group = db.getGroup(group.id)[0]
+      newg = true;
+    }
+    else
+    {
+      group = lgroup[0];
+      newg = false;
+    }
+
+    db.addUserGroup(group.id, user.id);
+    const saved = db.addMessage( user.username + " has join the group", me.id, group.id);
+
+    fastify.websocketServer.clients.forEach(client => {
+      if (client.readyState === 1) {
+        client.send(JSON.stringify({ type: "new_message", data: {saved, id_group: group.id} }));
+      }
+    });
+    return {group, newg};
   });
 
 
@@ -69,6 +127,15 @@ export default async function messageRoutes(fastify: FastifyInstance) {
       throw fastify.httpErrors.badRequest("Invalid user");
     }
     return db.getAllUserGroup(id);
+  });
+
+  fastify.post("/getGroupMembers", async (request) => {
+    const { id_group } = request.body as any;
+
+    if (!id_group) {
+      throw fastify.httpErrors.badRequest("Invalid user");
+    }
+    return db.getGroupMembers(id_group);
   });
 
   fastify.post("/UserInGroup", async (request) => {
