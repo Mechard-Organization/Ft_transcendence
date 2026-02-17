@@ -368,7 +368,7 @@ const fetchGroupMembers = async () => {
 
 
   return (
-    <div className="flex flex-col bg-[#FFF9E5]">
+    <div className="min-h-[calc(100vh-8rem)] flex flex-col bg-[#FFF9E5]">
       <div className="flex w-full max-w-7xl mx-auto gap-6 p-6">
         <div className="w-1/3 h-191 bg-white/80 rounded-2xl p-4 shadow-md">
           <h2 className="text-xl font-bold text-[#8B5A3C] mb-4">
@@ -490,9 +490,11 @@ const fetchGroupMembers = async () => {
                   </div>
                   <p>{msg.content}</p>
                   <p className="text-xs opacity-60 mt-1">
-                    {new Date(msg.timestamp).toLocaleTimeString("fr-FR", {
+                    {new Date(msg.timestamp).toLocaleDateString("fr-FR", {
                       hour: "2-digit",
                       minute: "2-digit",
+                      day: "2-digit",
+                      month: "2-digit",
                     })}
                   </p>
                 </div>

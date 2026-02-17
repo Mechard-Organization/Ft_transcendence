@@ -23,7 +23,7 @@ export default function GamePage() {
   }, []);
 
   return (
-    <div className="flex flex-col margin-bot">
+    <div className="min-h-[calc(100vh-8rem)] flex flex-col margin-bot">
       <main className="flex items-center justify-center">
 
         <canvas
