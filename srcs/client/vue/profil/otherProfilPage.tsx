@@ -130,7 +130,7 @@ export default function OtherProfilPage({ header, footer }: Props) {
     <>
       {header}
 
-      <main id="mainContent" className="">
+      <main id="mainContent" className="min-h-[calc(100vh-8rem)]">
         <h1>Profil</h1>
 
         <section style={{ marginBottom: 20 }}>

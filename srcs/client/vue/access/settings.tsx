@@ -222,7 +222,7 @@ export default function UserSettings() {
 
 
   return (
-  <div className="bg-[#FFF9E5] flex flex-col">
+  <div className="min-h-[calc(100vh-8rem)] bg-[#FFF9E5] flex flex-col">
     <main className="flex-grow max-w-3xl mx-auto px-6 py-12 space-y-8">
 
       <div className="bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6 text-center">

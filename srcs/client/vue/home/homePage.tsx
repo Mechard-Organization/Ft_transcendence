@@ -96,7 +96,7 @@ export default function HomePage() {
   );
 
   return (
-      <main className="flex-grow flex flex-col items-center mt-8">
+      <main className="flex-grow min-h-[calc(100vh-8rem)]  flex flex-col items-center margin-bot">
         {/* Header / Welcome */}
         <div className="text-center">
                   <img
@@ -146,7 +146,6 @@ export default function HomePage() {
             />
           </div>
         )}
-
       </main>
   );
 }
