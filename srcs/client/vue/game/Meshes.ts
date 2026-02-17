@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Meshes.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mechard <mechard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/01/29 13:24:09 by mechard          ###   ########.fr       */
+/*   Updated: 2026/02/16 15:57:57 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ export const defaultSettings: Settings = {
 
 export function setNewGame(newGameGiven: NewGame) {
   thisNewGame = newGameGiven;
-  // console.log("newgame set with ", thisNewGame.type);
+  // // console.log("newgame set with ", thisNewGame.type);
 }
 export function resetCounter() {
   counter = [0, 0];
@@ -130,11 +130,11 @@ export function setValues(input: Talker | undefined) {
   if (input.playerCount > 0 && (counter[0] == finalGoal || counter[1] == finalGoal || counter[0] == -1)) {
     saveValues(input, counter);
     thisPlayer.gameId = undefined;
-    console.log("creating disposableui");
+    // console.log("creating disposableui");
     createdisposableUI(0);
     return;
   }
-  // console.log("setVAlues called");
+  // // console.log("setVAlues called");
   if (!scene) return;
 
   const paddle1 = scene.getMeshByName("paddle1");
@@ -145,7 +145,7 @@ export function setValues(input: Talker | undefined) {
 
   const ball = scene.getMeshByName("ball");
   ball && (ball.position = new Vector3(input.ballpos.x, input.ballpos.y, input.ballpos.z));
-  console.log("setvalues called");
+  // console.log("setvalues called");
   thisPlayer.gameId = input.gameId;
 }
 
@@ -265,12 +265,12 @@ drag1.onDragObservable.add((event: any) => {
 });
 drag1.onDragStartObservable.add(() => {
   isDragging1 = true;
-  // console.log("is dragging 1");
+  // // console.log("is dragging 1");
 });
 
 drag1.onDragEndObservable.add(() => {
   isDragging1 = false;
-  // console.log("is dragging 11");
+  // // console.log("is dragging 11");
 });
 
 const drag2 = new PointerDragBehavior({
@@ -281,12 +281,12 @@ drag2.onDragObservable.add((event: any) => {
 });
 drag2.onDragStartObservable.add(() => {
   isDragging2 = true;
-  // console.log("is dragging 2");
+  // // console.log("is dragging 2");
 });
 
 drag2.onDragEndObservable.add(() => {
   isDragging2 = false;
-  // console.log("is dragging 21");
+  // // console.log("is dragging 21");
 });
 
 export let thisPlayer: Player = {
@@ -388,7 +388,7 @@ export async function pong(canvas) {
     if (message.type === "Playername" && !username) {
       thisPlayer.username = message.username;
       username = message.username;
-      console.log("Username set to", username);
+      // console.log("Username set to", username);
     }
 
     if (message.type === "talker") setValues(message);

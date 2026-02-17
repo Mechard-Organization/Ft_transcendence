@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Buttons.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jealefev <jealefev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/13 14:50:08 by jealefev         ###   ########.fr       */
+/*   Updated: 2026/02/16 15:56:06 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,7 +368,7 @@ export function createRemotePlayBtn(input: InputText): Button {
         mode: 1,
         playername: [username, input.text]
       }
-      console.log("new game created ", newGame)
+      // console.log("new game created ", newGame)
       setNewGame(newGame);
 
       if (disposableUI) {
@@ -383,9 +383,10 @@ export function createRemotePlayPlayBtn(input: InputText): Button {
   const addBtn = Button.CreateSimpleButton("joinGameBtn");
   buttonStyler(addBtn, "Join Remote Game");
   addBtn.onPointerUpObservable.add(() => {
-    if (input.text === "" || Number(input.text) == null)
+    if (input.text === "" || Number.isNaN(Number(input.text)))
       input.background = "rgba(255, 110, 110, 1)";
     else {
+      // console.log("the input number is ", Number(input.text))
       mainUI.rootContainer.isVisible = false;
       mainUI.isForeground = false;
       multiUI.rootContainer.isVisible = false;
@@ -404,7 +405,7 @@ export function createRemotePlayPlayBtn(input: InputText): Button {
         gameId: Number(input.text),
         playername: [username, "player2"]
       }
-      console.log("new game created ", newGame)
+      // console.log("new game created ", newGame)
       setNewGame(newGame);
 
       if (disposableUI) {
@@ -437,7 +438,7 @@ export function createCyberBtn(): Button {
       c.diffuseColor = new Color3(0, 0, 0);
       let light = scene.getLightByName("light");
       if (!light)
-        console.log("there is not light")
+        // console.log("there is not light")
       light.intensity = 0;
       colorType = 0;
     }
@@ -467,7 +468,7 @@ export function createNaturalBtn(): Button {
 
       let light = scene.getLightByName("light");
       if (!light)
-        console.log("there is not light")
+        // console.log("there is not light")
       light.intensity = 1;
       colorType = 1;
     }
@@ -496,7 +497,7 @@ export function createDefaultBtn(): Button {
     c.diffuseColor = new Color3(0, 0, 0);
     let light = scene.getLightByName("light");
     if (!light)
-      console.log("there is not light")
+      // console.log("there is not light")
     light.intensity = defaultSettings.lightIntensity;
     colorType = defaultSettings.colorType;
   });
