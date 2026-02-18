@@ -1,19 +1,14 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
 <div align="center">
-
-### 💾 Version 💾
-🇯🇵 [日本語](./README.jp.md) • 🇫🇷 [Français](./README.md)
-
+  <strong>💾 Version 💾</strong><br><br>
+  🇯🇵 <a href="./README.jp.md">日本語</a> • 
+  🇫🇷 <a href="./README.md">Français</a>
 </div>
 
 ---
 
-<div align="center">
-
-### Commands to clone the transcendence repository
-
-</div>
+<h2 align="center">Commands to clone the transcendence repository</h2>
 
 <details><summary> 🌍 From github</summary>
 
