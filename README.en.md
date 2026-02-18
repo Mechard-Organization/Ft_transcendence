@@ -62,6 +62,7 @@ The project consists of a real-time multiplayer Pong platform enhanced with:
 - Secure infrastructure using HTTPS and reverse proxy
 
 The objective was to build a production-ready web application combining modern web technologies, cybersecurity principles, DevOps practices, and real-time systems.
+</br>
 
 ---
 
