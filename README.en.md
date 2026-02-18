@@ -1,11 +1,10 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
-<div align="center">
-
-## 💾 Version 💾
-🇯🇵 [日本語](./README.jp.md) • 🇫🇷 [Français](./README.md)
-
-</div>
+<p align="center">
+  <strong style="font-size: 24px;">💾 Version 💾</strong><br/>
+  🇯🇵 <a href="./README.jp.md">日本語</a> • 
+  🇫🇷 <a href="./README.md">Français</a>
+</p>
 
 ---
 
