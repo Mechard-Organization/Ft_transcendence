@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Plus, PlusCircle, Send, Users, UserPlus, Group, Cross, X } from "lucide-react";
+import { Plus, PlusCircle, Send, Users, UserPlus, Group, Cross, X, Pencil } from "lucide-react";
 import Footer from "../ts/Footer";
 import { isAuthenticated } from "../access/authenticator";
 import { Link, useLocation } from "react-router-dom";
@@ -58,6 +58,8 @@ export default function ChatPage() {
   const wsRef = useRef<WebSocket | null>(null);
   const selectedConversationRef = useRef<number | null>(null);
   const [showAddUser, setShowAddUser] = useState(false); // afficher/masquer la recherche
+  const [showChangeGroupName, setShowChangeGroupName] = useState(false); // afficher/masquer la recherche
+  const [NewGroupName, setNewGroupName] = useState("");
   const [searchUsername, setSearchUsername] = useState(""); // nom tapé
   const [userAddGroup, setUserAddGroup] = useState<UserGroup>({
     id: 0,
@@ -284,6 +286,43 @@ const sendMessage = async () => {
     fetchUser();
   }, []);
 
+  const handleChangeGroupName = async () => {
+  if (!NewGroupName.trim() || !selectedConversation) return;
+
+    try {
+      const res = await fetch("/api/updateGroupName", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          name: NewGroupName.trim(), 
+          id_group: selectedConversation.id 
+        }),
+      });
+
+      if (!res.ok) throw new Error("Impossible de changer le nom du groupe");
+
+      console.log("Nom du groupe changé !");
+      
+      // Met à jour la conversation localement
+      setConversations((prev) =>
+        prev.map((conv) =>
+          conv.id === selectedConversation.id
+            ? { ...conv, username: NewGroupName.trim() }
+            : conv
+        )
+      );
+      
+      setSelectedConversation((prev) =>
+        prev ? { ...prev, username: NewGroupName.trim() } : prev
+      );
+
+      setNewGroupName("");
+      setShowChangeGroupName(false);
+    } catch (err) {
+      console.error("Erreur changement nom :", err);
+    }
+  };
+
   const addUsertoGroup = async (user: any, id_group: number) => {
     try {
       const auth = await isAuthenticated();
@@ -321,6 +360,7 @@ const sendMessage = async () => {
       console.error("Erreur addUsertoGroup:", err);
     }
   };
+
 
 const handleInviteUser = async () => {
   if (!searchUsername.trim() || !selectedConversation) return;
@@ -417,11 +457,14 @@ const fetchGroupMembers = async () => {
         </h2>
 
         {/* Right: Boutons */}
-        <div className="flex gap-2 items-center">
-  {/* Bouton pour afficher la barre de recherche */}
+<div className="flex gap-2 items-center">
+  {/* Bouton pour ajouter un utilisateur */}
   {selectedConversation && selectedConversation.id !== 0 && (
     <button
-      onClick={() => setShowAddUser((prev) => !prev)}
+      onClick={() => {
+        setShowAddUser((prev) => !prev);
+        setShowChangeGroupName(false);
+      }}
       className="p-2 rounded-full hover:bg-yellow-200 transition"
       title="Ajouter un utilisateur"
     >
@@ -429,7 +472,52 @@ const fetchGroupMembers = async () => {
     </button>
   )}
 
-  {/* Barre de recherche */}
+  {/* Bouton pour changer le nom */}
+  {selectedConversation && selectedConversation.id !== 0 && (
+    <button
+      onClick={() => {
+        setShowChangeGroupName((prev) => !prev);
+        setShowAddUser(false);
+      }}
+      className="p-2 rounded-full hover:bg-yellow-200 transition"
+      title="Changer le nom du groupe"
+    >
+      <Pencil className="w-6 h-6 text-[#8B5A3C]" />
+    </button>
+  )}
+
+  {/* Barre CHANGER NOM */}
+  {showChangeGroupName && selectedConversation && (
+    <div className="flex items-center gap-2">
+      <input
+        type="text"
+        placeholder="Nouveau nom du groupe..."
+        value={NewGroupName}
+        onChange={(e) => setNewGroupName(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleChangeGroupName();
+        }}
+        className="px-3 py-1 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+      />
+      <button
+        onClick={handleChangeGroupName}
+        className="px-3 py-1 rounded-full bg-[#8B5A3C] text-white hover:scale-105 transition"
+      >
+        Valider
+      </button>
+      <button
+        onClick={() => {
+          setShowChangeGroupName(false);
+          setNewGroupName("");
+        }}
+        className="p-1 rounded-full hover:bg-yellow-200 transition"
+      >
+        <X className="w-5 h-5 text-[#8B5A3C]" />
+      </button>
+    </div>
+  )}
+
+  {/* Barre AJOUTER USER */}
   {showAddUser && (
     <div className="flex items-center gap-2">
       <input
@@ -440,27 +528,35 @@ const fetchGroupMembers = async () => {
         onKeyDown={(e) => {
           if (e.key === "Enter") handleInviteUser();
         }}
-        className="px-3 py-1 rounded-full border-2 border-[#FEE96E]"
+        className="px-3 py-1 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
       />
       <button
         onClick={handleInviteUser}
-        className="px-3 py-1 rounded-full bg-[#FEE96E] border-2 border-[#FEE96E] hover:scale-105 transition"
+        className="px-3 py-1 rounded-full bg-[#8B5A3C] text-white hover:scale-105 transition"
       >
         Inviter
+      </button>
+      <button
+        onClick={() => {
+          setShowAddUser(false);
+          setSearchUsername("");
+        }}
+        className="p-1 rounded-full hover:bg-yellow-200 transition"
+      >
+        <X className="w-5 h-5 text-[#8B5A3C]" />
       </button>
     </div>
   )}
 
-  {/* Bouton voir les profil */}
+  {/* Bouton voir les membres */}
   {selectedConversation && selectedConversation.id !== 0 && (
-   <button
-  onClick={fetchGroupMembers}
-  className="p-2 rounded-full hover:bg-yellow-200 transition"
-  title="Voir membres"
->
-  <User className="w-6 h-6 text-[#8B5A3C]" />
-</button>
-
+    <button
+      onClick={fetchGroupMembers}
+      className="p-2 rounded-full hover:bg-yellow-200 transition"
+      title="Voir membres"
+    >
+      <User className="w-6 h-6 text-[#8B5A3C]" />
+    </button>
   )}
 </div>
 
