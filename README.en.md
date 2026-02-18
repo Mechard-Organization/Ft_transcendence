@@ -11,7 +11,7 @@
 
 <div align="center">
 
-## Commands to clone the transcendence repository
+## 📂 Clone the repo
 
 </div>
 
