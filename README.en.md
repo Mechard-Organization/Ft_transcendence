@@ -2,7 +2,7 @@
 
 ---
 
-<h1 align="center">💾 Version 💾</h1>
+<p align="center"><strong>💾 Version 💾</strong></p>
 <p align="center">
   <a href="./README.jp.md">🇯🇵 日本語</a> • 
   <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/main">🇫🇷 Français</a>
