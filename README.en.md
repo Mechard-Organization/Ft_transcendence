@@ -14,14 +14,12 @@
   <br/>
 </div>
 <details>
-  <div align="center">
-    <summary> 🌍 From github</summary>
+  <summary> 🌍 From github</summary>
 
-    ```bash
-    git clone git@github.com:Mechard-Organization/Ft_transcendence.git
+  ```bash
+  git clone git@github.com:Mechard-Organization/Ft_transcendence.git
 
-    ```
-  </div>
+  ```
 </details>
 
   <details>
