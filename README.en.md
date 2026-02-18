@@ -1,18 +1,11 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
-<p align="center">
-  <svg width="260" height="40" xmlns="http://www.w3.org/2000/svg">
-    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
-          font-size="26" font-weight="700" fill="white">
-      💾 Version 💾
-    </text>
-  </svg>
-</p>
+<div align="center">
 
-<p align="center">
-  🇯🇵 <a href="./README.jp.md">日本語</a> • 
-  🇫🇷 <a href="./README.md">Français</a>
-</p>
+## 💾 Version 💾
+🇯🇵 [日本語](./README.jp.md) • 🇫🇷 [Français](./README.md)
+
+</div>
 
 ---
 
