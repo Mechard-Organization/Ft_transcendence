@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/18 13:15:39 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:02:23 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,7 +337,8 @@ function createNewGame(newGame?: NewGame) {
       return newGame.gameId;
     }
   }
-
+  if(gId > 999999)
+    gId = 0
   const gameId = gId++;
   games.push({
     gameId,
