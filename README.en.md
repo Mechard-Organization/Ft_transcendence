@@ -4,30 +4,21 @@
 
 <h2 align="center">Commands to clone the transcendence repository</h2>
 
-<details><summary>👷‍♀️ For the project team only!</summary>
+<details><summary> 🌍 From github</summary>
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/Mechard-Organization/git_trs/main/git_trs.sh)"
+git clone git@github.com:Mechard-Organization/Ft_transcendence.git
 
 ```
 
-🖵 On your terminal
-
-<details><summary>Before working on your branch :</summary>
-
-```bash
-ARG="your branch"; git switch main && git pull && git switch $ARG && git merge main && git push 
-```
 </details>
 
-<details><summary>After you have pushed to your branch :</summary>
+<details><summary> 🏫 From intra</summary>
 
 ```bash
-ARG="your branch"; git switch main && git merge $ARG && git add . && git commit -m "$(date) - $(pwd) update" && git push && git switch $ARG
-```
+git clone git@vogsphere.42paris.fr:vogsphere/intra-uuid-1b74ffcb-2a75-4cc1-a276-c47ee8672993-7191380-mechard
 
-**⚠️ If there are conflicts, contact the person(s) concerned by the conflict before performing any operations ! ⚠️**
-</details>
+```
 
 </details>
 
@@ -51,52 +42,180 @@ ARG="your branch"; git switch main && git merge $ARG && git add . && git commit 
 
 <h2 align="center">📝 Project Overview 📝</h2>
 
-**ft_transcendence** is the final project of the **42 school’s core curriculum**.  
-It consists of designing a **complete and secure web application** that allows users to play the legendary **Pong** game in a modern, scalable, and collaborative environment.
+**ft_transcendence** is a full-stack web application developed as the final project of the 42 Common Core curriculum.
 
-The goal is to demonstrate our ability to:  
-- Master **new technologies** (TypeScript, Node.js, Docker, WebSockets, etc.).  
-- Manage a **complex team project**, following a clear and modular organization.  
-- Deliver a **functional, secure, and maintainable website** that meets all project constraints.
+The project consists of a real-time multiplayer Pong platform enhanced with:
 
-### 🎮 Main Features
-- **Real-time Pong game** (2 players — local or remote).  
-- **Tournament system** with matchmaking and alias management.  
-- **Live chat** (DMs, rooms, game invitations, blocklist).  
-- **User profiles** with statistics, match history, and avatars.  
-- Option to play against an **AI opponent** simulating a real player.  
-- **Enhanced security**: HTTPS, JWT + 2FA, OAuth2, password hashing, XSS/SQLi protection.  
-- **Microservices architecture**: each component (auth, chat, game, matchmaking) is independent and scalable.  
-- **Monitoring & observability** with Prometheus and Grafana.  
-- **Modern frontend**: Single Page Application (SPA) built with TypeScript + TailwindCSS.
+- Secure authentication system (JWT + OAuth 2.0 + 2FA)
+- Real-time multiplayer game using WebSockets
+- Social features (friends, chat, profiles)
+- Administrative tools
+- Monitoring and observability stack
+- Secure infrastructure using HTTPS and reverse proxy
 
-### ⚙️ Tech Stack
-- **Frontend**: TypeScript, TailwindCSS, SPA.  
-- **Backend**: Node.js (Fastify), SQLite, WebSockets.  
-- **Security**: HTTPS (Nginx reverse proxy), JWT, 2FA, OAuth2.  
-- **DevOps**: Docker, docker-compose, microservices, Prometheus/Grafana monitoring.  
-- **Gameplay**: Canvas/WebGL, real-time WS protocol, basic AI (limited vision).  
+The objective was to build a production-ready web application combining modern web technologies, cybersecurity principles, DevOps practices, and real-time systems.
+
+---
+
+## Instructions
+
+### Prerequisites
+
+- Docker version >= 24
+- Docker Compose v2
+- Make
+- Node.js >= 18 (for local development)
+
+---
+
+### Environment Variables
+
+Create a `.env` file at the root with:
+
+```bash
+###   GRAFANA   ###
+
+GF_SECURITY_ADMIN_USER=admin-grafana
+GF_SECURITY_ADMIN_PASSWORD=password-grafana
+GF_SERVER_HTTP_PORT=5000
+GF_INSTALL_PLUGINS=frser-sqlite-datasource
+
+###   ADMIN   ###
+
+ADMIN=admin_username
+ADMIN_PASSWORD=strong_password
+ADMIN_MAIL=admin@example.com
+
+### OAuth Google ###
+
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=https://localhost/api/auth/google/callback
+OAUTH_SUCCESS_REDIRECT=path-redirection
+```
+
+
+---
 
 ### 🚀 Launch
 ```bash
 make
 
 ```
-
-### 🏥 Commands list
+or
 ```bash
-make help
-
+make start
 
 ```
 
+### 🏥 Commands list
+Stop:
+```bash
+make down
+
+```
+Rebuild completely:
+```bash
+make rebirth
+
+```
+Logs:
+```bash
+make logs
+
+```
+for a complete list of available make commande, please make :
+```bash
+make help
+
+```
+Access
+
+Main application (HTTPS via Nginx):
+
+https://localhost:8443
+
+Available routes:
+
+    Frontend: /
+
+    API: /api/...
+
+    WebSockets: /ws/
+
+    Grafana: /grafana
+
+    Prometheus: /prometheus
+
 ---
 
-<h2 align="center">📂 Project Structure 📂</h2>
+<h2 align="center">👨‍💻 Team Information 👨‍💻</h2>
 
-<p align="center">
-<img src=".assets/imgs/tree.png" width="250" alt="tree">
-</p>
+mechard — Project Manager + Developer
+
+    Global architecture coordination
+
+    Backend API integration
+
+    Authentication system integration
+
+    Monitoring stack setup
+
+    DevOps orchestration
+
+mel-yand — Cybersecurity Developer
+
+    2FA implementation (TOTP)
+
+    OAuth 2.0 (Google OpenID Connect)
+
+    Password validation and security policies
+
+    Input validation & security hardening
+
+abutet — Technical Lead + WebSockets
+
+    Backend architecture (Fastify)
+
+    WebSocket server implementation
+
+    Real-time synchronization
+
+    Reverse proxy WebSocket routing
+
+ajamshid — Game Logic Developer
+
+    Pong gameplay engine
+
+    Collision system
+
+    Scoring and match state management
+
+    Match history logic
+
+jealefev — Product Owner + Developer
+
+    Feature definition and validation
+
+    UI/UX coherence
+
+    Frontend implementation
+
+    Social features integration
+
+<h2 align="center"> Project Management</h2>
+
+    Weekly sprint planning
+
+    Feature-based branching strategy
+
+    Pull Requests with mandatory review
+
+    Clear commit history from all members
+
+    GitHub Issues for task tracking
+
+    Discord for daily communication
 
 ---
 
