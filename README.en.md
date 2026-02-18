@@ -1,17 +1,21 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
-<div align="center">
-  <p style="font-size: 1.5em; font-weight: bold; margin: 0;">
-    💾 Version 💾
-  </p>
+<p align="center">
+  <svg width="260" height="40" xmlns="http://www.w3.org/2000/svg">
+    <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
+          font-size="26" font-weight="700" fill="white">
+      💾 Version 💾
+    </text>
+  </svg>
+</p>
 
-  <br>
-
+<p align="center">
   🇯🇵 <a href="./README.jp.md">日本語</a> • 
   🇫🇷 <a href="./README.md">Français</a>
-</div>
+</p>
 
 ---
+
 
 <h2 align="center">Commands to clone the transcendence repository</h2>
 
