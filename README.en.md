@@ -46,7 +46,9 @@
 
 ---
 
-<h2 align="center">📝 Project Overview 📝</h2>
+<p align="center">
+  <img src="./.assets/imgs/overview.svg" alt="Project Overview" width="420"/>
+</p>
 
 **ft_transcendence** is a full-stack web application developed as the final project of the 42 Common Core curriculum.
 
