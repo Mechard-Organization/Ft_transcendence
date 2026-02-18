@@ -10,12 +10,11 @@
 ---
 
 <details>
-  <summary style="list-style: none; cursor: pointer;">
+  <summary>
     <p align="center">
       <img src="./.assets/imgs/CTR.svg" width="500" />
     </p>
   </summary>
-  <br>
   <details><summary> 🌍 From github</summary>
 
   ```bash
