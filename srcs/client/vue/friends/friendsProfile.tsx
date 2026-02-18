@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Trophy, Target, Clock } from "lucide-react";
 import Footer from "../ts/Footer";
-import { isAuthenticated } from "../access/authenticator";
 import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { isAuthenticated } from "../access/authenticator";
+import AchievementCard from "../access/achievementCard";
+import { Achievement, achievements } from "../access/achievement";
+import { Trophy, Target, Settings, Clock } from "lucide-react";
 
 /* =====================
    TYPES
@@ -130,59 +132,122 @@ const ProfilePage: React.FC = () => {
     return <p>Chargement...</p>;
   }
 
+    const unlockedAchievements = achievements.filter(achievement =>
+    achievement.condition(userStats)
+  );
+
+  const totalAchievements = achievements.length;
+  const progressPercentage = (unlockedAchievements.length / totalAchievements) * 100;
+
+
+    
   return (
-    <div className="flex flex-col relative">
-      <div className=" mb-8 max-w-4xl w-full mx-auto text-center">
-        {isMe && (
-          <input
-            type="file"
-            id="fileInput"
-            accept="image/*"
-            hidden
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (e.target.files && e.target.files[0]) {
-                handleFile(e.target.files[0]);
-              }
-            }}
-          />
-        )}
+    <div className="flex-1 min-h-[calc(100vh-8rem)] flex-col">
+      <main className="flex-grow">
+        <div className="max-w-4xl mx-auto px-6 pt-8 pb-5">
 
-        <button
-          onClick={() =>
-            isMe && document.getElementById("fileInput")?.click()
-          }
-          className="flex items-center justify-center inline-block cursor-pointer"
-        >
-          <img
-            src={userStats.avatarUrl}
-            alt="avatar profil"
-            className="w-25 h-25 object-cover rounded-full border-4 border-[#FEE96E]"
-          />
-        </button>
+          {/* Profil */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6 flex flex-col sm:flex-row items-center gap-8">
+            <div className="relative">
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                hidden
+                onChange={e => { if (e.target.files?.[0]) handleFile(e.target.files[0]); }}
+              />
+              <button onClick={() => document.getElementById("fileInput")?.click()}>
+                <img src={userStats.avatarUrl} alt="avatar" className="w-32 h-32 rounded-full object-cover border-4 border-[#FEE96E]" />
+              </button>
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <h1 className="text-4xl font-bold text-[#8B5A3C]">{userStats.username}</h1>
+              <p className="text-[#A67C52] mt-1">{userStats.mail}</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <button onClick={() => window.location.href = "/settings"} className="p-4 rounded-full bg-[#FEE96E] hover:scale-105 transition">
+                <Settings className="w-6 h-6 text-[#8B5A3C]" />
+              </button>
+            </div>
+          </div>
 
-        <h1 className="text-4xl text-[#8B5A3C] mt-4">
-          {userStats.username}
-        </h1>
-      </div>
+          {/* Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
+            <div className="bg-white/90 rounded-3xl p-4 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
+              <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
+                <Target className="w-6 h-6 text-[#8B5A3C]" />
+              </div>
+              <h3 className="text-xl text-[#8B5A3C] mb-2">Parties jouées</h3>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.gamesPlayed)}</p>
+            </div>
+            <div className="bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
+              <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
+                <Trophy className="w-6 h-6 text-[#8B5A3C]" />
+              </div>
+              <h3 className="text-xl text-[#8B5A3C] mb-2">Victoires</h3>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.gamesWon)}</p>
+            </div>
+            <div className="bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
+              <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
+                <Trophy className="w-6 h-6 text-[#8B5A3C]" />
+              </div>
+              <h3 className="text-xl text-[#8B5A3C] mb-2">Meilleur Score</h3>
+              <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.highScore)}</p>
+            </div>
+          </div>
 
-      <div className="max-w-4xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        <StatCard
-          title="Parties jouées"
-          value={userStats.gamesPlayed}
-          icon={<Target className="w-8 h-8" />}
-        />
-        <StatCard
-          title="Victoires"
-          value={userStats.gamesWon}
-          icon={<Trophy className="w-8 h-8" />}
-        />
-        <StatCard
-          title="Meilleur score"
-          value={userStats.highScore}
-          icon={<Trophy className="w-8 h-8" />}
-        />
-      </div>
+          {/* Section Achievements */}
+          <div className="mt-10 bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E]">
 
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold text-[#8B5A3C] flex items-center gap-3">
+                <Trophy className="w-8 h-8" />
+                Achievements
+              </h2>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-[#8B5A3C]">
+                  {unlockedAchievements.length} / {totalAchievements}
+                </p>
+                <p className="text-sm text-[#A67C52]">
+                  {Math.round(progressPercentage)}% complété
+                </p>
+              </div>
+            </div>
+
+            {/* Barre de progression */}
+            <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+              <div
+                className="bg-gradient-to-r from-[#FEE96E] to-[#FFD700] h-3 rounded-full transition-all duration-500"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+
+            {/* Grille d'achievements */}
+            {achievements.length === 0 ? (
+              <p className="text-center text-[#A67C52] py-8">
+                Aucun achievement disponible
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {achievements.map(achievement => {
+                  const unlocked = achievement.condition(userStats);
+                  return (
+                    <AchievementCard
+                      key={achievement.id}
+                      title={achievement.title}
+                      description={achievement.description}
+                      icon={achievement.icon}
+                      unlocked={unlocked}
+                      rarity={achievement.rarity}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
