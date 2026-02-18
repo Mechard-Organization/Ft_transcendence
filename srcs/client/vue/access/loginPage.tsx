@@ -187,13 +187,11 @@ export default function LoginPage() {
 	    </div>
       <br/>
       <div>Vous n'avez pas encore de compte ? <a className="text-[#A67C52] hover:text-[#8B5A3C]" href = "/Register">Cliquez ici</a></div>
-	  </div>
-
       {twofaRequired && (
-  <div className="mt-6 p-6 bg-[#FFFAED] rounded-2xl border-2 border-[#FEE96E]">
+  <div className="mt-6 p-6 bg-white/90 rounded-2xl border-4 border-[#FEE96E]">
     <h2 className="text-xl text-[#8B5A3C] mb-4">Vérification 2FA</h2>
 
-    <div className="form-group mb-4">
+    <div className="form-group mb-4 text-[#8B5A3C]">
       <label htmlFor="twofaCode" className="block mb-1">
         Code de vérification
       </label>
@@ -210,7 +208,7 @@ export default function LoginPage() {
     </div>
 
     <button
-      className="w-full px-6 py-3 rounded-full bg-[#FEE96E] border-2 border-[#FEE96E]"
+      className="w-full px-6 py-3 rounded-full text-[#8B5A3C] bg-[#FEE96E] border-2 border-[#FEE96E]"
       onClick={onVerify2FA}
       disabled={verifying2fa}
     >
@@ -218,6 +216,8 @@ export default function LoginPage() {
     </button>
   </div>
 )}
+	  </div>
+
     </main>
     </div>
   );
