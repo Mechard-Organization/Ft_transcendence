@@ -10,9 +10,10 @@
 ---
 
 <details>
-    <p align="center">
-      <img src="./.assets/imgs/CTR.svg" width="500" />
-    </p>
+    <div align="center">
+      <img src="./.assets/imgs/CTR.svg" alt="📂 Clone the repo" width="500"/>
+      <br/>
+    </div>
   <details>
     <summary> 🌍 From github</summary>
 
