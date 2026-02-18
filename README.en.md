@@ -10,8 +10,6 @@
 ---
 
 <details>
-
-<details>
 <summary align="center"><img src="./.assets/imgs/CTR.svg" width="500"/></summary>
 
 <br>
