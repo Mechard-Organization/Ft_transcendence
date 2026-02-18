@@ -9,18 +9,17 @@
 
 ---
 
+<div align="center">
+  <img src="./.assets/imgs/CTR.svg" alt="📂 Clone the repo" width="500"/>
+  <br/>
+</div>
 <details>
-    <div align="center">
-      <img src="./.assets/imgs/CTR.svg" alt="📂 Clone the repo" width="500"/>
-      <br/>
-    </div>
-  <details>
-    <summary> 🌍 From github</summary>
+  <summary> 🌍 From github</summary>
 
-    ```bash
-    git clone git@github.com:Mechard-Organization/Ft_transcendence.git
+  ```bash
+  git clone git@github.com:Mechard-Organization/Ft_transcendence.git
 
-    ```
+  ```
 
   </details>
 
