@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Trophy, Target, UserRoundCheck, UserRoundPlus, UserRoundMinus, Settings } from "lucide-react";
-import Footer from "../ts/Footer";
+import { Trophy, Target, Settings } from "lucide-react";
 import { isAuthenticated } from "../access/authenticator";
+import { Achievement, achievements } from "../access/achievement";
+import AchievementCard from "../access/achievementCard";
 
 type UserStats = {
   id: number;
@@ -22,11 +23,6 @@ type MatchStats = {
   my_score: number;
   adv_username: string;
   adv_score: number;
-};
-
-type AdminUser = {
-  id: number;
-  username: string;
 };
 
 export default function ProfilePage() {
@@ -90,7 +86,6 @@ export default function ProfilePage() {
         admin: data.admin ?? false
       });
 
-
       const resmatchs = await fetch("/api/getMatch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -99,9 +94,8 @@ export default function ProfilePage() {
       const dataMatchs = await resmatchs.json();
       console.log(dataMatchs);
       setMatchs(
-        dataMatchs.map((match:any) => {
-          if (match.name_player1 === data.username)
-          {
+        dataMatchs.map((match: any) => {
+          if (match.name_player1 === data.username) {
             return {
               id: match.id_match,
               date: match.date,
@@ -110,9 +104,7 @@ export default function ProfilePage() {
               my_score: match.score1,
               adv_score: match.score2
             };
-          }
-          else
-          {
+          } else {
             return {
               id: match.id_match,
               date: match.date,
@@ -127,7 +119,6 @@ export default function ProfilePage() {
     }
     fetchUser();
   }, []);
-
 
   useEffect(() => {
     console.log("userStats mis à jour :", userStats);
@@ -156,9 +147,14 @@ export default function ProfilePage() {
     setUserStats(prev => ({ ...prev, avatarUrl: data.avatarUrl }));
   };
 
+  const unlockedAchievements = achievements.filter(achievement =>
+    achievement.condition(userStats)
+  );
 
+  const totalAchievements = achievements.length;
+  const progressPercentage = (unlockedAchievements.length / totalAchievements) * 100;
 
-return (
+  return (
     <div className="flex-1 min-h-[calc(100vh-8rem)] flex-col">
       <main className="flex-grow">
         <div className="max-w-4xl mx-auto px-6 pt-8 pb-5">
@@ -183,7 +179,7 @@ return (
             </div>
             <div className="flex flex-col gap-2">
               <button onClick={() => window.location.href = "/settings"} className="p-4 rounded-full bg-[#FEE96E] hover:scale-105 transition">
-                <Settings className="w-6 h-6 text-[#8B5A3C]"/>
+                <Settings className="w-6 h-6 text-[#8B5A3C]" />
               </button>
             </div>
           </div>
@@ -213,7 +209,58 @@ return (
             </div>
           </div>
 
-          {/* Tableau scrollable */}
+          {/* Section Achievements */}
+          <div className="mt-10 bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E]">
+
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold text-[#8B5A3C] flex items-center gap-3">
+                <Trophy className="w-8 h-8" />
+                Achievements
+              </h2>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-[#8B5A3C]">
+                  {unlockedAchievements.length} / {totalAchievements}
+                </p>
+                <p className="text-sm text-[#A67C52]">
+                  {Math.round(progressPercentage)}% complété
+                </p>
+              </div>
+            </div>
+
+            {/* Barre de progression */}
+            <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+              <div
+                className="bg-gradient-to-r from-[#FEE96E] to-[#FFD700] h-3 rounded-full transition-all duration-500"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+
+            {/* Grille d'achievements */}
+            {achievements.length === 0 ? (
+              <p className="text-center text-[#A67C52] py-8">
+                Aucun achievement disponible
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {achievements.map(achievement => {
+                  const unlocked = achievement.condition(userStats);
+                  return (
+                    <AchievementCard
+                      key={achievement.id}
+                      title={achievement.title}
+                      description={achievement.description}
+                      icon={achievement.icon}
+                      unlocked={unlocked}
+                      rarity={achievement.rarity}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Tableau des matchs */}
           <div className="mt-10 bg-white/95 rounded-3xl shadow-lg border-4 border-[#FEE96E] h-70 flex flex-col overflow-hidden">
             <div className="overflow-y-auto">
               <table className="min-w-full divide-y divide-gray-200">

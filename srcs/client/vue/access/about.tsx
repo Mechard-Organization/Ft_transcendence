@@ -13,7 +13,7 @@ type TeamMember = {
 const team: TeamMember[] = [
   {
     name: "Lylou",
-    role: "Technical Lead Developers",
+    role: "Technical Lead Developer",
     avatarUrl: "/assets/imgs/abutet_round.png",
     bio: "Abutet",
     linkedin: "https://www.linkedin.com/in/aymeric-butet-33402522b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
@@ -21,7 +21,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Mehdi",
-    role: "Developers cyber",
+    role: "Developer cyber",
     avatarUrl: "/assets/imgs/mel-yand_round.png",
     bio: "Mel-yand",
     linkedin: "https://www.service-public.gouv.fr/particuliers/vosdroits/N19775 ",
@@ -29,7 +29,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Maxime",
-    role: "Project Manager  Developers",
+    role: "Project Manager  Developer",
     avatarUrl: "/assets/imgs/mechard_round.png",
     bio: "Mechard",
     linkedin: "https://www.linkedin.com/in/maxime-echard/",
@@ -37,7 +37,7 @@ const team: TeamMember[] = [
   },
   {
     name: "Abdul",
-    role: "Developers Game logic",
+    role: "Developer Game logic",
     avatarUrl: "/assets/imgs/ajamshid_round.png",
     bio: "Ajamshid",
     linkedin: "https://linkedin.com/in/tonLinkedin",
@@ -45,10 +45,10 @@ const team: TeamMember[] = [
   },
   {
     name: "Jeanne",
-    role: "Product Owner Developers Front-end",
+    role: "Product Owner Developer Front-end",
     avatarUrl: "/assets/imgs/jealefev_round.png",
     bio: "Jealefev",
-    linkedin: "https://linkedin.com/in/jeanne-lefèvre-27180738a",
+    linkedin: "https://linkedin.com/in/jeanne-lefevre-7b8a6536a/",
     github: "https://github.com/namoule"
   }
 ];
