@@ -1,13 +1,13 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
 <p align="center">
-  <strong style="font-size: 24px;">💾 Version 💾</strong><br/>
+  <img src="https://img.shields.io/badge/%F0%9F%92%BE%20Version%20%F0%9F%92%BE-000000?style=for-the-badge" />
+  <br/>
   🇯🇵 <a href="./README.jp.md">日本語</a> • 
   🇫🇷 <a href="./README.md">Français</a>
 </p>
 
 ---
-
 
 <div align="center">
 
