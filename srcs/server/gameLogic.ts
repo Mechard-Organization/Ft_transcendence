@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/16 15:59:47 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:02:23 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ export function moveBall(games: Game): Vec3 {
 function moveSiglePaddle(paddle:any, keys:any, dragPos1:any, dragPos2:any, playerCount:any,games:any, isDragging1:any, isDragging2:any, aiN:number){
   // paddle movign 1
     let Direction = games.aiDirection;
-  if (playerCount > 0) {
+  if (playerCount > 0 && (games.mode == 1 || aiN == 1)) {
     if (isDragging1) {
       // console.log("is dragging 1");
       if ((dragPos1.z < paddle) && paddle > -tableHeight / 2 + 50) paddle -= paddleSpeed;
@@ -207,7 +207,7 @@ function moveSiglePaddle(paddle:any, keys:any, dragPos1:any, dragPos2:any, playe
   }
   // paddle moving 1 end
   // paddle moving 2
-    if (playerCount > 1) {
+  if (playerCount > 1 && (games.mode == 1 || aiN == 2)) {
     if (isDragging2) {
       // console.log("is gragging 2");
       if ((dragPos2.z < paddle) && paddle > -tableHeight / 2 + 50) paddle -= paddleSpeed;
@@ -337,7 +337,8 @@ function createNewGame(newGame?: NewGame) {
       return newGame.gameId;
     }
   }
-
+  if(gId > 999999)
+    gId = 0
   const gameId = gId++;
   games.push({
     gameId,

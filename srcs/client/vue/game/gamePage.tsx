@@ -11,6 +11,19 @@ export default function GamePage() {
     canvasRef.current.tabIndex = 0;
     canvasRef.current.focus();
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const keysToBlock = [
+        "ArrowUp",
+        "ArrowDown",
+      ];
+
+      if (keysToBlock.includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
     let cleanup: (() => void) | undefined;
 
     pong(canvasRef.current).then(fn => {
@@ -18,6 +31,7 @@ export default function GamePage() {
     });
 
     return () => {
+      window.removeEventListener("keydown", handleKeyDown);
       cleanup?.();
     };
   }, []);

@@ -6,13 +6,13 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/16 15:56:06 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:22:24 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { Button, InputText, Control, TextBlock, StackPanel } from "@babylonjs/gui/2D";
 import { Color3 } from "@babylonjs/core";
-import { thisPlayer, scene, username, setNewGame, resetCounter } from "../game/Meshes";
+import { thisPlayer, scene, username, setNewGame, resetCounter} from "../game/Meshes";
 import { setSelectedMesh, createCutomiseUI, createdisposableUI, createTournamentUI, mainUI, multiUI, tournamentUI, resumeUI, disposableUI, contestants, drawText, disposeDUI, disposeTUI, setPlayerCount, setPlayerName, setPause, customiseUI, resetGame, remoteUI } from "./UI"
 
 function shuffle(array: string[]) {
@@ -31,15 +31,15 @@ export interface Settings {
   lightIntensity: number,
   colorType: number
 }
+
 export const defaultSettings: Settings = {
-  tableMat: new Color3(0, 0.5, 0),
+  tableMat: new Color3(1, 0.95, 0.45),
   paddleMat: new Color3(0.1, 0.1, 0.1),
-  ballMat: new Color3(0.5, 0, 0),
-  wallMat: new Color3(0.5, 0.5, 0.5),
+  ballMat: new Color3(0.6, 0.5, 0.33),
+  wallMat: new Color3(0.6, 0.5, 0.33),
   lightIntensity: 0,
   colorType: 0,
 };
-
 
 export let colorType = defaultSettings.colorType;
 
@@ -467,9 +467,9 @@ export function createNaturalBtn(): Button {
       c.emissiveColor = new Color3(0, 0, 0);
 
       let light = scene.getLightByName("light");
-      if (!light)
+      // if (!light)
         // console.log("there is not light")
-      light.intensity = 1;
+      light.intensity = 0.9;
       colorType = 1;
     }
   });
@@ -496,7 +496,7 @@ export function createDefaultBtn(): Button {
     c.emissiveColor = defaultSettings.wallMat.clone();
     c.diffuseColor = new Color3(0, 0, 0);
     let light = scene.getLightByName("light");
-    if (!light)
+    // if (!light)
       // console.log("there is not light")
     light.intensity = defaultSettings.lightIntensity;
     colorType = defaultSettings.colorType;

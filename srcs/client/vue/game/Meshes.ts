@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/16 15:57:57 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/18 14:18:34 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,12 @@ export interface Settings {
   lightIntensity: number,
   colorType: number
 }
+
 export const defaultSettings: Settings = {
-  tableMat: new Color3(0, 0.5, 0),
+  tableMat: new Color3(1, 0.95, 0.45),
   paddleMat: new Color3(0.1, 0.1, 0.1),
-  ballMat: new Color3(0.5, 0, 0),
-  wallMat: new Color3(0.5, 0.5, 0.5),
+  ballMat: new Color3(0.6, 0.5, 0.33),
+  wallMat: new Color3(0.6, 0.5, 0.33),
   lightIntensity: 0,
   colorType: 0,
 };
