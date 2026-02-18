@@ -14,7 +14,7 @@
   <br/>
 </div>
 <details>
-  <summary> 🌍 From github</summary>
+  <summary align="center"> 🌍 From github</summary>
 
   ```bash
   git clone git@github.com:Mechard-Organization/Ft_transcendence.git
@@ -23,7 +23,7 @@
 </details>
 
   <details>
-    <summary> 🏫 From intra</summary>
+    <summary align="center"> 🏫 From intra</summary>
 
     ```bash
     git clone git@vogsphere.42paris.fr:vogsphere/intra-uuid-1b74ffcb-2a75-4cc1-a276-c47ee8672993-7191380-mechard
