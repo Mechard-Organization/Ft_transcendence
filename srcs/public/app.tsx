@@ -14,6 +14,8 @@ import AboutPage from './client/vue/access/about';
 import RankPage from './client/vue/game/rangGame';
 import Footer from './client/vue/ts/Footer';
 import ProtectedRoute from './client/vue/access/accessRoutes';
+import CGU from './client/vue/access/CGV';
+import PolicyPrivacyTermsService from './client/vue/access/PolicyPrivacyTermsService';
 export default function App() {
   return (
     <Router>
@@ -30,7 +32,13 @@ export default function App() {
         <Header />
         <main className= "flex-1">
         <Routes>
+          
           <Route path="/" element={<HomePage />} />
+
+          <Route path="/terms-and-conditions" element={<CGU/>}></Route>
+
+          <Route path="/privacy_policy" element={<PolicyPrivacyTermsService/>}></Route>
+
           <Route path="/Chat" element={
             <ProtectedRoute>
               <ChatPage />

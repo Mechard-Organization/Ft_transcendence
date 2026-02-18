@@ -212,7 +212,30 @@ return (
               <p className="text-5xl font-bold text-[#8B5A3C]">{Math.round(userStats.highScore)}</p>
             </div>
           </div>
-
+          <br/>
+          <div className="bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
+            <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
+              <Trophy className="w-6 h-6 text-[#8B5A3C]" />
+            </div>
+            <h3 className="text-xl text-[#8B5A3C] mb-2">Achievement</h3>
+                  {matchs.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-4 text-center font-medium">Aucune partie jouée</td>
+                    </tr>
+                  ) : (
+                    matchs.map(match => {
+                      const isWin = match.my_score > match.adv_score;
+                      return (
+                        <tr key={match.id} className={isWin ? "bg-[#C3F99A]" : "bg-[#F9D09A]"}>
+                          <td className="px-6 py-4">{new Date(match.date).toLocaleDateString()}</td>
+                          <td className="px-6 py-4">{match.adv_username}</td>
+                          <td className="px-6 py-4">{Math.round(match.my_score)} - {Math.round(match.adv_score)}</td>
+                          <td className="px-6 py-4 font-bold">{isWin ? "Victoire" : "Défaite"}</td>
+                        </tr>
+                      )
+                    })
+                  )}
+          </div>
           {/* Tableau scrollable */}
           <div className="mt-10 bg-white/95 rounded-3xl shadow-lg border-4 border-[#FEE96E] h-70 flex flex-col overflow-hidden">
             <div className="overflow-y-auto">
