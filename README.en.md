@@ -10,9 +10,15 @@
 ---
 
 <details>
-<summary align="center"><img src="./.assets/imgs/CTR.svg" width="500"/></summary>
+  <summary style="text-align: center; list-style: none;">
+    
+  <div align="center">
+    <img src="./.assets/imgs/CTR.svg" width="500" />
+  </div>
 
-<br>
+  </summary>
+
+  <br>
 
 <details><summary> 🌍 From github</summary>
 
