@@ -35,7 +35,7 @@
 ---
 
 <div align="center">
-  <img src="./.assets/imgs/TT.svg" alt="👨‍💻 the team 👨‍💻" width="320"/>
+  <img src="./.assets/imgs/TT.svg" alt="👨‍💻 the team 👨‍💻" width="200"/>
   <br/>
 </div>
 
