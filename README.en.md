@@ -1,7 +1,7 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
 <p align="center">
-  <img src="./.assets/imgs/version.svg" alt="Version" />
+  <img src="./.assets/imgs/version.svg" alt="Version" width="320"/>
   <br/>
   🇯🇵 <a href="./README.jp.md">日本語</a> • 
   🇫🇷 <a href="./README.md">Français</a>
