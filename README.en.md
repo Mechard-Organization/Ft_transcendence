@@ -2,6 +2,14 @@
 
 ---
 
+<h2 align="center">💾 Version 💾</h2>
+<p align="center">
+  <a href="./README.jp.md">🇯🇵 日本語</a> • 
+  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/main">🇫🇷 Français</a>
+</p>
+
+---
+
 <h2 align="center">Commands to clone the transcendence repository</h2>
 
 <details><summary> 🌍 From github</summary>
@@ -29,16 +37,6 @@ git clone git@vogsphere.42paris.fr:vogsphere/intra-uuid-1b74ffcb-2a75-4cc1-a276-
 <p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/jeanne"><img src=".assets/imgs/ft_transcendence_avatars_banner_42_n1_left.png" width="33.333%" alt="Jeanne" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/lylou"><img src=".assets/imgs/ft_transcendence_avatars_banner_42_n1_center.png" width="33.333%" alt="Lylou" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/maxime"><img src=".assets/imgs/ft_transcendence_avatars_banner_42_n1_right.png" width="33.333%" alt="Maxime" /></a></p>
 
 <p align="center"><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/medhi"><img src=".assets/imgs/ft_transcendence_avatars_banner_42_n2_left.png" width="50%" alt="medhi" /></a><a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/abdul"><img src=".assets/imgs/ft_transcendence_avatars_banner_42_n2_right.png" width="50%" alt="abdul" /></a></p>
-
----
-
-<h2 align="center">💾 Version 💾</h2>
-<p align="center">
-  <a href="./README.jp.md">🇯🇵 日本語</a> • 
-  <a href="https://github.com/Mechard-Organization/Ft_transcendence/tree/main">🇫🇷 Français</a>
-</p>
-
----
 
 <h2 align="center">📝 Project Overview 📝</h2>
 
