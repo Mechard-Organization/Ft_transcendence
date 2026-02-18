@@ -20,8 +20,7 @@
   git clone git@github.com:Mechard-Organization/Ft_transcendence.git
 
   ```
-
-  </details>
+</details>
 
   <details>
     <summary> 🏫 From intra</summary>
