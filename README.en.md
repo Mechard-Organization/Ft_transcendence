@@ -10,16 +10,12 @@
 ---
 
 <details>
-  <summary style="text-align: center; list-style: none;">
-    
-  <div align="center">
-    <img src="./.assets/imgs/CTR.svg" width="500" />
-  </div>
-
+  <summary style="list-style: none; cursor: pointer;">
+    <p align="center">
+      <img src="./.assets/imgs/CTR.svg" width="500" />
+    </p>
   </summary>
-
   <br>
-
   <details><summary> 🌍 From github</summary>
 
   ```bash
