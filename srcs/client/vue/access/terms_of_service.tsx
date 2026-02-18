@@ -1,10 +1,9 @@
-import { cgvContent } from "../content/cgv";
 import { User } from "lucide-react";
+import { TermsOfService } from "../content/TermsOfService";
 
 
 
-
-export default function CGU() {
+export default function Terms_of_service() {
 
   return (
     <div>
@@ -18,9 +17,9 @@ export default function CGU() {
               <User className="w-6 h-6 text-[#8B5A3C]" />
             </div>
           </div>
-          <h1 className="flex items-center justify-center rounded-full">Conditions Generales d'Utilisation</h1>
+          <h1 className="flex items-center justify-center rounded-full"> Terms & Service</h1>
           <div className="whitespace-pre-wrap font-sans text-gray-700 leading-relaxed">
-          {cgvContent}
+          {TermsOfService}
           </div>
             </div>
         </div>

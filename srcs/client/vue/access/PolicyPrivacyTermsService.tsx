@@ -14,7 +14,7 @@ export default function CGU() {
               <User className="w-6 h-6 text-[#8B5A3C]" />
             </div>
           </div>
-          <h1 className="flex items-center justify-center rounded-full">Privacy Policy Terms & Service</h1>
+          <h1 className="flex items-center justify-center rounded-full">Privacy Policy</h1>
           <div className="whitespace-pre-wrap font-sans text-gray-700 leading-relaxed">
           {PPContent}
           </div>

@@ -16,6 +16,7 @@ import Footer from './client/vue/ts/Footer';
 import ProtectedRoute from './client/vue/access/accessRoutes';
 import CGU from './client/vue/access/CGV';
 import PolicyPrivacyTermsService from './client/vue/access/PolicyPrivacyTermsService';
+import Terms_of_service from './client/vue/access/terms_of_service';
 export default function App() {
   return (
     <Router>
@@ -35,9 +36,11 @@ export default function App() {
           
           <Route path="/" element={<HomePage />} />
 
-          <Route path="/terms-and-conditions" element={<CGU/>}></Route>
+          <Route path="/terms-of-service" element={<Terms_of_service/>}></Route>
 
-          <Route path="/privacy_policy" element={<PolicyPrivacyTermsService/>}></Route>
+          <Route path="/privacy-policy" element={<PolicyPrivacyTermsService/>}></Route>
+
+          <Route path="/CGU" element={<CGU/>}></Route>
 
           <Route path="/Chat" element={
             <ProtectedRoute>

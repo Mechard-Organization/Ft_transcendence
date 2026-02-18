@@ -1,13 +1,73 @@
 export const PPContent = `
 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis id ipsum id lacinia. Mauris ornare mollis consectetur. Cras finibus, turpis vel finibus egestas, turpis odio molestie velit, id placerat nulla mi nec ante. Maecenas nisi erat, consectetur sed enim vel, consequat mattis eros. Maecenas lobortis felis non ante porta, sit amet ullamcorper ante dictum. Sed eget semper nulla. Integer et turpis nunc. Suspendisse vel neque et ex finibus vulputate. Curabitur maximus enim hendrerit eros malesuada, ac tincidunt tellus consectetur. Proin semper, ipsum at maximus molestie, orci massa imperdiet justo, non volutpat nulla massa at nisi. Etiam semper, elit vel lobortis blandit, tellus massa sagittis ex, ut pulvinar eros ligula vitae libero. Donec consectetur a sem nec rhoncus. Etiam auctor sed tellus eu gravida. Nunc sodales orci a lectus tempus, ut ultricies est fermentum. Etiam et tortor id tortor tristique laoreet. Aliquam tincidunt enim lorem, quis viverra mi finibus ut.
+PRIVACY POLICY
 
-Sed condimentum, massa quis blandit ullamcorper, felis magna efficitur turpis, ultricies porta ante ex quis sem. Donec quis eleifend diam. Integer suscipit dictum neque. Praesent iaculis mi non quam sollicitudin ornare. Sed at dolor ipsum. Nam faucibus rutrum tempus. Donec consequat rutrum quam a consequat. Curabitur luctus mattis lorem, ut ornare diam facilisis eu. Sed finibus nisl ante, nec venenatis neque rutrum vitae. Morbi dictum commodo tortor. Fusce sed pellentesque elit. Ut sagittis dignissim erat efficitur ultricies. Vestibulum in lectus vitae enim feugiat porta id bibendum orci. Proin euismod et diam quis porta. Nulla facilisi.
+Last updated: February 18, 2026
 
-Aliquam vestibulum tellus vel nulla sagittis, ac cursus lacus varius. Sed eget nulla quis leo rhoncus feugiat eu at dolor. Integer tristique finibus pretium. Vestibulum eros mi, blandit luctus congue venenatis, congue at ante. Integer mi nibh, volutpat sit amet dictum quis, congue eget tellus. Nam vel varius sapien. Phasellus sodales justo id vestibulum dapibus. Donec id interdum lectus. In nec velit non mi facilisis iaculis. Aenean mollis nulla non laoreet malesuada. Aliquam erat volutpat. Phasellus vestibulum magna lorem, quis aliquet mi mollis scelerisque. In hac habitasse platea dictumst. Praesent porttitor bibendum tellus, sit amet posuere dui. Phasellus in dapibus urna, imperdiet eleifend ipsum.
+1. DATA CONTROLLER
 
-Fusce nunc magna, tempus non augue vitae, vehicula sollicitudin massa. Duis egestas porttitor cursus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi molestie dui a quam mattis rutrum. Ut et ligula quam. Proin dignissim mauris varius tellus lobortis, et maximus urna scelerisque. Etiam egestas augue eget dolor tristique varius. Maecenas vel orci sed eros vulputate tincidunt vel nec dolor. Cras vitae lorem laoreet, tincidunt mi ut, maximus enim. Etiam sed augue et ex fringilla euismod sed et elit. Aenean quam quam, tincidunt non venenatis at, commodo ut purus. Suspendisse pretium, dui sit amet congue eleifend, purus odio efficitur tellus, congue tincidunt risus risus vitae mauris. Cras ornare pretium lobortis. Fusce pulvinar fringilla ante, vitae mattis odio ultrices nec.
+Data controller:
+Mechard Mel-yand
+Ajamshid Abutet
+Jealefev
+Contact: [jealefev@student.42.fr](mailto:jealefev@student.42.fr)
+Country: France
 
-Nunc elit metus, egestas in consectetur sit amet, efficitur sit amet est. Praesent maximus magna ipsum, commodo efficitur augue blandit nec. Maecenas eget commodo elit. Nunc felis turpis, vulputate ut imperdiet et, interdum aliquam risus. Etiam consectetur ligula id risus faucibus, ut placerat mi semper. Aenean mi diam, rutrum vel velit in, suscipit sodales lorem. Aliquam a sodales turpis, vitae eleifend elit. Nunc eget euismod urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse consectetur at ante sed finibus. In eget maximus elit. Integer a mauris arcu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+2. DATA COLLECTED
+
+We collect:
+
+* Email address
+* Username
+* Encrypted (hashed and salted) password
+* Authentication data related to Google Authentication
+* Session cookies
+
+3. PURPOSE OF PROCESSING
+
+Data is processed solely for:
+
+* Account creation and management
+* User authentication
+* Securing accounts (2FA)
+* Maintaining active sessions
+
+No marketing, advertising, or analytics tracking is used.
+
+4. COOKIES
+
+Only technical session cookies are used.
+These cookies are necessary for the proper functioning of the service.
+
+5. DATA STORAGE
+
+Data is hosted locally in France.
+Appropriate security measures are implemented to protect user data.
+
+6. DATA RETENTION
+
+Data is retained for as long as the account remains active.
+Users may delete their account at any time, which results in data deletion.
+
+7. USER RIGHTS (GDPR)
+
+Under GDPR, users have the right to:
+
+* Access their data
+* Rectify their data
+* Request deletion
+* Restrict processing
+
+Requests can be sent to: [jealefev@student.42.fr](mailto:jealefev@student.42.fr)
+
+8. MINORS
+
+The service is accessible to minors.
+Parents or legal guardians may request account deletion by contacting the operator.
+
+9. SECURITY
+
+Passwords are hashed and salted.
+2FA is implemented to increase account security.
 `;

@@ -1,13 +1,87 @@
 export const cgvContent = `
 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis id ipsum id lacinia. Mauris ornare mollis consectetur. Cras finibus, turpis vel finibus egestas, turpis odio molestie velit, id placerat nulla mi nec ante. Maecenas nisi erat, consectetur sed enim vel, consequat mattis eros. Maecenas lobortis felis non ante porta, sit amet ullamcorper ante dictum. Sed eget semper nulla. Integer et turpis nunc. Suspendisse vel neque et ex finibus vulputate. Curabitur maximus enim hendrerit eros malesuada, ac tincidunt tellus consectetur. Proin semper, ipsum at maximus molestie, orci massa imperdiet justo, non volutpat nulla massa at nisi. Etiam semper, elit vel lobortis blandit, tellus massa sagittis ex, ut pulvinar eros ligula vitae libero. Donec consectetur a sem nec rhoncus. Etiam auctor sed tellus eu gravida. Nunc sodales orci a lectus tempus, ut ultricies est fermentum. Etiam et tortor id tortor tristique laoreet. Aliquam tincidunt enim lorem, quis viverra mi finibus ut.
+CONDITIONS GÉNÉRALES D’UTILISATION (CGU)
 
-Sed condimentum, massa quis blandit ullamcorper, felis magna efficitur turpis, ultricies porta ante ex quis sem. Donec quis eleifend diam. Integer suscipit dictum neque. Praesent iaculis mi non quam sollicitudin ornare. Sed at dolor ipsum. Nam faucibus rutrum tempus. Donec consequat rutrum quam a consequat. Curabitur luctus mattis lorem, ut ornare diam facilisis eu. Sed finibus nisl ante, nec venenatis neque rutrum vitae. Morbi dictum commodo tortor. Fusce sed pellentesque elit. Ut sagittis dignissim erat efficitur ultricies. Vestibulum in lectus vitae enim feugiat porta id bibendum orci. Proin euismod et diam quis porta. Nulla facilisi.
+Dernière mise à jour : 18 février 2026
 
-Aliquam vestibulum tellus vel nulla sagittis, ac cursus lacus varius. Sed eget nulla quis leo rhoncus feugiat eu at dolor. Integer tristique finibus pretium. Vestibulum eros mi, blandit luctus congue venenatis, congue at ante. Integer mi nibh, volutpat sit amet dictum quis, congue eget tellus. Nam vel varius sapien. Phasellus sodales justo id vestibulum dapibus. Donec id interdum lectus. In nec velit non mi facilisis iaculis. Aenean mollis nulla non laoreet malesuada. Aliquam erat volutpat. Phasellus vestibulum magna lorem, quis aliquet mi mollis scelerisque. In hac habitasse platea dictumst. Praesent porttitor bibendum tellus, sit amet posuere dui. Phasellus in dapibus urna, imperdiet eleifend ipsum.
+1. ÉDITEUR DU SERVICE
 
-Fusce nunc magna, tempus non augue vitae, vehicula sollicitudin massa. Duis egestas porttitor cursus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi molestie dui a quam mattis rutrum. Ut et ligula quam. Proin dignissim mauris varius tellus lobortis, et maximus urna scelerisque. Etiam egestas augue eget dolor tristique varius. Maecenas vel orci sed eros vulputate tincidunt vel nec dolor. Cras vitae lorem laoreet, tincidunt mi ut, maximus enim. Etiam sed augue et ex fringilla euismod sed et elit. Aenean quam quam, tincidunt non venenatis at, commodo ut purus. Suspendisse pretium, dui sit amet congue eleifend, purus odio efficitur tellus, congue tincidunt risus risus vitae mauris. Cras ornare pretium lobortis. Fusce pulvinar fringilla ante, vitae mattis odio ultrices nec.
+Le jeu Transcencdance est édité par :
+Mechard
+Mel-yand
+Ajamshid
+Abutet
+Jealefev
 
-Nunc elit metus, egestas in consectetur sit amet, efficitur sit amet est. Praesent maximus magna ipsum, commodo efficitur augue blandit nec. Maecenas eget commodo elit. Nunc felis turpis, vulputate ut imperdiet et, interdum aliquam risus. Etiam consectetur ligula id risus faucibus, ut placerat mi semper. Aenean mi diam, rutrum vel velit in, suscipit sodales lorem. Aliquam a sodales turpis, vitae eleifend elit. Nunc eget euismod urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse consectetur at ante sed finibus. In eget maximus elit. Integer a mauris arcu. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+Pays d’exploitation : France
+Contact : [jealefev@student.42.fr](mailto:jealefev@student.42.fr)
+
+2. OBJET
+
+Les présentes Conditions Générales d’Utilisation ont pour objet de définir les modalités d’accès et d’utilisation du jeu en ligne Transcencdance, accessible via navigateur web.
+
+3. DESCRIPTION DU SERVICE
+
+Transcencdance est un jeu gratuit accessible via navigateur, jouable en solo ou en multijoueur contre un bot.
+Le jeu comprend un système de chat ainsi que des fonctionnalités d’ajout, blocage et suppression d’amis.
+
+Le service est entièrement gratuit, sans publicité, sans achats intégrés et sans système de dons.
+
+4. ACCÈS AU SERVICE
+
+L’accès au jeu nécessite :
+
+* Une adresse email
+* La création d’un mot de passe
+* Le choix d’un nom d’utilisateur
+
+Une authentification via Google Authentification et un système 2FA peuvent être utilisés.
+
+L’utilisateur peut supprimer son compte à tout moment via les paramètres du jeu.
+
+5. UTILISATION DU CHAT
+
+Les utilisateurs sont responsables des contenus qu’ils publient dans le chat.
+
+L’éditeur n’assure pas de modération active du chat.
+L’utilisateur reconnaît utiliser le chat sous sa propre responsabilité.
+
+Tout comportement illégal ou contraire à la législation française engage la responsabilité exclusive de son auteur.
+
+6. MINEURS
+
+Le jeu est accessible aux mineurs.
+Les mineurs sont réputés utiliser le service sous la responsabilité de leurs représentants légaux.
+
+7. PROPRIÉTÉ INTELLECTUELLE
+
+Le jeu Transcencdance ainsi que l’ensemble de ses contenus (code, design, éléments graphiques) sont la propriété exclusive des éditeurs.
+
+Le streaming et la diffusion de vidéos du jeu sont autorisés, sous réserve de ne pas porter atteinte à l’image du jeu.
+
+8. RESPONSABILITÉ
+
+Le service est fourni « en l’état ».
+
+Les éditeurs ne garantissent pas :
+
+* L’absence d’erreurs ou de bugs
+* La disponibilité permanente du service
+* L’absence d’interruption
+
+Les éditeurs ne pourront être tenus responsables :
+
+* Des pertes de données
+* Des pertes de progression
+* Des dommages indirects liés à l’utilisation du service
+
+9. MODIFICATION OU ARRÊT DU SERVICE
+
+Les éditeurs se réservent le droit de modifier, suspendre ou arrêter le jeu à tout moment, sans préavis.
+
+10. DROIT APPLICABLE
+
+Les présentes CGU sont régies par le droit français.
+Tout litige relève de la compétence des juridictions françaises.
 `;
