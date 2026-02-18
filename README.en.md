@@ -11,7 +11,11 @@
 
 ---
 
-<div align="center">Commands to clone the transcendence repository</div>
+<div align="center">
+
+### Commands to clone the transcendence repository
+
+</div>
 
 <details><summary> 🌍 From github</summary>
 
