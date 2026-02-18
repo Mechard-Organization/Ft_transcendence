@@ -98,6 +98,7 @@ OAUTH_SUCCESS_REDIRECT=path-redirection
 ---
 
 <details><summary>### 🚀 Launch</summary>
+
 ```bash
 make
 
@@ -107,7 +108,6 @@ or
 make start
 
 ```
-
 </details>
 ### 🏥 Commands list
 Stop:
