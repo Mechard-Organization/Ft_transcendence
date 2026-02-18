@@ -9,12 +9,13 @@
 
 ---
 
-<div align="center">
+<details>
 
-<img src="./.assets/imgs/CTR.svg" alt="📂 Clone the repo" width="500"/>
-  <br/>
+<summary align="center">
+  <img src="./.assets/imgs/CTR.svg" alt="📂 Clone the repo" width="500"/>
+</summary>
 
-</div>
+<br>
 
 <details><summary> 🌍 From github</summary>
 
@@ -32,6 +33,7 @@ git clone git@vogsphere.42paris.fr:vogsphere/intra-uuid-1b74ffcb-2a75-4cc1-a276-
 
 ```
 
+</details>
 </details>
 
 ---
