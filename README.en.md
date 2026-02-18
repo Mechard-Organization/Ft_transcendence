@@ -11,7 +11,7 @@
 
 <div align="center">
 
-<img src="./.assets/imgs/CTR.svg" alt="📂 Clone the repo" width="100"/>
+<img src="./.assets/imgs/CTR.svg" alt="📂 Clone the repo" width="500"/>
   <br/>
 
 </div>
