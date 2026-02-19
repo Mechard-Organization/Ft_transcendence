@@ -120,37 +120,38 @@ The objective was to build a production-ready web application combining modern w
   ### 🏥 Commands list
   </summary>
 
-🚀 Launch
-```bash
-make
+  🚀 Launch
+  ```bash
+  make
 
-```
-or
-```bash
-make start
+  ```
+  or
+  ```bash
+  make start
 
-```
+  ```
 
-Stop:
-```bash
-make down
+  Stop:
+  ```bash
+  make down
 
-```
-Rebuild completely:
-```bash
-make rebirth
+  ```
+  Rebuild completely:
+  ```bash
+  make rebirth
 
-```
-Logs:
-```bash
-make logs
+  ```
+  Logs:
+  ```bash
+  make logs
 
-```
-for a complete list of available make commande, please make :
-```bash
-make help
+  ```
+  for a complete list of available make commande, please make :
+  ```bash
+  make help
 
-```
+  ```
+</details>
 Access
 
 Main application (HTTPS via Nginx):
