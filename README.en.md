@@ -547,7 +547,7 @@ All technical implementations were written, reviewed, and validated by the team.
 
 License
 
-Educational project developed at 42.
+  **Educational project developed at 42.**
 
 ---
 
