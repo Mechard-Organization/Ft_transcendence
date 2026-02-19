@@ -67,7 +67,7 @@ The objective was to build a production-ready web application combining modern w
 ---
 
 <p align="center">
-  <img src="./.assets/imgs/instructions.svg" alt="Instructions" width="420"/>
+  <img src="./.assets/imgs/I.svg" alt="Instructions" width="420"/>
 </p>
 
 ### Prerequisites
