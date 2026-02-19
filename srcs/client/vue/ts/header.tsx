@@ -74,6 +74,20 @@ export default function Header() {
     wsRef.current = ws;
 
     ws.onopen = () => {
+      (async () => {
+        try {
+          const auth = await isAuthenticated();
+          if (!auth?.id) return;
+
+          const resUser = await fetch("/api/updateUserConnected", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: auth.id, status: true }),
+          });
+        } catch (err) {
+          console.error("Erreur update profil :", err);
+        }
+      })();
       console.log("✅ WebSocket connecté");
     };
 
@@ -94,6 +108,20 @@ export default function Header() {
     };
 
     ws.onclose = () => {
+      (async () => {
+        try {
+          const auth = await isAuthenticated();
+          if (!auth?.id) return;
+
+          const resUser = await fetch("/api/updateUserConnected", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: auth.id, status: false }),
+          });
+        } catch (err) {
+          console.error("Erreur update profil :", err);
+        }
+      })();
       console.log("❌ WebSocket fermé");
     };
 
@@ -110,10 +138,22 @@ export default function Header() {
 
 
 const handlelogout = async () => {
-  await fetch("/api/auth/logout", {
-    method: "POST",
-    credentials: "include", // 🔑 OBLIGATOIRE
-  });
+  try {
+    const auth = await isAuthenticated();
+    if (!auth?.id) return;
+
+    const resUser = await fetch("/api/updateUserConnected", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: auth.id, status: false }),
+    });
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include", // 🔑 OBLIGATOIRE
+    });
+  } catch (err) {
+    console.error("Erreur update profil :", err);
+  }
 
   window.location.href = "/Login";
 };

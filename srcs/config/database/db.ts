@@ -28,6 +28,7 @@ db.prepare(`
     google_sub TEXT UNIQUE,
     oauth_enabled INTEGER NOT NULL DEFAULT 0,
     admin BOOL DEFAULT FALSE,
+    connected BOOL DEFAULT FALSE,
     avatarUrl TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     twofa_enabled INTEGER NOT NULL DEFAULT 0,
@@ -322,7 +323,7 @@ export function createOAuthUser(username: string, password_hash: string, mail: s
 
 export function getUserById(id: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret, oauth_enabled
+    SELECT *
     FROM users
     WHERE id = ?
   `);
@@ -332,7 +333,7 @@ export function getUserById(id: string) {
 
 export function getUserByUsername(username: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret, oauth_enabled
+    SELECT *
     FROM users
     WHERE username = ?
   `);
@@ -342,7 +343,7 @@ export function getUserByUsername(username: string) {
 
 export function getUserByMail(mail: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret, oauth_enabled
+    SELECT *
     FROM users
     WHERE mail = ?
   `);
@@ -352,7 +353,7 @@ export function getUserByMail(mail: string) {
 
 export function getUserByGoogleSub(google_sub: string) {
   const stmt = db.prepare(`
-    SELECT id, username, password_hash, mail, admin, avatarUrl, twofa_enabled, twofa_secret, twofa_temp_secret, oauth_enabled, google_sub
+    SELECT *
     FROM users
     WHERE google_sub = ?
   `);
@@ -388,42 +389,6 @@ export function ranking() {
   return stmt.all();
 }
 
-
-// --- 2FA in USER FONCTIONS --- //
-
-export function setTwofaTempSecret(userId: number, secret: string) {
-  return db.prepare(`
-    UPDATE users SET twofa_temp_secret = ? WHERE id = ?
-  `).run(secret, userId);
-}
-
-export function enableTwofa(userId: number) {
-  return db.prepare(`
-    UPDATE users
-    SET twofa_enabled = 1,
-        twofa_secret = twofa_temp_secret,
-        twofa_temp_secret = NULL
-    WHERE id = ?
-  `).run(userId);
-}
-
-export function disableTwofa(userId: number) {
-  return db.prepare(`
-    UPDATE users
-    SET twofa_enabled = 0,
-        twofa_secret = NULL,
-        twofa_temp_secret = NULL
-    WHERE id = ?
-  `).run(userId);
-}
-
-export function getTwofaStatus(userId: number) {
-  return db.prepare(`
-    SELECT twofa_enabled FROM users WHERE id = ?
-  `).get(userId);
-}
-
-// --------------------------- //
 
 export function getAllUsers() {
   const stmt = db.prepare(`
@@ -473,6 +438,16 @@ export function updateUserAdmin(status: boolean, id: string) {
   return stmt.run(status ? 1 : 0, id);
 }
 
+export function updateUserConnected(status: boolean, id: string) {
+  const stmt = db.prepare(`
+    UPDATE users
+    SET connected = ?
+    WHERE id = ?
+  `);
+
+  return stmt.run(status ? 1 : 0, id);
+}
+
 export function updateUserPp(url: string | null, id: string) {
   const stmt = db.prepare(`
     UPDATE users
@@ -510,6 +485,40 @@ export type User = {
   created_at: string;
   oauth_enabled?: number;
 };
+
+// --- 2FA in USER FONCTIONS --- //
+
+export function setTwofaTempSecret(userId: number, secret: string) {
+  return db.prepare(`
+    UPDATE users SET twofa_temp_secret = ? WHERE id = ?
+  `).run(secret, userId);
+}
+
+export function enableTwofa(userId: number) {
+  return db.prepare(`
+    UPDATE users
+    SET twofa_enabled = 1,
+        twofa_secret = twofa_temp_secret,
+        twofa_temp_secret = NULL
+    WHERE id = ?
+  `).run(userId);
+}
+
+export function disableTwofa(userId: number) {
+  return db.prepare(`
+    UPDATE users
+    SET twofa_enabled = 0,
+        twofa_secret = NULL,
+        twofa_temp_secret = NULL
+    WHERE id = ?
+  `).run(userId);
+}
+
+export function getTwofaStatus(userId: number) {
+  return db.prepare(`
+    SELECT twofa_enabled FROM users WHERE id = ?
+  `).get(userId);
+}
 
 // --- FIREND FUNCTIONS ---
 
