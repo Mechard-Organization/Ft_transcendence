@@ -70,7 +70,7 @@ export default function ChatPage() {
   (async () => {
       try {
         const auth = await isAuthenticated();
-        
+
         if (!(auth?.authenticated)) {
           setAuthStatus("anonymous")
           console.log("utilisateur non identifie")
@@ -107,11 +107,12 @@ export default function ChatPage() {
       highScore: 0
     });
 
-  async function fetchMessages() {
+  async function fetchMessages(id_group: number) {
     const auth = await isAuthenticated();
     const id = auth?.id ?? null;
     let res;
-    if (!selectedConversation)
+    console.log(id_group);
+    if (!id_group)
     {
         res = await fetch("/api/messages", {
         method: "POST",
@@ -128,7 +129,7 @@ export default function ChatPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id_group: selectedConversation.id,
+          id_group,
           id
         }),
       });
@@ -175,7 +176,7 @@ useEffect(() => {
           const idGroup = msg.data.id_group ?? null;
           console.log("mm", msg.data.saved);
           if (msg.type === "new_message" && idGroup === selectedConversationRef.current) {
-            fetchMessages();
+            fetchMessages(idGroup);
           }
         }
       } catch (err) {
@@ -194,7 +195,7 @@ useEffect(() => {
 
   useEffect(() => {
 
-    fetchMessages();
+    fetchMessages(selectedConversation?.id!);
   }, [selectedConversation]);
 
   useEffect((): void =>{
@@ -293,16 +294,16 @@ const sendMessage = async () => {
       const res = await fetch("/api/updateGroupName", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          name: NewGroupName.trim(), 
-          id_group: selectedConversation.id 
+        body: JSON.stringify({
+          name: NewGroupName.trim(),
+          id_group: selectedConversation.id
         }),
       });
 
       if (!res.ok) throw new Error("Impossible de changer le nom du groupe");
 
       console.log("Nom du groupe changé !");
-      
+
       // Met à jour la conversation localement
       setConversations((prev) =>
         prev.map((conv) =>
@@ -311,7 +312,7 @@ const sendMessage = async () => {
             : conv
         )
       );
-      
+
       setSelectedConversation((prev) =>
         prev ? { ...prev, username: NewGroupName.trim() } : prev
       );
