@@ -178,6 +178,8 @@ The objective was to build a production-ready web application combining modern w
 
       Prometheus: /prometheus
 
+</details>
+
 <h2 align="center">👨‍💻 Team Information 👨‍💻</h2>
 
 mechard — Project Manager + Developer
