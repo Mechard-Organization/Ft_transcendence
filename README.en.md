@@ -180,6 +180,66 @@ The objective was to build a production-ready web application combining modern w
 
 </details>
 
+**Each member** contributed to both the mandatory part and selected modules.
+
+<details>
+  <summary>🎨 Frontend</summary>
+
+      React (Vite)
+
+      TypeScript
+
+      TailwindCSS
+
+      Babylon.js (3D rendering)
+
+      Radix UI components
+</details>
+
+<details>
+  <summary>💾 Backend</summary>
+
+      Fastify (Node.js framework)
+
+      JWT authentication
+
+      OAuth 2.0 / OpenID Connect (Google)
+
+      TOTP-based 2FA
+
+      WebSocket server (real-time gameplay)
+</details>
+
+<details>
+  <summary>💾 Database</summary>
+
+      SQLite (better-sqlite3)
+
+  Why SQLite?
+
+      Lightweight
+
+      Reliable
+
+      Easy container integration
+
+      Sufficient relational structure for user/game logic
+</details>
+
+<details>
+  <summary>🏢 Infrastructure</summary>
+
+      Docker containerization
+
+      Nginx reverse proxy
+
+      HTTPS enforced everywhere
+
+      Prometheus metrics collection
+
+      Grafana dashboards
+</details>
+
 <p align="center">
   <img src="./.assets/imgs/TI.svg" alt="Team Information" width="450"/>
 </p>
