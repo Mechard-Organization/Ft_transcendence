@@ -537,10 +537,9 @@ Individual Contributions:
       Docker orchestration
 </details>
 
+All modules are **functional and demonstrable**.
 
 Total: **14+ points**
-
-All modules are **functional and demonstrable**.
 
 ---
 
