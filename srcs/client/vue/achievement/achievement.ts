@@ -70,7 +70,7 @@ export const achievements: Achievement[] = [
     rarity: 'legendary'
   },
     {
-    id: 'master',
+    id: 'merguez',
     title: 'Meguez',
     description: 'Perdre 5 Parties',
     icon: '',
@@ -78,7 +78,7 @@ export const achievements: Achievement[] = [
     rarity: 'Merguez'
   },
     {
-    id: 'master',
+    id: 'grosse merguez',
     title: 'Grosse Meguez',
     description: 'Perdre 10 Parties',
     icon: '',
