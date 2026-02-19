@@ -185,15 +185,15 @@ The objective was to build a production-ready web application combining modern w
 </p>
 
 <details>
-  <summary>mel-yand — Cybersecurity Developer</summary>
+  <summary>jealefev — Product Owner + Developer</summary>
 
-    2FA implementation (TOTP)
+    Feature definition and validation
 
-    OAuth 2.0 (Google OpenID Connect)
+    UI/UX coherence
 
-    Password validation and security policies
+    Frontend implementation
 
-    Input validation & security hardening
+    Social features integration
 </details>
 
 <details>
@@ -209,6 +209,18 @@ The objective was to build a production-ready web application combining modern w
 </details>
 
 <details>
+  <summary>mel-yand — Cybersecurity Developer</summary>
+
+    2FA implementation (TOTP)
+
+    OAuth 2.0 (Google OpenID Connect)
+
+    Password validation and security policies
+
+    Input validation & security hardening
+</details>
+
+<details>
   <summary>ajamshid — Game Logic Developer</summary>
 
     Pong gameplay engine
@@ -218,18 +230,6 @@ The objective was to build a production-ready web application combining modern w
     Scoring and match state management
 
     Match history logic
-</details>
-
-<details>
-  <summary>jealefev — Product Owner + Developer</summary>
-
-    Feature definition and validation
-
-    UI/UX coherence
-
-    Frontend implementation
-
-    Social features integration
 </details>
 
 <details>
