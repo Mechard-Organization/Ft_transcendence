@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Trophy, Target, Settings } from "lucide-react";
 import { isAuthenticated } from "../access/authenticator";
-import { Achievement, achievements } from "../access/achievement";
-import AchievementCard from "../access/achievementCard";
+import { achievements, Achievement } from "../achievement/achievement";
+import AchievementCard from "../achievement/achievementCard";
 
 type UserStats = {
   id: number;

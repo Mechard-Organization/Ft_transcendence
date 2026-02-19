@@ -91,6 +91,13 @@ export default async function userRoutes(fastify: FastifyInstance) {
     return { ok: true };
   });
 
+  fastify.post("/updateUserConnected", async (request) => {
+    const { id , status } = request.body as any;
+
+    db.updateUserConnected(status, id);
+    return { ok: true };
+  });
+
   fastify.delete("/delUser", async (request, reply) => {
     const { id } = request.body as any;
     const user = db.getUserById(id);

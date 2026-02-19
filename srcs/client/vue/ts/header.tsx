@@ -74,6 +74,20 @@ export default function Header() {
     wsRef.current = ws;
 
     ws.onopen = () => {
+      (async () => {
+        try {
+          const auth = await isAuthenticated();
+          if (!auth?.id) return;
+
+          const resUser = await fetch("/api/updateUserConnected", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: auth.id, status: true }),
+          });
+        } catch (err) {
+          console.error("Erreur update profil :", err);
+        }
+      })();
       console.log("✅ WebSocket connecté");
     };
 
@@ -94,6 +108,20 @@ export default function Header() {
     };
 
     ws.onclose = () => {
+      (async () => {
+        try {
+          const auth = await isAuthenticated();
+          if (!auth?.id) return;
+
+          const resUser = await fetch("/api/updateUserConnected", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: auth.id, status: false }),
+          });
+        } catch (err) {
+          console.error("Erreur update profil :", err);
+        }
+      })();
       console.log("❌ WebSocket fermé");
     };
 
@@ -110,10 +138,22 @@ export default function Header() {
 
 
 const handlelogout = async () => {
-  await fetch("/api/auth/logout", {
-    method: "POST",
-    credentials: "include", // 🔑 OBLIGATOIRE
-  });
+  try {
+    const auth = await isAuthenticated();
+    if (!auth?.id) return;
+
+    const resUser = await fetch("/api/updateUserConnected", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: auth.id, status: false }),
+    });
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include", // 🔑 OBLIGATOIRE
+    });
+  } catch (err) {
+    console.error("Erreur update profil :", err);
+  }
 
   window.location.href = "/Login";
 };
@@ -151,7 +191,7 @@ const handlelogout = async () => {
                   : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
               }`}
             >
-              <Brain className="w-6 h-6" />
+              <Brain className="HeaderIcone" />
             </div>
           </Link>
           {authStatus === "authenticated" ? (
@@ -165,7 +205,7 @@ const handlelogout = async () => {
                       : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                   }`}
                 >
-                  <Joystick className="w-6 h-6" />
+                  <Joystick className="HeaderIcone" />
                 </div>
               </Link>
               <Link to="/rank">
@@ -176,7 +216,7 @@ const handlelogout = async () => {
                       : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                   }`}
                 >
-                  <Crown className="w-6 h-6" />
+                  <Crown className="HeaderIcone" />
                 </div>
               </Link>
 
@@ -189,7 +229,7 @@ const handlelogout = async () => {
                       : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                   }`}
                 >
-                  <MessagesSquare className="w-6 h-6" />
+                  <MessagesSquare className="HeaderIcone" />
                 </div>
               </Link>
 
@@ -228,7 +268,7 @@ const handlelogout = async () => {
                 }`}
                 title={authStatus === "loading" ? "Vérification..." : "Se connecter"}
               >
-                <User className="w-6 h-6" />
+                <User className="HeaderIcone" />
               </div>
             </Link>
           )}

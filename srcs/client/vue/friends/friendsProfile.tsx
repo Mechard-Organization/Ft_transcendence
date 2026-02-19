@@ -2,8 +2,8 @@ import Footer from "../ts/Footer";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { isAuthenticated } from "../access/authenticator";
-import AchievementCard from "../access/achievementCard";
-import { Achievement, achievements } from "../access/achievement";
+import AchievementCard from "../achievement/achievementCard";
+import { Achievement, achievements } from "../achievement/achievement";
 import { Trophy, Target, Settings, Clock } from "lucide-react";
 
 /* =====================

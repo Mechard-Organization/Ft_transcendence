@@ -53,13 +53,15 @@ export default async function authRoutes(fastify: FastifyInstance) {
     if (user.twofa_enabled === 1) {
       const pending = signTwofaPending(user.id);
 
-      reply.setCookie("twofa_pending", pending, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        path: "/",
-        maxAge: 300,
-      });
+    db.updateUserConnected(true, user.id);
+
+    reply.setCookie("twofa_pending", pending, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 300,
+    });
 
     return reply.code(200).send({ twofa_required: true });
     }
@@ -91,7 +93,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
 
     const user = db.getUserById(String(userId));
     if (!user) return reply.code(401).send({ error: "Invalid session" });
-    
+
     if (user.twofa_enabled !== 1 || !user.twofa_secret) {
       return reply.code(400).send({ error: "2FA not enabled" });
     }
