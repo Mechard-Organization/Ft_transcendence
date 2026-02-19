@@ -1,6 +1,6 @@
 import Footer from "../ts/Footer";
 import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { isAuthenticated } from "../access/authenticator";
 import AchievementCard from "../achievement/achievementCard";
 import { Achievement, achievements } from "../achievement/achievement";
@@ -19,9 +19,11 @@ type UserStats = {
   gamesWon: number;
   highScore: number;
   twofaEnabled?: boolean;
+  connected: boolean;
 };
 
 const ProfilePage: React.FC = () => {
+  const wsRef = useRef<WebSocket | null>(null);
   const { id } = useParams<{ id: string }>();
   const userId: number = Number(id);
 
@@ -77,7 +79,8 @@ const ProfilePage: React.FC = () => {
         winRate: dataWin.Win / dataNum.Match,
         gamesPlayed: dataNum.Match,
         gamesWon: dataWin.Win,
-        highScore: dataHight.max_score
+        highScore: dataHight.max_score,
+        connected: data.connected
       });
       } catch (error) {
         console.error("Erreur récupération profil :", error);
@@ -128,6 +131,42 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const ws = new WebSocket(`/ws/`);
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      console.log("✅ WebSocket connecté (friendProfile)");
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data);
+        
+        if (message.type === "user_status_changed" && message.data.userId === userId) {
+          setUserStats(prev => 
+            prev ? { ...prev, connected: message.data.connected } : prev
+          );
+        }
+        if (message.type === "new_avatar" && message.data.userId === userId) {
+          setUserStats(prev => 
+            prev ? { ...prev, avatarUrl: message.data.avatarUrl } : prev
+          );
+        }
+      } catch (err) {
+        console.error("Erreur WS:", err);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log("❌ WebSocket fermé (friendProfile)");
+    };
+
+    return () => ws.close();
+  }, [userId]);
+
+
+  
   if (!userStats) {
     return <p>Chargement...</p>;
   }
@@ -159,6 +198,11 @@ const ProfilePage: React.FC = () => {
               <button onClick={() => document.getElementById("fileInput")?.click()}>
                 <img src={userStats.avatarUrl} alt="avatar" className="w-32 h-32 rounded-full object-cover border-4 border-[#FEE96E]" />
               </button>
+            <div
+                  className={`w-5 h-5 rounded-full border-4 border-white flex items-center justify-center ${
+                    userStats.connected
+                      ? "bg-green-500 shadow-lg shadow-green-500/50"
+                      : "bg-red-500 shadow-lg shadow-red-500/50"}`}title={userStats.connected ? "En ligne" : "Hors ligne"}/>
             </div>
             <div className="flex-1 text-center sm:text-left">
               <h1 className="text-4xl font-bold text-[#8B5A3C]">{userStats.username}</h1>

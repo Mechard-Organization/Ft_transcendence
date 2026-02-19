@@ -13,6 +13,7 @@ type UserStats = {
   username: string;
   mail: string;
   avatarUrl: string;
+  connected: boolean;
 };
 
 export default function Header() {
@@ -28,7 +29,8 @@ export default function Header() {
     id: 0,
     username: "",
     mail: "",
-    avatarUrl: "/uploads/profil/default.jpeg"
+    avatarUrl: "/uploads/profil/default.jpeg",
+    connected: false
   });
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function Header() {
             username: userData.username,
             mail: userData.mail,
             avatarUrl: userData.avatarUrl ?? "/uploads/profil/default.jpeg",
+            connected : userData.connected
           });
           } else {
             setAuthStatus("anonymous");
@@ -84,10 +87,12 @@ export default function Header() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id: auth.id, status: true }),
           });
+          setUserStats(prev => ({ ...prev, connected: true }));
         } catch (err) {
           console.error("Erreur update profil :", err);
         }
       })();
+      console.log("laaaaaa : ", userStats.connected)
       console.log("✅ WebSocket connecté");
     };
 
@@ -181,6 +186,7 @@ const handlelogout = async () => {
             />
           </Link>
         </div>
+            
         {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
           <Link to="/about">
