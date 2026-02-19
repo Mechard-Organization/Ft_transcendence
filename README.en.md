@@ -95,7 +95,7 @@ The objective was to build a production-ready web application combining modern w
   ### Environment Variables
   </summary>
 
-  Create a `.env` file at the root with:
+  Create a `.env` file at the root with :
 
   ```bash
   ###   GRAFANA   ###
