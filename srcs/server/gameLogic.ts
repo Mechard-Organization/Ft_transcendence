@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameLogic.ts                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/18 14:02:23 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/19 11:41:09 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,7 @@ export function movePaddles(games: Game): Paddles {
     }
   }
 
-// paddle moving two 
+// paddle moving two
 games.paddles.paddle2 = moveSiglePaddle(games.paddles.paddle2, keys, dragPos1,dragPos2, playerCount,games, isDragging1, isDragging2, 2)
   return games.paddles;
 }
@@ -357,7 +357,7 @@ function createNewGame(newGame?: NewGame) {
     },
     ballPos: { x: 0, y: 11, z: (Math.random() * 200) * (Math.random() > 0.5 ? 1 : -1) },
     playerIds: [1, 0],
-    playername: newGame?.playername ?? ["BOT", "BOT"]
+    playername: newGame?.playername ?? ["Bot", "Bot"]
   });
 
 
@@ -414,6 +414,10 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
   if (newGame && newGame.type == "newGame") {
 
     const gameId = createNewGame(newGame)
+    if (newGame.mode == 1  && newGame?.gameId == undefined)
+    {
+      player.ws?.send(JSON.stringify({ type: "inviteMatch", game: talkerTemp[talkerTemp.findIndex(g => g.gameId === gameId)]}))
+    }
     // console.log("game created new game given user ", player.username, gId, games[games.findIndex(g => g.gameId === gameId)]);
     removeOldAddNewGame(player, gameId);
 
