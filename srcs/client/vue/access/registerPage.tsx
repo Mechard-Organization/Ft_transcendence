@@ -131,7 +131,7 @@ export default function RegisterPage() {
                   value={mail}
                   onChange={(e) => setMail(e.target.value)}
                   autoComplete="email"
-                  className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+                  className="text-[#86592d] flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
                 />
               </div>
 
@@ -146,7 +146,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="new-password"
-                  className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+                  className="text-[#86592d] flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
                 />
               </div>
 
@@ -161,13 +161,13 @@ export default function RegisterPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   autoComplete="new-password"
-                  className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+                  className="text-[#86592d] flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
                 />
               </div>
 
               <button
                 id="registerBtn"
-                className="flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
+                className="text-[#86592d] flex-1 px-6 py-3 rounded-full border-2 border-[#FEE96E] bg-[#FEE96E] focus:outline-none focus:border-[#8B5A3C]"
                 type="submit"
                 disabled={loading}
               >
@@ -182,7 +182,7 @@ export default function RegisterPage() {
             </form>
           </div>
           </div>
-		  <div className="mt-4"> Vous avez déjà un compte ?{" "}<a className="text-[#A67C52] hover:text-[#8B5A3C]" href="/Login">Cliquez ici</a>
+		  <div className="mt-4 text-[#A67C52]"> Vous avez déjà un compte ?{" "}<a className="text-[#86592d] hover:text-[#734d26]" href="/Login">Cliquez ici</a>
         </div>
       </div>
     <div className="margin-bot w-full">

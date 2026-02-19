@@ -6,22 +6,23 @@ import ChatPage from './client/vue/messages/messagesPage';
 import ProfilePage from './client/vue/profil/profilPage';
 import LoginPage from './client/vue/access/loginPage';
 import RegisterPage from './client/vue/access/registerPage';
-import SettingsPage from './client/vue/access/settings';
+import SettingsPage from './client/vue/settings/settings';
 import FriendsPage from './client/vue/friends/friend';
 import FriendProfil from './client/vue/friends/friendsProfile'
 import AdminPage from './client/vue/admin/AdminPage';
-import AboutPage from './client/vue/access/about';
+import AboutPage from './client/vue/policies/about';
 import RankPage from './client/vue/game/rangGame';
 import Footer from './client/vue/ts/Footer';
 import ProtectedRoute from './client/vue/access/accessRoutes';
-import CGU from './client/vue/access/CGV';
-import PolicyPrivacyTermsService from './client/vue/access/PolicyPrivacyTermsService';
-import Terms_of_service from './client/vue/access/terms_of_service';
+import CGU from './client/vue/policies/CGU';
+import PolicyPrivacy from './client/vue/policies/PolicyPrivacyTermsService';
+import Terms_of_service from './client/vue/policies/terms_of_service';
+
 export default function App() {
   return (
     <Router>
       <div 
-        className="flex-col bg-[#FFFAED]"
+        className="flex-col bg-[#FFFAED] colors"
         style={{
           backgroundImage: `
             radial-gradient(circle at 20% 50%, rgba(254, 233, 110, 0.15) 0%, transparent 50%),
@@ -38,7 +39,7 @@ export default function App() {
 
           <Route path="/terms-of-service" element={<Terms_of_service/>}></Route>
 
-          <Route path="/privacy-policy" element={<PolicyPrivacyTermsService/>}></Route>
+          <Route path="/privacy-policy" element={<PolicyPrivacy/>}></Route>
 
           <Route path="/CGU" element={<CGU/>}></Route>
 

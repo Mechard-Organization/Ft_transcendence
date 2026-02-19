@@ -41,13 +41,13 @@ export default function RankPage() {
 
   return (
     <div className="min-h-[calc(100vh-8rem)] flex flex-col bg-[#FFF9E5]">
-      <main className="max-w-6xl mx-auto px-5 py-8">
+      <main className="max-w-6xl  mx-auto px-5 py-8">
         <h1 className="text-4xl font-extrabold text-center text-[#8B5A3C] mb-12 tracking-wide">
           Classement des joueurs
         </h1>
 
         <div className="bg-white/95 rounded-3xl shadow-lg border-4 border-[#FEE96E] overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full h-[70vh] divide-y divide-gray-200">
             <thead className="bg-[#FEE96E]">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-bold text-[#8B5A3C]">#</th>

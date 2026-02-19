@@ -186,7 +186,7 @@ export default function LoginPage() {
           </div>
 	    </div>
       <br/>
-      <div>Vous n'avez pas encore de compte ? <a className="text-[#A67C52] hover:text-[#8B5A3C]" href = "/Register">Cliquez ici</a></div>
+      <div className="text-[#A67C52]">Vous n'avez pas encore de compte ? <a className="text-[#8B5A3E] hover:text-[#8B5A3C]" href = "/Register">Cliquez ici</a></div>
       {twofaRequired && (
   <div className="mt-6 p-6 bg-white/90 rounded-2xl border-4 border-[#FEE96E]">
     <h2 className="text-xl text-[#8B5A3C] mb-4">Vérification 2FA</h2>

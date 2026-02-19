@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { validatePassword, validateEmail } from "../../../services/validate.service";
 import { isAuthenticated } from "../access/authenticator";
-import TwoFA from "./2fa";
+import TwoFA from "../access/2fa";
 import Footer from "../ts/Footer";
 import { UserPlus, UserCheck, UserMinus } from "lucide-react";
 
