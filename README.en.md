@@ -112,6 +112,7 @@ The objective was to build a production-ready web application combining modern w
   GOOGLE_REDIRECT_URI=https://localhost/api/auth/google/callback
   OAUTH_SUCCESS_REDIRECT=path-redirection
   ```
+  
 </details>
 
 <details>
@@ -122,9 +123,9 @@ The objective was to build a production-ready web application combining modern w
 
   <details>
     <summary>
-  
     🚀 Launch
     </summary>
+
     ```bash
     make
 
