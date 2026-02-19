@@ -1,6 +1,12 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
 <p align="center">
+  <img src="./.assets/imgs/TRS.png" alt="Transcendence" width="600"/>
+</p>
+
+---
+
+<p align="center">
   <img src="./.assets/imgs/version.svg" alt="💾 Version 💾" width="320"/>
   <br/>
   🇯🇵 <a href="./README.jp.md">日本語</a> • 
@@ -66,144 +72,126 @@ The objective was to build a production-ready web application combining modern w
 
 ---
 
-## Instructions
+<p align="center">
+  <img src="./.assets/imgs/I.svg" alt="Instructions" width="600"/>
+</p>
 
-### Prerequisites
+<details>
+  <summary>
+  
+  ### Prerequisites
+  </summary>
 
-- Docker version >= 24
-- Docker Compose v2
-- Make
-- Node.js >= 18 (for local development)
+  - Docker version >= 24
+  - Docker Compose v2
+  - Make
+  - Node.js >= 18 (for local development)
 
----
-
-### Environment Variables
-
-Create a `.env` file at the root with:
-
-```bash
-###   GRAFANA   ###
-
-GF_SECURITY_ADMIN_USER=admin-grafana
-GF_SECURITY_ADMIN_PASSWORD=password-grafana
-GF_SERVER_HTTP_PORT=5000
-GF_INSTALL_PLUGINS=frser-sqlite-datasource
-
-###   ADMIN   ###
-
-ADMIN=admin_username
-ADMIN_PASSWORD=strong_password
-ADMIN_MAIL=admin@example.com
-
-### OAuth Google ###
-
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=https://localhost/api/auth/google/callback
-OAUTH_SUCCESS_REDIRECT=path-redirection
-```
-
-
----
-
-<details><summary>### 🚀 Launch</summary>
-
-```bash
-make
-
-```
-or
-```bash
-make start
-
-```
 </details>
-### 🏥 Commands list
-Stop:
-```bash
-make down
 
-```
-Rebuild completely:
-```bash
-make rebirth
+<details>
+  <summary>
+  
+  ### Environment Variables
+  </summary>
 
-```
-Logs:
-```bash
-make logs
+  Create a `.env` file at the root with :
 
-```
-for a complete list of available make commande, please make :
-```bash
-make help
+  ```bash
+  ###   GRAFANA   ###
 
-```
-Access
+  GF_SECURITY_ADMIN_USER=admin-grafana
+  GF_SECURITY_ADMIN_PASSWORD=password-grafana
+  GF_SERVER_HTTP_PORT=5000
+  GF_INSTALL_PLUGINS=frser-sqlite-datasource
 
-Main application (HTTPS via Nginx):
+  ###   ADMIN   ###
 
-https://localhost:8443
+  ADMIN=admin_username
+  ADMIN_PASSWORD=strong_password
+  ADMIN_MAIL=admin@example.com
 
-Available routes:
+  ### OAuth Google ###
 
-    Frontend: /
+  GOOGLE_CLIENT_ID=your_google_client_id
+  GOOGLE_CLIENT_SECRET=your_google_client_secret
+  GOOGLE_REDIRECT_URI=https://localhost/api/auth/google/callback
+  OAUTH_SUCCESS_REDIRECT=path-redirection
+  ```
 
-    API: /api/...
+</details>
 
-    WebSockets: /ws/
+<details>
+  <summary>
+  
+  ### 🏥 Commands list
+  </summary>
 
-    Grafana: /grafana
+  🚀 Launch :
+  
+  ```bash
+  make
 
-    Prometheus: /prometheus
+  ```
+  or
+  ```bash
+  make start
 
----
+  ```
 
-<h2 align="center">👨‍💻 Team Information 👨‍💻</h2>
+  🛑 Stop :
+  ```bash
+  make down
 
-mechard — Project Manager + Developer
+  ```
+  👼 Rebuild completely:
+  ```bash
+  make rebirth
 
-    Global architecture coordination
+  ```
+  📜 Logs :
+  ```bash
+  make logs
 
-    Backend API integration
+  ```
+  for a **complete list of available make commande**, please make :
+  ```bash
+  make help
 
-    Authentication system integration
+  ```
 
-    Monitoring stack setup
+</details>
 
-    DevOps orchestration
+<details>
+  <summary>
+  
+  ### 🔓 Access
+  </summary>
 
-mel-yand — Cybersecurity Developer
+  Main application (HTTPS via Nginx):
 
-    2FA implementation (TOTP)
+  https://localhost:8443
 
-    OAuth 2.0 (Google OpenID Connect)
+  Available routes:
 
-    Password validation and security policies
+      Frontend: /
 
-    Input validation & security hardening
+      API: /api/...
 
-abutet — Technical Lead + WebSockets
+      WebSockets: /ws/
 
-    Backend architecture (Fastify)
+      Grafana: /grafana
 
-    WebSocket server implementation
+      Prometheus: /prometheus
 
-    Real-time synchronization
+</details>
 
-    Reverse proxy WebSocket routing
+<p align="center">
+  <img src="./.assets/imgs/TI.svg" alt="Team Information" width="700"/>
+</p>
 
-ajamshid — Game Logic Developer
-
-    Pong gameplay engine
-
-    Collision system
-
-    Scoring and match state management
-
-    Match history logic
-
-jealefev — Product Owner + Developer
+<details>
+  <summary>jealefev — Product Owner + Developer</summary>
 
     Feature definition and validation
 
@@ -212,8 +200,60 @@ jealefev — Product Owner + Developer
     Frontend implementation
 
     Social features integration
+</details>
 
-<h2 align="center"> Project Management</h2>
+<details>
+  <summary>abutet — Technical Lead + WebSockets</summary>
+
+    Backend architecture (Fastify)
+
+    WebSocket server implementation
+
+    Real-time synchronization
+
+    Reverse proxy WebSocket routing
+</details>
+
+<details>
+  <summary>mel-yand — Cybersecurity Developer</summary>
+
+    2FA implementation (TOTP)
+
+    OAuth 2.0 (Google OpenID Connect)
+
+    Password validation and security policies
+
+    Input validation & security hardening
+</details>
+
+<details>
+  <summary>ajamshid — Game Logic Developer</summary>
+
+    Pong gameplay engine
+
+    Collision system
+
+    Scoring and match state management
+
+    Match history logic
+</details>
+
+<details>
+  <summary>mechard — Project Manager + Developer</summary>
+
+      Global architecture coordination
+
+      Backend API integration
+
+      Authentication system integration
+
+      Monitoring stack setup
+
+      DevOps orchestration
+</details>
+
+<details>
+  <summary>Project Management</summary>
 
     Weekly sprint planning
 
@@ -226,6 +266,294 @@ jealefev — Product Owner + Developer
     GitHub Issues for task tracking
 
     Discord for daily communication
+</details>
+
+**Each member** contributed to both the mandatory part and selected modules.
+
+<details>
+  <summary>🎨 Frontend</summary>
+
+      React (Vite)
+
+      TypeScript
+
+      TailwindCSS
+
+      Babylon.js (3D rendering)
+
+      Radix UI components
+</details>
+
+<details>
+  <summary>💾 Backend</summary>
+
+      Fastify (Node.js framework)
+
+      JWT authentication
+
+      OAuth 2.0 / OpenID Connect (Google)
+
+      TOTP-based 2FA
+
+      WebSocket server (real-time gameplay)
+</details>
+
+<details>
+  <summary>💾 Database</summary>
+
+      SQLite (better-sqlite3)
+
+  Why SQLite?
+
+      Lightweight
+
+      Reliable
+
+      Easy container integration
+
+      Sufficient relational structure for user/game logic
+</details>
+
+<details>
+  <summary>🏢 Infrastructure</summary>
+
+      Docker containerization
+
+      Nginx reverse proxy
+
+      HTTPS enforced everywhere
+
+      Prometheus metrics collection
+
+      Grafana dashboards
+</details>
+
+<details>
+  <summary>🗂️ Database Schema</summary>
+  Users
+
+      id
+
+      username
+
+      password_hash
+
+      mail
+
+      google_sub
+
+      oauth_enabled
+
+      twofa_enabled
+
+      twofa_secret
+
+      admin
+
+      avatarUrl
+
+      created_at
+
+  Match
+
+      id
+
+      player1_id
+
+      player2_id
+
+      score
+
+      winner
+
+      played_at
+
+  Friends
+
+      id_user
+
+      id_friend
+
+      id_sender
+
+      accept
+
+  Messages
+
+      id
+
+      id_author
+
+      id_group
+
+      content
+
+      timestamp
+</details>
+
+Relations ensure **referential integrity and prevent data corruption** during concurrent actions.
+
+<p align="center">
+  <img src="./.assets/imgs/FL.svg" alt="Features List" width="700"/>
+</p>
+
+<details>
+  <summary>Authentication</summary>
+
+      Secure signup/login
+
+      JWT-based session management
+
+      Strong password validation
+
+      Email format validation
+
+      Google OAuth 2.0 authentication
+
+      2FA activation/deactivation
+
+      2FA login verification
+</details>
+
+<details>
+  <summary>Real-Time Multiplayer Game</summary>
+
+      WebSocket-based synchronization
+
+      Remote 1v1 gameplay
+
+      Reconnection handling
+
+      Live state broadcasting
+</details>
+
+<details>
+  <summary>Social System</summary>
+
+      Profile pages
+
+      Avatar management
+
+      Friends system
+
+      Group and private chat
+
+      Block users
+</details>
+
+<details>
+  <summary>Administration</summary>
+
+      Admin role
+
+      User moderation tools
+</details>
+
+<details>
+  <summary>Monitoring</summary>
+
+      Prometheus metrics endpoint
+
+      Grafana dashboards
+
+      Containerized observability
+</details>
+
+<p align="center">
+  <img src="./.assets/imgs/M.svg" alt="Modules" width="700"/>
+</p>
+
+<details>
+  <summary>Major Modules (2 pts each)</summary>
+
+    Web (Fastify + React full-stack framework usage)
+
+    Real-time features (WebSockets)
+
+    Standard user management
+
+    Cybersecurity (OAuth 2.0 + 2FA)
+
+    Gaming (complete web-based game)
+
+    DevOps (monitoring + containerization)
+</details>
+
+<details>
+  <summary>Minor Modules (1 pt each)</summary>
+
+    ORM alternative approach with structured DB layer
+
+    Match history & statistics
+
+    Advanced chat features
+</details>
+
+Individual Contributions:
+
+<details>
+  <summary>jealefev</summary>
+
+      Product validation
+
+      Frontend UI
+
+      Social features
+</details>
+
+<details>
+  <summary>abutet</summary>
+
+      Fastify server architecture
+
+      WebSocket implementation
+
+      Reverse proxy configuration
+</details>
+
+<details>
+  <summary>mel-yand</summary>
+
+      2FA implementation
+
+      OAuth Google integration
+
+      Security validation logic
+</details>
+
+<details>
+  <summary>ajamshid</summary>
+
+      Game engine logic
+
+      Collision detection
+
+      Score management
+</details>
+
+<details>
+  <summary>mechard</summary>
+
+      Authentication integration
+
+      JWT flows
+
+      Monitoring stack
+
+      Docker orchestration
+</details>
+
+All modules are **functional and demonstrable**.
+
+Total: **14+ points**
+
+---
+
+All technical implementations were written, reviewed, and validated by the team.
+
+License
+
+    Educational project developed at 42.
 
 ---
 
