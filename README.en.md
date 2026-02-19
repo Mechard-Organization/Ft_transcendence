@@ -483,10 +483,6 @@ Relations ensure **referential integrity and prevent data corruption** during co
     Advanced chat features
 </details>
 
-Total: 14+ points
-
-All modules are **functional and demonstrable**.
-
 Individual Contributions:
 
 <details>
@@ -540,6 +536,11 @@ Individual Contributions:
 
       Docker orchestration
 </details>
+
+
+Total: **14+ points**
+
+All modules are **functional and demonstrable**.
 
 ---
 
