@@ -530,7 +530,7 @@ Individual Contributions:
 </details>
 
 <details>
-  <summary>mechard
+  <summary>mechard</summary>
 
       Authentication integration
 
