@@ -364,3 +364,62 @@
 .google-icon {
   display: inline-block;
 }
+
+
+.icone {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-weight: bold;
+  color : #8B5A3C;
+}
+
+.HeaderIcone {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-weight: bold;
+  color : #8B5A3C;
+}
+
+.grille {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 56rem;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 768px)
+{
+  .grille{
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+
+.bubble {
+  flex: 1;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: #FEE96E;
+  background-color: #FEE96E;
+  color: #8B5A3C;
+  font: poppins;
+  font-weight: bold;
+}
+
+.bubble:focus{
+  outline: none;
+  border-color: #8B5A3C;
+}
+
+.colors{
+  background-color: #FFF9E5;
+  border-color: #FEE96E;
+  color: #A67C52;
+  text-shadow: #8B5A3C;
+}

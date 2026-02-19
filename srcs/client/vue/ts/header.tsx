@@ -151,7 +151,7 @@ const handlelogout = async () => {
                   : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
               }`}
             >
-              <Brain className="w-6 h-6" />
+              <Brain className="HeaderIcone" />
             </div>
           </Link>
           {authStatus === "authenticated" ? (
@@ -165,7 +165,7 @@ const handlelogout = async () => {
                       : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                   }`}
                 >
-                  <Joystick className="w-6 h-6" />
+                  <Joystick className="HeaderIcone" />
                 </div>
               </Link>
               <Link to="/rank">
@@ -176,7 +176,7 @@ const handlelogout = async () => {
                       : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                   }`}
                 >
-                  <Crown className="w-6 h-6" />
+                  <Crown className="HeaderIcone" />
                 </div>
               </Link>
 
@@ -189,7 +189,7 @@ const handlelogout = async () => {
                       : "bg-[#FEE96E]/80 text-[#8B5A3C] hover:bg-[#FEE96E]/100"
                   }`}
                 >
-                  <MessagesSquare className="w-6 h-6" />
+                  <MessagesSquare className="HeaderIcone" />
                 </div>
               </Link>
 
@@ -228,7 +228,7 @@ const handlelogout = async () => {
                 }`}
                 title={authStatus === "loading" ? "Vérification..." : "Se connecter"}
               >
-                <User className="w-6 h-6" />
+                <User className="HeaderIcone" />
               </div>
             </Link>
           )}
