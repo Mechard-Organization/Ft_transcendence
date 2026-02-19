@@ -181,7 +181,7 @@ The objective was to build a production-ready web application combining modern w
 </details>
 
 <p align="center">
-  <img src="./.assets/imgs/TI.svg" alt="Team Information" width="650"/>
+  <img src="./.assets/imgs/TI.svg" alt="Team Information" width="700"/>
 </p>
 
 <details>
