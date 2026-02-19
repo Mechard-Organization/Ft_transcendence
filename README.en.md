@@ -391,6 +391,72 @@ Relations ensure **referential integrity and prevent data corruption** during co
   <img src="./.assets/imgs/FL.svg" alt="Features List" width="700"/>
 </p>
 
+<details>
+  <summary>Authentication</summary>
+
+      Secure signup/login
+
+      JWT-based session management
+
+      Strong password validation
+
+      Email format validation
+
+      Google OAuth 2.0 authentication
+
+      2FA activation/deactivation
+
+      2FA login verification
+</details>
+
+<details>
+  <summary>Real-Time Multiplayer Game</summary>
+
+      WebSocket-based synchronization
+
+      Remote 1v1 gameplay
+
+      Reconnection handling
+
+      Live state broadcasting
+</details>
+
+<details>
+  <summary>Social System</summary>
+
+      Profile pages
+
+      Avatar management
+
+      Friends system
+
+      Group and private chat
+
+      Block users
+</details>
+
+<details>
+  <summary>Administration</summary>
+
+      Admin role
+
+      User moderation tools
+</details>
+
+<details>
+  <summary>Monitoring</summary>
+
+      Prometheus metrics endpoint
+
+      Grafana dashboards
+
+      Containerized observability
+</details>
+
+<p align="center">
+  <img src="./.assets/imgs/M.svg" alt="Modules" width="360"/>
+</p>
+
 
 ---
 

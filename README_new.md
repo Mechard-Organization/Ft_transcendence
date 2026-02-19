@@ -315,7 +315,7 @@ Monitoring
 
     Containerized observability
 
-Modules
+🚧 Modules
 Major Modules (2 pts each)
 
     Web (Fastify + React full-stack framework usage)
