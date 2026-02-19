@@ -180,19 +180,24 @@ The objective was to build a production-ready web application combining modern w
 
 </details>
 
-<h2 align="center">👨‍💻 Team Information 👨‍💻</h2>
+<p align="center">
+  <img src="./.assets/imgs/TI.svg" alt="Team Information" width="450"/>
+</p>
 
-mechard — Project Manager + Developer
 
-    Global architecture coordination
+<details>
+  <summary>mechard — Project Manager + Developer</summary>
 
-    Backend API integration
+      Global architecture coordination
 
-    Authentication system integration
+      Backend API integration
 
-    Monitoring stack setup
+      Authentication system integration
 
-    DevOps orchestration
+      Monitoring stack setup
+
+      DevOps orchestration
+</details>
 
 mel-yand — Cybersecurity Developer
 
