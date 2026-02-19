@@ -82,34 +82,37 @@ The objective was to build a production-ready web application combining modern w
   - Node.js >= 18 (for local development)
 
 </details>
----
 
-### Environment Variables
+<details>
+  <summary>
+  
+  ### Environment Variables
+  </summary>
 
-Create a `.env` file at the root with:
+  Create a `.env` file at the root with:
 
-```bash
-###   GRAFANA   ###
+  ```bash
+  ###   GRAFANA   ###
 
-GF_SECURITY_ADMIN_USER=admin-grafana
-GF_SECURITY_ADMIN_PASSWORD=password-grafana
-GF_SERVER_HTTP_PORT=5000
-GF_INSTALL_PLUGINS=frser-sqlite-datasource
+  GF_SECURITY_ADMIN_USER=admin-grafana
+  GF_SECURITY_ADMIN_PASSWORD=password-grafana
+  GF_SERVER_HTTP_PORT=5000
+  GF_INSTALL_PLUGINS=frser-sqlite-datasource
 
-###   ADMIN   ###
+  ###   ADMIN   ###
 
-ADMIN=admin_username
-ADMIN_PASSWORD=strong_password
-ADMIN_MAIL=admin@example.com
+  ADMIN=admin_username
+  ADMIN_PASSWORD=strong_password
+  ADMIN_MAIL=admin@example.com
 
-### OAuth Google ###
+  ### OAuth Google ###
 
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_REDIRECT_URI=https://localhost/api/auth/google/callback
-OAUTH_SUCCESS_REDIRECT=path-redirection
-```
-
+  GOOGLE_CLIENT_ID=your_google_client_id
+  GOOGLE_CLIENT_SECRET=your_google_client_secret
+  GOOGLE_REDIRECT_URI=https://localhost/api/auth/google/callback
+  OAUTH_SUCCESS_REDIRECT=path-redirection
+  ```
+</details>
 
 ---
 
