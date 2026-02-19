@@ -546,9 +546,8 @@ Total: **14+ points**
 All technical implementations were written, reviewed, and validated by the team.
 
 License
-<div><b>
+
     Educational project developed at 42.
-</b></div>
 
 ---
 
