@@ -262,7 +262,7 @@ The objective was to build a production-ready web application combining modern w
     Discord for daily communication
 </details>
 
-**- Each member** contributed to both the mandatory part and selected modules.
+**Each member** contributed to both the mandatory part and selected modules.
 
 <details>
   <summary>🎨 Frontend</summary>
