@@ -383,6 +383,7 @@ The objective was to build a production-ready web application combining modern w
       content
 
       timestamp
+</details>
 
 ---
 
