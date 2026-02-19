@@ -199,7 +199,8 @@ The objective was to build a production-ready web application combining modern w
       DevOps orchestration
 </details>
 
-mel-yand — Cybersecurity Developer
+<details>
+  <summary>mel-yand — Cybersecurity Developer</summary>
 
     2FA implementation (TOTP)
 
@@ -208,8 +209,10 @@ mel-yand — Cybersecurity Developer
     Password validation and security policies
 
     Input validation & security hardening
+</details>
 
-abutet — Technical Lead + WebSockets
+<details>
+  <summary>abutet — Technical Lead + WebSockets</summary>
 
     Backend architecture (Fastify)
 
@@ -218,8 +221,10 @@ abutet — Technical Lead + WebSockets
     Real-time synchronization
 
     Reverse proxy WebSocket routing
+</details>
 
-ajamshid — Game Logic Developer
+<details>
+  <summary>ajamshid — Game Logic Developer</summary>
 
     Pong gameplay engine
 
@@ -228,8 +233,10 @@ ajamshid — Game Logic Developer
     Scoring and match state management
 
     Match history logic
+</details>
 
-jealefev — Product Owner + Developer
+<details>
+  <summary>jealefev — Product Owner + Developer</summary>
 
     Feature definition and validation
 
@@ -238,8 +245,10 @@ jealefev — Product Owner + Developer
     Frontend implementation
 
     Social features integration
+</details>
 
-<h2 align="center"> Project Management</h2>
+<details>
+  <summary>Project Management</summary>
 
     Weekly sprint planning
 
@@ -252,6 +261,7 @@ jealefev — Product Owner + Developer
     GitHub Issues for task tracking
 
     Discord for daily communication
+</details>
 
 ---
 
