@@ -385,6 +385,13 @@ The objective was to build a production-ready web application combining modern w
       timestamp
 </details>
 
+Relations ensure **referential integrity and prevent data corruption** during concurrent actions.
+
+<p align="center">
+  <img src="./.assets/imgs/FL.svg" alt="Features List" width="420"/>
+</p>
+
+
 ---
 
 <p align="right">written by <i><b>mechard</b></i></p>
