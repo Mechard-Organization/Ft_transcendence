@@ -4,6 +4,8 @@
   <img src="./.assets/imgs/TRS.png" alt="Transcendence" width="600"/>
 </p>
 
+---
+
 <p align="center">
   <img src="./.assets/imgs/version.svg" alt="💾 Version 💾" width="320"/>
   <br/>
