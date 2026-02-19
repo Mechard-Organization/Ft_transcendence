@@ -457,6 +457,97 @@ Relations ensure **referential integrity and prevent data corruption** during co
   <img src="./.assets/imgs/M.svg" alt="Modules" width="700"/>
 </p>
 
+<details>
+  <summary>Major Modules (2 pts each)</summary>
+
+    Web (Fastify + React full-stack framework usage)
+
+    Real-time features (WebSockets)
+
+    Standard user management
+
+    Cybersecurity (OAuth 2.0 + 2FA)
+
+    Gaming (complete web-based game)
+
+    DevOps (monitoring + containerization)
+</details>
+
+<details>
+  <summary>Minor Modules (1 pt each)</summary>
+
+    ORM alternative approach with structured DB layer
+
+    Match history & statistics
+
+    Advanced chat features
+</details>
+
+Total: 14+ points
+
+All modules are **functional and demonstrable**.
+
+Individual Contributions:
+
+<details>
+  <summary>jealefev</summary>
+
+      Product validation
+
+      Frontend UI
+
+      Social features
+</details>
+
+<details>
+  <summary>abutet</summary>
+
+      Fastify server architecture
+
+      WebSocket implementation
+
+      Reverse proxy configuration
+</details>
+
+<details>
+  <summary>mel-yand</summary>
+
+      2FA implementation
+
+      OAuth Google integration
+
+      Security validation logic
+</details>
+
+<details>
+  <summary>ajamshid</summary>
+
+      Game engine logic
+
+      Collision detection
+
+      Score management
+</details>
+
+<details>
+  <summary>mechard
+
+      Authentication integration
+
+      JWT flows
+
+      Monitoring stack
+
+      Docker orchestration
+</details>
+
+---
+
+All technical implementations were written, reviewed, and validated by the team.
+
+License
+
+Educational project developed at 42.
 
 ---
 

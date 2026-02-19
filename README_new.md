@@ -395,13 +395,6 @@ AI tools were used to:
     Suggest refactoring approaches
 
 All technical implementations were written, reviewed, and validated by the team.
-Known Limitations
-
-    Optimized primarily for Google Chrome
-
-    AI opponent difficulty balancing can be improved
-
-    Mobile layout can be further refined
 
 License
 
