@@ -116,67 +116,67 @@ The objective was to build a production-ready web application combining modern w
 </details>
 
 <details>
-  <summary><b>
+  <summary>
   
-  🏥 Commands list
-  </b></summary>
+  ### 🏥 Commands list
+  </summary>
 
-  <details>
-    <summary>
-    🚀 Launch
-    </summary>
+  🚀 Launch :
+  
+  ```bash
+  make
 
-    ```bash
-    make
+  ```
+  or
+  ```bash
+  make start
 
-    ```
-    or
-    ```bash
-    make start
+  ```
 
-    ```
-  </details>
-
-  Stop:
+  🛑 Stop :
   ```bash
   make down
 
   ```
-  Rebuild completely:
+  👼 Rebuild completely:
   ```bash
   make rebirth
 
   ```
-  Logs:
+  📜 Logs :
   ```bash
   make logs
 
   ```
-  for a complete list of available make commande, please make :
+  for a **complete list of available make commande**, please make :
   ```bash
   make help
 
   ```
+
 </details>
-Access
 
-Main application (HTTPS via Nginx):
+<details>
+  <summary>
+  
+  ### 🔓 Access
+  </summary>
 
-https://localhost:8443
+  Main application (HTTPS via Nginx):
 
-Available routes:
+  https://localhost:8443
 
-    Frontend: /
+  Available routes:
 
-    API: /api/...
+      Frontend: /
 
-    WebSockets: /ws/
+      API: /api/...
 
-    Grafana: /grafana
+      WebSockets: /ws/
 
-    Prometheus: /prometheus
+      Grafana: /grafana
 
----
+      Prometheus: /prometheus
 
 <h2 align="center">👨‍💻 Team Information 👨‍💻</h2>
 
