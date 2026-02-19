@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Buttons.ts                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/18 14:22:24 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/19 11:40:49 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ import { setSelectedMesh, createCutomiseUI, createdisposableUI, createTournament
 
 function shuffle(array: string[]) {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1)); 
-    [array[i], array[j]] = [array[j], array[i]];  
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 }
@@ -351,29 +351,53 @@ export function createRemotePlayBtn(input: InputText): Button {
     if (input.text === "")
       input.background = "rgba(255, 110, 110, 1)";
     else {
-      mainUI.rootContainer.isVisible = false;
-      mainUI.isForeground = false;
-      multiUI.rootContainer.isVisible = false;
-      multiUI.isForeground = false;
-      resumeUI.rootContainer.isVisible = false;
-      resumeUI.isForeground = false;
-      remoteUI.rootContainer.isVisible = false;
-      remoteUI.isForeground = false;
+      (async () => {
+        try {
+          const user = await fetch("/api/getuserbyname", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username }),
+          });
+          const userData = await user.json();
 
-      setPlayerCount(2);
-      setPlayerName(["Player1", "Player2"]);
-      let newGame: NewGame = {
-        type: "newGame",
-        playerCount: 2,
-        mode: 1,
-        playername: [username, input.text]
-      }
-      // console.log("new game created ", newGame)
-      setNewGame(newGame);
+          const adv = await fetch("/api/getuserbyname", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: input.text }),
+          });
+          const advData = await adv.json();
+          if (!userData || !user.ok || !advData || !adv.ok)
+            input.background = "rgba(255, 110, 110, 1)";
+          else
+          {
+            mainUI.rootContainer.isVisible = false;
+            mainUI.isForeground = false;
+            multiUI.rootContainer.isVisible = false;
+            multiUI.isForeground = false;
+            resumeUI.rootContainer.isVisible = false;
+            resumeUI.isForeground = false;
+            remoteUI.rootContainer.isVisible = false;
+            remoteUI.isForeground = false;
 
-      if (disposableUI) {
-        disposeDUI();
-      }
+            setPlayerCount(2);
+            setPlayerName(["Player1", "Player2"]);
+            let newGame: NewGame = {
+              type: "newGame",
+              playerCount: 2,
+              mode: 1,
+              playername: [username, input.text]
+            }
+            setNewGame(newGame);
+            console.log("new game created ", newGame.gameId)
+
+            if (disposableUI) {
+              disposeDUI();
+            }
+          }
+        } catch (err) {
+          console.error("Erreur:", err);
+        }
+      })();
     }
   });
   return addBtn;

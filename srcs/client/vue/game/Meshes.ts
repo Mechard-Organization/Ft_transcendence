@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Meshes.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/18 14:18:34 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/19 11:40:19 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ export function setValues(input: Talker | undefined) {
     createdisposableUI(0);
     return;
   }
-  // // console.log("setVAlues called");
+  // console.log("setVAlues called", input);
   if (!scene) return;
 
   const paddle1 = scene.getMeshByName("paddle1");
@@ -393,6 +393,24 @@ export async function pong(canvas) {
     }
 
     if (message.type === "talker") setValues(message);
+    if (message.type === "inviteMatch")
+    {
+      try {
+        (async () => {
+          console.log(message);
+          const res = await fetch("/api/inviteMatch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              username: message.game.playername[0],
+              advname: message.game.playername[1],
+              gameId: message.game.gameId,})
+          });
+        })();
+      } catch (err) {
+        console.error("Erreur:", err);
+      }
+    }
     if (message.type === "welcome") console.log(message);
   };
 
