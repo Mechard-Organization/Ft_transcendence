@@ -454,7 +454,7 @@ Relations ensure **referential integrity and prevent data corruption** during co
 </details>
 
 <p align="center">
-  <img src="./.assets/imgs/M.svg" alt="Modules" width="360"/>
+  <img src="./.assets/imgs/M.svg" alt="Modules" width="700"/>
 </p>
 
 
