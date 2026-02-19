@@ -70,13 +70,15 @@ The objective was to build a production-ready web application combining modern w
   <img src="./.assets/imgs/I.svg" alt="Instructions" width="600"/>
 </p>
 
-### Prerequisites
+<details>
+  <summary>### Prerequisites</summary>
 
-- Docker version >= 24
-- Docker Compose v2
-- Make
-- Node.js >= 18 (for local development)
+  - Docker version >= 24
+  - Docker Compose v2
+  - Make
+  - Node.js >= 18 (for local development)
 
+</details>
 ---
 
 ### Environment Variables
