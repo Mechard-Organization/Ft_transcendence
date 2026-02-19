@@ -322,7 +322,67 @@ The objective was to build a production-ready web application combining modern w
       Grafana dashboards
 </details>
 
+<details>
+  <summary>🗂️ Database Schema</summary>
+  Users
 
+      id
+
+      username
+
+      password_hash
+
+      mail
+
+      google_sub
+
+      oauth_enabled
+
+      twofa_enabled
+
+      twofa_secret
+
+      admin
+
+      avatarUrl
+
+      created_at
+
+  Match
+
+      id
+
+      player1_id
+
+      player2_id
+
+      score
+
+      winner
+
+      played_at
+
+  Friends
+
+      id_user
+
+      id_friend
+
+      id_sender
+
+      accept
+
+  Messages
+
+      id
+
+      id_author
+
+      id_group
+
+      content
+
+      timestamp
 
 ---
 
