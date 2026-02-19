@@ -10,7 +10,7 @@
   <img src="./.assets/imgs/version.svg" alt="💾 Version 💾" width="320"/>
   <br/>
   🇯🇵 <a href="./README.jp.md">日本語</a> • 
-  🇫🇷 <a href="./README.md">Français</a>
+  🇬🇧 <a href="./README.en.md">English</a>
 </p>
 
 ---
