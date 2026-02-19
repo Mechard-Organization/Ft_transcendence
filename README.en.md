@@ -120,16 +120,21 @@ The objective was to build a production-ready web application combining modern w
   ### 🏥 Commands list
   </summary>
 
-  🚀 Launch
-  ```bash
-  make
+  <details>
+    <summary>
+  
+    🚀 Launch
+    </summary>
+    ```bash
+    make
 
-  ```
-  or
-  ```bash
-  make start
+    ```
+    or
+    ```bash
+    make start
 
-  ```
+    ```
+  </details>
 
   Stop:
   ```bash
