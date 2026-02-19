@@ -71,7 +71,10 @@ The objective was to build a production-ready web application combining modern w
 </p>
 
 <details>
-  <summary>### Prerequisites</summary>
+  <summary>
+  
+  ### Prerequisites
+  </summary>
 
   - Docker version >= 24
   - Docker Compose v2
