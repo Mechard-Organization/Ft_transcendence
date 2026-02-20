@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Meshes.ts                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/19 11:40:19 by abutet           ###   ########.fr       */
+/*   Updated: 2026/02/20 12:19:08 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -454,6 +454,7 @@ export async function pong(canvas) {
 
   return () => {
     alive = false;
+    thisPlayer.pause = 0;
     ws.close();
     resetBabylonJs();
     canvas.remove();
