@@ -53,7 +53,7 @@ export default function RegisterPage() {
 	console.log("mail :", mail);
     try {
           const response = await fetch("/api/users", {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ username: u, password: p, mail: m }),
