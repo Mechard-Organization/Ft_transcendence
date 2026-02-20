@@ -63,7 +63,6 @@ export default function FriendsPage() {
     }
 
     const data = await res.json();
-    console.log("Blocked users:", data);
 
     setBlocked(data);
   } catch (err) {
@@ -80,7 +79,6 @@ const loadBlocked = async (id: number) => {
   });
 
   const data = await res.json();
-  console.log("Blocked loaded:", data);
   setBlocked(data);
 };
 
@@ -243,7 +241,7 @@ const loadBlocked = async (id: number) => {
       </ul>
     </section>
     {/* Amis */}
-      <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] 
+      <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]
                     flex flex-col h-[150px]">
       <h2 className="text-[#8B5A3C] text-xl mb-4 flex-shrink-0"> <UserCheck/></h2>
 
@@ -270,7 +268,7 @@ const loadBlocked = async (id: number) => {
         ))}
       </ul>
     </section>
-    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] 
+    <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]
                     flex flex-col h-[150px]">
       <h2 className="text-[#8B5A3C] text-xl mb-4 flex-shrink-0">
         <UserX />

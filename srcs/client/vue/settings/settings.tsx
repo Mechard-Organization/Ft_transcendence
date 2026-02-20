@@ -80,7 +80,6 @@ export default function UserSettings() {
     formData.append("id", String(userStats.id));
 
     try {
-      console.log("avatar ", formData);
       const res = await fetch("/api/users/me/avatar", {
         method: "POST",
         body: formData,
@@ -153,15 +152,7 @@ export default function UserSettings() {
     } catch (err) { console.error(err); }
   };
 
-  const eraseUser = async () => {
-    //logout
-    //changer la page
-    //supprimer le user
-    console.log("erase user clicked")
-  }
-
-
-    const addAdmin = async () => {
+  const addAdmin = async () => {
     if (!newAdminName.trim()) return;
 
     try {

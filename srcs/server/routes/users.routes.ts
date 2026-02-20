@@ -11,7 +11,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   fastify.get("/users", async () => db.getAllUsers());
 
-  fastify.put("/users", async (request) => {
+  fastify.post("/users", async (request) => {
     const { username, password, mail } = request.body as any;
 
     if (!username || !password || !mail)
@@ -29,7 +29,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
 
   fastify.post("/getuser", async (request) => {
     const { id } = request.body as any;
-    console.log(id);
     return id > 0 ? db.getUserById(id) : { username: "Invité.e"};
   });
 

@@ -73,7 +73,7 @@ export default function ChatPage() {
 
         if (!(auth?.authenticated)) {
           setAuthStatus("anonymous")
-          console.log("utilisateur non identifie")
+          console.log("utilisateur non identifie");
         }
         else {
           setAuthStatus("authenticated")
@@ -81,7 +81,6 @@ export default function ChatPage() {
         }
       } catch {
         setAuthStatus("anonymous");
-        console.log("AAAAAAAAAAAAAAAAa")
       }
 }
 )
@@ -111,7 +110,6 @@ export default function ChatPage() {
     const auth = await isAuthenticated();
     const id = auth?.id ?? null;
     let res;
-    console.log(id_group);
     if (!id_group)
     {
         res = await fetch("/api/messages", {
@@ -174,7 +172,6 @@ useEffect(() => {
         if (msg.data)
         {
           const idGroup = msg.data.id_group ?? null;
-          console.log("mm", msg.data.saved);
           if (msg.type === "new_message" && idGroup === selectedConversationRef.current) {
             fetchMessages(idGroup);
           }
@@ -199,7 +196,6 @@ useEffect(() => {
   }, [selectedConversation]);
 
   useEffect((): void =>{
-    console.log("aaaaaa:", messages)
 }, [messages])
 /* ---------------- SEND MESSAGE ---------------- */
 const sendMessage = async () => {
@@ -225,7 +221,7 @@ const sendMessage = async () => {
   };
 
   useEffect(() => {
-    console.log("group : ", selectedConversation)
+    console.log("group : ", selectedConversation);
   }, [selectedConversation])
 
   useEffect(() => {
@@ -337,14 +333,11 @@ const sendMessage = async () => {
 
       const userData = await resUser.json();
 
-      console.log(id_group);
-
       const res = await fetch("/api/addUserToGroup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user, id_group, me: userData }),
       });
-      console.log("essai d'ajouter : ", user, id_group);
       if (!res.ok) throw new Error("Impossible d'ajouter l'utilisateur au groupe");
 
       console.log("Utilisateur ajouté au groupe !");

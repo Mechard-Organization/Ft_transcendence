@@ -92,7 +92,6 @@ export default function Header() {
           console.error("Erreur update profil :", err);
         }
       })();
-      console.log("laaaaaa : ", userStats.connected)
       console.log("✅ WebSocket connecté");
     };
 
@@ -102,7 +101,6 @@ export default function Header() {
         if (avatar.data)
         {
           const idGroup = avatar.data.id_group ?? null;
-          console.log("mm", avatar.data.avatarUrl);
           if (avatar.type === "new_avatar") {
             setUserStats(prev => ({ ...prev, avatarUrl: avatar.data.avatarUrl }));
           }
@@ -186,7 +184,7 @@ const handlelogout = async () => {
             />
           </Link>
         </div>
-            
+
         {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
           <Link to="/about">

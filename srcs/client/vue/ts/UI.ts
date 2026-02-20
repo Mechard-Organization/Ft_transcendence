@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   UI.ts                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:17:53 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/16 15:56:38 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/20 14:16:13 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,6 @@ export function setPause(num: number) {
 }
 export function setSelectedMesh(name: string) {
   selectedMesh = null;
-  // console.log("set selected mesh called")
   switch (name) {
     case "ball":
       selectedMesh = scene.getMeshByName("ball");
@@ -257,11 +256,9 @@ export function createUI() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       if (playerCount > 0 && thisPlayer.gameId) {
-        // console.log(thisPlayer.gameId);
         resumeUI.rootContainer.isVisible = true;
         resumeUI.isForeground = true;
         thisPlayer.pause = 1;
-        // console.log("pause set to 1")
       }
     }
   });
@@ -323,9 +320,6 @@ export function createdisposableUI(type: number) {
   disposableUI = AdvancedDynamicTexture.CreateFullscreenUI("statsUI");
   disposableUI.background = "rgba(255, 255, 255, 0.5)";
   const statsPanel = new StackPanel();
-  // console.log("contestantS ", contestants);
-  // console.log("counter ", counter);
-  // console.log("contestants length ", contestants.length)
   if (counter[0] == finalGoal) {
     text = createTextBlock(playername[0] + " Won the game!");
     if (contestants.length >= 2) {
@@ -432,9 +426,7 @@ export function createCutomiseUI() {
 }
 
 function observerBodyColor(value: any, state: any) {
-  // console.log("selected mesh changing color");
   if (selectedMesh) {
-    // console.log("selected mesh changing color");
     let dC = selectedMesh.material.diffuseColor;
     let eC = selectedMesh.material.emissiveColor;
     if (colorType == 0) {

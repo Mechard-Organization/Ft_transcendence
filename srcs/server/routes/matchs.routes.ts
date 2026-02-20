@@ -78,7 +78,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
 		let groupId = db.oldGroup(user.id, adv.id)?.id_group;
 		if (!groupId)
 		{
-			console.log(groupId)
 			groupId = db.createGroup(adv.username).id;
     		db.addUserGroup(groupId, user.id);
 			db.addMessage( user.username + " has join the group", adv.id, groupId);

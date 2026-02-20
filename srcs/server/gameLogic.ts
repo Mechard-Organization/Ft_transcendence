@@ -6,7 +6,7 @@
 /*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 14:01:28 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/19 11:41:09 by abutet           ###   ########.fr       */
+/*   Updated: 2026/02/20 14:26:40 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,6 @@ function moveSiglePaddle(paddle:any, keys:any, dragPos1:any, dragPos2:any, playe
     let Direction = games.aiDirection;
   if (playerCount > 0 && (games.mode == 1 || aiN == 1)) {
     if (isDragging1) {
-      // console.log("is dragging 1");
       if ((dragPos1.z < paddle) && paddle > -tableHeight / 2 + 50) paddle -= paddleSpeed;
       if ((dragPos1.z > paddle) && paddle < tableHeight / 2 - 50) paddle += paddleSpeed;
     }
@@ -209,7 +208,6 @@ function moveSiglePaddle(paddle:any, keys:any, dragPos1:any, dragPos2:any, playe
   // paddle moving 2
   if (playerCount > 1 && (games.mode == 1 || aiN == 2)) {
     if (isDragging2) {
-      // console.log("is gragging 2");
       if ((dragPos2.z < paddle) && paddle > -tableHeight / 2 + 50) paddle -= paddleSpeed;
       if ((dragPos2.z > paddle) && paddle < tableHeight / 2 - 50) paddle += paddleSpeed;
     }
@@ -233,7 +231,6 @@ export function movePaddles(games: Game): Paddles {
   if (games.mode == 0) {
     let playerIndex = findPlayer(undefined, games.gameId);
     if (playerIndex == -1) {
-      // console.log("player not found mode = 0, gID ", games.gameId)
       if (keys == undefined)
         return (games.paddles);
     }
@@ -250,7 +247,6 @@ export function movePaddles(games: Game): Paddles {
   if (games.mode == 1) {
     let playerIndex = findPlayer(games.playername[0]);
     if (playerIndex == -1 || games.playerIds[1] == 0 || games.playerIds[0] == 0) {
-      // console.log("player not found mode = 1, gID ", games.gameId)
       isDragging1 = false;
       keys = undefined;
     }
@@ -269,7 +265,6 @@ export function movePaddles(games: Game): Paddles {
 
     let playerIndex = findPlayer(games.playername[1]);
     if (playerIndex == -1 || games.playerIds[1] == 0 || games.playerIds[0] == 0) {
-      // console.log("player not found mode = 1, gID ", games.gameId);
       isDragging2 = false;
       keys = undefined;
     }
@@ -299,15 +294,12 @@ function findPlayer(username?: string, gId?: number): number {
 }
 
 export function removePlayerByWS(ws: WS) {
-  // console.log("removebyws called on ")
   const player: Player | undefined = Object.values(players).find(player => player.ws === ws);
-  // console.log("removebyws called on ", player?.username)
   if (player) {
 
     const gameIndex = games.findIndex(g => g.gameId === player.gameId);
     let talkerindex = talkerTemp.findIndex(g => g.gameId === player.gameId);
     const playerIndex = findPlayer(player.username);
-    // console.log("removeOldAddNewGame calles player, GID ", player.username, gameIndex, games[gameIndex])
     if (games[gameIndex] != undefined) {
       if (games[gameIndex].mode == 0 || games[gameIndex].playername[0] == player.username)
         games[gameIndex].playerIds[0] = 0;
@@ -315,25 +307,19 @@ export function removePlayerByWS(ws: WS) {
         games[gameIndex].playerIds[1] = 0;
     }
     if (games[gameIndex] != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
-      // console.log("removed game", games[gameIndex].gameId);
       games.splice(gameIndex, 1);
       talkerTemp.splice(talkerindex, 1);
 
     }
-    // console.log("deleted player ", players[playerIndex].username)
     delete players[playerIndex];
   }
 }
 
 function createNewGame(newGame?: NewGame) {
-  // console.log("===========create newGmae is called ===============")
   if (newGame && newGame.mode == 1 && newGame?.gameId != undefined) {
     const gameIndex = games.findIndex(g => g.gameId == newGame.gameId);
-    // console.log(`============= find index is ${gameIndex} ===============`)
     if (gameIndex != -1 && games[gameIndex].playername[1] == newGame.playername[0]) {
       games[gameIndex].playerIds[1] = 1;
-      // console.log("mode: ", newGame?.mode, " gameId: ", newGame?.gameId, "playername: ", games[gameIndex].playername)
-      // console.log(newGame.gameId);
       return newGame.gameId;
     }
   }
@@ -372,8 +358,6 @@ function createNewGame(newGame?: NewGame) {
     playername: games[gameindex].playername,
     playerCount: games[gameindex].playerCount
   });
-  // console.log("mode: ", games[gameindex].mode, " gameId: ", games[gameindex].gameId, "playername: ", games[gameindex].playername);
-  console.log("********** other player can join the game on ", gameId)
   if (newGame && newGame.mode == 1 && newGame?.gameId != undefined){
     talkerTemp[talkerTemp.length - 1].counter = games[gameindex].counter = [-1,-1]
   }
@@ -384,12 +368,9 @@ function createNewGame(newGame?: NewGame) {
 export function removeOldAddNewGame(player: Player, gId: number) {
   const gameIndex = games.findIndex(g => g.gameId === player.gameId);
   let talkerindex = talkerTemp.findIndex(g => g.gameId === player.gameId);
-  // console.log("removeOldAddNewGame", gameIndex, talkerindex, "calles player, oldgame ", player.username, games[gameIndex])
   const playerIndex = findPlayer(player.username);
   if (games[gameIndex] != undefined) {
-    // console.log(games[gameIndex].playername[0], player.username)
     if (games[gameIndex].mode == 0 || games[gameIndex].playername[0] == player.username) {
-      // console.log("playerid 0 set to 0")
       games[gameIndex].playerIds[0] = 0;
     }
     if (games[gameIndex].mode == 0 || games[gameIndex].playername[1] == player.username) {
@@ -397,14 +378,12 @@ export function removeOldAddNewGame(player: Player, gId: number) {
     }
   }
   if (games[gameIndex] != undefined && games[gameIndex].playerIds[0] == 0 && games[gameIndex].playerIds[1] == 0) {
-    // console.log("removed game", games[gameIndex].gameId);
     games.splice(gameIndex, 1);
     talkerTemp.splice(talkerindex, 1);
 
   }
   if (gId >= 0)
     players[playerIndex].gameId = gId;
-  // console.log("new game is ", gId)
 }
 
 export function movePaddlesAndBalls(wsMessage: WSMessage) {
@@ -418,7 +397,6 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
     {
       player.ws?.send(JSON.stringify({ type: "inviteMatch", game: talkerTemp[talkerTemp.findIndex(g => g.gameId === gameId)]}))
     }
-    // console.log("game created new game given user ", player.username, gId, games[games.findIndex(g => g.gameId === gameId)]);
     removeOldAddNewGame(player, gameId);
 
     player.ws?.send(JSON.stringify(talkerTemp[talkerTemp.findIndex(g => g.gameId === gameId)]))
@@ -430,7 +408,6 @@ export function movePaddlesAndBalls(wsMessage: WSMessage) {
       player.username = `p${gameId}`
     player.gameId = gameId;
     players[gameId] = player
-    // console.log("game created new user ", player.username);
     player.ws?.send(JSON.stringify({ type: "Playername", username: player.username }))
     return;
   }
@@ -452,13 +429,10 @@ setInterval(() => {
     let talkerindex = talkerTemp.findIndex(g => g.gameId === games[i].gameId)
     let playerIndex = findPlayer(undefined, games[i].gameId)
     if (playerIndex != -1 && players[playerIndex].pause == 1 && games[i].mode == 0) {
-      // // console.log("game paused", i, "  ", talkerindex);
       i++;
       continue;
     }
     if (games[i].mode == 1 && (games[i].playerIds[0] == 0 || games[i].playerIds[1] == 0)) {
-      // // console.log("game paused", i, "  ", talkerindex);
-
       i++;
       continue;
     }
@@ -471,11 +445,7 @@ setInterval(() => {
 
     if (games[i] && games[i].mode == 0) {
       let playerIndex = findPlayer(undefined, games[i].gameId);
-      if (playerIndex == -1) {
-        // console.log("player not found mode = 0, gID ", games[i].gameId)
-
-      }
-      else {
+      if (playerIndex != -1) {
         players[playerIndex].ws?.send(JSON.stringify(talkerTemp[talkerindex]));
         if (talkerTemp[talkerindex].counter[0] >= finalGoal || talkerTemp[talkerindex].counter[1] >= finalGoal) {
           removeOldAddNewGame(players[playerIndex], -1);
