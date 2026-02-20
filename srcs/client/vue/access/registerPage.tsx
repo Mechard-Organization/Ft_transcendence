@@ -61,9 +61,9 @@ export default function RegisterPage() {
 
 
       const data: RegisterResponse = await response.json();
-    console.log(JSON.stringify(data, null, 2))
+      console.log(JSON.stringify(data.message, null, 2))
       if (!response.ok) {
-        setError(data.error || data.message || "Erreur lors de la création");
+        setError(data.message || data.error || "Erreur lors de la création");
         return;
       }
 
