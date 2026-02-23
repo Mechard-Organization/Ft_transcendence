@@ -142,11 +142,6 @@ const ProfilePage: React.FC = () => {
       try {
         const message = JSON.parse(event.data);
 
-        if (message.type === "user_status_changed" && message.data.userId === userId) {
-          setUserStats(prev =>
-            prev ? { ...prev, connected: message.data.connected } : prev
-          );
-        }
         if (message.type === "new_avatar" && message.data.userId === userId) {
           setUserStats(prev =>
             prev ? { ...prev, avatarUrl: message.data.avatarUrl } : prev
