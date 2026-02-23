@@ -6,7 +6,7 @@
 /*   By: ajamshid <ajamshid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:17:53 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/23 14:47:25 by ajamshid         ###   ########.fr       */
+/*   Updated: 2026/02/23 15:17:11 by ajamshid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ export function createUI() {
     mainUI.addControl(mainPanel);
 
     const singlePlayerBtn = createSinglePlayerBtn();
-    const multiPlayerBtn = createMultiPlayerBtn();
+    const multiPlayerBtn = createTwoPlayerBtn();
     const remotePlayerBtn = createRemoteBtn();
     const customiseBtn = createCustomiseBtn();
     // singlePlayerBtn.metadata = { ui: mainUI };
