@@ -6,7 +6,7 @@
 /*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:17:53 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/20 14:16:13 by abutet           ###   ########.fr       */
+/*   Updated: 2026/02/23 15:49:29 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ export function createUI() {
     mainUI.addControl(mainPanel);
 
     const singlePlayerBtn = createSinglePlayerBtn();
-    const multiPlayerBtn = createMultiPlayerBtn();
+    const multiPlayerBtn = createTwoPlayerBtn();
     const remotePlayerBtn = createRemoteBtn();
     const customiseBtn = createCustomiseBtn();
     // singlePlayerBtn.metadata = { ui: mainUI };
@@ -342,7 +342,7 @@ export function createdisposableUI(type: number) {
   if (text)
     disposableUI.addControl(text);
 
-  if (contestantNumber > contestants.length - 1)
+  if (contestantNumber >= contestants.length - 1)
     contestantNumber = 0;
   if (contestantNumber < contestants.length - 1) {
     resetGame(1);
