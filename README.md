@@ -474,9 +474,13 @@ Les relations assurent l’**intégrité référentielle et empêchent la corrup
 
     Fonctionnalités temps réel (WebSockets)
 
+    Permettre aux utilisateurs d'intéragir entre eux
+
+    API public
+
     Gestion standard des utilisateurs
 
-    Cybersécurité (OAuth 2.0 + 2FA)
+    Opposant IA
 
     Jeu (jeu web complet)
 
@@ -484,11 +488,17 @@ Les relations assurent l’**intégrité référentielle et empêchent la corrup
 </details>
 
 <details>
-  <summary>Modules mineurs (1 point chacun)</summary>
+  <summary>Modules mineurs (1 point chacun)</summary> 
+
+    Design du site personalisé
 
     Approche alternative à ORM avec couche DB structurée
 
     Historique des matchs et statistiques
+
+    Cybersécurité (OAuth 2.0)
+
+    Cybersécurité (2FA)
 
     Fonctionnalités de chat avancées
 </details>
@@ -549,7 +559,7 @@ Contributions individuelles:
 
 Tous les modules sont **fonctionnels et démontrables**.
 
-Total : **14+ points**
+Total : **22 points**
 
 ---
 
