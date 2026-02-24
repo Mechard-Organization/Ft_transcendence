@@ -3,7 +3,6 @@ import { Lock } from 'lucide-react';
 type AchievementCardProps = {
   title: string;
   description: string;
-  icon: string;
   unlocked: boolean;
   rarity: 'common' | 'rare' | 'epic' | 'legendary' | 'Merguez';
 };
@@ -11,7 +10,6 @@ type AchievementCardProps = {
 export default function AchievementCard({ 
   title, 
   description, 
-  icon, 
   unlocked, 
   rarity 
 }: AchievementCardProps) {
@@ -48,11 +46,6 @@ export default function AchievementCard({
           <Lock className="w-5 h-5 text-gray-500" />
         </div>
       )}
-
-      <div className={`text-5xl mb-2 ${unlocked ? '' : 'grayscale'}`}>
-        {icon}
-      </div>
-
       <h4 className={`font-bold text-lg mb-1 ${unlocked ? 'text-[#8B5A3C]' : 'text-gray-500'}`}>
         {title}
       </h4>

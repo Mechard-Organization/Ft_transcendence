@@ -110,6 +110,7 @@ export default function ChatPage() {
     const auth = await isAuthenticated();
     const id = auth?.id ?? null;
     let res;
+    console.log("bbbbbbb", id_group);
     if (!id_group)
     {
         res = await fetch("/api/messages", {
@@ -132,8 +133,6 @@ export default function ChatPage() {
         }),
       });
     }
-    selectedConversationRef.current =
-      !selectedConversation || selectedConversation?.id === 0 ? null : selectedConversation?.id;
     setMessages(await res.json());
   }
 
@@ -172,6 +171,7 @@ useEffect(() => {
         if (msg.data)
         {
           const idGroup = msg.data.id_group ?? null;
+          console.log(idGroup, selectedConversationRef.current);
           if (msg.type === "new_message" && idGroup === selectedConversationRef.current) {
             fetchMessages(idGroup);
           }
@@ -191,7 +191,8 @@ useEffect(() => {
 
 
   useEffect(() => {
-
+       selectedConversationRef.current =
+      !selectedConversation || selectedConversation?.id === 0 ? null : selectedConversation?.id;
     fetchMessages(selectedConversation?.id!);
   }, [selectedConversation]);
 

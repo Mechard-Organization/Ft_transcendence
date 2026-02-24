@@ -48,7 +48,7 @@ const team: TeamMember[] = [
     role: "Product Owner Developer Front-end",
     avatarUrl: "/assets/imgs/jealefev_round.png",
     bio: "Jealefev",
-    linkedin: "https://linkedin.com/in/jeanne-lefevre-7b8a6536a/",
+    linkedin: "https://www.linkedin.com/in/abdul-rashed-jamshidi-36b3b5211/",
     github: "https://github.com/namoule"
   }
 ];
