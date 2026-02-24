@@ -1,22 +1,17 @@
 import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
-// db.ts
+
 const Database = require("better-sqlite3");
 
-// __dirname = /app/config/database (dans le conteneur, une fois lancé)
 const DB_DIR = path.join(__dirname, "data");
 const DB_PATH = path.join(DB_DIR, "mydb.sqlite");
 
-// On s'assure que le dossier existe
 if (!fs.existsSync(DB_DIR)) {
   fs.mkdirSync(DB_DIR, { recursive: true });
 }
 
-// --- INITIALISATION DE LA BASE ---
 const db = new Database(DB_PATH);
-
-// Création de la table si nécessaire
 
 // --- TABLE USERS ---
 db.prepare(`
