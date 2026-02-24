@@ -25,7 +25,6 @@ export default async function messageRoutes(fastify: FastifyInstance) {
 
     const info = db.addMessage(content, id, id_group);
     const saved = db.getMessagesById(info.id);
-    console.log("hello saved: ", saved);
 
     fastify.websocketServer.clients.forEach(client => {
       if (client.readyState === 1) {
