@@ -16,7 +16,6 @@ export default function FriendsPage() {
   const [usernameInput, setUsernameInput] = useState("");
   const [userId, setUserId] = useState<number | null>(null);
 
-  // 🔐 Auth + load data
   useEffect(() => {
     (async () => {
       const auth = await isAuthenticated();
@@ -28,7 +27,6 @@ export default function FriendsPage() {
     })();
   }, []);
 
-  // 🌐 WebSocket
   useEffect(() => {
     if (!userId) return;
 
@@ -174,7 +172,6 @@ const loadBlocked = async (id: number) => {
 <main className="flex-grow w-full max-w-6xl mx-auto px-6 py-10">
   <h1 className="text-[#8B5A3C] text-3xl mb-10 flex items-center justify-center gap-2"><UserCheck/> Amis</h1>
 
-  {/* Ajouter un ami */}
   <form
     onSubmit={addFriend}
     className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-2 border-[#FEE96E]
@@ -196,9 +193,7 @@ const loadBlocked = async (id: number) => {
     </button>
   </form>
 
-  {/* Listes */}
   <div className="grid grid-cols-1 md:grid-cols-1 gap-8 items-stretch">
-    {/* Requêtes */}
     <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E] flex flex-col h-[150px]">
       <h2 className="text-[#8B5A3C] text-xl flex-shrink-0">
          <BellPlus className="text-[#8B5A3C] text-xl mb-4">
@@ -240,7 +235,6 @@ const loadBlocked = async (id: number) => {
         ))}
       </ul>
     </section>
-    {/* Amis */}
       <section className="bg-white/80 rounded-3xl p-6 shadow-xl border-2 border-[#FEE96E]
                     flex flex-col h-[150px]">
       <h2 className="text-[#8B5A3C] text-xl mb-4 flex-shrink-0"> <UserCheck/></h2>

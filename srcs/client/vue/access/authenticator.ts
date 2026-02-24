@@ -1,7 +1,7 @@
 export async function isAuthenticated() {
   const res = await fetch("/api/auth/me", {
     method: "GET",
-    credentials: "include", // ⚠️ OBLIGATOIRE pour envoyer le cookie HttpOnly
+    credentials: "include",
   });
   
   const data = await res.json();

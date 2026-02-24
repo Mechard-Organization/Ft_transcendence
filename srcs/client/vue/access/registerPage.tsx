@@ -98,7 +98,6 @@ export default function RegisterPage() {
               id="registerForm"
               className="form-container flex flex-col items-center gap-4"
               onSubmit={onSubmitRegister}
-              /* action={formAction} */
             >
               <div className="form-group w-full text-center">
                 <label htmlFor="username" className="block mb-1">

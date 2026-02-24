@@ -198,7 +198,7 @@ useEffect(() => {
 
   useEffect((): void =>{
 }, [messages])
-/* ---------------- SEND MESSAGE ---------------- */
+
 const sendMessage = async () => {
   if (!newMessage.trim()) return;
 
@@ -301,7 +301,6 @@ const sendMessage = async () => {
 
       console.log("Nom du groupe changé !");
 
-      // Met à jour la conversation localement
       setConversations((prev) =>
         prev.map((conv) =>
           conv.id === selectedConversation.id
@@ -438,11 +437,8 @@ const fetchGroupMembers = async () => {
             ))}
         </div>
 
-        {/* ---------------- RIGHT PANEL ---------------- */}
         <div className="w-2/3 h-191 flex flex-col bg-white/80 rounded-2xl shadow-md overflow-hidden relative">
-          {/* HEADER CHAT */}
           <div className="bg-[#FEE96E] p-4 flex items-center justify-between">
-        {/* Left: Titre */}
         <h2 className="text-xl font-bold text-[#8B5A3C]">
           {selectedConversation === null
             ? "Sélectionne une discussion"
@@ -451,9 +447,7 @@ const fetchGroupMembers = async () => {
               : selectedConversation?.username || "Discussion générale"}
         </h2>
 
-        {/* Right: Boutons */}
 <div className="flex gap-2 items-center">
-  {/* Bouton pour ajouter un utilisateur */}
   {selectedConversation && selectedConversation.id !== 0 && (
     <button
       onClick={() => {
@@ -467,7 +461,6 @@ const fetchGroupMembers = async () => {
     </button>
   )}
 
-  {/* Bouton pour changer le nom */}
   {selectedConversation && selectedConversation.id !== 0 && (
     <button
       onClick={() => {
@@ -481,7 +474,6 @@ const fetchGroupMembers = async () => {
     </button>
   )}
 
-  {/* Barre CHANGER NOM */}
   {showChangeGroupName && selectedConversation && (
     <div className="flex items-center gap-2">
       <input
@@ -512,7 +504,6 @@ const fetchGroupMembers = async () => {
     </div>
   )}
 
-  {/* Barre AJOUTER USER */}
   {showAddUser && (
     <div className="flex items-center gap-2">
       <input
@@ -543,7 +534,6 @@ const fetchGroupMembers = async () => {
     </div>
   )}
 
-  {/* Bouton voir les membres */}
   {selectedConversation && selectedConversation.id !== 0 && (
     <button
       onClick={fetchGroupMembers}
@@ -554,11 +544,7 @@ const fetchGroupMembers = async () => {
     </button>
   )}
 </div>
-
       </div>
-
-
-          {/* MESSAGES */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {messages.map((msg) => (
               <div
@@ -594,7 +580,6 @@ const fetchGroupMembers = async () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* INPUT */}
           <div className="p-4 flex gap-2 border-t border-yellow-300">
             <input
               value={newMessage}
