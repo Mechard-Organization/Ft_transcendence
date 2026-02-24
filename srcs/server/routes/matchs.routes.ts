@@ -75,7 +75,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
 			throw fastify.httpErrors.badRequest("Missing fields");
 		const user = db.getUserByUsername(username);
 		const adv = db.getUserByUsername(advname);
-		let groupId = db.oldGroup(user.id, adv.id).id_group;
+		let groupId = db.oldGroup(user.id, adv.id)?.id_group;
 		if (!groupId)
 		{
 			groupId = db.createGroup(adv.username).id;
@@ -84,7 +84,6 @@ export default async function userRoutes(fastify: FastifyInstance) {
     		db.addUserGroup(groupId, adv.id);
 			db.addMessage( adv.username + " has join the group", user.id, groupId);
 		}
-		console.log("bbbbb", user.username + " challenges you to a duel\n game id: " + gameId, user.id , groupId)
 		const saved = db.addMessage( user.username + " challenges you to a duel\n game id: " + gameId, user.id , groupId);
 		fastify.websocketServer.clients.forEach(client => {
 			if (client.readyState === 1) {

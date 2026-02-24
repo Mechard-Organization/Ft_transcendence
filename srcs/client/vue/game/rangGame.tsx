@@ -21,7 +21,6 @@ export default function RankPage() {
         const json = await res.json();
 
         const data: PlayerStats[] = Array.isArray(json) ? json : [];
-        console.log(data);
 
         setPlayers(data.map((user: any) => ({
           id: user.id,

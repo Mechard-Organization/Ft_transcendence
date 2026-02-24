@@ -6,7 +6,7 @@
 /*   By: abutet <abutet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:05:54 by ajamshid          #+#    #+#             */
-/*   Updated: 2026/02/19 11:40:49 by abutet           ###   ########.fr       */
+/*   Updated: 2026/02/20 14:14:30 by abutet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,6 +368,8 @@ export function createRemotePlayBtn(input: InputText): Button {
           const advData = await adv.json();
           if (!userData || !user.ok || !advData || !adv.ok)
             input.background = "rgba(255, 110, 110, 1)";
+          else if (userData.username == advData.username)
+            input.background = "rgba(255, 110, 110, 1)";
           else
           {
             mainUI.rootContainer.isVisible = false;
@@ -388,7 +390,6 @@ export function createRemotePlayBtn(input: InputText): Button {
               playername: [username, input.text]
             }
             setNewGame(newGame);
-            console.log("new game created ", newGame.gameId)
 
             if (disposableUI) {
               disposeDUI();
@@ -410,7 +411,6 @@ export function createRemotePlayPlayBtn(input: InputText): Button {
     if (input.text === "" || Number.isNaN(Number(input.text)))
       input.background = "rgba(255, 110, 110, 1)";
     else {
-      // console.log("the input number is ", Number(input.text))
       mainUI.rootContainer.isVisible = false;
       mainUI.isForeground = false;
       multiUI.rootContainer.isVisible = false;
@@ -429,7 +429,6 @@ export function createRemotePlayPlayBtn(input: InputText): Button {
         gameId: Number(input.text),
         playername: [username, "player2"]
       }
-      // console.log("new game created ", newGame)
       setNewGame(newGame);
 
       if (disposableUI) {
@@ -461,8 +460,6 @@ export function createCyberBtn(): Button {
       c.emissiveColor = c.diffuseColor.clone();
       c.diffuseColor = new Color3(0, 0, 0);
       let light = scene.getLightByName("light");
-      if (!light)
-        // console.log("there is not light")
       light.intensity = 0;
       colorType = 0;
     }
@@ -491,8 +488,6 @@ export function createNaturalBtn(): Button {
       c.emissiveColor = new Color3(0, 0, 0);
 
       let light = scene.getLightByName("light");
-      // if (!light)
-        // console.log("there is not light")
       light.intensity = 0.9;
       colorType = 1;
     }
@@ -520,8 +515,6 @@ export function createDefaultBtn(): Button {
     c.emissiveColor = defaultSettings.wallMat.clone();
     c.diffuseColor = new Color3(0, 0, 0);
     let light = scene.getLightByName("light");
-    // if (!light)
-      // console.log("there is not light")
     light.intensity = defaultSettings.lightIntensity;
     colorType = defaultSettings.colorType;
   });

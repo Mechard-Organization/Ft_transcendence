@@ -48,12 +48,9 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-	console.log("username :", username);
-	console.log("password :", password);
-	console.log("mail :", mail);
     try {
           const response = await fetch("/api/users", {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ username: u, password: p, mail: m }),
@@ -61,9 +58,8 @@ export default function RegisterPage() {
 
 
       const data: RegisterResponse = await response.json();
-    console.log(JSON.stringify(data, null, 2))
       if (!response.ok) {
-        setError(data.error || data.message || "Erreur lors de la création");
+        setError(data.message || data.error || "Erreur lors de la création");
         return;
       }
 
@@ -74,7 +70,6 @@ export default function RegisterPage() {
       setAvatarUrl("/uploads/profil/default.jpeg")
 
       window.location.href = "/Login"
-      console.log("data :",  data)
     } catch (err) {
       console.error(err);
       setError("Erreur réseau, réessaie plus tard.");

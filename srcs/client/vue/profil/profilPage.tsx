@@ -92,7 +92,6 @@ export default function ProfilePage() {
         body: JSON.stringify({ name_player: data.username })
       });
       const dataMatchs = await resmatchs.json();
-      console.log(dataMatchs);
       setMatchs(
         dataMatchs.map((match: any) => {
           if (match.name_player1 === data.username) {
