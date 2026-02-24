@@ -97,7 +97,6 @@ export default function HomePage() {
 
   return (
       <main className="flex-grow min-h-[calc(100vh-8rem)]  flex flex-col items-center margin-bot">
-        {/* Header / Welcome */}
         <div className="text-center">
                   <img
           src="/uploads/gif/cookie.gif"
@@ -108,7 +107,6 @@ export default function HomePage() {
           <p className="text-2xl text-[#A67C52]">Jouez, chattez et amusez-vous !</p>
         </div>
 
-        {/* Actions */}
         {authStatus === "authenticated" ? (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mt-10">
             <ActionCard
