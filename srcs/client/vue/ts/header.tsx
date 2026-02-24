@@ -152,7 +152,7 @@ const handlelogout = async () => {
     });
     await fetch("/api/auth/logout", {
       method: "POST",
-      credentials: "include", // 🔑 OBLIGATOIRE
+      credentials: "include",
     });
   } catch (err) {
     console.error("Erreur update profil :", err);
@@ -170,11 +170,9 @@ const handlelogout = async () => {
         minHeight: "5px",
       }}
     >
-      {/* Overlay */}
       <div className="absolute inset-0 bg-black/20"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 flex items-center justify-between py-3">
-        {/* Logo Home */}
         <div className="rounded-2xl transition-all transform hover:scale-150 cursor-pointer">
           <Link to="/">
             <img
@@ -185,7 +183,6 @@ const handlelogout = async () => {
           </Link>
         </div>
 
-        {/* Navigation */}
         <nav className="flex items-center gap-4 h-full">
           <Link to="/about">
             <div
@@ -200,7 +197,6 @@ const handlelogout = async () => {
           </Link>
           {authStatus === "authenticated" ? (
             <>
-              {/* Jouer */}
               <Link to="/Game">
                 <div
                   className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${
@@ -224,7 +220,6 @@ const handlelogout = async () => {
                 </div>
               </Link>
 
-              {/* Chat */}
               <Link to="/chat">
                 <div
                   className={`w-12 h-12 flex items-center justify-center rounded-full transition-all cursor-pointer ${

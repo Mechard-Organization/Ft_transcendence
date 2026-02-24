@@ -245,7 +245,6 @@ export default function UserSettings() {
           </div>
         </button>
       </div>
-      {/* Admin Panel */}
           {userStats.admin == true && (
             <div className="mt-12 bg-white/90 rounded-3xl shadow-xl border-4 border-[#FEE96E] p-4">
               <h3 className="text-2xl text-[#8B5A3C] mb-4 flex items-center gap-2">
@@ -253,7 +252,6 @@ export default function UserSettings() {
                 Admin Panel
               </h3>
 
-              {/* Ajouter un admin */}
               <div className="flex gap-2 mb-4">
                 <input
                   type="text"
@@ -267,7 +265,6 @@ export default function UserSettings() {
                 </button>
               </div>
 
-              {/* Liste des admins */}
               <ul className="space-y-2 text-[#8B5A3C]">
                 {admins.map(a => (
                   <li key={a.id} className="flex justify-between items-center bg-[#FFF9E5] px-4 py-2 rounded-full">

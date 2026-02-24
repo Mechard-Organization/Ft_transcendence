@@ -158,7 +158,6 @@ export default function ProfilePage() {
       <main className="flex-grow">
         <div className="max-w-4xl mx-auto px-6 pt-8 pb-5">
 
-          {/* Profil */}
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border-4 border-[#FEE96E] p-6 flex flex-col sm:flex-row items-center gap-8">
             <div className="relative">
               <input
@@ -183,7 +182,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
             <div className="bg-white/90 rounded-3xl p-4 shadow-xl border-4 border-[#FEE96E] flex flex-col items-center">
               <div className="bg-[#FEE96E] rounded-full p-4 mb-4">
@@ -208,10 +206,8 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Section Achievements */}
           <div className="mt-10 bg-white/90 rounded-3xl p-6 shadow-xl border-4 border-[#FEE96E]">
 
-            {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-[#8B5A3C] flex items-center gap-3">
                 <Trophy className="w-8 h-8" />
@@ -227,7 +223,6 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            {/* Barre de progression */}
             <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
               <div
                 className="bg-gradient-to-r from-[#FEE96E] to-[#FFD700] h-3 rounded-full transition-all duration-500"
@@ -235,7 +230,6 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Grille d'achievements */}
             {achievements.length === 0 ? (
               <p className="text-center text-[#A67C52] py-8">
                 Aucun achievement disponible
@@ -259,7 +253,6 @@ export default function ProfilePage() {
             )}
           </div>
 
-          {/* Tableau des matchs */}
           <div className="mt-10 bg-white/95 rounded-3xl shadow-lg border-4 border-[#FEE96E] h-70 flex flex-col overflow-hidden">
             <div className="overflow-y-auto">
               <table className="min-w-full divide-y divide-gray-200">
