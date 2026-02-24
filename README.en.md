@@ -464,15 +464,19 @@ Relations ensure **referential integrity and prevent data corruption** during co
 </p>
 
 <details>
-  <summary>Major Modules (2 pts each)</summary>
+  <summary>Major Modules (2 points each)</summary>
 
-    Web (Fastify + React full-stack framework usage)
+    Web (Fastify + React full-stack framework)
 
     Real-time features (WebSockets)
 
+    Allow users to interact with each other
+
+    Public API
+
     Standard user management
 
-    Cybersecurity (OAuth 2.0 + 2FA)
+    AI opponent
 
     Gaming (complete web-based game)
 
@@ -480,11 +484,17 @@ Relations ensure **referential integrity and prevent data corruption** during co
 </details>
 
 <details>
-  <summary>Minor Modules (1 pt each)</summary>
+  <summary>Minor Modules (1 point each)</summary>
 
-    ORM alternative approach with structured DB layer
+    Custom website design
 
-    Match history & statistics
+    Alternative ORM approach with structured database layer
+
+    Match history and statistics
+
+    Cybersecurity (OAuth 2.0)
+
+    Cybersecurity (2FA)
 
     Advanced chat features
 </details>
