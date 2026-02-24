@@ -170,7 +170,7 @@ L’objectif était de construire une application web prête pour la production,
 <details>
   <summary>
   
-  ### 🔓 Accè
+  ### 🔓 Accès
   </summary>
 
   Application principale (HTTPS via Nginx) :
