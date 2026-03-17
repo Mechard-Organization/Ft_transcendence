@@ -6,7 +6,7 @@
 #    By: abutet <abutet@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/12 13:14:27 by abutet            #+#    #+#              #
-#    Updated: 2026/02/05 15:15:03 by abutet           ###   ########.fr        #
+#    Updated: 2026/02/24 13:22:50 by abutet           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ prepare:
 	@chmod 777 ./srcs/config/database/data
 	@mkdir -p ./srcs/config/database/data
 	@chmod 777 ./srcs/config/database/data
-	@mkdir -p srcs/server/uploads/profil
+	@mkdir -p ./uploads/profil
 	@chmod 777 ./uploads/profil
 
 up: prepare
