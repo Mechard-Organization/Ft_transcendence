@@ -1,6 +1,10 @@
 <h1 align="center">🏓 ft_transcendence 🏓</h1>
 
 <p align="center">
+  🌐 <a href="https://ft-transcendence-42.app/">Voir la démo en ligne</a>
+</p>
+
+<p align="center">
   <img src="./.assets/imgs/TRS.png" alt="Transcendence" width="600"/>
 </p>
 
